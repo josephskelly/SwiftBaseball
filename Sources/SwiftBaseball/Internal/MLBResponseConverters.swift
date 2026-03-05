@@ -200,6 +200,90 @@ enum MLBResponseConverters {
         }
     }
 
+    // MARK: - Boxscore
+
+    static func boxscore(from response: MLBBoxscoreResponse) -> Boxscore {
+        guard let teams = response.teams else {
+            return Boxscore(teams: BoxscoreTeams(
+                away: emptyBoxscoreTeam(),
+                home: emptyBoxscoreTeam()
+            ), officials: nil, info: nil)
+        }
+        return Boxscore(
+            teams: BoxscoreTeams(
+                away: boxscoreTeam(from: teams.away),
+                home: boxscoreTeam(from: teams.home)
+            ),
+            officials: response.officials?.compactMap(official),
+            info: response.info?.compactMap(boxscoreInfoItem)
+        )
+    }
+
+    private static func boxscoreTeam(from raw: MLBBoxscoreTeam) -> BoxscoreTeam {
+        let team = raw.team.map(teamReference) ?? TeamReference(id: 0, name: "")
+        let stats = BoxscoreTeamStats(
+            batting: raw.teamStats?.batting ?? emptyBattingStats(),
+            pitching: raw.teamStats?.pitching ?? emptyPitchingStats(),
+            fielding: raw.teamStats?.fielding ?? emptyFieldingStats()
+        )
+        let players: [String: BoxscorePlayer]? = raw.players?.reduce(into: [:]) { result, pair in
+            let (key, value) = pair
+            result[key] = boxscorePlayer(from: value)
+        }
+        return BoxscoreTeam(
+            team: team,
+            teamStats: stats,
+            players: players,
+            batters: raw.batters,
+            pitchers: raw.pitchers,
+            battingOrder: raw.battingOrder,
+            note: raw.note?.compactMap(boxscoreInfoItem)
+        )
+    }
+
+    private static func boxscorePlayer(from raw: MLBBoxscorePlayer) -> BoxscorePlayer {
+        let person = raw.person.map(playerReference)
+            ?? PlayerReference(id: 0, fullName: "")
+        let pos = position(from: raw.position)
+        let stats = BoxscorePlayerStats(
+            batting: raw.stats?.batting ?? emptyBattingStats(),
+            pitching: raw.stats?.pitching ?? emptyPitchingStats(),
+            fielding: raw.stats?.fielding ?? emptyFieldingStats()
+        )
+        return BoxscorePlayer(
+            person: person,
+            jerseyNumber: raw.jerseyNumber,
+            position: pos,
+            stats: stats,
+            battingOrder: raw.battingOrder
+        )
+    }
+
+    private static func official(from raw: MLBOfficial) -> Official? {
+        guard let ref = raw.official else { return nil }
+        return Official(
+            official: playerReference(from: ref),
+            officialType: raw.officialType ?? ""
+        )
+    }
+
+    private static func boxscoreInfoItem(from raw: MLBBoxscoreInfo) -> BoxscoreInfoItem? {
+        guard let label = raw.label else { return nil }
+        return BoxscoreInfoItem(label: label, value: raw.value)
+    }
+
+    private static func emptyBoxscoreTeam() -> BoxscoreTeam {
+        BoxscoreTeam(
+            team: TeamReference(id: 0, name: ""),
+            teamStats: BoxscoreTeamStats(
+                batting: emptyBattingStats(),
+                pitching: emptyPitchingStats(),
+                fielding: emptyFieldingStats()
+            ),
+            players: nil, batters: nil, pitchers: nil, battingOrder: nil, note: nil
+        )
+    }
+
     // MARK: - Private helpers
 
     private static func position(from raw: MLBPositionObject?) -> Position {
@@ -247,6 +331,18 @@ enum MLBResponseConverters {
     private static func gameStatus(from detailedState: String?) -> GameStatus {
         guard let state = detailedState else { return .scheduled }
         return GameStatus(rawValue: state) ?? .scheduled
+    }
+
+    private static func emptyBattingStats() -> BattingStats {
+        try! JSONDecoder().decode(BattingStats.self, from: "{}".data(using: .utf8)!)
+    }
+
+    private static func emptyPitchingStats() -> PitchingStats {
+        try! JSONDecoder().decode(PitchingStats.self, from: "{}".data(using: .utf8)!)
+    }
+
+    private static func emptyFieldingStats() -> FieldingStats {
+        try! JSONDecoder().decode(FieldingStats.self, from: "{}".data(using: .utf8)!)
     }
 
     private static let dateOnlyFormatter: DateFormatter = {

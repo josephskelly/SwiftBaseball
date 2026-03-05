@@ -130,6 +130,38 @@ struct MLBAPIIntegrationTests {
         }
     }
 
+    // MARK: - Games
+
+    @Test("Fetch boxscore by game PK")
+    func fetchBoxscore() async throws {
+        let builder = QueryBuilder<Boxscore>.boxscore(gamePk: 745612, client: client)
+        let boxscore = try await builder.fetch()
+
+        #expect(boxscore.teams.away.team.id > 0)
+        #expect(boxscore.teams.home.team.id > 0)
+        #expect(!boxscore.teams.away.team.name.isEmpty)
+        #expect(!boxscore.teams.home.team.name.isEmpty)
+
+        // Team stats should have some data
+        #expect(boxscore.teams.away.teamStats.batting.atBats ?? 0 > 0)
+        #expect(boxscore.teams.home.teamStats.batting.atBats ?? 0 > 0)
+
+        // Players should be populated
+        let awayPlayers = try #require(boxscore.teams.away.players)
+        #expect(!awayPlayers.isEmpty)
+    }
+
+    @Test("Fetch linescore by game PK")
+    func fetchLinescore() async throws {
+        let builder = QueryBuilder<Linescore>.linescore(gamePk: 745612, client: client)
+        let linescore = try await builder.fetch()
+
+        #expect(linescore.currentInning == 9)
+        #expect(linescore.innings.count == 9)
+        #expect(linescore.teams.away.runs != nil)
+        #expect(linescore.teams.home.runs != nil)
+    }
+
     // MARK: - Standings
 
     @Test("Fetch standings for season")

@@ -4,7 +4,8 @@ extension QueryBuilder where T == Boxscore {
     static func boxscore(gamePk: Int, client: any APIClient) -> QueryBuilder<Boxscore> {
         let endpoint = Endpoint(path: "game/\(gamePk)/boxscore")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
-            try JSONDecoder.mlb.decode(Boxscore.self, from: data)
+            let response = try JSONDecoder.mlb.decode(MLBBoxscoreResponse.self, from: data)
+            return MLBResponseConverters.boxscore(from: response)
         }
     }
 }
