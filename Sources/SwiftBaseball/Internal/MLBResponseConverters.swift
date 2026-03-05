@@ -333,17 +333,9 @@ enum MLBResponseConverters {
         return GameStatus(rawValue: state) ?? .scheduled
     }
 
-    private static func emptyBattingStats() -> BattingStats {
-        try! JSONDecoder().decode(BattingStats.self, from: "{}".data(using: .utf8)!)
-    }
-
-    private static func emptyPitchingStats() -> PitchingStats {
-        try! JSONDecoder().decode(PitchingStats.self, from: "{}".data(using: .utf8)!)
-    }
-
-    private static func emptyFieldingStats() -> FieldingStats {
-        try! JSONDecoder().decode(FieldingStats.self, from: "{}".data(using: .utf8)!)
-    }
+    private static func emptyBattingStats() -> BattingStats { .empty }
+    private static func emptyPitchingStats() -> PitchingStats { .empty }
+    private static func emptyFieldingStats() -> FieldingStats { .empty }
 
     private static let dateOnlyFormatter: DateFormatter = {
         let f = DateFormatter()

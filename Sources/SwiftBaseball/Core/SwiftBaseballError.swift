@@ -1,13 +1,22 @@
 import Foundation
 
+/// Errors thrown by SwiftBaseball API operations.
 public enum SwiftBaseballError: Error, Sendable {
+    /// A network-level error occurred.
     case networkError(URLError)
+    /// The response data could not be decoded.
     case decodingError(DecodingError)
+    /// The provided date range is invalid.
     case invalidDateRange(start: String, end: String)
+    /// No player was found matching the query.
     case playerNotFound(String)
+    /// The API returned a rate-limit response.
     case rateLimited(retryAfter: TimeInterval?)
+    /// The API returned a non-success HTTP status code.
     case invalidResponse(statusCode: Int)
+    /// The library configuration is invalid.
     case configurationError(String)
+    /// The API returned an unexpected response format.
     case unexpectedResponse
 }
 

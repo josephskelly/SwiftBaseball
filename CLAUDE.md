@@ -37,6 +37,7 @@ docs/                      — Implementation plan, API design notes
 - Errors use typed `SwiftBaseballError` enum, not generic `Error`
 - No force unwraps (`!`) in production code
 - No third-party dependencies — Foundation only
+- Idiomatic Swift
 
 ## Essential Commands
 ```
@@ -61,8 +62,59 @@ swift test --filter PlayerTests      # Run specific test suite
 
 ## Data Source Gotchas
 - MLB Stats API: free, no auth, but has undocumented rate limits
-- API date format is `"YYYY-MM-DD"` — use ISO8601DateFormatter
+- API date format is `"YYYY-MM-DD"`
 - Some API fields use empty string `""` instead of null — handle in custom decoding
 - Player IDs differ across sources (MLB ID != FanGraphs ID != BREF ID)
-- Linux: avoid Apple-only APIs (no `DateFormatter.dateFormat` locale quirks — use ISO8601)
+- Use DateFormatter with en_US_POSIX
 - Statcast (future): CSV format, ~90 columns, 25k row limit per query, aggressive rate limiting
+
+## Documentation
+- All public API must have DocC comments (`///`)
+- Use `/// - Parameters:`, `/// - Returns:`, `/// - Throws:` format
+- Cross-reference related types with double-backtick syntax: ``TypeName``
+- Never use `//` for public-facing symbols
+- Group related symbols using `/// - SeeAlso:`
+
+## DocC Structure
+- Articles go in `Sources/SwiftBaseball/Documentation.docc/`
+- Top-level catalog file: `SwiftBaseball.md`
+- Add new types to the Topics section in the catalog
+
+## Testing
+- Framework: Swift Testing (not XCTest) unless target is < iOS 16
+- All public methods require unit tests before a PR is mergeable
+- Test file naming: `{TypeName}Tests.swift` in `Tests/SwiftBaseballTests/`
+- Aim for edge cases: empty responses, malformed JSON, network errors, 
+  stat boundary values (0 PA, 162 G, .400 AVG etc.)
+- Mock all network calls — never hit live MLB Stats API in tests
+- Use `#expect` and `#require` macros, not `XCTAssert`
+- Parameterized tests preferred for stat calculation coverage
+
+## Test Coverage Targets
+- Models: 100%
+- Networking/parsing: 100%  
+- Utilities: 90%+
+- Run coverage: Product → Test (⌘U) with coverage enabled
+
+## Test Structure (AAA)
+- Arrange / Act / Assert pattern, separated by blank lines
+- Each test tests exactly one behavior
+- Test names: camelCase with `@Test` attribute (e.g., `@Test func fetchPlayerById()`)
+
+## Mock Pattern
+- Use protocol-based mocking:
+
+    protocol HTTPClient {
+        func data(for request: URLRequest) async throws -> (Data, URLResponse)
+    }
+    
+    struct MockHTTPClient: HTTPClient { ... }
+
+- Never use third-party mocking libraries.
+
+## Project Management
+- Use Plan mode with Claude
+- Keep documentation up to date
+- Build and test with comprehensive Unit Tests before every commit
+- Always update the README.md, CLAUDE.md, and the implementation plan whenever applicable.
+- Commit and push after after testing and updating the documentation.

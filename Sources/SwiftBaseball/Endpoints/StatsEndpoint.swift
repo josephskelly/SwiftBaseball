@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Query types
 
+/// Query type for player statistics endpoints.
 public enum StatsQuery: Sendable {
     case batting
     case pitching

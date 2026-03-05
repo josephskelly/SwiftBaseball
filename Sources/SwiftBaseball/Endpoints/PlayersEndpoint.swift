@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Query type
 
+/// Query type for player search endpoints.
 public enum PlayerQuery: Sendable {
     case search(String)
 }

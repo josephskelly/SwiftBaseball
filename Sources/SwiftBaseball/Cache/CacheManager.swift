@@ -1,8 +1,8 @@
 import Foundation
 
-// Actor-based in-memory response cache with TTL.
-// Enabled via Configuration(cacheEnabled: true).
-
+/// Actor-based in-memory response cache with configurable TTL.
+///
+/// Enabled via ``Configuration/cacheEnabled``. Entries expire after the configured TTL.
 public actor CacheManager {
     private struct Entry {
         let data: Data
@@ -12,12 +12,16 @@ public actor CacheManager {
     private var store: [String: Entry] = [:]
     private let defaultTTL: TimeInterval
 
+    /// Creates a cache manager with the specified default TTL.
+    ///
+    /// - Parameter defaultTTL: Time-to-live in seconds for cached entries. Defaults to 3600 (1 hour).
     public init(defaultTTL: TimeInterval = 3600) {
         self.defaultTTL = defaultTTL
     }
 
     // MARK: - Public API
 
+    /// Retrieves cached data for the given key, or `nil` if expired or missing.
     public func get(key: String) -> Data? {
         guard let entry = store[key], entry.expiresAt > Date() else {
             store.removeValue(forKey: key)
@@ -26,24 +30,29 @@ public actor CacheManager {
         return entry.data
     }
 
+    /// Stores data in the cache with an optional custom TTL.
     public func set(key: String, data: Data, ttl: TimeInterval? = nil) {
         let expiry = Date().addingTimeInterval(ttl ?? defaultTTL)
         store[key] = Entry(data: data, expiresAt: expiry)
     }
 
+    /// Removes a single entry from the cache.
     public func invalidate(key: String) {
         store.removeValue(forKey: key)
     }
 
+    /// Removes all entries from the cache.
     public func purgeAll() {
         store.removeAll()
     }
 
+    /// Removes all expired entries from the cache.
     public func purgeExpired() {
         let now = Date()
         store = store.filter { $0.value.expiresAt > now }
     }
 
+    /// The number of entries currently in the cache (including expired).
     public var count: Int { store.count }
 }
 

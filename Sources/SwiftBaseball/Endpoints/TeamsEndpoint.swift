@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Query type
 
+/// Query type for team endpoints.
 public enum TeamQuery: Sendable {
     case all(season: Int)
     case roster(teamId: Int, season: Int)

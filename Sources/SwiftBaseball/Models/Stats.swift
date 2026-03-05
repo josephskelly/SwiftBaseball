@@ -2,6 +2,11 @@ import Foundation
 
 // MARK: - Batting
 
+/// Batting statistics for a player or team.
+///
+/// All counting stats and rate stats are optional to handle partial data from the API.
+/// Rate stats (``avg``, ``obp``, ``slg``, ``ops``, ``babip``) are decoded from
+/// both string and numeric API formats.
 public struct BattingStats: Codable, Sendable, Equatable {
     public let gamesPlayed: Int?
     public let plateAppearances: Int?
@@ -79,10 +84,61 @@ public struct BattingStats: Codable, Sendable, Equatable {
         if let s = try? c.decodeIfPresent(String.self, forKey: key) { return Double(s) }
         return nil
     }
+
+    /// An empty batting stats instance with all properties set to `nil`.
+    static let empty = BattingStats(
+        gamesPlayed: nil, plateAppearances: nil, atBats: nil, runs: nil,
+        hits: nil, doubles: nil, triples: nil, homeRuns: nil, rbi: nil,
+        stolenBases: nil, caughtStealing: nil, baseOnBalls: nil,
+        intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil,
+        sacFlies: nil, sacBunts: nil, groundIntoDoublePlay: nil,
+        totalBases: nil, leftOnBase: nil,
+        avg: nil, obp: nil, slg: nil, ops: nil, babip: nil
+    )
+
+    init(
+        gamesPlayed: Int?, plateAppearances: Int?, atBats: Int?, runs: Int?,
+        hits: Int?, doubles: Int?, triples: Int?, homeRuns: Int?, rbi: Int?,
+        stolenBases: Int?, caughtStealing: Int?, baseOnBalls: Int?,
+        intentionalWalks: Int?, strikeOuts: Int?, hitByPitch: Int?,
+        sacFlies: Int?, sacBunts: Int?, groundIntoDoublePlay: Int?,
+        totalBases: Int?, leftOnBase: Int?,
+        avg: Double?, obp: Double?, slg: Double?, ops: Double?, babip: Double?
+    ) {
+        self.gamesPlayed = gamesPlayed
+        self.plateAppearances = plateAppearances
+        self.atBats = atBats
+        self.runs = runs
+        self.hits = hits
+        self.doubles = doubles
+        self.triples = triples
+        self.homeRuns = homeRuns
+        self.rbi = rbi
+        self.stolenBases = stolenBases
+        self.caughtStealing = caughtStealing
+        self.baseOnBalls = baseOnBalls
+        self.intentionalWalks = intentionalWalks
+        self.strikeOuts = strikeOuts
+        self.hitByPitch = hitByPitch
+        self.sacFlies = sacFlies
+        self.sacBunts = sacBunts
+        self.groundIntoDoublePlay = groundIntoDoublePlay
+        self.totalBases = totalBases
+        self.leftOnBase = leftOnBase
+        self.avg = avg
+        self.obp = obp
+        self.slg = slg
+        self.ops = ops
+        self.babip = babip
+    }
 }
 
 // MARK: - Pitching
 
+/// Pitching statistics for a player or team.
+///
+/// Rate stats (``era``, ``whip``, ``avg``, ``inningsPitched``) are decoded from
+/// both string and numeric API formats.
 public struct PitchingStats: Codable, Sendable, Equatable {
     public let gamesPlayed: Int?
     public let gamesStarted: Int?
@@ -159,10 +215,58 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         if let s = try? c.decodeIfPresent(String.self, forKey: key) { return Double(s) }
         return nil
     }
+
+    /// An empty pitching stats instance with all properties set to `nil`.
+    static let empty = PitchingStats(
+        gamesPlayed: nil, gamesStarted: nil, wins: nil, losses: nil,
+        saves: nil, saveOpportunities: nil, holds: nil, blownSaves: nil,
+        completeGames: nil, shutouts: nil, hits: nil, runs: nil,
+        earnedRuns: nil, homeRuns: nil, baseOnBalls: nil,
+        intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil,
+        wildPitches: nil, balks: nil, battersFaced: nil,
+        era: nil, whip: nil, avg: nil, inningsPitched: nil
+    )
+
+    init(
+        gamesPlayed: Int?, gamesStarted: Int?, wins: Int?, losses: Int?,
+        saves: Int?, saveOpportunities: Int?, holds: Int?, blownSaves: Int?,
+        completeGames: Int?, shutouts: Int?, hits: Int?, runs: Int?,
+        earnedRuns: Int?, homeRuns: Int?, baseOnBalls: Int?,
+        intentionalWalks: Int?, strikeOuts: Int?, hitByPitch: Int?,
+        wildPitches: Int?, balks: Int?, battersFaced: Int?,
+        era: Double?, whip: Double?, avg: Double?, inningsPitched: Double?
+    ) {
+        self.gamesPlayed = gamesPlayed
+        self.gamesStarted = gamesStarted
+        self.wins = wins
+        self.losses = losses
+        self.saves = saves
+        self.saveOpportunities = saveOpportunities
+        self.holds = holds
+        self.blownSaves = blownSaves
+        self.completeGames = completeGames
+        self.shutouts = shutouts
+        self.hits = hits
+        self.runs = runs
+        self.earnedRuns = earnedRuns
+        self.homeRuns = homeRuns
+        self.baseOnBalls = baseOnBalls
+        self.intentionalWalks = intentionalWalks
+        self.strikeOuts = strikeOuts
+        self.hitByPitch = hitByPitch
+        self.wildPitches = wildPitches
+        self.balks = balks
+        self.battersFaced = battersFaced
+        self.era = era
+        self.whip = whip
+        self.avg = avg
+        self.inningsPitched = inningsPitched
+    }
 }
 
 // MARK: - Fielding
 
+/// Fielding/defensive statistics for a player or team.
 public struct FieldingStats: Codable, Sendable, Equatable {
     public let gamesPlayed: Int?
     public let gamesStarted: Int?
@@ -202,10 +306,36 @@ public struct FieldingStats: Codable, Sendable, Equatable {
         else if let s = try? c.decodeIfPresent(String.self, forKey: .fielding) { fielding = Double(s) }
         else { fielding = nil }
     }
+
+    /// An empty fielding stats instance with all properties set to `nil`.
+    static let empty = FieldingStats(
+        gamesPlayed: nil, gamesStarted: nil, assists: nil, putOuts: nil,
+        errors: nil, chances: nil, doublePlays: nil, triplePlays: nil,
+        passedBalls: nil, innings: nil, fielding: nil
+    )
+
+    init(
+        gamesPlayed: Int?, gamesStarted: Int?, assists: Int?, putOuts: Int?,
+        errors: Int?, chances: Int?, doublePlays: Int?, triplePlays: Int?,
+        passedBalls: Int?, innings: Double?, fielding: Double?
+    ) {
+        self.gamesPlayed = gamesPlayed
+        self.gamesStarted = gamesStarted
+        self.assists = assists
+        self.putOuts = putOuts
+        self.errors = errors
+        self.chances = chances
+        self.doublePlays = doublePlays
+        self.triplePlays = triplePlays
+        self.passedBalls = passedBalls
+        self.innings = innings
+        self.fielding = fielding
+    }
 }
 
 // MARK: - Player season stats wrapper
 
+/// Aggregated stats for a player in a single season, broken down by stat group.
 public struct PlayerSeasonStats: Codable, Sendable, Equatable {
     public let player: PlayerReference
     public let team: TeamReference?

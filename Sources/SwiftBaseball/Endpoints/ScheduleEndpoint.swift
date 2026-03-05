@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Query type
 
+/// Query type for game schedule endpoints.
 public enum ScheduleQuery: Sendable {
     case date(String)               // "2024-07-04"
     case dateRange(String, String)  // start, end

@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Query type
 
+/// Query type for standings endpoints.
 public enum StandingsQuery: Sendable {
     case season(Int)
     case regularSeason(Int)
