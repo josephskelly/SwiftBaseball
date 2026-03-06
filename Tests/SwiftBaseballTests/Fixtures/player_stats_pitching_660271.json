@@ -1,0 +1,56 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "season",
+        "code": "season"
+      },
+      "group": {
+        "displayName": "pitching",
+        "code": "pitching"
+      },
+      "splits": [
+        {
+          "season": "2023",
+          "stat": {
+            "gamesPlayed": 23,
+            "gamesStarted": 23,
+            "wins": 10,
+            "losses": 5,
+            "saves": 0,
+            "saveOpportunities": 0,
+            "holds": 0,
+            "blownSaves": 0,
+            "completeGames": 1,
+            "shutouts": 1,
+            "hits": 99,
+            "runs": 50,
+            "earnedRuns": 46,
+            "homeRunsAllowed": 15,
+            "baseOnBalls": 55,
+            "intentionalWalks": 2,
+            "strikeOuts": 167,
+            "hitByPitch": 3,
+            "wildPitches": 5,
+            "balks": 0,
+            "battersFaced": 548,
+            "era": "3.14",
+            "whip": "1.06",
+            "avg": ".196",
+            "inningsPitched": "132.0"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          }
+        }
+      ]
+    }
+  ]
+}

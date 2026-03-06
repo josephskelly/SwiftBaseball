@@ -188,4 +188,69 @@ struct MLBAPIIntegrationTests {
         // 3 AL divisions
         #expect(standings.count == 3)
     }
+
+    // MARK: - Stats
+
+    @Test("Fetch player batting stats")
+    func fetchPlayerBattingStats() async throws {
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: client)
+            .season(2024)
+            .group(.batting)
+        let stats = try await builder.fetch()
+
+        #expect(!stats.isEmpty)
+
+        let entry = try #require(stats.first)
+        #expect(entry.player.id == 660271)
+        #expect(entry.group == .batting)
+        #expect(entry.batting != nil)
+        #expect(entry.pitching == nil)
+
+        let batting = try #require(entry.batting)
+        #expect(batting.gamesPlayed ?? 0 > 0)
+        #expect(batting.homeRuns ?? 0 > 0)
+        #expect(batting.avg != nil)
+    }
+
+    @Test("Fetch player pitching stats")
+    func fetchPlayerPitchingStats() async throws {
+        // Ohtani pitched in 2023
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: client)
+            .season(2023)
+            .group(.pitching)
+        let stats = try await builder.fetch()
+
+        #expect(!stats.isEmpty)
+
+        let entry = try #require(stats.first)
+        #expect(entry.group == .pitching)
+        #expect(entry.pitching != nil)
+        #expect(entry.batting == nil)
+
+        let pitching = try #require(entry.pitching)
+        #expect(pitching.wins ?? 0 > 0)
+        #expect(pitching.era != nil)
+    }
+
+    // MARK: - Leaders
+
+    @Test("Fetch HR leaders")
+    func fetchHRLeaders() async throws {
+        let builder = QueryBuilder<[LeaderCategory]>.leaders(.homeRuns, client: client)
+            .season(2024)
+            .limit(5)
+        let categories = try await builder.fetch()
+
+        #expect(!categories.isEmpty)
+
+        let category = try #require(categories.first)
+        #expect(category.leaderCategory == "homeRuns")
+        #expect(category.leaders.count <= 5)
+        #expect(!category.leaders.isEmpty)
+
+        let leader = try #require(category.leaders.first)
+        #expect(leader.rank == 1)
+        #expect(leader.player.id > 0)
+        #expect(!leader.value.isEmpty)
+    }
 }

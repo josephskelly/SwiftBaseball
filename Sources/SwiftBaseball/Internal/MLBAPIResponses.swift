@@ -271,8 +271,10 @@ struct MLBStatSplit: Decodable {
 }
 
 struct MLBStatPayload: Decodable {
-    // Batting
+    // Shared
     let gamesPlayed: Int?
+    let gamesStarted: Int?
+    // Batting
     let plateAppearances: Int?
     let atBats: Int?
     let runs: Int?

@@ -192,12 +192,58 @@ enum MLBResponseConverters {
                     team: split.team.map(teamReference),
                     season: split.season ?? "",
                     group: group,
-                    batting: nil,   // Full stat parsing in Phase 4
-                    pitching: nil,
-                    fielding: nil
+                    batting: group == .batting ? battingStats(from: split.stat) : nil,
+                    pitching: group == .pitching ? pitchingStats(from: split.stat) : nil,
+                    fielding: group == .fielding ? fieldingStats(from: split.stat) : nil
                 )
             }
         }
+    }
+
+    private static func battingStats(from raw: MLBStatPayload) -> BattingStats {
+        BattingStats(
+            gamesPlayed: raw.gamesPlayed, plateAppearances: raw.plateAppearances,
+            atBats: raw.atBats, runs: raw.runs, hits: raw.hits,
+            doubles: raw.doubles, triples: raw.triples, homeRuns: raw.homeRuns,
+            rbi: raw.rbi, stolenBases: raw.stolenBases,
+            caughtStealing: raw.caughtStealing, baseOnBalls: raw.baseOnBalls,
+            intentionalWalks: raw.intentionalWalks, strikeOuts: raw.strikeOuts,
+            hitByPitch: raw.hitByPitch, sacFlies: raw.sacFlies,
+            sacBunts: raw.sacBunts, groundIntoDoublePlay: raw.groundIntoDoublePlay,
+            totalBases: raw.totalBases, leftOnBase: raw.leftOnBase,
+            avg: raw.avg.flatMap(Double.init), obp: raw.obp.flatMap(Double.init),
+            slg: raw.slg.flatMap(Double.init), ops: raw.ops.flatMap(Double.init),
+            babip: raw.babip.flatMap(Double.init)
+        )
+    }
+
+    private static func pitchingStats(from raw: MLBStatPayload) -> PitchingStats {
+        PitchingStats(
+            gamesPlayed: raw.gamesPlayed, gamesStarted: raw.gamesStarted,
+            wins: raw.wins, losses: raw.losses, saves: raw.saves,
+            saveOpportunities: raw.saveOpportunities, holds: raw.holds,
+            blownSaves: raw.blownSaves, completeGames: raw.completeGames,
+            shutouts: raw.shutouts, hits: raw.hits, runs: raw.runs,
+            earnedRuns: raw.earnedRuns, homeRuns: raw.homeRunsAllowed,
+            baseOnBalls: raw.baseOnBalls, intentionalWalks: raw.intentionalWalks,
+            strikeOuts: raw.strikeOuts, hitByPitch: raw.hitByPitch,
+            wildPitches: raw.wildPitches, balks: raw.balks,
+            battersFaced: raw.battersFaced,
+            era: raw.era.flatMap(Double.init), whip: raw.whip.flatMap(Double.init),
+            avg: raw.avg.flatMap(Double.init),
+            inningsPitched: raw.inningsPitched.flatMap(Double.init)
+        )
+    }
+
+    private static func fieldingStats(from raw: MLBStatPayload) -> FieldingStats {
+        FieldingStats(
+            gamesPlayed: raw.gamesPlayed, gamesStarted: raw.gamesStarted,
+            assists: raw.assists, putOuts: raw.putOuts, errors: raw.errors,
+            chances: raw.chances, doublePlays: raw.doublePlays,
+            triplePlays: raw.triplePlays, passedBalls: raw.passedBalls,
+            innings: raw.innings.flatMap(Double.init),
+            fielding: raw.fielding.flatMap(Double.init)
+        )
     }
 
     // MARK: - Boxscore

@@ -1,0 +1,56 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "season",
+        "code": "season"
+      },
+      "group": {
+        "displayName": "hitting",
+        "code": "hitting"
+      },
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 159,
+            "plateAppearances": 731,
+            "atBats": 636,
+            "runs": 134,
+            "hits": 197,
+            "doubles": 38,
+            "triples": 7,
+            "homeRuns": 54,
+            "rbi": 130,
+            "stolenBases": 59,
+            "caughtStealing": 4,
+            "baseOnBalls": 81,
+            "intentionalWalks": 20,
+            "strikeOuts": 162,
+            "hitByPitch": 7,
+            "sacFlies": 5,
+            "sacBunts": 2,
+            "groundIntoDoublePlay": 10,
+            "totalBases": 411,
+            "leftOnBase": 80,
+            "avg": ".310",
+            "obp": ".390",
+            "slg": ".646",
+            "ops": "1.036",
+            "babip": ".334"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          }
+        }
+      ]
+    }
+  ]
+}

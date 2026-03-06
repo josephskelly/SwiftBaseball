@@ -1,0 +1,57 @@
+{
+  "leagueLeaders": [
+    {
+      "leaderCategory": "homeRuns",
+      "leaders": [
+        {
+          "rank": 1,
+          "value": "54",
+          "person": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          },
+          "season": "2024",
+          "leagueRank": 1
+        },
+        {
+          "rank": 2,
+          "value": "47",
+          "person": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450"
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "season": "2024",
+          "leagueRank": 1
+        },
+        {
+          "rank": 3,
+          "value": "44",
+          "person": {
+            "id": 665487,
+            "fullName": "Marcell Ozuna",
+            "link": "/api/v1/people/665487"
+          },
+          "team": {
+            "id": 144,
+            "name": "Atlanta Braves",
+            "link": "/api/v1/teams/144"
+          },
+          "season": "2024",
+          "leagueRank": 3
+        }
+      ]
+    }
+  ]
+}
