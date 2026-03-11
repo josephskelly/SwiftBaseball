@@ -113,8 +113,9 @@ swift test --filter PlayerTests      # Run specific test suite
 - Never use third-party mocking libraries.
 
 ## Project Management
-- Use Plan mode with Claude
-- Keep documentation up to date
-- Build and test with comprehensive Unit Tests before every commit
-- Always update the README.md, CLAUDE.md, and the implementation plan whenever applicable.
-- Commit and push after after testing and updating the documentation.
+
+- Keep a TODO list of proposed changes and keep it updated when planning.
+- Always write and perform any relevant unit tests after any changes.
+- Always update any relevant documentation after any changes including: README.md, CLAUDE.md, TODO.md
+- Always add all and commit after changes with a succint one line message at the top followed by a more detailed description.
+- Always push after each commit.
