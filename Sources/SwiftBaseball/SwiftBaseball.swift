@@ -101,6 +101,16 @@ public enum SwiftBaseball {
         .playerStats(id: id, client: client)
     }
 
+    /// Fetch season stats for multiple players concurrently.
+    ///
+    ///     let stats = try await SwiftBaseball
+    ///         .batchStats([660271, 592450], group: .batting)
+    ///         .season(2024)
+    ///         .fetch()
+    public static func batchStats(_ ids: [Int], group: StatGroup) -> BatchStatsQuery {
+        BatchStatsQuery(playerIds: ids, group: group, client: client)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

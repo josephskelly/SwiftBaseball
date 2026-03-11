@@ -13,6 +13,10 @@ public struct Configuration: Sendable {
     public var cacheTTL: TimeInterval
     /// Maximum number of concurrent API requests.
     public var maxConcurrentRequests: Int
+    /// Maximum number of retry attempts for transient errors (429, 5xx, network failures).
+    public var maxRetries: Int
+    /// Base delay in seconds for exponential back-off between retries.
+    public var retryBaseDelay: TimeInterval
     /// User-Agent header sent with each request.
     public var userAgent: String
 
@@ -26,18 +30,24 @@ public struct Configuration: Sendable {
     ///   - cacheEnabled: Whether to cache responses. Defaults to `false`.
     ///   - cacheTTL: Cache time-to-live in seconds. Defaults to `3600`.
     ///   - maxConcurrentRequests: Maximum concurrent requests. Defaults to `5`.
+    ///   - maxRetries: Maximum retry attempts for transient errors. Defaults to `3`.
+    ///   - retryBaseDelay: Base exponential back-off delay in seconds. Defaults to `0.5`.
     ///   - userAgent: User-Agent header value. Defaults to `"SwiftBaseball/0.1.0"`.
     public init(
         baseURL: URL? = nil,
         cacheEnabled: Bool = false,
         cacheTTL: TimeInterval = 3600,
         maxConcurrentRequests: Int = 5,
+        maxRetries: Int = 3,
+        retryBaseDelay: TimeInterval = 0.5,
         userAgent: String = "SwiftBaseball/0.1.0"
     ) {
         self.baseURL = baseURL ?? Self.defaultBaseURL
         self.cacheEnabled = cacheEnabled
         self.cacheTTL = cacheTTL
         self.maxConcurrentRequests = maxConcurrentRequests
+        self.maxRetries = maxRetries
+        self.retryBaseDelay = retryBaseDelay
         self.userAgent = userAgent
     }
 

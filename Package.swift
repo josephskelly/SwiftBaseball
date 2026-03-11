@@ -10,12 +10,18 @@ let package = Package(
         .watchOS(.v9)
     ],
     products: [
-        .library(name: "SwiftBaseball", targets: ["SwiftBaseball"])
+        .library(name: "SwiftBaseball", targets: ["SwiftBaseball"]),
+        .executable(name: "baseball-cli", targets: ["baseball-cli"])
     ],
     targets: [
         .target(
             name: "SwiftBaseball",
             path: "Sources/SwiftBaseball"
+        ),
+        .executableTarget(
+            name: "baseball-cli",
+            dependencies: ["SwiftBaseball"],
+            path: "Sources/CLI"
         ),
         .testTarget(
             name: "SwiftBaseballTests",
