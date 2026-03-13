@@ -150,6 +150,57 @@ struct StatsTests {
         #expect(entry.fielding == nil)
     }
 
+    // MARK: - Fielding stats
+
+    @Test("Decode fielding stats from fixture")
+    func decodeFieldingStats() throws {
+        let data = try Fixtures.load("player_stats_fielding_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let entry = try #require(stats.first)
+        #expect(entry.season == "2023")
+        #expect(entry.group == .fielding)
+        #expect(entry.team?.id == 108)
+
+        let fielding = try #require(entry.fielding)
+        #expect(fielding.gamesPlayed == 23)
+        #expect(fielding.gamesStarted == 23)
+        #expect(fielding.assists == 12)
+        #expect(fielding.putOuts == 8)
+        #expect(fielding.errors == 1)
+        #expect(fielding.chances == 21)
+        #expect(fielding.doublePlays == 2)
+        #expect(fielding.triplePlays == 0)
+        #expect(fielding.passedBalls == 0)
+    }
+
+    @Test("Fielding rate stats decode from strings")
+    func fieldingRateStats() throws {
+        let data = try Fixtures.load("player_stats_fielding_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let fielding = try #require(stats.first?.fielding)
+        #expect(abs((fielding.innings ?? 0) - 132.0) < 0.01)
+        #expect(abs((fielding.fielding ?? 0) - 0.952) < 0.001)
+    }
+
+    @Test("Fielding group produces nil batting and pitching")
+    func fieldingGroupRouting() throws {
+        let data = try Fixtures.load("player_stats_fielding_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let entry = try #require(stats.first)
+        #expect(entry.batting == nil)
+        #expect(entry.pitching == nil)
+        #expect(entry.fielding != nil)
+    }
+
     // MARK: - Edge cases
 
     @Test("Empty splits returns empty array")

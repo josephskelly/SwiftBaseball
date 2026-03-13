@@ -77,4 +77,102 @@ struct ScheduleTests {
         #expect(homeRecord.losses == 33)
         #expect(homeRecord.pct == ".602")
     }
+
+    // MARK: - Postponed game
+
+    @Test("Postponed game decodes status correctly")
+    func postponedGameStatus() throws {
+        let data = try Fixtures.load("schedule_postponed.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.id == 745001)
+        #expect(game.status == .postponed)
+        #expect(game.gameType == .regularSeason)
+        #expect(game.venue.name == "Fenway Park")
+    }
+
+    @Test("Postponed game has nil score and isWinner false")
+    func postponedGameNoScore() throws {
+        let data = try Fixtures.load("schedule_postponed.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.teams.away.score == nil)
+        #expect(game.teams.home.score == nil)
+        #expect(game.teams.away.isWinner == false)
+        #expect(game.teams.home.isWinner == false)
+    }
+
+    @Test("Postponed game teams decode correctly")
+    func postponedGameTeams() throws {
+        let data = try Fixtures.load("schedule_postponed.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.teams.away.team.id == 147)
+        #expect(game.teams.away.team.name == "New York Yankees")
+        #expect(game.teams.home.team.id == 111)
+        #expect(game.teams.home.team.name == "Boston Red Sox")
+    }
+
+    // MARK: - Edge cases
+
+    @Test("Empty dates array returns empty schedule")
+    func emptyDatesReturnsEmpty() throws {
+        let json = #"{"dates":[]}"#.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        #expect(entries.isEmpty)
+    }
+
+    @Test("Date with no games returns empty schedule")
+    func dateWithNoGames() throws {
+        let json = #"{"dates":[{"date":"2024-07-04","games":[]}]}"#.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        #expect(entries.isEmpty)
+    }
+
+    @Test("Game with missing venue gets placeholder venue")
+    func missingVenueGetsPlaceholder() throws {
+        let json = """
+        {"dates":[{"date":"2024-07-04","games":[{
+            "gamePk": 999,
+            "gameDate": "2024-07-04T17:10:00Z",
+            "gameType": "R",
+            "season": "2024",
+            "status": {"detailedState": "Final"},
+            "teams": {
+                "away": {"team": {"id": 1, "name": "Team A"}, "isWinner": false},
+                "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": true, "score": 3}
+            }
+        }]}]}
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.venue.id == 0)
+        #expect(game.venue.name == "")
+    }
+
+    @Test("schedule() query builder uses dateRange parameter")
+    func scheduleQueryBuilderDateRange() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("schedule_2024_07_04.json")
+        mock.stub(path: "schedule", data: data)
+
+        let builder = QueryBuilder<[ScheduleEntry]>.schedule(.dateRange("2024-07-01", "2024-07-07"), client: mock)
+        _ = try await builder.fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "startDate" && $0.value == "2024-07-01" })
+        #expect(items.contains { $0.name == "endDate" && $0.value == "2024-07-07" })
+    }
 }

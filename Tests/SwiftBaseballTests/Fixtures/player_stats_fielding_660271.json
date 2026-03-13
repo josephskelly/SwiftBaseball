@@ -1,0 +1,42 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "season",
+        "code": "season"
+      },
+      "group": {
+        "displayName": "fielding",
+        "code": "fielding"
+      },
+      "splits": [
+        {
+          "season": "2023",
+          "stat": {
+            "gamesPlayed": 23,
+            "gamesStarted": 23,
+            "assists": 12,
+            "putOuts": 8,
+            "errors": 1,
+            "chances": 21,
+            "doublePlays": 2,
+            "triplePlays": 0,
+            "passedBalls": 0,
+            "innings": "132.0",
+            "fielding": ".952"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          }
+        }
+      ]
+    }
+  ]
+}
