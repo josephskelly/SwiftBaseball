@@ -180,11 +180,13 @@ public enum GameType: String, Codable, Sendable, Hashable, CaseIterable {
     case worldSeries         = "W"
     /// All-Star Game.
     case allStar             = "A"
+    /// Unrecognized game type returned by the API.
+    case unknown             = "U"
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
         let raw = try container.decode(String.self)
-        self = GameType(rawValue: raw) ?? .regularSeason
+        self = GameType(rawValue: raw) ?? .unknown
     }
 }
 

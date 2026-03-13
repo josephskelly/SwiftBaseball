@@ -29,13 +29,13 @@ struct BatchStatsTests {
 
     // MARK: - Multi-player batch
 
-    @Test("Batch of two players returns combined results")
+    @Test("Batch of two players returns combined results with correct per-player data")
     func batchTwoPlayers() async throws {
         let mock = MockAPIClient()
-        let battingData = try Fixtures.load("player_stats_batting_660271.json")
-        // Re-use the same fixture for player 592450 — we only care about result count
-        mock.stub(path: "people/660271/stats", data: battingData)
-        mock.stub(path: "people/592450/stats", data: battingData)
+        let ohtaniData = try Fixtures.load("player_stats_batting_660271.json")
+        let judgeData = try Fixtures.load("player_stats_batting_592450.json")
+        mock.stub(path: "people/660271/stats", data: ohtaniData)
+        mock.stub(path: "people/592450/stats", data: judgeData)
 
         let query = BatchStatsQuery(
             playerIds: [660271, 592450],
@@ -44,8 +44,15 @@ struct BatchStatsTests {
             client: mock
         )
         let results = try await query.fetch()
-        // Two players × one season entry each
-        #expect(results.count >= 2)
+
+        #expect(results.count == 2)
+        let ohtani = try #require(results.first { $0.player.id == 660271 })
+        let judge = try #require(results.first { $0.player.id == 592450 })
+
+        #expect(ohtani.batting?.homeRuns == 54)
+        #expect(judge.batting?.homeRuns == 58)
+        #expect(ohtani.player.fullName == "Shohei Ohtani")
+        #expect(judge.player.fullName == "Aaron Judge")
     }
 
     // MARK: - season() modifier

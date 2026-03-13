@@ -31,8 +31,9 @@ struct ScheduleTests {
         #expect(game.teams.away.score == 3)
         #expect(game.teams.away.isWinner == false)
 
-        #expect(game.venue.id == 22)
-        #expect(game.venue.name == "Dodger Stadium")
+        let venue = try #require(game.venue)
+        #expect(venue.id == 22)
+        #expect(venue.name == "Dodger Stadium")
     }
 
     @Test("Schedule game date parses correctly")
@@ -78,6 +79,52 @@ struct ScheduleTests {
         #expect(homeRecord.pct == ".602")
     }
 
+    // MARK: - Unknown game type
+
+    @Test("Unknown gameType code falls back to .unknown not .regularSeason")
+    func unknownGameTypeFallback() throws {
+        let json = """
+        {"dates":[{"date":"2024-07-04","games":[{
+            "gamePk": 123,
+            "gameDate": "2024-07-04T17:10:00Z",
+            "gameType": "X",
+            "season": "2024",
+            "status": {"detailedState": "Final"},
+            "teams": {
+                "away": {"team": {"id": 1, "name": "Team A"}, "isWinner": false},
+                "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": true, "score": 5}
+            },
+            "venue": {"id": 1, "name": "Some Park"}
+        }]}]}
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.gameType == .unknown)
+    }
+
+    @Test("Missing gameType falls back to .unknown")
+    func missingGameTypeFallback() throws {
+        let json = """
+        {"dates":[{"date":"2024-07-04","games":[{
+            "gamePk": 124,
+            "gameDate": "2024-07-04T17:10:00Z",
+            "season": "2024",
+            "status": {"detailedState": "Scheduled"},
+            "teams": {
+                "away": {"team": {"id": 1, "name": "Team A"}},
+                "home": {"team": {"id": 2, "name": "Team B"}}
+            }
+        }]}]}
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.gameType == .unknown)
+    }
+
     // MARK: - Postponed game
 
     @Test("Postponed game decodes status correctly")
@@ -90,7 +137,7 @@ struct ScheduleTests {
         #expect(game.id == 745001)
         #expect(game.status == .postponed)
         #expect(game.gameType == .regularSeason)
-        #expect(game.venue.name == "Fenway Park")
+        #expect(game.venue?.name == "Fenway Park")
     }
 
     @Test("Postponed game has nil score and isWinner false")
@@ -158,8 +205,7 @@ struct ScheduleTests {
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
         let game = try #require(entries.first)
-        #expect(game.venue.id == 0)
-        #expect(game.venue.name == "")
+        #expect(game.venue == nil)
     }
 
     @Test("schedule() query builder uses dateRange parameter")

@@ -1,0 +1,56 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "season",
+        "code": "season"
+      },
+      "group": {
+        "displayName": "hitting",
+        "code": "hitting"
+      },
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 158,
+            "plateAppearances": 633,
+            "atBats": 534,
+            "runs": 122,
+            "hits": 153,
+            "doubles": 28,
+            "triples": 2,
+            "homeRuns": 58,
+            "rbi": 144,
+            "stolenBases": 9,
+            "caughtStealing": 5,
+            "baseOnBalls": 87,
+            "intentionalWalks": 21,
+            "strikeOuts": 170,
+            "hitByPitch": 5,
+            "sacFlies": 8,
+            "sacBunts": 0,
+            "groundIntoDoublePlay": 9,
+            "totalBases": 359,
+            "leftOnBase": 71,
+            "avg": ".286",
+            "obp": ".458",
+            "slg": ".701",
+            "ops": "1.159",
+            "babip": ".284"
+          },
+          "player": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450"
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          }
+        }
+      ]
+    }
+  ]
+}

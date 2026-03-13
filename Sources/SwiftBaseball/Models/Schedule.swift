@@ -12,8 +12,8 @@ public struct ScheduleEntry: Codable, Sendable, Equatable, Identifiable {
     public let status: GameStatus
     /// Away and home team entries.
     public let teams: ScheduleTeams
-    /// Venue where the game is played.
-    public let venue: VenueReference
+    /// Venue where the game is played. `nil` if the API did not include venue data.
+    public let venue: VenueReference?
     /// Type of game (regular season, postseason, etc.).
     public let gameType: GameType
     /// Season year (e.g. "2024").
