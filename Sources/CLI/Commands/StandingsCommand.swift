@@ -1,5 +1,6 @@
 import Foundation
 import SwiftBaseball
+import CLISupport
 
 struct StandingsCommand {
     /// `standings [--season YEAR] [--league AL|NL]`

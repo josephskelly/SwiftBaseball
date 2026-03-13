@@ -226,7 +226,7 @@ public enum StatType: String, Codable, Sendable, Hashable, CaseIterable {
 // MARK: - GameStatus
 
 /// Current status of a game.
-public enum GameStatus: String, Codable, Sendable, Hashable {
+public enum GameStatus: String, Codable, Sendable, Hashable, CaseIterable {
     /// Game is scheduled but has not started.
     case scheduled   = "Scheduled"
     /// Teams are warming up.

@@ -1,5 +1,6 @@
 import Foundation
 import SwiftBaseball
+import CLISupport
 
 struct PlayersCommand {
     /// `players search <name>`  or  `players id <id>`

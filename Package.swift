@@ -18,14 +18,18 @@ let package = Package(
             name: "SwiftBaseball",
             path: "Sources/SwiftBaseball"
         ),
+        .target(
+            name: "CLISupport",
+            path: "Sources/CLISupport"
+        ),
         .executableTarget(
             name: "baseball-cli",
-            dependencies: ["SwiftBaseball"],
+            dependencies: ["SwiftBaseball", "CLISupport"],
             path: "Sources/CLI"
         ),
         .testTarget(
             name: "SwiftBaseballTests",
-            dependencies: ["SwiftBaseball"],
+            dependencies: ["SwiftBaseball", "CLISupport"],
             path: "Tests/SwiftBaseballTests",
             resources: [.copy("Fixtures")]
         )

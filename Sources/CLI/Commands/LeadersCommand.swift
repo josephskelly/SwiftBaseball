@@ -1,5 +1,6 @@
 import Foundation
 import SwiftBaseball
+import CLISupport
 
 struct LeadersCommand {
     /// `leaders <stat> [--season YEAR] [--limit N]`

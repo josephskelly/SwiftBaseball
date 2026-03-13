@@ -1,6 +1,7 @@
 import Testing
 import Foundation
 @testable import SwiftBaseball
+import CLISupport
 
 /// Tests for CLI-facing SwiftBaseball types: argument-parseable enums and category mappings.
 @Suite("CLI Tests")
@@ -60,7 +61,7 @@ struct CLITests {
     @Test("TableFormatter renders header and rows")
     func tableFormatterBasic() {
         let rows = [["Aaron Judge", "58"], ["Shohei Ohtani", "54"]]
-        let table = InlineTableFormatter(headers: ["Player", "HR"], rows: rows).render()
+        let table = TableFormatter(headers: ["Player", "HR"], rows: rows).render()
         #expect(table.contains("Aaron Judge"))
         #expect(table.contains("Shohei Ohtani"))
         #expect(table.contains("Player"))
@@ -69,7 +70,7 @@ struct CLITests {
 
     @Test("TableFormatter pads all content lines to equal width")
     func tableFormatterEqualWidth() {
-        let table = InlineTableFormatter(
+        let table = TableFormatter(
             headers: ["Name", "Value"],
             rows: [["A very long name", "1"], ["B", "99"]]
         ).render()
@@ -80,41 +81,14 @@ struct CLITests {
 
     @Test("TableFormatter empty rows produces header-only table")
     func tableFormatterEmptyRows() {
-        let table = InlineTableFormatter(headers: ["X", "Y"], rows: []).render()
+        let table = TableFormatter(headers: ["X", "Y"], rows: []).render()
         #expect(table.contains("X"))
         #expect(!table.split(separator: "\n").filter { $0.hasPrefix("|") }.dropFirst().isEmpty == false)
     }
 
     @Test("TableFormatter empty headers returns empty string")
     func tableFormatterEmptyHeaders() {
-        #expect(InlineTableFormatter(headers: [], rows: []).render().isEmpty)
+        #expect(TableFormatter(headers: [], rows: []).render().isEmpty)
     }
 }
 
-// MARK: - InlineTableFormatter (duplicate of CLI's TableFormatter for testability)
-
-/// Mirrors `Sources/CLI/Formatting/TableFormatter.swift` for unit testing without
-/// importing the executable target.
-private struct InlineTableFormatter {
-    let headers: [String]
-    let rows: [[String]]
-
-    func render() -> String {
-        guard !headers.isEmpty else { return "" }
-        var widths = headers.map(\.count)
-        for row in rows {
-            for (i, cell) in row.prefix(headers.count).enumerated() {
-                widths[i] = max(widths[i], cell.count)
-            }
-        }
-        let sep = "+" + widths.map { String(repeating: "-", count: $0 + 2) }.joined(separator: "+") + "+"
-        func line(_ cells: [String]) -> String {
-            var s = "|"
-            for (i, cell) in cells.prefix(headers.count).enumerated() {
-                s += " " + cell.padding(toLength: widths[i], withPad: " ", startingAt: 0) + " |"
-            }
-            return s
-        }
-        return ([sep, line(headers), sep] + rows.map { line($0) } + [sep]).joined(separator: "\n")
-    }
-}

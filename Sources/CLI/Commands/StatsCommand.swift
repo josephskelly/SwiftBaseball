@@ -1,5 +1,6 @@
 import Foundation
 import SwiftBaseball
+import CLISupport
 
 struct StatsCommand {
     /// `stats <batting|pitching> <playerID> [--season YEAR]`

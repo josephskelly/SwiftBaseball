@@ -1,12 +1,17 @@
 import Foundation
 
 /// Renders tabular data as an ASCII table.
-struct TableFormatter {
-    let headers: [String]
-    let rows: [[String]]
+public struct TableFormatter {
+    public let headers: [String]
+    public let rows: [[String]]
+
+    public init(headers: [String], rows: [[String]]) {
+        self.headers = headers
+        self.rows = rows
+    }
 
     /// Renders and returns the ASCII table as a string.
-    func render() -> String {
+    public func render() -> String {
         guard !headers.isEmpty else { return "" }
 
         // Compute column widths
@@ -39,7 +44,7 @@ struct TableFormatter {
     }
 
     /// Prints the table to stdout.
-    func print() {
+    public func print() {
         Swift.print(render())
     }
 }
