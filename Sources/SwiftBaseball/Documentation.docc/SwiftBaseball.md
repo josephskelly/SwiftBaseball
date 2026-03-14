@@ -60,6 +60,30 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``LinescoreOffense``
 - ``LinescoreDefense``
 
+### Play-by-Play
+
+- ``PlayByPlay``
+- ``Play``
+- ``PlayResult``
+- ``PlayAbout``
+- ``Count``
+- ``PlayMatchup``
+- ``Runner``
+- ``RunnerMovement``
+- ``RunnerDetails``
+- ``PlayEvent``
+- ``PlayEventDetails``
+- ``CodeDescription``
+- ``PitchData``
+
+### Game Log
+
+- ``GameLogEntry``
+
+### Transactions
+
+- ``Transaction``
+
 ### Statistics
 
 - ``BattingStats``

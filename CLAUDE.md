@@ -18,8 +18,8 @@ Swift equivalent of Python's pybaseball. MIT licensed. Author: Joseph Kelly.
 Sources/
   SwiftBaseball/           — Public fluent query API (SwiftBaseball.players(...).fetch())
     Core/                  — APIClient protocol, QueryBuilder, errors, configuration
-    Models/                — Codable structs: Player, Team, Game, Stats, Standings
-    Endpoints/             — Players, Teams, Schedule, Games, Stats, Standings, Leaders
+    Models/                — Codable structs: Player, Team, Game, Stats, Standings, GameLog, PlayByPlay, Transaction
+    Endpoints/             — Players, Teams, Schedule, Games, Stats, Standings, Leaders, GameLog, PlayByPlay, Transactions
     Cache/                 — Actor-based response cache with TTL
 Tests/
   SwiftBaseballTests/      — Unit + integration tests

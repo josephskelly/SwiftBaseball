@@ -50,13 +50,31 @@ let standings = try await SwiftBaseball
 
 // Player detail with stats
 let judge = try await SwiftBaseball.player(id: 592450).fetch()
+
+// Game log — per-game stat lines
+let log = try await SwiftBaseball
+    .gameLog(playerId: 660271)
+    .season(2024)
+    .group(.batting)
+    .fetch()
+
+// Play-by-play with pitch data
+let pbp = try await SwiftBaseball
+    .playByPlay(gamePk: 745612)
+    .fetch()
+
+// Trade deadline transactions
+let trades = try await SwiftBaseball
+    .transactions()
+    .dateRange(start: "2024-07-01", end: "2024-07-31")
+    .fetch()
 ```
 
 ## Data Sources
 
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
-| **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats |
+| **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, game logs, play-by-play, transactions |
 | Baseball Savant / Statcast | Planned | None | Pitch-level data, exit velocity, spin rate, launch angle |
 | Baseball Reference | Planned | None (scraped) | Historical season stats, awards |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
@@ -113,6 +131,9 @@ Then add it as a dependency to your target:
 | **Endpoints/Teams** | Team info, rosters, coaches |
 | **Endpoints/Schedule** | Game schedules by date, team, or season |
 | **Endpoints/Games** | Box scores, line scores, play-by-play |
+| **Endpoints/GameLog** | Per-game stat lines for a player |
+| **Endpoints/PlayByPlay** | Pitch-level play-by-play with runner and matchup data |
+| **Endpoints/Transactions** | Trades, signings, and roster moves |
 | **Endpoints/Stats** | Batting, pitching, fielding statistics |
 | **Endpoints/Standings** | Division, league, and wildcard standings |
 | **Endpoints/Leaders** | League leaders by stat category |
