@@ -56,6 +56,49 @@ struct RateLimiterTests {
         await limiter.release()
     }
 
+    @Test("Multiple concurrent tasks contend for a single permit without deadlock")
+    func concurrentStressSinglePermit() async {
+        let limiter = RateLimiter(maxConcurrent: 1)
+        let taskCount = 20
+        let counter = Counter()
+
+        await withTaskGroup(of: Void.self) { group in
+            for _ in 0..<taskCount {
+                group.addTask {
+                    await limiter.acquire()
+                    await counter.increment()
+                    // Simulate brief work
+                    try? await Task.sleep(nanoseconds: 1_000_000)
+                    await limiter.release()
+                }
+            }
+        }
+
+        let finalCount = await counter.value
+        #expect(finalCount == taskCount)
+    }
+
+    @Test("Concurrent tasks with limited permits all complete")
+    func concurrentStressMultiplePermits() async {
+        let limiter = RateLimiter(maxConcurrent: 3)
+        let taskCount = 30
+        let counter = Counter()
+
+        await withTaskGroup(of: Void.self) { group in
+            for _ in 0..<taskCount {
+                group.addTask {
+                    await limiter.acquire()
+                    await counter.increment()
+                    try? await Task.sleep(nanoseconds: 500_000)
+                    await limiter.release()
+                }
+            }
+        }
+
+        let finalCount = await counter.value
+        #expect(finalCount == taskCount)
+    }
+
     // MARK: - Configuration
 
     @Test("Configuration default retry values")
@@ -70,6 +113,32 @@ struct RateLimiterTests {
         let config = Configuration(maxRetries: 5, retryBaseDelay: 1.0)
         #expect(config.maxRetries == 5)
         #expect(config.retryBaseDelay == 1.0)
+    }
+
+    @Test("Configuration custom baseURL is respected")
+    func configurationCustomBaseURL() {
+        // swiftlint:disable:next force_unwrapping
+        let customURL = URL(string: "https://custom.api.example.com/v2/")!
+        let config = Configuration(baseURL: customURL)
+        #expect(config.baseURL == customURL)
+    }
+
+    @Test("Configuration custom cacheTTL is respected")
+    func configurationCustomCacheTTL() {
+        let config = Configuration(cacheTTL: 7200)
+        #expect(config.cacheTTL == 7200)
+    }
+
+    @Test("Configuration default userAgent includes version")
+    func configurationDefaultUserAgent() {
+        let config = Configuration()
+        #expect(config.userAgent == "SwiftBaseball/\(swiftBaseballVersion)")
+    }
+
+    @Test("Configuration nil baseURL uses default")
+    func configurationNilBaseURLUsesDefault() {
+        let config = Configuration(baseURL: nil)
+        #expect(config.baseURL.absoluteString == "https://statsapi.mlb.com/api/v1/")
     }
 
     // MARK: - Retry via URLSessionAPIClient
@@ -184,4 +253,12 @@ private final class RetryCountingAPIClient: APIClient, @unchecked Sendable {
         }
         throw lastError
     }
+}
+
+// MARK: - Counter
+
+/// A thread-safe counter for stress tests.
+private actor Counter {
+    var value: Int = 0
+    func increment() { value += 1 }
 }

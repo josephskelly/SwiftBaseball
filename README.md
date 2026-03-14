@@ -30,12 +30,8 @@ import SwiftBaseball
 // Look up a player
 let players = try await SwiftBaseball.players(.search("Ohtani")).fetch()
 
-// Get season batting stats
-let battingStats = try await SwiftBaseball
-    .stats(.batting)
-    .season(2024)
-    .team("NYY")
-    .fetch()
+// Get season batting stats for a player
+let stats = try await SwiftBaseball.playerStats(id: 592450).season(2024).fetch()
 
 // Fetch today's schedule
 let games = try await SwiftBaseball
@@ -48,8 +44,14 @@ let standings = try await SwiftBaseball
     .league(.american)
     .fetch()
 
-// Player detail with stats
+// Player detail
 let judge = try await SwiftBaseball.player(id: 592450).fetch()
+
+// Batch stats for multiple players
+let batch = try await SwiftBaseball
+    .batchStats([660271, 592450], group: .batting)
+    .season(2024)
+    .fetch()
 
 // Game log — per-game stat lines
 let log = try await SwiftBaseball
@@ -143,11 +145,11 @@ Then add it as a dependency to your target:
 
 | pybaseball | SwiftBaseball |
 |---|---|
-| `batting_stats(2024)` | `SwiftBaseball.stats(.batting).season(2024).fetch()` |
-| `pitching_stats(2024)` | `SwiftBaseball.stats(.pitching).season(2024).fetch()` |
+| `batting_stats(2024)` | `SwiftBaseball.playerStats(id: 592450).season(2024).fetch()` |
+| `pitching_stats(2024)` | `SwiftBaseball.playerStats(id: 477132).season(2024).fetch()` |
 | `playerid_lookup("ohtani")` | `SwiftBaseball.players(.search("Ohtani")).fetch()` |
 | `standings(2024)` | `SwiftBaseball.standings(.season(2024)).fetch()` |
-| `schedule_and_record(2024, "NYY")` | `SwiftBaseball.schedule(.season(2024)).team("NYY").fetch()` |
+| `schedule_and_record(2024)` | `SwiftBaseball.schedule(.season(2024)).teamId(147).fetch()` |
 
 ## Roadmap
 

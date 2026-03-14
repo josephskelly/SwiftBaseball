@@ -97,4 +97,24 @@ struct CacheTests {
         // Underlying mock should only have been called once (second call was cached)
         #expect(mock.callCount == 1)
     }
+
+    @Test("CachingAPIClient returns identical data from cache as from original fetch")
+    func cachingClientReturnsIdenticalData() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_search_ohtani.json")
+        mock.stub(path: "people/search", data: data)
+
+        let cache = CacheManager(defaultTTL: 60)
+        let client = CachingAPIClient(wrapped: mock, cache: cache, ttl: 60)
+
+        let endpoint = Endpoint(path: "people/search", queryItems: [
+            URLQueryItem(name: "names", value: "Ohtani")
+        ])
+
+        let first = try await client.fetchRaw(endpoint)
+        let second = try await client.fetchRaw(endpoint)
+
+        #expect(first == second)
+        #expect(mock.callCount == 1)
+    }
 }

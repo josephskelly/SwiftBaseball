@@ -1,5 +1,8 @@
 import Foundation
 
+/// The current version of the SwiftBaseball library.
+public let swiftBaseballVersion = "0.1.0"
+
 /// Configuration for the SwiftBaseball API client.
 ///
 /// Controls base URL, caching behavior, concurrency limits, and user agent.
@@ -32,7 +35,7 @@ public struct Configuration: Sendable {
     ///   - maxConcurrentRequests: Maximum concurrent requests. Defaults to `5`.
     ///   - maxRetries: Maximum retry attempts for transient errors. Defaults to `3`.
     ///   - retryBaseDelay: Base exponential back-off delay in seconds. Defaults to `0.5`.
-    ///   - userAgent: User-Agent header value. Defaults to `"SwiftBaseball/0.1.0"`.
+    ///   - userAgent: User-Agent header value. Defaults to `"SwiftBaseball/<version>"`.
     public init(
         baseURL: URL? = nil,
         cacheEnabled: Bool = false,
@@ -40,7 +43,7 @@ public struct Configuration: Sendable {
         maxConcurrentRequests: Int = 5,
         maxRetries: Int = 3,
         retryBaseDelay: TimeInterval = 0.5,
-        userAgent: String = "SwiftBaseball/0.1.0"
+        userAgent: String = "SwiftBaseball/\(swiftBaseballVersion)"
     ) {
         self.baseURL = baseURL ?? Self.defaultBaseURL
         self.cacheEnabled = cacheEnabled
