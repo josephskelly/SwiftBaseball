@@ -246,6 +246,43 @@ enum MLBResponseConverters {
         )
     }
 
+    // MARK: - Game Log
+
+    static func gameLogEntries(from response: MLBGameLogResponse) -> [GameLogEntry] {
+        response.stats.flatMap { statGroup -> [GameLogEntry] in
+            let groupName = statGroup.group?.displayName ?? ""
+            let group = StatGroup(apiValue: groupName)
+            return statGroup.splits.compactMap { split in
+                guard let dateString = split.date,
+                      let date = parseDate(dateString),
+                      let gamePk = split.game?.gamePk else { return nil }
+
+                let player = split.player.map(playerReference)
+                    ?? PlayerReference(id: 0, fullName: "")
+                let team = split.team.map(teamReference)
+                    ?? TeamReference(id: 0, name: "")
+                let opponent = split.opponent.map(teamReference)
+                    ?? TeamReference(id: 0, name: "")
+
+                return GameLogEntry(
+                    player: player,
+                    season: split.season ?? "",
+                    date: date,
+                    gamePk: gamePk,
+                    team: team,
+                    opponent: opponent,
+                    isHome: split.isHome ?? false,
+                    isWin: split.isWin ?? false,
+                    gameType: GameType(rawValue: split.gameType ?? "") ?? .unknown,
+                    group: group,
+                    batting: group == .batting ? battingStats(from: split.stat) : nil,
+                    pitching: group == .pitching ? pitchingStats(from: split.stat) : nil,
+                    fielding: group == .fielding ? fieldingStats(from: split.stat) : nil
+                )
+            }
+        }
+    }
+
     // MARK: - Boxscore
 
     static func boxscore(from response: MLBBoxscoreResponse) -> Boxscore {

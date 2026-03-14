@@ -328,6 +328,39 @@ struct MLBStatPayload: Decodable {
     let innings: String?
 }
 
+// MARK: - Game Log
+
+struct MLBGameLogResponse: Decodable {
+    let stats: [MLBGameLogGroup]
+}
+
+struct MLBGameLogGroup: Decodable {
+    let type: MLBDisplayName?
+    let group: MLBDisplayName?
+    let splits: [MLBGameLogSplit]
+}
+
+struct MLBDisplayName: Decodable {
+    let displayName: String
+}
+
+struct MLBGameLogSplit: Decodable {
+    let season: String?
+    let stat: MLBStatPayload
+    let player: MLBEntityRef?
+    let team: MLBEntityRef?
+    let opponent: MLBEntityRef?
+    let date: String?
+    let gameType: String?
+    let isHome: Bool?
+    let isWin: Bool?
+    let game: MLBGameReference?
+}
+
+struct MLBGameReference: Decodable {
+    let gamePk: Int
+}
+
 // MARK: - Shared
 
 struct MLBEntityRef: Decodable {

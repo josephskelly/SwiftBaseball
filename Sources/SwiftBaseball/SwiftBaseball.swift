@@ -92,6 +92,15 @@ public enum SwiftBaseball {
         .linescore(gamePk: gamePk, client: client)
     }
 
+    // MARK: - Game Log
+
+    /// Fetch per-game stat lines for a player.
+    ///
+    ///     let log = try await SwiftBaseball.gameLog(playerId: 660271).season(2024).group(.batting).fetch()
+    public static func gameLog(playerId: Int) -> QueryBuilder<[GameLogEntry]> {
+        .gameLog(playerId: playerId, client: client)
+    }
+
     // MARK: - Stats
 
     /// Fetch season stats for a player.
