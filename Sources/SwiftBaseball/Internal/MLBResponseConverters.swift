@@ -283,6 +283,24 @@ enum MLBResponseConverters {
         }
     }
 
+    // MARK: - Transactions
+
+    static func transactions(from response: MLBTransactionsResponse) -> [Transaction] {
+        response.transactions.map { raw in
+            Transaction(
+                id: raw.id,
+                person: raw.person.map(playerReference),
+                fromTeam: raw.fromTeam.map(teamReference),
+                toTeam: raw.toTeam.map(teamReference),
+                date: raw.date.flatMap(parseDateTime),
+                effectiveDate: raw.effectiveDate.flatMap(parseDateTime),
+                typeCode: raw.typeCode,
+                typeDesc: raw.typeDesc,
+                description: raw.description
+            )
+        }
+    }
+
     // MARK: - Boxscore
 
     static func boxscore(from response: MLBBoxscoreResponse) -> Boxscore {

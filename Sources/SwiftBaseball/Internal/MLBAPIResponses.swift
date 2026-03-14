@@ -361,6 +361,24 @@ struct MLBGameReference: Decodable {
     let gamePk: Int
 }
 
+// MARK: - Transactions
+
+struct MLBTransactionsResponse: Decodable {
+    let transactions: [MLBTransaction]
+}
+
+struct MLBTransaction: Decodable {
+    let id: Int
+    let person: MLBEntityRef?
+    let fromTeam: MLBEntityRef?
+    let toTeam: MLBEntityRef?
+    let date: String?
+    let effectiveDate: String?
+    let typeCode: String?
+    let typeDesc: String?
+    let description: String?
+}
+
 // MARK: - Shared
 
 struct MLBEntityRef: Decodable {

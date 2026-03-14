@@ -1,0 +1,96 @@
+{
+  "transactions": [
+    {
+      "id": 745001,
+      "person": {
+        "id": 592450,
+        "fullName": "Aaron Judge",
+        "link": "/api/v1/people/592450"
+      },
+      "fromTeam": {
+        "id": 147,
+        "name": "New York Yankees",
+        "link": "/api/v1/teams/147"
+      },
+      "toTeam": {
+        "id": 147,
+        "name": "New York Yankees",
+        "link": "/api/v1/teams/147"
+      },
+      "date": "2024-07-01T00:00:00Z",
+      "effectiveDate": "2024-07-01T00:00:00Z",
+      "typeCode": "SGN",
+      "typeDesc": "Signing",
+      "description": "The New York Yankees signed designated hitter Aaron Judge."
+    },
+    {
+      "id": 745002,
+      "person": {
+        "id": 543037,
+        "fullName": "Jazz Chisholm Jr.",
+        "link": "/api/v1/people/543037"
+      },
+      "fromTeam": {
+        "id": 146,
+        "name": "Miami Marlins",
+        "link": "/api/v1/teams/146"
+      },
+      "toTeam": {
+        "id": 147,
+        "name": "New York Yankees",
+        "link": "/api/v1/teams/147"
+      },
+      "date": "2024-07-27T00:00:00Z",
+      "effectiveDate": "2024-07-27T00:00:00Z",
+      "typeCode": "TR",
+      "typeDesc": "Trade",
+      "description": "The New York Yankees acquired infielder Jazz Chisholm Jr. from the Miami Marlins."
+    },
+    {
+      "id": 745003,
+      "person": {
+        "id": 663993,
+        "fullName": "Jack Flaherty",
+        "link": "/api/v1/people/663993"
+      },
+      "fromTeam": {
+        "id": 116,
+        "name": "Detroit Tigers",
+        "link": "/api/v1/teams/116"
+      },
+      "toTeam": {
+        "id": 119,
+        "name": "Los Angeles Dodgers",
+        "link": "/api/v1/teams/119"
+      },
+      "date": "2024-07-30T00:00:00Z",
+      "effectiveDate": "2024-07-30T00:00:00Z",
+      "typeCode": "TR",
+      "typeDesc": "Trade",
+      "description": "The Los Angeles Dodgers acquired right-handed pitcher Jack Flaherty from the Detroit Tigers."
+    },
+    {
+      "id": 745004,
+      "person": {
+        "id": 664023,
+        "fullName": "Tanner Scott",
+        "link": "/api/v1/people/664023"
+      },
+      "fromTeam": {
+        "id": 146,
+        "name": "Miami Marlins",
+        "link": "/api/v1/teams/146"
+      },
+      "toTeam": {
+        "id": 135,
+        "name": "San Diego Padres",
+        "link": "/api/v1/teams/135"
+      },
+      "date": "2024-07-30T00:00:00Z",
+      "effectiveDate": "2024-07-30T00:00:00Z",
+      "typeCode": "TR",
+      "typeDesc": "Trade",
+      "description": "The San Diego Padres acquired left-handed pitcher Tanner Scott from the Miami Marlins."
+    }
+  ]
+}

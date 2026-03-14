@@ -101,6 +101,17 @@ public enum SwiftBaseball {
         .gameLog(playerId: playerId, client: client)
     }
 
+    // MARK: - Transactions
+
+    /// Fetch MLB transactions (trades, signings, roster moves).
+    ///
+    ///     let trades = try await SwiftBaseball.transactions()
+    ///         .dateRange(start: "2024-07-01", end: "2024-07-31")
+    ///         .fetch()
+    public static func transactions() -> QueryBuilder<[Transaction]> {
+        .transactions(client: client)
+    }
+
     // MARK: - Stats
 
     /// Fetch season stats for a player.
