@@ -361,6 +361,94 @@ struct MLBGameReference: Decodable {
     let gamePk: Int
 }
 
+// MARK: - Play-by-Play
+
+struct MLBPlayByPlayResponse: Decodable {
+    let allPlays: [MLBPlay]
+    let scoringPlays: [Int]?
+}
+
+struct MLBPlay: Decodable {
+    let result: MLBPlayResult?
+    let about: MLBPlayAbout?
+    let count: MLBCount?
+    let matchup: MLBPlayMatchup?
+    let runners: [MLBRunner]?
+    let playEvents: [MLBPlayEvent]?
+}
+
+struct MLBPlayResult: Decodable {
+    let type: String?
+    let event: String?
+    let eventType: String?
+    let description: String?
+    let rbi: Int?
+    let awayScore: Int?
+    let homeScore: Int?
+}
+
+struct MLBPlayAbout: Decodable {
+    let atBatIndex: Int
+    let halfInning: String?
+    let inning: Int
+    let isComplete: Bool
+    let isScoringPlay: Bool
+    let hasOut: Bool
+}
+
+struct MLBCount: Decodable {
+    let balls: Int
+    let strikes: Int
+    let outs: Int
+}
+
+struct MLBPlayMatchup: Decodable {
+    let batter: MLBEntityRef?
+    let batSide: MLBCodeDescription?
+    let pitcher: MLBEntityRef?
+    let pitchHand: MLBCodeDescription?
+}
+
+struct MLBRunner: Decodable {
+    let movement: MLBRunnerMovement?
+    let details: MLBRunnerDetails?
+}
+
+struct MLBRunnerMovement: Decodable {
+    let originBase: String?
+    let start: String?
+    let end: String?
+    let outBase: String?
+    let isOut: Bool?
+}
+
+struct MLBRunnerDetails: Decodable {
+    let event: String?
+    let runner: MLBEntityRef?
+}
+
+struct MLBPlayEvent: Decodable {
+    let details: MLBPlayEventDetails?
+    let count: MLBCount?
+    let pitchData: MLBPitchData?
+    let pitchNumber: Int?
+    let isPitch: Bool?
+    let type: String?
+}
+
+struct MLBPlayEventDetails: Decodable {
+    let call: MLBCodeDescription?
+    let description: String?
+}
+
+struct MLBPitchData: Decodable {
+    let startSpeed: Double?
+    let endSpeed: Double?
+    let zone: Int?
+    let strikeZoneTop: Double?
+    let strikeZoneBottom: Double?
+}
+
 // MARK: - Transactions
 
 struct MLBTransactionsResponse: Decodable {

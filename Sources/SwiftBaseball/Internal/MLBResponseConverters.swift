@@ -246,6 +246,93 @@ enum MLBResponseConverters {
         )
     }
 
+    // MARK: - Play-by-Play
+
+    static func playByPlay(from response: MLBPlayByPlayResponse) -> PlayByPlay {
+        PlayByPlay(
+            allPlays: response.allPlays.map(play),
+            scoringPlays: response.scoringPlays
+        )
+    }
+
+    private static func play(from raw: MLBPlay) -> Play {
+        Play(
+            result: playResult(from: raw.result),
+            about: playAbout(from: raw.about),
+            count: count(from: raw.count),
+            matchup: playMatchup(from: raw.matchup),
+            runners: raw.runners?.map(runner),
+            playEvents: raw.playEvents?.map(playEvent)
+        )
+    }
+
+    private static func playResult(from raw: MLBPlayResult?) -> PlayResult {
+        PlayResult(
+            type: raw?.type, event: raw?.event, eventType: raw?.eventType,
+            description: raw?.description, rbi: raw?.rbi,
+            awayScore: raw?.awayScore, homeScore: raw?.homeScore
+        )
+    }
+
+    private static func playAbout(from raw: MLBPlayAbout?) -> PlayAbout {
+        PlayAbout(
+            atBatIndex: raw?.atBatIndex ?? 0,
+            halfInning: raw?.halfInning,
+            inning: raw?.inning ?? 0,
+            isComplete: raw?.isComplete ?? false,
+            isScoringPlay: raw?.isScoringPlay ?? false,
+            hasOut: raw?.hasOut ?? false
+        )
+    }
+
+    private static func count(from raw: MLBCount?) -> Count {
+        Count(balls: raw?.balls ?? 0, strikes: raw?.strikes ?? 0, outs: raw?.outs ?? 0)
+    }
+
+    private static func playMatchup(from raw: MLBPlayMatchup?) -> PlayMatchup {
+        PlayMatchup(
+            batter: raw?.batter.map(playerReference) ?? PlayerReference(id: 0, fullName: ""),
+            batSide: handSide(from: raw?.batSide?.code),
+            pitcher: raw?.pitcher.map(playerReference) ?? PlayerReference(id: 0, fullName: ""),
+            pitchHand: handSide(from: raw?.pitchHand?.code)
+        )
+    }
+
+    private static func runner(from raw: MLBRunner) -> Runner {
+        Runner(
+            movement: raw.movement.map { m in
+                RunnerMovement(
+                    originBase: m.originBase, start: m.start, end: m.end,
+                    outBase: m.outBase, isOut: m.isOut ?? false
+                )
+            },
+            details: raw.details.map { d in
+                RunnerDetails(event: d.event, runner: d.runner.map(playerReference))
+            }
+        )
+    }
+
+    private static func playEvent(from raw: MLBPlayEvent) -> PlayEvent {
+        PlayEvent(
+            details: raw.details.map { d in
+                PlayEventDetails(
+                    call: d.call.map { CodeDescription(code: $0.code, description: $0.description) },
+                    description: d.description
+                )
+            },
+            count: raw.count.map(count),
+            pitchData: raw.pitchData.map { p in
+                PitchData(
+                    startSpeed: p.startSpeed, endSpeed: p.endSpeed, zone: p.zone,
+                    strikeZoneTop: p.strikeZoneTop, strikeZoneBottom: p.strikeZoneBottom
+                )
+            },
+            pitchNumber: raw.pitchNumber,
+            isPitch: raw.isPitch,
+            type: raw.type
+        )
+    }
+
     // MARK: - Game Log
 
     static func gameLogEntries(from response: MLBGameLogResponse) -> [GameLogEntry] {

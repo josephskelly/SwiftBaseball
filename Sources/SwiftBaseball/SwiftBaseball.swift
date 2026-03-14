@@ -87,6 +87,13 @@ public enum SwiftBaseball {
         .boxscore(gamePk: gamePk, client: client)
     }
 
+    /// Fetch play-by-play data for a game.
+    ///
+    ///     let pbp = try await SwiftBaseball.playByPlay(gamePk: 745612).fetch()
+    public static func playByPlay(gamePk: Int) -> QueryBuilder<PlayByPlay> {
+        .playByPlay(gamePk: gamePk, client: client)
+    }
+
     /// Fetch a game's line score.
     public static func linescore(gamePk: Int) -> QueryBuilder<Linescore> {
         .linescore(gamePk: gamePk, client: client)
