@@ -268,6 +268,7 @@ struct MLBStatSplit: Decodable {
     let stat: MLBStatPayload
     let player: MLBEntityRef?
     let team: MLBEntityRef?
+    let split: MLBCodeDescription?
 }
 
 struct MLBStatPayload: Decodable {

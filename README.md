@@ -53,6 +53,12 @@ let batch = try await SwiftBaseball
     .season(2024)
     .fetch()
 
+// Platoon splits — OPS vs LHP / vs RHP
+let splits = try await SwiftBaseball
+    .playerPlatoonStats(id: 660271)
+    .season(2024)
+    .fetch()
+
 // Game log — per-game stat lines
 let log = try await SwiftBaseball
     .gameLog(playerId: 660271)

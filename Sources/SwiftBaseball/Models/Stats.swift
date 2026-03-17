@@ -362,3 +362,18 @@ public struct PlayerSeasonStats: Codable, Sendable, Equatable {
     public let pitching: PitchingStats?
     public let fielding: FieldingStats?
 }
+
+// MARK: - Platoon splits
+
+/// Batting stats split by handedness of the opposing pitcher.
+public struct PlayerPlatoonStats: Sendable, Equatable {
+    /// Stats vs left-handed pitchers.
+    public let vsLeft: BattingStats?
+    /// Stats vs right-handed pitchers.
+    public let vsRight: BattingStats?
+
+    public init(vsLeft: BattingStats?, vsRight: BattingStats?) {
+        self.vsLeft = vsLeft
+        self.vsRight = vsRight
+    }
+}
