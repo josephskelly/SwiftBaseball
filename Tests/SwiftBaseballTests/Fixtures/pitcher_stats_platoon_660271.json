@@ -1,0 +1,104 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "statSplits"
+      },
+      "group": {
+        "displayName": "pitching"
+      },
+      "splits": [
+        {
+          "season": "2023",
+          "stat": {
+            "gamesPlayed": 23,
+            "doubles": 8,
+            "triples": 0,
+            "homeRuns": 11,
+            "strikeOuts": 76,
+            "baseOnBalls": 23,
+            "intentionalWalks": 0,
+            "hits": 45,
+            "hitByPitch": 2,
+            "avg": ".197",
+            "atBats": 228,
+            "obp": ".276",
+            "slg": ".377",
+            "ops": ".653",
+            "groundIntoDoublePlay": 5,
+            "inningsPitched": "63.0",
+            "whip": "1.08",
+            "battersFaced": 255,
+            "balks": 0,
+            "wildPitches": 7,
+            "runs": 24,
+            "earnedRuns": 22,
+            "sacBunts": 0,
+            "sacFlies": 1
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "split": {
+            "code": "vl",
+            "description": "vs Left"
+          }
+        },
+        {
+          "season": "2023",
+          "stat": {
+            "gamesPlayed": 23,
+            "doubles": 7,
+            "triples": 0,
+            "homeRuns": 7,
+            "strikeOuts": 91,
+            "baseOnBalls": 32,
+            "intentionalWalks": 0,
+            "hits": 40,
+            "hitByPitch": 9,
+            "avg": ".170",
+            "atBats": 235,
+            "obp": ".293",
+            "slg": ".289",
+            "ops": ".582",
+            "groundIntoDoublePlay": 11,
+            "inningsPitched": "68.1",
+            "whip": "1.05",
+            "battersFaced": 276,
+            "balks": 0,
+            "wildPitches": 5,
+            "runs": 23,
+            "earnedRuns": 20,
+            "sacBunts": 0,
+            "sacFlies": 0
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "split": {
+            "code": "vr",
+            "description": "vs Right"
+          }
+        }
+      ]
+    }
+  ]
+}

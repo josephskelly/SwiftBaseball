@@ -135,6 +135,13 @@ public enum SwiftBaseball {
         .playerPlatoonStats(id: id, client: client)
     }
 
+    /// Fetch platoon pitching splits (vs LHB / vs RHB) for a pitcher.
+    ///
+    ///     let splits = try await SwiftBaseball.pitcherPlatoonStats(id: 660271).season(2023).fetch()
+    public static func pitcherPlatoonStats(id: Int) -> QueryBuilder<PitcherPlatoonStats> {
+        .pitcherPlatoonStats(id: id, client: client)
+    }
+
     /// Fetch season stats for multiple players concurrently.
     ///
     ///     let stats = try await SwiftBaseball

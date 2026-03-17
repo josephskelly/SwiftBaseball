@@ -377,3 +377,16 @@ public struct PlayerPlatoonStats: Sendable, Equatable {
         self.vsRight = vsRight
     }
 }
+
+/// Pitching stats split by handedness of the opposing batter.
+public struct PitcherPlatoonStats: Sendable, Equatable {
+    /// Stats vs left-handed batters.
+    public let vsLeft: PitchingStats?
+    /// Stats vs right-handed batters.
+    public let vsRight: PitchingStats?
+
+    public init(vsLeft: PitchingStats?, vsRight: PitchingStats?) {
+        self.vsLeft = vsLeft
+        self.vsRight = vsRight
+    }
+}

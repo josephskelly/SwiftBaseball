@@ -59,6 +59,12 @@ let splits = try await SwiftBaseball
     .season(2024)
     .fetch()
 
+// Pitcher platoon splits — OPS against vs LHB / vs RHB
+let pitcherSplits = try await SwiftBaseball
+    .pitcherPlatoonStats(id: 660271)
+    .season(2023)
+    .fetch()
+
 // Game log — per-game stat lines
 let log = try await SwiftBaseball
     .gameLog(playerId: 660271)

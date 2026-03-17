@@ -396,4 +396,85 @@ struct StatsTests {
         #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
         #expect(items.contains { $0.name == "season" && $0.value == "2024" })
     }
+
+    // MARK: - Pitcher platoon splits
+
+    @Test("Decode pitcher platoon splits from fixture")
+    func decodePitcherPlatoonSplits() throws {
+        let data = try Fixtures.load("pitcher_stats_platoon_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+
+        let vsLeft = try #require(platoon.vsLeft)
+        #expect(vsLeft.gamesPlayed == 23)
+        #expect(vsLeft.ops == 0.653)
+        #expect(vsLeft.obp == 0.276)
+        #expect(vsLeft.whip == 1.08)
+        #expect(vsLeft.strikeOuts == 76)
+        #expect(vsLeft.battersFaced == 255)
+
+        let vsRight = try #require(platoon.vsRight)
+        #expect(vsRight.gamesPlayed == 23)
+        #expect(vsRight.ops == 0.582)
+        #expect(vsRight.obp == 0.293)
+        #expect(vsRight.whip == 1.05)
+        #expect(vsRight.strikeOuts == 91)
+        #expect(vsRight.battersFaced == 276)
+    }
+
+    @Test("Empty pitcher platoon splits returns both nil")
+    func emptyPitcherPlatoonSplits() throws {
+        let json = """
+        { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"pitching"}, "splits": [] }] }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 1, fullName: "")
+        let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+
+        #expect(platoon.vsLeft == nil)
+        #expect(platoon.vsRight == nil)
+    }
+
+    @Test("Pitcher platoon splits with only vs-left present")
+    func pitcherPlatoonSplitsOnlyVsLeft() throws {
+        let json = """
+        { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"pitching"}, "splits": [{
+            "season": "2023",
+            "stat": {
+                "gamesPlayed": 20, "hits": 30, "runs": 15, "earnedRuns": 12,
+                "homeRuns": 5, "strikeOuts": 50, "baseOnBalls": 10,
+                "intentionalWalks": 0, "hitByPitch": 1, "balks": 0, "wildPitches": 2,
+                "battersFaced": 150, "inningsPitched": "45.0",
+                "avg": ".210", "obp": ".290", "slg": ".350", "ops": ".640",
+                "whip": "0.89"
+            },
+            "split": {"code": "vl", "description": "vs Left"}
+        }] }] }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 1, fullName: "")
+        let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+
+        #expect(platoon.vsLeft != nil)
+        #expect(platoon.vsLeft?.ops == 0.640)
+        #expect(platoon.vsRight == nil)
+    }
+
+    @Test("pitcherPlatoonStats() query builder constructs correct endpoint")
+    func pitcherPlatoonStatsQueryBuilder() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("pitcher_stats_platoon_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+
+        let builder = QueryBuilder<PitcherPlatoonStats>.pitcherPlatoonStats(id: 660271, client: mock)
+            .season(2023)
+        _ = try await builder.fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "statSplits" })
+        #expect(items.contains { $0.name == "sitCodes" && $0.value == "vl,vr" })
+        #expect(items.contains { $0.name == "group" && $0.value == "pitching" })
+        #expect(items.contains { $0.name == "season" && $0.value == "2023" })
+    }
 }

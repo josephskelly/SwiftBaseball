@@ -230,6 +230,19 @@ enum MLBResponseConverters {
         )
     }
 
+    static func pitcherPlatoonStats(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PitcherPlatoonStats {
+        let splits = response.stats.flatMap(\.splits)
+        let vl = splits.first(where: { $0.split?.code == "vl" })
+        let vr = splits.first(where: { $0.split?.code == "vr" })
+        return PitcherPlatoonStats(
+            vsLeft: vl.map { pitchingStats(from: $0.stat) },
+            vsRight: vr.map { pitchingStats(from: $0.stat) }
+        )
+    }
+
     private static func pitchingStats(from raw: MLBStatPayload) -> PitchingStats {
         PitchingStats(
             gamesPlayed: raw.gamesPlayed, gamesStarted: raw.gamesStarted,
