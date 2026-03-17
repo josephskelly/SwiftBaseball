@@ -2,12 +2,10 @@
   "stats": [
     {
       "type": {
-        "displayName": "season",
-        "code": "season"
+        "displayName": "season"
       },
       "group": {
-        "displayName": "pitching",
-        "code": "pitching"
+        "displayName": "pitching"
       },
       "splits": [
         {

@@ -209,7 +209,7 @@ struct StatsTests {
     @Test("Empty splits returns empty array")
     func emptySplits() throws {
         let json = """
-        { "stats": [{ "type": {"displayName":"season","code":"season"}, "group": {"displayName":"hitting","code":"hitting"}, "splits": [] }] }
+        { "stats": [{ "type": {"displayName":"season"}, "group": {"displayName":"hitting"}, "splits": [] }] }
         """.data(using: .utf8)!
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
@@ -233,7 +233,7 @@ struct StatsTests {
     @Test("Zero stat line (0 PA, .000 AVG)")
     func zeroStatLine() throws {
         let json = """
-        { "stats": [{ "type": {"displayName":"season","code":"season"}, "group": {"displayName":"hitting","code":"hitting"}, "splits": [{
+        { "stats": [{ "type": {"displayName":"season"}, "group": {"displayName":"hitting"}, "splits": [{
             "season": "2024",
             "stat": {
                 "gamesPlayed": 1, "plateAppearances": 0, "atBats": 0,

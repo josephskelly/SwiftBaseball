@@ -2,12 +2,10 @@
   "stats": [
     {
       "type": {
-        "displayName": "season",
-        "code": "season"
+        "displayName": "season"
       },
       "group": {
-        "displayName": "hitting",
-        "code": "hitting"
+        "displayName": "hitting"
       },
       "splits": [
         {

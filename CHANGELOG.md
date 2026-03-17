@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Stats group routing**: `MLBStatGroup` now decodes `type`/`group` via `MLBDisplayName` instead of `MLBCodeDescription`, fixing pitching and fielding stats silently misrouting to batting against the live API (which omits the `code` field)
+
 ### Added
 
 - **Pitching opponent rates**: `obp`, `slg`, `ops` on `PitchingStats` (on-base, slugging, OPS against)

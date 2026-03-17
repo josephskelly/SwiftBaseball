@@ -184,7 +184,7 @@ enum MLBResponseConverters {
         playerRef: PlayerReference
     ) -> [PlayerSeasonStats] {
         response.stats.flatMap { statGroup -> [PlayerSeasonStats] in
-            let groupCode = statGroup.group?.code ?? ""
+            let groupCode = statGroup.group?.displayName ?? ""
             let group = StatGroup(apiValue: groupCode)
             return statGroup.splits.map { split in
                 PlayerSeasonStats(

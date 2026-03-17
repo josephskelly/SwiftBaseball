@@ -258,8 +258,8 @@ struct MLBPlayerStatsResponse: Decodable {
 }
 
 struct MLBStatGroup: Decodable {
-    let type: MLBCodeDescription?
-    let group: MLBCodeDescription?
+    let type: MLBDisplayName?
+    let group: MLBDisplayName?
     let splits: [MLBStatSplit]
 }
 
