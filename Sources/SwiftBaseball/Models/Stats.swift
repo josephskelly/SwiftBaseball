@@ -166,6 +166,14 @@ public struct PitchingStats: Codable, Sendable, Equatable {
     public let era: Double?
     public let whip: Double?
     public let avg: Double?
+
+    /// On-base percentage against.
+    public let obp: Double?
+    /// Slugging percentage against.
+    public let slg: Double?
+    /// OPS against.
+    public let ops: Double?
+
     public let inningsPitched: Double?
 
     enum CodingKeys: String, CodingKey {
@@ -174,7 +182,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         case completeGames, shutouts, hits, runs, earnedRuns
         case homeRuns, baseOnBalls, intentionalWalks, strikeOuts
         case hitByPitch, wildPitches, balks, battersFaced
-        case era, whip, avg, inningsPitched
+        case era, whip, avg, obp, slg, ops, inningsPitched
     }
 
     public init(from decoder: any Decoder) throws {
@@ -204,6 +212,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         era             = try Self.decodeStatString(c, key: .era)
         whip            = try Self.decodeStatString(c, key: .whip)
         avg             = try Self.decodeStatString(c, key: .avg)
+        obp             = try Self.decodeStatString(c, key: .obp)
+        slg             = try Self.decodeStatString(c, key: .slg)
+        ops             = try Self.decodeStatString(c, key: .ops)
         inningsPitched  = try Self.decodeStatString(c, key: .inningsPitched)
     }
 
@@ -224,7 +235,8 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         earnedRuns: nil, homeRuns: nil, baseOnBalls: nil,
         intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil,
         wildPitches: nil, balks: nil, battersFaced: nil,
-        era: nil, whip: nil, avg: nil, inningsPitched: nil
+        era: nil, whip: nil, avg: nil,
+        obp: nil, slg: nil, ops: nil, inningsPitched: nil
     )
 
     init(
@@ -234,7 +246,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         earnedRuns: Int?, homeRuns: Int?, baseOnBalls: Int?,
         intentionalWalks: Int?, strikeOuts: Int?, hitByPitch: Int?,
         wildPitches: Int?, balks: Int?, battersFaced: Int?,
-        era: Double?, whip: Double?, avg: Double?, inningsPitched: Double?
+        era: Double?, whip: Double?, avg: Double?,
+        obp: Double?, slg: Double?, ops: Double?,
+        inningsPitched: Double?
     ) {
         self.gamesPlayed = gamesPlayed
         self.gamesStarted = gamesStarted
@@ -260,6 +274,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         self.era = era
         self.whip = whip
         self.avg = avg
+        self.obp = obp
+        self.slg = slg
+        self.ops = ops
         self.inningsPitched = inningsPitched
     }
 }

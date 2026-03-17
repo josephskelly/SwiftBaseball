@@ -231,6 +231,9 @@ enum MLBResponseConverters {
             battersFaced: raw.battersFaced,
             era: raw.era.flatMap(Double.init), whip: raw.whip.flatMap(Double.init),
             avg: raw.avg.flatMap(Double.init),
+            obp: raw.obp.flatMap(Double.init),
+            slg: raw.slg.flatMap(Double.init),
+            ops: raw.ops.flatMap(Double.init),
             inningsPitched: raw.inningsPitched.flatMap(Double.init)
         )
     }

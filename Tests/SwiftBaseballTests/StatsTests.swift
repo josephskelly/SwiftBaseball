@@ -123,6 +123,9 @@ struct StatsTests {
         #expect(abs((pitching.era ?? 0) - 3.14) < 0.01)
         #expect(abs((pitching.whip ?? 0) - 1.06) < 0.01)
         #expect(abs((pitching.avg ?? 0) - 0.196) < 0.001)
+        #expect(abs((pitching.obp ?? 0) - 0.302) < 0.001)
+        #expect(abs((pitching.slg ?? 0) - 0.362) < 0.001)
+        #expect(abs((pitching.ops ?? 0) - 0.664) < 0.001)
         #expect(abs((pitching.inningsPitched ?? 0) - 132.0) < 0.1)
     }
 
@@ -303,6 +306,9 @@ struct StatsTests {
         #expect(empty.gamesPlayed == nil)
         #expect(empty.era == nil)
         #expect(empty.wins == nil)
+        #expect(empty.obp == nil)
+        #expect(empty.slg == nil)
+        #expect(empty.ops == nil)
     }
 
     @Test("FieldingStats.empty has all nil properties")

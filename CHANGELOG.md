@@ -4,6 +4,12 @@ All notable changes to SwiftBaseball will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Pitching opponent rates**: `obp`, `slg`, `ops` on `PitchingStats` (on-base, slugging, OPS against)
+
 ## [0.1.0] — 2026-03-13
 
 ### Added
