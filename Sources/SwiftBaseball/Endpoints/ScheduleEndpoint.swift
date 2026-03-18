@@ -18,7 +18,7 @@ extension ScheduleQuery {
     /// `splitSquad`, series metadata, and unused status codes — to reduce payload
     /// size and lower the chance of hitting MLB Stats API rate limits.
     private static let scheduleFields = [
-        "dates", "dates.games", "dates.games.gamePk", "dates.games.gameDate",
+        "dates", "dates.date", "dates.games", "dates.games.gamePk", "dates.games.gameDate",
         "dates.games.status", "dates.games.status.detailedState",
         "dates.games.status.abstractGameState",
         "dates.games.teams", "dates.games.teams.away", "dates.games.teams.away.team",
