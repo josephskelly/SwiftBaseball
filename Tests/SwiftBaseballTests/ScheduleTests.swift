@@ -166,6 +166,80 @@ struct ScheduleTests {
         #expect(game.teams.home.team.name == "Boston Red Sox")
     }
 
+    // MARK: - Completed Early (weather-shortened)
+
+    @Test("Completed Early (Rain) game decodes status as .final via abstractGameState fallback")
+    func completedEarlyRainFallback() throws {
+        let data = try Fixtures.load("schedule_completed_early.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.id == 746100)
+        // detailedState "Completed Early (Rain)" is unrecognized; abstractGameState
+        // "Final" should cause the converter to return .final.
+        #expect(game.status == .final)
+    }
+
+    @Test("Completed Early game has correct scores and teams")
+    func completedEarlyScoresAndTeams() throws {
+        let data = try Fixtures.load("schedule_completed_early.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.teams.away.team.id == 121)
+        #expect(game.teams.away.team.name == "New York Mets")
+        #expect(game.teams.away.score == 5)
+        #expect(game.teams.home.team.id == 146)
+        #expect(game.teams.home.team.name == "Miami Marlins")
+        #expect(game.teams.home.score == 5)
+    }
+
+    @Test("nil detailedState with abstractGameState Final decodes as .final")
+    func nilDetailedStateAbstractFinal() throws {
+        let json = """
+        {"dates":[{"date":"2024-06-12","games":[{
+            "gamePk": 746200,
+            "gameDate": "2024-06-12T23:10:00Z",
+            "gameType": "R",
+            "season": "2024",
+            "status": {"abstractGameState": "Final", "codedGameState": "F"},
+            "teams": {
+                "away": {"team": {"id": 1, "name": "Team A"}, "isWinner": false},
+                "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": true, "score": 4}
+            }
+        }]}]}
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.status == .final)
+    }
+
+    @Test("Unrecognized detailedState with abstractGameState Live decodes as .inProgress")
+    func unrecognizedDetailedStateLive() throws {
+        let json = """
+        {"dates":[{"date":"2024-06-12","games":[{
+            "gamePk": 746201,
+            "gameDate": "2024-06-12T23:10:00Z",
+            "gameType": "R",
+            "season": "2024",
+            "status": {"abstractGameState": "Live", "detailedState": "Rain Delay: Top 5th", "codedGameState": "I"},
+            "teams": {
+                "away": {"team": {"id": 1, "name": "Team A"}, "isWinner": false},
+                "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": false}
+            }
+        }]}]}
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.status == .inProgress)
+    }
+
     // MARK: - Edge cases
 
     @Test("Empty dates array returns empty schedule")

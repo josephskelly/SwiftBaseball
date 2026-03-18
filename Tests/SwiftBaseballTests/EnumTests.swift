@@ -68,6 +68,21 @@ struct EnumTests {
         #expect(decoded == .scheduled)
     }
 
+    @Test("GameStatus new cases round-trip through rawValue")
+    func gameStatusNewCasesRoundTrip() {
+        let cases: [(GameStatus, String)] = [
+            (.completedEarly, "Completed Early"),
+            (.gameOver,       "Game Over"),
+            (.rainDelay,      "Rain Delay"),
+            (.delayed,        "Delayed"),
+            (.delayedStart,   "Delayed Start"),
+        ]
+        for (status, raw) in cases {
+            #expect(GameStatus(rawValue: raw) == status)
+            #expect(status.rawValue == raw)
+        }
+    }
+
     // MARK: - StatGroup
 
     @Test("All StatGroup cases round-trip through rawValue", arguments: StatGroup.allCases)

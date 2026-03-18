@@ -1,0 +1,94 @@
+{
+  "copyright": "Copyright 2024 MLB Advanced Media, L.P.",
+  "totalItems": 1,
+  "totalEvents": 0,
+  "totalGames": 1,
+  "totalGamesInProgress": 0,
+  "dates": [
+    {
+      "date": "2024-06-12",
+      "totalItems": 1,
+      "totalEvents": 0,
+      "totalGames": 1,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 746100,
+          "link": "/api/v1.1/game/746100/feed/live",
+          "gameType": "R",
+          "season": "2024",
+          "gameDate": "2024-06-12T23:10:00Z",
+          "officialDate": "2024-06-12",
+          "status": {
+            "abstractGameState": "Final",
+            "codedGameState": "F",
+            "detailedState": "Completed Early (Rain)",
+            "statusCode": "FT",
+            "startTimeTBD": false,
+            "abstractGameCode": "F"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 32,
+                "losses": 28,
+                "pct": ".533"
+              },
+              "score": 5,
+              "team": {
+                "id": 121,
+                "name": "New York Mets",
+                "link": "/api/v1/teams/121"
+              },
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 25,
+                "losses": 36,
+                "pct": ".410"
+              },
+              "score": 5,
+              "team": {
+                "id": 146,
+                "name": "Miami Marlins",
+                "link": "/api/v1/teams/146"
+              },
+              "isWinner": false,
+              "splitSquad": false,
+              "seriesNumber": 1
+            }
+          },
+          "venue": {
+            "id": 4169,
+            "name": "loanDepot park",
+            "link": "/api/v1/venues/4169"
+          },
+          "content": {
+            "link": "/api/v1/game/746100/content"
+          },
+          "isTie": true,
+          "gameNumber": 1,
+          "publicFacing": true,
+          "doubleHeader": "N",
+          "gamedayType": "P",
+          "tiebreaker": "N",
+          "calendarEventID": "14-746100-2024-06-12",
+          "seasonDisplay": "2024",
+          "dayNight": "night",
+          "scheduledInnings": 9,
+          "reverseHomeAwayStatus": false,
+          "inningBreakLength": 120,
+          "gamesInSeries": 3,
+          "seriesGameNumber": 1,
+          "seriesDescription": "Regular Season",
+          "recordSource": "S",
+          "ifNecessary": "N",
+          "ifNecessaryDescription": "Normal Game"
+        }
+      ]
+    }
+  ]
+}

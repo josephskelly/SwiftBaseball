@@ -240,7 +240,17 @@ public enum GameStatus: String, Codable, Sendable, Hashable, CaseIterable {
     /// Game has been cancelled.
     case cancelled   = "Cancelled"
     /// Game has been suspended.
-    case suspended   = "Suspended"
+    case suspended      = "Suspended"
+    /// Game was completed early (e.g. weather-shortened).
+    case completedEarly = "Completed Early"
+    /// Game is over; alternative MLB term for a final state.
+    case gameOver       = "Game Over"
+    /// Game is delayed due to rain or another condition during play.
+    case rainDelay      = "Rain Delay"
+    /// Game is delayed (generic mid-game delay).
+    case delayed        = "Delayed"
+    /// Game has a delayed start before first pitch.
+    case delayedStart   = "Delayed Start"
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()

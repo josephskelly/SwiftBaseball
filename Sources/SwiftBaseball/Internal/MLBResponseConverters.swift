@@ -91,7 +91,7 @@ enum MLBResponseConverters {
         return ScheduleEntry(
             id: raw.gamePk,
             gameDate: gameDate,
-            status: gameStatus(from: raw.status?.detailedState),
+            status: gameStatus(from: raw.status?.detailedState, abstractGameState: raw.status?.abstractGameState),
             teams: ScheduleTeams(away: awayEntry, home: homeEntry),
             venue: raw.venue.map(venueReference),
             gameType: GameType(rawValue: raw.gameType ?? "") ?? .unknown,
@@ -545,9 +545,21 @@ enum MLBResponseConverters {
         LeagueRecord(wins: raw.wins, losses: raw.losses, pct: raw.pct)
     }
 
-    private static func gameStatus(from detailedState: String?) -> GameStatus {
-        guard let state = detailedState else { return .scheduled }
-        return GameStatus(rawValue: state) ?? .scheduled
+    private static func gameStatus(
+        from detailedState: String?,
+        abstractGameState: String?
+    ) -> GameStatus {
+        // Primary: exact match on detailedState raw value.
+        if let state = detailedState, let status = GameStatus(rawValue: state) {
+            return status
+        }
+        // Secondary: broad fallback via abstractGameState when detailedState is
+        // unrecognized (e.g. "Completed Early (Rain)") or absent.
+        switch abstractGameState {
+        case "Final": return .final
+        case "Live":  return .inProgress
+        default:      return .scheduled
+        }
     }
 
     private static func emptyBattingStats() -> BattingStats { .empty }
