@@ -221,6 +221,8 @@ public enum StatType: String, Codable, Sendable, Hashable, CaseIterable {
     case career
     /// Season-by-season breakdown.
     case yearByYear
+    /// Advanced sabermetric stats (wOBA, wRC+, WAR, etc.).
+    case sabermetrics
 }
 
 // MARK: - GameStatus

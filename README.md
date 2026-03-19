@@ -59,6 +59,12 @@ let splits = try await SwiftBaseball
     .season(2024)
     .fetch()
 
+// Sabermetrics — wOBA, wRC+, WAR
+let saber = try await SwiftBaseball
+    .playerSabermetrics(id: 660271)
+    .season(2024)
+    .fetch()
+
 // Pitcher platoon splits — OPS against vs LHB / vs RHB
 let pitcherSplits = try await SwiftBaseball
     .pitcherPlatoonStats(id: 660271)
@@ -88,7 +94,7 @@ let trades = try await SwiftBaseball
 
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
-| **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, game logs, play-by-play, transactions |
+| **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions |
 | Baseball Savant / Statcast | Planned | None | Pitch-level data, exit velocity, spin rate, launch angle |
 | Baseball Reference | Planned | None (scraped) | Historical season stats, awards |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
@@ -148,7 +154,7 @@ Then add it as a dependency to your target:
 | **Endpoints/GameLog** | Per-game stat lines for a player |
 | **Endpoints/PlayByPlay** | Pitch-level play-by-play with runner and matchup data |
 | **Endpoints/Transactions** | Trades, signings, and roster moves |
-| **Endpoints/Stats** | Batting, pitching, fielding statistics |
+| **Endpoints/Stats** | Batting, pitching, fielding, sabermetric statistics |
 | **Endpoints/Standings** | Division, league, and wildcard standings |
 | **Endpoints/Leaders** | League leaders by stat category |
 | **Cache** | Actor-based response caching with TTL |

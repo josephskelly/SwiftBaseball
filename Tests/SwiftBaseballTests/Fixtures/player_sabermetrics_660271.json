@@ -1,0 +1,58 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.",
+  "stats": [
+    {
+      "type": {
+        "displayName": "sabermetrics"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "exemptions": [],
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "woba": 0.430549,
+            "wRaa": 70.8202,
+            "wRc": 156.331,
+            "wRcPlus": 179.678,
+            "rar": 86.6456,
+            "war": 8.94856,
+            "batting": 69.6496,
+            "fielding": 0.0,
+            "baseRunning": 9.73535,
+            "positional": -17.1759,
+            "wLeague": 2.33332,
+            "replacement": 22.1032,
+            "spd": 8.10565,
+            "ubr": 1.9,
+            "wGdp": 2.2,
+            "wSb": 8.7988
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "league": {
+            "id": 104,
+            "name": "National League",
+            "link": "/api/v1/league/104"
+          },
+          "sport": {
+            "id": 1,
+            "link": "/api/v1/sports/1",
+            "abbreviation": "MLB"
+          },
+          "gameType": "R"
+        }
+      ]
+    }
+  ]
+}

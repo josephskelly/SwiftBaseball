@@ -194,7 +194,8 @@ enum MLBResponseConverters {
                     group: group,
                     batting: group == .batting ? battingStats(from: split.stat) : nil,
                     pitching: group == .pitching ? pitchingStats(from: split.stat) : nil,
-                    fielding: group == .fielding ? fieldingStats(from: split.stat) : nil
+                    fielding: group == .fielding ? fieldingStats(from: split.stat) : nil,
+                    sabermetrics: nil
                 )
             }
         }
@@ -272,6 +273,38 @@ enum MLBResponseConverters {
             triplePlays: raw.triplePlays, passedBalls: raw.passedBalls,
             innings: raw.innings.flatMap(Double.init),
             fielding: raw.fielding.flatMap(Double.init)
+        )
+    }
+
+    // MARK: - Sabermetrics
+
+    static func playerSabermetrics(
+        from response: MLBSabermetricResponse,
+        playerRef: PlayerReference
+    ) -> [PlayerSeasonStats] {
+        response.stats.flatMap { statGroup -> [PlayerSeasonStats] in
+            statGroup.splits.map { split in
+                PlayerSeasonStats(
+                    player: split.player.map(playerReference) ?? playerRef,
+                    team: split.team.map(teamReference),
+                    season: split.season ?? "",
+                    group: .batting,
+                    batting: nil,
+                    pitching: nil,
+                    fielding: nil,
+                    sabermetrics: sabermetricStats(from: split.stat)
+                )
+            }
+        }
+    }
+
+    private static func sabermetricStats(from raw: MLBSabermetricPayload) -> SabermetricStats {
+        SabermetricStats(
+            woba: raw.woba, wRaa: raw.wRaa, wRc: raw.wRc, wRcPlus: raw.wRcPlus,
+            rar: raw.rar, war: raw.war, batting: raw.batting, fielding: raw.fielding,
+            baseRunning: raw.baseRunning, positional: raw.positional,
+            wLeague: raw.wLeague, replacement: raw.replacement,
+            spd: raw.spd, ubr: raw.ubr, wGdp: raw.wGdp, wSb: raw.wSb
         )
     }
 

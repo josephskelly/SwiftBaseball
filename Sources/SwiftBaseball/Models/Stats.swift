@@ -350,6 +350,80 @@ public struct FieldingStats: Codable, Sendable, Equatable {
     }
 }
 
+// MARK: - Sabermetrics
+
+/// Advanced sabermetric statistics from the MLB Stats API.
+///
+/// Includes WAR components (offensive, defensive, baserunning, positional adjustment)
+/// and other derived metrics like wOBA, wRC+, and speed score.
+public struct SabermetricStats: Codable, Sendable, Equatable {
+    /// Weighted on-base average.
+    public let woba: Double?
+    /// Weighted runs above average.
+    public let wRaa: Double?
+    /// Weighted runs created.
+    public let wRc: Double?
+    /// Weighted runs created plus (league-adjusted, 100 = average).
+    public let wRcPlus: Double?
+    /// Runs above replacement.
+    public let rar: Double?
+    /// Wins above replacement.
+    public let war: Double?
+    /// Batting runs (offensive component of WAR).
+    public let batting: Double?
+    /// Fielding runs (defensive component of WAR).
+    public let fielding: Double?
+    /// Baserunning runs (baserunning component of WAR).
+    public let baseRunning: Double?
+    /// Positional adjustment runs.
+    public let positional: Double?
+    /// League adjustment runs.
+    public let wLeague: Double?
+    /// Replacement-level runs.
+    public let replacement: Double?
+    /// Speed score.
+    public let spd: Double?
+    /// Ultimate base running (non-SB component).
+    public let ubr: Double?
+    /// Weighted grounded-into-double-play runs.
+    public let wGdp: Double?
+    /// Weighted stolen base runs.
+    public let wSb: Double?
+
+    /// An empty sabermetric stats instance with all properties set to `nil`.
+    static let empty = SabermetricStats(
+        woba: nil, wRaa: nil, wRc: nil, wRcPlus: nil,
+        rar: nil, war: nil, batting: nil, fielding: nil,
+        baseRunning: nil, positional: nil, wLeague: nil,
+        replacement: nil, spd: nil, ubr: nil, wGdp: nil, wSb: nil
+    )
+
+    init(
+        woba: Double?, wRaa: Double?, wRc: Double?, wRcPlus: Double?,
+        rar: Double?, war: Double?, batting: Double?, fielding: Double?,
+        baseRunning: Double?, positional: Double?, wLeague: Double?,
+        replacement: Double?, spd: Double?, ubr: Double?, wGdp: Double?,
+        wSb: Double?
+    ) {
+        self.woba = woba
+        self.wRaa = wRaa
+        self.wRc = wRc
+        self.wRcPlus = wRcPlus
+        self.rar = rar
+        self.war = war
+        self.batting = batting
+        self.fielding = fielding
+        self.baseRunning = baseRunning
+        self.positional = positional
+        self.wLeague = wLeague
+        self.replacement = replacement
+        self.spd = spd
+        self.ubr = ubr
+        self.wGdp = wGdp
+        self.wSb = wSb
+    }
+}
+
 // MARK: - Player season stats wrapper
 
 /// Aggregated stats for a player in a single season, broken down by stat group.
@@ -361,6 +435,7 @@ public struct PlayerSeasonStats: Codable, Sendable, Equatable {
     public let batting: BattingStats?
     public let pitching: PitchingStats?
     public let fielding: FieldingStats?
+    public let sabermetrics: SabermetricStats?
 }
 
 // MARK: - Platoon splits

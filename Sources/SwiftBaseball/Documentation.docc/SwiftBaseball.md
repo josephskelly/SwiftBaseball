@@ -89,6 +89,7 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``BattingStats``
 - ``PitchingStats``
 - ``FieldingStats``
+- ``SabermetricStats``
 - ``PlayerSeasonStats``
 - ``StatGroup``
 - ``StatType``

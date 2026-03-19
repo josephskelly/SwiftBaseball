@@ -468,6 +468,44 @@ struct MLBTransaction: Decodable {
     let description: String?
 }
 
+// MARK: - Sabermetrics
+
+struct MLBSabermetricResponse: Decodable {
+    let stats: [MLBSabermetricGroup]
+}
+
+struct MLBSabermetricGroup: Decodable {
+    let type: MLBDisplayName?
+    let group: MLBDisplayName?
+    let splits: [MLBSabermetricSplit]
+}
+
+struct MLBSabermetricSplit: Decodable {
+    let season: String?
+    let stat: MLBSabermetricPayload
+    let player: MLBEntityRef?
+    let team: MLBEntityRef?
+}
+
+struct MLBSabermetricPayload: Decodable {
+    let woba: Double?
+    let wRaa: Double?
+    let wRc: Double?
+    let wRcPlus: Double?
+    let rar: Double?
+    let war: Double?
+    let batting: Double?
+    let fielding: Double?
+    let baseRunning: Double?
+    let positional: Double?
+    let wLeague: Double?
+    let replacement: Double?
+    let spd: Double?
+    let ubr: Double?
+    let wGdp: Double?
+    let wSb: Double?
+}
+
 // MARK: - Shared
 
 struct MLBEntityRef: Decodable {

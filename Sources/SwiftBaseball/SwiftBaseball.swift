@@ -128,6 +128,13 @@ public enum SwiftBaseball {
         .playerStats(id: id, client: client)
     }
 
+    /// Fetch sabermetric stats (wOBA, wRC+, WAR, etc.) for a player.
+    ///
+    ///     let saber = try await SwiftBaseball.playerSabermetrics(id: 660271).season(2024).fetch()
+    public static func playerSabermetrics(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
+        .playerSabermetrics(id: id, client: client)
+    }
+
     /// Fetch platoon batting splits (vs LHP / vs RHP) for a position player.
     ///
     ///     let splits = try await SwiftBaseball.playerPlatoonStats(id: 660271).season(2024).fetch()
