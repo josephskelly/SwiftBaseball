@@ -53,7 +53,7 @@ public struct StatcastQuery: Sendable {
         var items = [
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
-            URLQueryItem(name: "player_id", value: String(playerId)),
+            URLQueryItem(name: "batters_lookup[]", value: String(playerId)),
             URLQueryItem(name: "player_type", value: "batter"),
         ]
 
@@ -124,7 +124,7 @@ public struct StatcastPitcherQuery: Sendable {
         var items = [
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
-            URLQueryItem(name: "player_id", value: String(playerId)),
+            URLQueryItem(name: "pitchers_lookup[]", value: String(playerId)),
             URLQueryItem(name: "player_type", value: "pitcher"),
         ]
 
