@@ -94,6 +94,11 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``StatGroup``
 - ``StatType``
 
+### Statcast
+
+- ``StatcastBatting``
+- ``StatcastQuery``
+
 ### Standings
 
 - ``DivisionStandings``

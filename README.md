@@ -83,6 +83,13 @@ let pbp = try await SwiftBaseball
     .playByPlay(gamePk: 745612)
     .fetch()
 
+// Statcast batted ball profile — GB%, FB%, exit velo, barrel rate
+let statcast = try await SwiftBaseball
+    .statcastBatting(playerId: 660271)
+    .season(2024)
+    .fetch()
+print(statcast.gbPercent, statcast.avgExitVelocity, statcast.barrelRate)
+
 // Trade deadline transactions
 let trades = try await SwiftBaseball
     .transactions()
@@ -95,7 +102,7 @@ let trades = try await SwiftBaseball
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions |
-| Baseball Savant / Statcast | Planned | None | Pitch-level data, exit velocity, spin rate, launch angle |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA |
 | Baseball Reference | Planned | None (scraped) | Historical season stats, awards |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 
@@ -113,7 +120,7 @@ let trades = try await SwiftBaseball
 │  QueryBuilder  │  APIClient  │  Cache  │  Error Types   │
 ├─────────────────────────────────────────────────────────┤
 │                    Data Sources                          │
-│  MLB Stats API  │  Statcast (future)  │  BREF (future)  │
+│  MLB Stats API  │  Baseball Savant    │  BREF (future)  │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -155,6 +162,7 @@ Then add it as a dependency to your target:
 | **Endpoints/PlayByPlay** | Pitch-level play-by-play with runner and matchup data |
 | **Endpoints/Transactions** | Trades, signings, and roster moves |
 | **Endpoints/Stats** | Batting, pitching, fielding, sabermetric statistics |
+| **Endpoints/Statcast** | Batted ball profile, exit velocity, launch angle, barrel rate (via Baseball Savant CSV) |
 | **Endpoints/Standings** | Division, league, and wildcard standings |
 | **Endpoints/Leaders** | League leaders by stat category |
 | **Cache** | Actor-based response caching with TTL |

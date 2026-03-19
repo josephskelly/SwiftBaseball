@@ -14,6 +14,7 @@ public enum SwiftBaseball {
     // Class wrapper allows safe mutation from configure() before concurrent use.
     private final class State: @unchecked Sendable {
         var client: any APIClient = URLSessionAPIClient()
+        var statcastClient: StatcastAPIClient = StatcastAPIClient()
         var configuration: Configuration = .default
     }
     private static let _state = State()
@@ -27,9 +28,11 @@ public enum SwiftBaseball {
         } else {
             _state.client = base
         }
+        _state.statcastClient = StatcastAPIClient(configuration: configuration)
     }
 
     private static var client: any APIClient { _state.client }
+    private static var statcastClient: StatcastAPIClient { _state.statcastClient }
 
     // MARK: - Players
 
@@ -157,6 +160,22 @@ public enum SwiftBaseball {
     ///         .fetch()
     public static func batchStats(_ ids: [Int], group: StatGroup) -> BatchStatsQuery {
         BatchStatsQuery(playerIds: ids, group: group, client: client)
+    }
+
+    // MARK: - Statcast
+
+    /// Fetch Statcast batted ball data from Baseball Savant.
+    ///
+    /// Returns aggregated batted ball profile including GB%, FB%, LD%,
+    /// exit velocity, launch angle, barrel rate, and expected stats (xBA, xSLG, xwOBA).
+    ///
+    ///     let statcast = try await SwiftBaseball
+    ///         .statcastBatting(playerId: 660271)
+    ///         .season(2024)
+    ///         .fetch()
+    ///     print(statcast.gbPercent)  // 0.397
+    public static func statcastBatting(playerId: Int) -> StatcastQuery {
+        StatcastQuery(playerId: playerId, client: statcastClient)
     }
 
     // MARK: - Standings
