@@ -82,6 +82,11 @@ public struct QueryBuilder<T: Sendable>: Sendable {
         modifying { $0.adding(name: "group", value: group.apiValue) }
     }
 
+    /// Filters results to a specific game type (e.g. spring training, regular season).
+    public func gameType(_ type: GameType) -> QueryBuilder<T> {
+        modifying { $0.adding(name: "gameType", value: type.rawValue) }
+    }
+
     // MARK: - Private
 
     private func modifying(_ transform: (Endpoint) -> Endpoint) -> QueryBuilder<T> {

@@ -33,6 +33,13 @@ let players = try await SwiftBaseball.players(.search("Ohtani")).fetch()
 // Get season batting stats for a player
 let stats = try await SwiftBaseball.playerStats(id: 592450).season(2024).fetch()
 
+// Spring training stats
+let spring = try await SwiftBaseball.playerStats(id: 592450)
+    .season(2025)
+    .gameType(.springTraining)
+    .group(.batting)
+    .fetch()
+
 // Fetch today's schedule
 let games = try await SwiftBaseball
     .schedule(.date("2024-07-04"))

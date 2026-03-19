@@ -75,6 +75,16 @@ struct QueryBuilderTests {
         #expect(items.contains { $0.name == "endDate" && $0.value == "2024-09-30" })
     }
 
+    @Test("gameType() appends gameType query item")
+    func gameTypeModifier() {
+        let mock = MockAPIClient()
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: mock)
+            .gameType(.springTraining)
+
+        let items = builder.endpoint.queryItems
+        #expect(items.contains { $0.name == "gameType" && $0.value == "S" })
+    }
+
     @Test("Chained modifiers are immutable — original unchanged")
     func immutableChaining() {
         let mock = MockAPIClient()
