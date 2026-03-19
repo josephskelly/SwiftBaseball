@@ -97,6 +97,13 @@ let statcast = try await SwiftBaseball
     .fetch()
 print(statcast.gbPercent, statcast.avgExitVelocity, statcast.barrelRate)
 
+// Statcast pitching — batted ball against, pitch arsenal, whiff rate
+let pitching = try await SwiftBaseball
+    .statcastPitching(playerId: 543037)
+    .season(2024)
+    .fetch()
+print(pitching.whiffRate, pitching.avgFastballVelo, pitching.pitchMix)
+
 // Trade deadline transactions
 let trades = try await SwiftBaseball
     .transactions()
@@ -109,7 +116,7 @@ let trades = try await SwiftBaseball
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions |
-| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix) |
 | Baseball Reference | Planned | None (scraped) | Historical season stats, awards |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 

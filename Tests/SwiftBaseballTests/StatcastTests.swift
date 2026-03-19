@@ -203,6 +203,118 @@ struct StatcastTests {
         #expect(abs((stats.barrelRate ?? 0) - 1.0 / 3.0) < 0.001)
     }
 
+    // MARK: - Pitcher aggregation from fixture
+
+    @Test("Pitcher aggregation: batted ball counts from fixture")
+    func pitcherBattedBallCounts() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // Fixture has 4 batted ball events: popup, ground_ball, ground_ball, ground_ball (wait, let me check)
+        // Row 2: popup, Row 4: ground_ball, Row 6: ground_ball
+        // Actually: row indices with bb_type: popup(1), ground_ball(3), ground_ball(5) — 3 not 4
+        // Let me count: lines 2,4,6 have bb_type set → 3 batted balls
+        // Wait no — line 5 (foul) has no bb_type, but launch_speed is set from foul ball
+        // bb_type rows: popup(line2), ground_ball(line4), ground_ball(line6)
+        #expect(stats.battedBallEvents == 3)
+        #expect(stats.groundBalls == 2)
+        #expect(stats.popups == 1)
+    }
+
+    @Test("Pitcher aggregation: total pitches from fixture")
+    func pitcherTotalPitches() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        #expect(stats.totalPitches == 15)
+    }
+
+    @Test("Pitcher aggregation: fastball velocity from fixture")
+    func pitcherFastballVelocity() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // Fastball codes (FF, SI, FC) release_speed values:
+        // FF: 94.1, 95.1, 92.7, 97.4 — SI: 94.6, 92.6, 92.5
+        let fbVelos = [94.1, 95.1, 92.7, 97.4, 94.6, 92.6, 92.5]
+        let expectedAvg = fbVelos.reduce(0, +) / Double(fbVelos.count)
+        #expect(abs((stats.avgFastballVelo ?? 0) - expectedAvg) < 0.01)
+        #expect(stats.maxFastballVelo == 97.4)
+    }
+
+    @Test("Pitcher aggregation: whiff rate from fixture")
+    func pitcherWhiffRate() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // Swings: hit_into_play(3), foul(1), foul_tip(1), swinging_strike(2) = 7
+        // Whiffs: foul_tip(1), swinging_strike(2) = 3
+        // Whiff rate = 3/7
+        #expect(abs((stats.whiffRate ?? 0) - 3.0 / 7.0) < 0.001)
+    }
+
+    @Test("Pitcher aggregation: CSW from fixture")
+    func pitcherCSW() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // CSW descriptions: called_strike(1), swinging_strike(2) = 3
+        // CSW = 3 / 15
+        #expect(abs((stats.csw ?? 0) - 3.0 / 15.0) < 0.001)
+    }
+
+    @Test("Pitcher aggregation: pitch mix from fixture")
+    func pitcherPitchMix() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // pitch_name values: 4-Seam Fastball(4), Sinker(3), Sweeper(2), Changeup(2),
+        //                    Slider(2), Curveball(2)
+        #expect(stats.pitchMix.count == 6)
+        #expect(stats.pitchMix[0].name == "4-Seam Fastball")
+        #expect(stats.pitchMix[0].count == 4)
+        #expect(abs(stats.pitchMix[0].percentage - 4.0 / 15.0) < 0.001)
+        #expect(stats.pitchMix[0].avgVelocity != nil)
+        #expect(stats.pitchMix[0].avgSpinRate != nil)
+    }
+
+    @Test("Pitcher aggregation: empty rows produce zero state")
+    func pitcherEmptyRows() {
+        let stats = StatcastPitcherAggregator.aggregate([])
+
+        #expect(stats.totalPitches == 0)
+        #expect(stats.battedBallEvents == 0)
+        #expect(stats.whiffRate == nil)
+        #expect(stats.csw == nil)
+        #expect(stats.avgFastballVelo == nil)
+        #expect(stats.pitchMix.isEmpty)
+    }
+
+    @Test("Pitcher aggregation: spin rate from fixture")
+    func pitcherSpinRate() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        #expect(stats.avgSpinRate != nil)
+        // All 15 rows have release_spin_rate
+        #expect(stats.avgSpinRate! > 1500)
+        #expect(stats.avgSpinRate! < 3000)
+    }
+
     // MARK: - StatcastQuery builder
 
     @Test("StatcastQuery season sets date range for full year")
@@ -221,5 +333,13 @@ struct StatcastTests {
             .dateRange(start: "2024-06-01", end: "2024-06-30")
 
         #expect(query.playerId == 660271)
+    }
+
+    @Test("StatcastPitcherQuery builds with season")
+    func pitcherQuerySeason() {
+        let client = StatcastAPIClient()
+        let query = StatcastPitcherQuery(playerId: 543037, client: client).season(2024)
+
+        #expect(query.playerId == 543037)
     }
 }

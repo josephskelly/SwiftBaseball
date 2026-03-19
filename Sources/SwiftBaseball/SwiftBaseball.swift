@@ -178,6 +178,20 @@ public enum SwiftBaseball {
         StatcastQuery(playerId: playerId, client: statcastClient)
     }
 
+    /// Fetch Statcast pitching data from Baseball Savant.
+    ///
+    /// Returns batted-ball-against metrics and pitch arsenal data including
+    /// velocity, spin rate, whiff rate, and pitch-type usage.
+    ///
+    ///     let statcast = try await SwiftBaseball
+    ///         .statcastPitching(playerId: 543037)
+    ///         .season(2024)
+    ///         .fetch()
+    ///     print(statcast.whiffRate)  // 0.25
+    public static func statcastPitching(playerId: Int) -> StatcastPitcherQuery {
+        StatcastPitcherQuery(playerId: playerId, client: statcastClient)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

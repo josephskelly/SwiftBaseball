@@ -69,6 +69,79 @@ public struct StatcastQuery: Sendable {
     }
 }
 
+// MARK: - Pitcher Query
+
+/// Query builder for Statcast pitching data from Baseball Savant.
+///
+/// Fetches pitch-level CSV data and aggregates it into ``StatcastPitching``
+/// statistics including batted-ball-against metrics and pitch arsenal data.
+///
+/// ```swift
+/// let stats = try await SwiftBaseball
+///     .statcastPitching(playerId: 543037)
+///     .season(2024)
+///     .fetch()
+/// ```
+public struct StatcastPitcherQuery: Sendable {
+    let playerId: Int
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+    private var startDate: String?
+    private var endDate: String?
+
+    init(playerId: Int, client: StatcastAPIClient) {
+        self.playerId = playerId
+        self.client = client
+    }
+
+    /// Filters to a specific season. Sets date range to the full calendar year.
+    public func season(_ year: Int) -> StatcastPitcherQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Filters to a specific date range in `"YYYY-MM-DD"` format.
+    public func dateRange(start: String, end: String) -> StatcastPitcherQuery {
+        var copy = self
+        copy.startDate = start
+        copy.endDate = end
+        return copy
+    }
+
+    /// Executes the query and returns aggregated Statcast pitching statistics.
+    ///
+    /// - Returns: Aggregated pitching profile including batted-ball-against data and pitch arsenal.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> StatcastPitching {
+        let items = buildQueryItems()
+        let csv = try await client.fetchCSV(queryItems: items)
+        let rows = CSVParser.parse(csv)
+        return StatcastPitcherAggregator.aggregate(rows)
+    }
+
+    private func buildQueryItems() -> [URLQueryItem] {
+        var items = [
+            URLQueryItem(name: "all", value: "true"),
+            URLQueryItem(name: "type", value: "details"),
+            URLQueryItem(name: "player_id", value: String(playerId)),
+            URLQueryItem(name: "player_type", value: "pitcher"),
+        ]
+
+        if let start = startDate, let end = endDate {
+            items.append(URLQueryItem(name: "game_date_gt", value: start))
+            items.append(URLQueryItem(name: "game_date_lt", value: end))
+        } else if let year = seasonYear {
+            items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
+            items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
+        }
+
+        return items
+    }
+}
+
+// MARK: - Batting Aggregator
+
 /// Aggregates pitch-level Statcast rows into ``StatcastBatting``.
 enum StatcastAggregator {
 
@@ -141,6 +214,170 @@ enum StatcastAggregator {
             xBA: xBA,
             xSLG: xSLG,
             xwOBA: xwOBA
+        )
+    }
+
+    /// Computes barrel/hard-hit/expected stats from batted ball rows.
+    ///
+    /// Shared by both ``StatcastAggregator`` and ``StatcastPitcherAggregator``.
+    static func battedBallMetrics(
+        from battedBalls: [[String: String]]
+    ) -> (
+        groundBalls: Int, flyBalls: Int, lineDrives: Int, popups: Int,
+        gbPct: Double?, fbPct: Double?, ldPct: Double?, popupPct: Double?,
+        avgEV: Double?, maxEV: Double?, avgLA: Double?,
+        barrelRate: Double?, hardHitRate: Double?,
+        xBA: Double?, xSLG: Double?, xwOBA: Double?
+    ) {
+        let total = battedBalls.count
+        let gb = battedBalls.filter { $0["bb_type"] == "ground_ball" }.count
+        let fb = battedBalls.filter { $0["bb_type"] == "fly_ball" }.count
+        let ld = battedBalls.filter { $0["bb_type"] == "line_drive" }.count
+        let pu = battedBalls.filter { $0["bb_type"] == "popup" }.count
+
+        let gbPct = total > 0 ? Double(gb) / Double(total) : nil
+        let fbPct = total > 0 ? Double(fb) / Double(total) : nil
+        let ldPct = total > 0 ? Double(ld) / Double(total) : nil
+        let puPct = total > 0 ? Double(pu) / Double(total) : nil
+
+        let evs = battedBalls.compactMap { $0["launch_speed"].flatMap(Double.init) }
+        let avgEV = evs.isEmpty ? nil : evs.reduce(0, +) / Double(evs.count)
+        let maxEV = evs.max()
+
+        let las = battedBalls.compactMap { $0["launch_angle"].flatMap(Double.init) }
+        let avgLA = las.isEmpty ? nil : las.reduce(0, +) / Double(las.count)
+
+        let barrels = battedBalls.filter { row in
+            guard let ev = row["launch_speed"].flatMap(Double.init),
+                  let la = row["launch_angle"].flatMap(Double.init),
+                  ev >= 98.0 else { return false }
+            let minA = 26.0 - (ev - 98.0) * 1.0
+            let maxA = min(50.0, 30.0 + (ev - 98.0) * 2.0)
+            return la >= max(minA, 8.0) && la <= maxA
+        }.count
+        let barrelRate = total > 0 ? Double(barrels) / Double(total) : nil
+
+        let hardHit = evs.filter { $0 >= 95.0 }.count
+        let hardHitRate = total > 0 ? Double(hardHit) / Double(total) : nil
+
+        let xBAs = battedBalls.compactMap { $0["estimated_ba_using_speedangle"].flatMap(Double.init) }
+        let xSLGs = battedBalls.compactMap { $0["estimated_slg_using_speedangle"].flatMap(Double.init) }
+        let xwOBAs = battedBalls.compactMap { $0["estimated_woba_using_speedangle"].flatMap(Double.init) }
+        let xBA = xBAs.isEmpty ? nil : xBAs.reduce(0, +) / Double(xBAs.count)
+        let xSLG = xSLGs.isEmpty ? nil : xSLGs.reduce(0, +) / Double(xSLGs.count)
+        let xwOBA = xwOBAs.isEmpty ? nil : xwOBAs.reduce(0, +) / Double(xwOBAs.count)
+
+        return (gb, fb, ld, pu, gbPct, fbPct, ldPct, puPct,
+                avgEV, maxEV, avgLA, barrelRate, hardHitRate, xBA, xSLG, xwOBA)
+    }
+}
+
+// MARK: - Pitcher Aggregator
+
+/// Aggregates pitch-level Statcast rows into ``StatcastPitching``.
+enum StatcastPitcherAggregator {
+
+    /// Descriptions that count as swinging strikes (whiffs).
+    private static let whiffDescriptions: Set<String> = [
+        "swinging_strike", "swinging_strike_blocked", "foul_tip", "missed_bunt",
+    ]
+
+    /// Descriptions that count as swings (denominator for whiff rate).
+    private static let swingDescriptions: Set<String> = [
+        "swinging_strike", "swinging_strike_blocked", "foul_tip", "missed_bunt",
+        "foul", "foul_bunt", "hit_into_play", "bunt_foul_tip",
+    ]
+
+    /// Descriptions that count as called strikes + whiffs (CSW numerator).
+    private static let cswDescriptions: Set<String> = [
+        "called_strike", "swinging_strike", "swinging_strike_blocked",
+    ]
+
+    /// Fastball pitch type codes for velocity aggregation.
+    private static let fastballCodes: Set<String> = ["FF", "SI", "FC"]
+
+    static func aggregate(_ rows: [[String: String]]) -> StatcastPitching {
+        // Batted ball against — reuse shared logic
+        let battedBalls = rows.filter { $0["bb_type"] != nil }
+        let bb = StatcastAggregator.battedBallMetrics(from: battedBalls)
+
+        // Pitch arsenal
+        let totalPitches = rows.count
+
+        // Fastball velocity
+        let fbVelos = rows.compactMap { row -> Double? in
+            guard let code = row["pitch_type"], fastballCodes.contains(code) else { return nil }
+            return row["release_speed"].flatMap(Double.init)
+        }
+        let avgFBV = fbVelos.isEmpty ? nil : fbVelos.reduce(0, +) / Double(fbVelos.count)
+        let maxFBV = fbVelos.max()
+
+        // Spin rate across all pitches
+        let spins = rows.compactMap { $0["release_spin_rate"].flatMap(Double.init) }
+        let avgSpin = spins.isEmpty ? nil : spins.reduce(0, +) / Double(spins.count)
+
+        // Whiff rate = swinging strikes / total swings
+        let swings = rows.filter { row in
+            guard let desc = row["description"] else { return false }
+            return swingDescriptions.contains(desc)
+        }.count
+        let whiffs = rows.filter { row in
+            guard let desc = row["description"] else { return false }
+            return whiffDescriptions.contains(desc)
+        }.count
+        let whiffRate = swings > 0 ? Double(whiffs) / Double(swings) : nil
+
+        // CSW = (called strikes + whiffs) / total pitches
+        let cswCount = rows.filter { row in
+            guard let desc = row["description"] else { return false }
+            return cswDescriptions.contains(desc)
+        }.count
+        let csw = totalPitches > 0 ? Double(cswCount) / Double(totalPitches) : nil
+
+        // Pitch mix
+        var pitchGroups: [String: [Dictionary<String, String>]] = [:]
+        for row in rows {
+            let name = row["pitch_name"] ?? "Unknown"
+            guard !name.isEmpty else { continue }
+            pitchGroups[name, default: []].append(row)
+        }
+        let mix = pitchGroups.map { (name, pitches) -> PitchMixEntry in
+            let velos = pitches.compactMap { $0["release_speed"].flatMap(Double.init) }
+            let spinRates = pitches.compactMap { $0["release_spin_rate"].flatMap(Double.init) }
+            return PitchMixEntry(
+                name: name,
+                count: pitches.count,
+                percentage: totalPitches > 0 ? Double(pitches.count) / Double(totalPitches) : 0,
+                avgVelocity: velos.isEmpty ? nil : velos.reduce(0, +) / Double(velos.count),
+                avgSpinRate: spinRates.isEmpty ? nil : spinRates.reduce(0, +) / Double(spinRates.count)
+            )
+        }.sorted { $0.count > $1.count }
+
+        return StatcastPitching(
+            battedBallEvents: battedBalls.count,
+            groundBalls: bb.groundBalls,
+            flyBalls: bb.flyBalls,
+            lineDrives: bb.lineDrives,
+            popups: bb.popups,
+            gbPercent: bb.gbPct,
+            fbPercent: bb.fbPct,
+            ldPercent: bb.ldPct,
+            popupPercent: bb.popupPct,
+            avgExitVelocity: bb.avgEV,
+            maxExitVelocity: bb.maxEV,
+            avgLaunchAngle: bb.avgLA,
+            barrelRate: bb.barrelRate,
+            hardHitRate: bb.hardHitRate,
+            xBA: bb.xBA,
+            xSLG: bb.xSLG,
+            xwOBA: bb.xwOBA,
+            totalPitches: totalPitches,
+            avgFastballVelo: avgFBV,
+            maxFastballVelo: maxFBV,
+            avgSpinRate: avgSpin,
+            whiffRate: whiffRate,
+            csw: csw,
+            pitchMix: mix
         )
     }
 }
