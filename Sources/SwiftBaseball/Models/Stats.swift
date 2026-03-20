@@ -131,6 +131,13 @@ public struct BattingStats: Codable, Sendable, Equatable {
         self.ops = ops
         self.babip = babip
     }
+
+    /// OPS value, falling back to `obp + slg` when the API omits the pre-computed field.
+    public var effectiveOPS: Double? {
+        if let ops { return ops }
+        guard let obp, let slg else { return nil }
+        return obp + slg
+    }
 }
 
 // MARK: - Pitching
@@ -278,6 +285,13 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         self.slg = slg
         self.ops = ops
         self.inningsPitched = inningsPitched
+    }
+
+    /// OPS-against value, falling back to `obp + slg` when the API omits the pre-computed field.
+    public var effectiveOPS: Double? {
+        if let ops { return ops }
+        guard let obp, let slg else { return nil }
+        return obp + slg
     }
 }
 

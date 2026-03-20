@@ -478,3 +478,90 @@ struct StatsTests {
         #expect(items.contains { $0.name == "season" && $0.value == "2023" })
     }
 }
+
+// MARK: - effectiveOPS
+
+@Suite("BattingStats.effectiveOPS")
+struct BattingEffectiveOPSTests {
+
+    /// Helper that builds a `BattingStats` with only `ops`, `obp`, and `slg` set.
+    private func batting(ops: Double? = nil, obp: Double? = nil, slg: Double? = nil) -> BattingStats {
+        BattingStats(
+            gamesPlayed: nil, plateAppearances: nil, atBats: nil, runs: nil,
+            hits: nil, doubles: nil, triples: nil, homeRuns: nil, rbi: nil,
+            stolenBases: nil, caughtStealing: nil, baseOnBalls: nil,
+            intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil,
+            sacFlies: nil, sacBunts: nil, groundIntoDoublePlay: nil,
+            totalBases: nil, leftOnBase: nil,
+            avg: nil, obp: obp, slg: slg, ops: ops, babip: nil
+        )
+    }
+
+    @Test("Returns ops when present")
+    func returnsOPSWhenPresent() {
+        let stats = batting(ops: 0.900, obp: 0.350, slg: 0.550)
+        #expect(stats.effectiveOPS == 0.900)
+    }
+
+    @Test("Computes obp + slg when ops is nil")
+    func computesFromComponents() {
+        let stats = batting(obp: 0.350, slg: 0.550)
+        let result = stats.effectiveOPS!
+        #expect(abs(result - 0.900) < 0.0001)
+    }
+
+    @Test("Returns nil when ops and obp are both nil")
+    func nilWhenMissingOBP() {
+        let stats = batting(slg: 0.550)
+        #expect(stats.effectiveOPS == nil)
+    }
+
+    @Test("Returns nil when ops and slg are both nil")
+    func nilWhenMissingSLG() {
+        let stats = batting(obp: 0.350)
+        #expect(stats.effectiveOPS == nil)
+    }
+
+    @Test("Returns nil when all three are nil")
+    func nilWhenAllNil() {
+        let stats = batting()
+        #expect(stats.effectiveOPS == nil)
+    }
+}
+
+@Suite("PitchingStats.effectiveOPS")
+struct PitchingEffectiveOPSTests {
+
+    /// Helper that builds a `PitchingStats` with only `ops`, `obp`, and `slg` set.
+    private func pitching(ops: Double? = nil, obp: Double? = nil, slg: Double? = nil) -> PitchingStats {
+        PitchingStats(
+            gamesPlayed: nil, gamesStarted: nil, wins: nil, losses: nil,
+            saves: nil, saveOpportunities: nil, holds: nil, blownSaves: nil,
+            completeGames: nil, shutouts: nil, hits: nil, runs: nil,
+            earnedRuns: nil, homeRuns: nil, baseOnBalls: nil,
+            intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil,
+            wildPitches: nil, balks: nil, battersFaced: nil,
+            era: nil, whip: nil, avg: nil,
+            obp: obp, slg: slg, ops: ops, inningsPitched: nil
+        )
+    }
+
+    @Test("Returns ops when present")
+    func returnsOPSWhenPresent() {
+        let stats = pitching(ops: 0.700, obp: 0.300, slg: 0.400)
+        #expect(stats.effectiveOPS == 0.700)
+    }
+
+    @Test("Computes obp + slg when ops is nil")
+    func computesFromComponents() {
+        let stats = pitching(obp: 0.300, slg: 0.400)
+        let result = stats.effectiveOPS!
+        #expect(abs(result - 0.700) < 0.0001)
+    }
+
+    @Test("Returns nil when all three are nil")
+    func nilWhenAllNil() {
+        let stats = pitching()
+        #expect(stats.effectiveOPS == nil)
+    }
+}
