@@ -7,7 +7,7 @@ import Foundation
 /// velocity, spin rate, whiff rate, and pitch-type usage.
 ///
 /// All percentages are expressed as values between 0 and 1 (e.g. 0.25 = 25%).
-public struct StatcastPitching: Sendable, Equatable {
+public struct StatcastPitching: Sendable, Equatable, Codable {
 
     // MARK: - Batted Ball Against
 
@@ -69,7 +69,7 @@ public struct StatcastPitching: Sendable, Equatable {
 }
 
 /// A single entry in a pitcher's pitch-mix breakdown.
-public struct PitchMixEntry: Sendable, Equatable, Identifiable {
+public struct PitchMixEntry: Sendable, Equatable, Identifiable, Codable {
     /// Unique identifier matching the pitch name.
     public var id: String { name }
     /// Human-readable pitch name (e.g. "4-Seam Fastball").
@@ -82,4 +82,8 @@ public struct PitchMixEntry: Sendable, Equatable, Identifiable {
     public let avgVelocity: Double?
     /// Average spin rate for this pitch type (RPM).
     public let avgSpinRate: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case name, count, percentage, avgVelocity, avgSpinRate
+    }
 }

@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Computed from pitch-level data fetched from Baseball Savant.
 /// All percentages are expressed as values between 0 and 1 (e.g. 0.45 = 45%).
-public struct StatcastBatting: Sendable, Equatable {
+public struct StatcastBatting: Sendable, Equatable, Codable {
     /// Total batted ball events used to compute percentages.
     public let battedBallEvents: Int
     /// Ground ball count.
