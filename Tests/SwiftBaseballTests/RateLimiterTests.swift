@@ -33,19 +33,19 @@ struct RateLimiterTests {
         let limiter = RateLimiter(maxConcurrent: 1)
         await limiter.acquire()
 
-        var secondAcquired = false
+        let flag = Flag()
         let task = Task {
             await limiter.acquire()
-            secondAcquired = true
+            await flag.set()
         }
 
         // Yield so the task has a chance to reach the waiter list
         try? await Task.sleep(nanoseconds: 10_000_000)
-        #expect(secondAcquired == false)
+        #expect(await flag.value == false)
 
         await limiter.release()
         await task.value
-        #expect(secondAcquired == true)
+        #expect(await flag.value == true)
         await limiter.release()
     }
 
@@ -261,4 +261,10 @@ private final class RetryCountingAPIClient: APIClient, @unchecked Sendable {
 private actor Counter {
     var value: Int = 0
     func increment() { value += 1 }
+}
+
+/// A thread-safe boolean flag for concurrency tests.
+private actor Flag {
+    var value: Bool = false
+    func set() { value = true }
 }
