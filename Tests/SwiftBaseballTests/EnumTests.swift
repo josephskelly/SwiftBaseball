@@ -54,6 +54,11 @@ struct EnumTests {
         #expect(decoded == .exhibition)
     }
 
+    @Test("All GameType cases have non-empty displayName", arguments: GameType.allCases)
+    func gameTypeDisplayName(_ type: GameType) {
+        #expect(!type.displayName.isEmpty)
+    }
+
     @Test("GameType.unknown is the fallback for unrecognized codes")
     func gameTypeUnknownFallback() {
         let json = #""X""#.data(using: .utf8)!

@@ -185,6 +185,21 @@ public enum GameType: String, Codable, Sendable, Hashable, CaseIterable {
     /// Unrecognized game type returned by the API.
     case unknown             = "U"
 
+    /// Human-readable label for display in UI (e.g. "Spring Training").
+    public var displayName: String {
+        switch self {
+        case .springTraining:     return "Spring Training"
+        case .regularSeason:      return "Regular Season"
+        case .wildCard:           return "Wild Card"
+        case .divisionSeries:     return "Division Series"
+        case .leagueChampionship: return "League Championship"
+        case .worldSeries:        return "World Series"
+        case .allStar:            return "All-Star Game"
+        case .exhibition:         return "Exhibition"
+        case .unknown:            return "Unknown"
+        }
+    }
+
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
         let raw = try container.decode(String.self)
