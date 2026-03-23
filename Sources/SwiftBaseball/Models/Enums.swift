@@ -180,6 +180,8 @@ public enum GameType: String, Codable, Sendable, Hashable, CaseIterable {
     case worldSeries         = "W"
     /// All-Star Game.
     case allStar             = "A"
+    /// Exhibition game (e.g. MLB team vs minor-league affiliate).
+    case exhibition          = "E"
     /// Unrecognized game type returned by the API.
     case unknown             = "U"
 

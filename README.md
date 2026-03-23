@@ -40,6 +40,13 @@ let spring = try await SwiftBaseball.playerStats(id: 592450)
     .group(.batting)
     .fetch()
 
+// Exhibition game stats (e.g. MLB vs minor-league affiliate)
+let exhibition = try await SwiftBaseball.playerStats(id: 592450)
+    .season(2025)
+    .gameType(.exhibition)
+    .group(.batting)
+    .fetch()
+
 // Fetch today's schedule
 let games = try await SwiftBaseball
     .schedule(.date("2024-07-04"))

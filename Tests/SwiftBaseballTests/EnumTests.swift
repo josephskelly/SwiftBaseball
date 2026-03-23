@@ -47,6 +47,13 @@ struct EnumTests {
         #expect(GameType(rawValue: type.rawValue) == type)
     }
 
+    @Test("GameType.exhibition decodes from 'E'")
+    func gameTypeExhibition() {
+        let json = #""E""#.data(using: .utf8)!
+        let decoded = try? JSONDecoder().decode(GameType.self, from: json)
+        #expect(decoded == .exhibition)
+    }
+
     @Test("GameType.unknown is the fallback for unrecognized codes")
     func gameTypeUnknownFallback() {
         let json = #""X""#.data(using: .utf8)!
