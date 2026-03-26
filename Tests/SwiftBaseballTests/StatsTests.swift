@@ -477,4 +477,96 @@ struct StatsTests {
         #expect(items.contains { $0.name == "group" && $0.value == "pitching" })
         #expect(items.contains { $0.name == "season" && $0.value == "2023" })
     }
+
+    // MARK: - Deduplication and aggregation across game types
+
+    @Test("Batter platoon deduplicates repeated splits from comma-separated gameType")
+    func batterPlatoonDedup() throws {
+        // Simulate the API returning 8× duplicated splits (as observed with gameType=R,S,E,F,D,L,W,A)
+        let json = """
+        { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"hitting"}, "splits": [
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"R","stat":{"gamesPlayed":100,"plateAppearances":200,"atBats":180,"hits":50,"doubles":10,"triples":1,"homeRuns":8,"rbi":30,"stolenBases":5,"caughtStealing":1,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":40,"hitByPitch":2,"sacFlies":1,"sacBunts":0,"groundIntoDoublePlay":3,"totalBases":90,"leftOnBase":60,"avg":".278","obp":".338","slg":".500","ops":".838","babip":".310"}},
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"S","stat":{"gamesPlayed":5,"plateAppearances":10,"atBats":9,"hits":3,"doubles":1,"triples":0,"homeRuns":1,"rbi":2,"stolenBases":0,"caughtStealing":0,"baseOnBalls":1,"intentionalWalks":0,"strikeOuts":2,"hitByPitch":0,"sacFlies":0,"sacBunts":0,"groundIntoDoublePlay":0,"totalBases":7,"leftOnBase":3,"avg":".333","obp":".400","slg":".778","ops":"1.178","babip":".286"}},
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"R","stat":{"gamesPlayed":100,"plateAppearances":200,"atBats":180,"hits":50,"doubles":10,"triples":1,"homeRuns":8,"rbi":30,"stolenBases":5,"caughtStealing":1,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":40,"hitByPitch":2,"sacFlies":1,"sacBunts":0,"groundIntoDoublePlay":3,"totalBases":90,"leftOnBase":60,"avg":".278","obp":".338","slg":".500","ops":".838","babip":".310"}},
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"S","stat":{"gamesPlayed":5,"plateAppearances":10,"atBats":9,"hits":3,"doubles":1,"triples":0,"homeRuns":1,"rbi":2,"stolenBases":0,"caughtStealing":0,"baseOnBalls":1,"intentionalWalks":0,"strikeOuts":2,"hitByPitch":0,"sacFlies":0,"sacBunts":0,"groundIntoDoublePlay":0,"totalBases":7,"leftOnBase":3,"avg":".333","obp":".400","slg":".778","ops":"1.178","babip":".286"}},
+            {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":120,"plateAppearances":400,"atBats":350,"hits":100,"doubles":20,"triples":3,"homeRuns":30,"rbi":70,"stolenBases":15,"caughtStealing":2,"baseOnBalls":40,"intentionalWalks":5,"strikeOuts":80,"hitByPitch":3,"sacFlies":2,"sacBunts":0,"groundIntoDoublePlay":5,"totalBases":220,"leftOnBase":100,"avg":".286","obp":".362","slg":".629","ops":".990","babip":".300"}},
+            {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":120,"plateAppearances":400,"atBats":350,"hits":100,"doubles":20,"triples":3,"homeRuns":30,"rbi":70,"stolenBases":15,"caughtStealing":2,"baseOnBalls":40,"intentionalWalks":5,"strikeOuts":80,"hitByPitch":3,"sacFlies":2,"sacBunts":0,"groundIntoDoublePlay":5,"totalBases":220,"leftOnBase":100,"avg":".286","obp":".362","slg":".629","ops":".990","babip":".300"}}
+        ]}]}
+        """.data(using: .utf8)!
+
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 1, fullName: "Test")
+        let platoon = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
+
+        // vL should aggregate R + S (not count duplicates)
+        let vl = try #require(platoon.vsLeft)
+        #expect(vl.plateAppearances == 210)  // 200 + 10
+        #expect(vl.atBats == 189)  // 180 + 9
+        #expect(vl.hits == 53)  // 50 + 3
+        #expect(vl.homeRuns == 9)  // 8 + 1
+        #expect(vl.totalBases == 97)  // 90 + 7
+
+        // OPS recomputed from aggregated counts
+        let obpDenom = 189 + 16 + 2 + 1  // AB + BB + HBP + SF
+        let expectedOBP = Double(53 + 16 + 2) / Double(obpDenom)
+        let expectedSLG = Double(97) / Double(189)
+        let expectedOPS = expectedOBP + expectedSLG
+        #expect(abs((vl.ops ?? 0) - expectedOPS) < 0.001)
+
+        // vR should have only R (one unique gameType)
+        let vr = try #require(platoon.vsRight)
+        #expect(vr.plateAppearances == 400)
+        #expect(vr.atBats == 350)
+        #expect(vr.ops == 0.990)  // Single entry, returned as-is
+    }
+
+    @Test("Pitcher platoon deduplicates and aggregates across game types")
+    func pitcherPlatoonDedup() throws {
+        let json = """
+        { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"pitching"}, "splits": [
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":5,"losses":3,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":60,"runs":25,"earnedRuns":22,"homeRuns":8,"baseOnBalls":20,"intentionalWalks":0,"strikeOuts":70,"hitByPitch":3,"wildPitches":2,"balks":0,"battersFaced":250,"era":"3.50","whip":"1.20","avg":".264","obp":".332","slg":".440","ops":".772","inningsPitched":"56.2"}},
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"S","stat":{"gamesPlayed":3,"gamesStarted":3,"wins":1,"losses":0,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":5,"runs":2,"earnedRuns":2,"homeRuns":1,"baseOnBalls":2,"intentionalWalks":0,"strikeOuts":8,"hitByPitch":0,"wildPitches":0,"balks":0,"battersFaced":25,"era":"3.00","whip":"1.05","avg":".217","obp":".280","slg":".391","ops":".671","inningsPitched":"6.0"}},
+            {"split":{"code":"vl","description":"vs Left"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":5,"losses":3,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":60,"runs":25,"earnedRuns":22,"homeRuns":8,"baseOnBalls":20,"intentionalWalks":0,"strikeOuts":70,"hitByPitch":3,"wildPitches":2,"balks":0,"battersFaced":250,"era":"3.50","whip":"1.20","avg":".264","obp":".332","slg":".440","ops":".772","inningsPitched":"56.2"}},
+            {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":4,"losses":2,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":50,"runs":20,"earnedRuns":18,"homeRuns":6,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":85,"hitByPitch":2,"wildPitches":1,"balks":0,"battersFaced":270,"era":"2.80","whip":"1.00","avg":".197","obp":".249","slg":".350","ops":".599","inningsPitched":"57.2"}},
+            {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":4,"losses":2,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":50,"runs":20,"earnedRuns":18,"homeRuns":6,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":85,"hitByPitch":2,"wildPitches":1,"balks":0,"battersFaced":270,"era":"2.80","whip":"1.00","avg":".197","obp":".249","slg":".350","ops":".599","inningsPitched":"57.2"}}
+        ]}]}
+        """.data(using: .utf8)!
+
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 1, fullName: "Test")
+        let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+
+        // vL should aggregate R + S
+        let vl = try #require(platoon.vsLeft)
+        #expect(vl.battersFaced == 275)  // 250 + 25
+        #expect(vl.strikeOuts == 78)  // 70 + 8
+        #expect(vl.hits == 65)  // 60 + 5
+
+        // OPS is BF-weighted: (0.772 * 250 + 0.671 * 25) / 275
+        let expectedOPS = (0.772 * 250.0 + 0.671 * 25.0) / 275.0
+        #expect(abs((vl.ops ?? 0) - expectedOPS) < 0.001)
+
+        // vR should have only R (single entry)
+        let vr = try #require(platoon.vsRight)
+        #expect(vr.battersFaced == 270)
+        #expect(vr.ops == 0.599)
+    }
+
+    @Test("Batter platoon with no gameType field still works (backwards compat)")
+    func batterPlatoonNoGameType() throws {
+        // Existing fixture has no gameType on splits — should still parse fine
+        let data = try Fixtures.load("player_stats_platoon_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let platoon = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
+
+        // Single vl and vr entries with nil gameType — no aggregation needed
+        let vsLeft = try #require(platoon.vsLeft)
+        #expect(vsLeft.gamesPlayed == 114)
+        #expect(vsLeft.ops == 0.867)
+
+        let vsRight = try #require(platoon.vsRight)
+        #expect(vsRight.gamesPlayed == 145)
+        #expect(vsRight.ops == 1.128)
+    }
 }

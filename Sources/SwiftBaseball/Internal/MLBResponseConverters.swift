@@ -218,29 +218,189 @@ enum MLBResponseConverters {
         )
     }
 
+    /// Builds batter platoon stats by deduplicating and aggregating splits
+    /// across all game types.
+    ///
+    /// When the MLB API receives comma-separated `gameType` values (e.g.
+    /// `R,S,E,F,D,L,W,A`), it returns duplicate splits — the same
+    /// `(splitCode, gameType)` pair repeated N times (once per requested type).
+    /// This method deduplicates by `(splitCode, gameType)`, then sums counting
+    /// stats across game types to produce a single aggregated vL and vR result.
     static func playerPlatoonStats(
         from response: MLBPlayerStatsResponse,
         playerRef: PlayerReference
     ) -> PlayerPlatoonStats {
-        let splits = response.stats.flatMap(\.splits)
-        let vl = splits.first(where: { $0.split?.code == "vl" })
-        let vr = splits.first(where: { $0.split?.code == "vr" })
+        let unique = deduplicatedSplits(from: response)
+        let vlStats = unique.filter { $0.split?.code == "vl" }.map { battingStats(from: $0.stat) }
+        let vrStats = unique.filter { $0.split?.code == "vr" }.map { battingStats(from: $0.stat) }
         return PlayerPlatoonStats(
-            vsLeft: vl.map { battingStats(from: $0.stat) },
-            vsRight: vr.map { battingStats(from: $0.stat) }
+            vsLeft: aggregateBattingStats(vlStats),
+            vsRight: aggregateBattingStats(vrStats)
         )
     }
 
+    /// Builds pitcher platoon stats by deduplicating and aggregating splits
+    /// across all game types.
     static func pitcherPlatoonStats(
         from response: MLBPlayerStatsResponse,
         playerRef: PlayerReference
     ) -> PitcherPlatoonStats {
-        let splits = response.stats.flatMap(\.splits)
-        let vl = splits.first(where: { $0.split?.code == "vl" })
-        let vr = splits.first(where: { $0.split?.code == "vr" })
+        let unique = deduplicatedSplits(from: response)
+        let vlStats = unique.filter { $0.split?.code == "vl" }.map { pitchingStats(from: $0.stat) }
+        let vrStats = unique.filter { $0.split?.code == "vr" }.map { pitchingStats(from: $0.stat) }
         return PitcherPlatoonStats(
-            vsLeft: vl.map { pitchingStats(from: $0.stat) },
-            vsRight: vr.map { pitchingStats(from: $0.stat) }
+            vsLeft: aggregatePitchingStats(vlStats),
+            vsRight: aggregatePitchingStats(vrStats)
+        )
+    }
+
+    /// Removes duplicate splits produced by comma-separated gameType queries.
+    ///
+    /// The API returns identical `(splitCode, gameType)` pairs repeated once per
+    /// requested game type. This keeps only the first occurrence of each pair.
+    private static func deduplicatedSplits(
+        from response: MLBPlayerStatsResponse
+    ) -> [MLBStatSplit] {
+        let allSplits = response.stats.flatMap(\.splits)
+        var seen = Set<String>()
+        return allSplits.filter { split in
+            let code = split.split?.code ?? ""
+            let gt = split.gameType ?? ""
+            let key = "\(code)-\(gt)"
+            guard !seen.contains(key) else { return false }
+            seen.insert(key)
+            return true
+        }
+    }
+
+    /// Sums batting counting stats across game types and computes rate stats
+    /// from the aggregated totals.
+    private static func aggregateBattingStats(
+        _ stats: [BattingStats]
+    ) -> BattingStats? {
+        guard !stats.isEmpty else { return nil }
+        if stats.count == 1 { return stats[0] }
+
+        var gp = 0, pa = 0, ab = 0, r = 0, h = 0
+        var d = 0, t = 0, hr = 0, rbi = 0, sb = 0, cs = 0
+        var bb = 0, ibb = 0, so = 0, hbp = 0, sf = 0, sac = 0
+        var gidp = 0, tb = 0, lob = 0
+
+        for s in stats {
+            gp  += s.gamesPlayed ?? 0
+            pa  += s.plateAppearances ?? 0
+            ab  += s.atBats ?? 0
+            r   += s.runs ?? 0
+            h   += s.hits ?? 0
+            d   += s.doubles ?? 0
+            t   += s.triples ?? 0
+            hr  += s.homeRuns ?? 0
+            rbi += s.rbi ?? 0
+            sb  += s.stolenBases ?? 0
+            cs  += s.caughtStealing ?? 0
+            bb  += s.baseOnBalls ?? 0
+            ibb += s.intentionalWalks ?? 0
+            so  += s.strikeOuts ?? 0
+            hbp += s.hitByPitch ?? 0
+            sf  += s.sacFlies ?? 0
+            sac += s.sacBunts ?? 0
+            gidp += s.groundIntoDoublePlay ?? 0
+            tb  += s.totalBases ?? 0
+            lob += s.leftOnBase ?? 0
+        }
+
+        let avg: Double? = ab > 0 ? Double(h) / Double(ab) : nil
+        let obpDenom = ab + bb + hbp + sf
+        let obp: Double? = obpDenom > 0 ? Double(h + bb + hbp) / Double(obpDenom) : nil
+        let slg: Double? = ab > 0 ? Double(tb) / Double(ab) : nil
+        let ops: Double? = if let obp, let slg { obp + slg } else { nil }
+        // BABIP = (H - HR) / (AB - SO - HR + SF)
+        let babipDenom = ab - so - hr + sf
+        let babip: Double? = babipDenom > 0 ? Double(h - hr) / Double(babipDenom) : nil
+
+        return BattingStats(
+            gamesPlayed: gp, plateAppearances: pa, atBats: ab,
+            runs: r, hits: h, doubles: d, triples: t, homeRuns: hr,
+            rbi: rbi, stolenBases: sb, caughtStealing: cs,
+            baseOnBalls: bb, intentionalWalks: ibb, strikeOuts: so,
+            hitByPitch: hbp, sacFlies: sf, sacBunts: sac,
+            groundIntoDoublePlay: gidp, totalBases: tb, leftOnBase: lob,
+            avg: avg, obp: obp, slg: slg, ops: ops, babip: babip
+        )
+    }
+
+    /// Sums pitching counting stats across game types and computes rate stats
+    /// from the aggregated totals.
+    private static func aggregatePitchingStats(
+        _ stats: [PitchingStats]
+    ) -> PitchingStats? {
+        guard !stats.isEmpty else { return nil }
+        if stats.count == 1 { return stats[0] }
+
+        var gp = 0, gs = 0, w = 0, l = 0, sv = 0, svo = 0
+        var hld = 0, bs = 0, cg = 0, sho = 0
+        var h = 0, r = 0, er = 0, hr = 0
+        var bb = 0, ibb = 0, so = 0, hbp = 0
+        var wp = 0, bk = 0, bf = 0
+        var totalIP = 0.0
+
+        for s in stats {
+            gp  += s.gamesPlayed ?? 0
+            gs  += s.gamesStarted ?? 0
+            w   += s.wins ?? 0
+            l   += s.losses ?? 0
+            sv  += s.saves ?? 0
+            svo += s.saveOpportunities ?? 0
+            hld += s.holds ?? 0
+            bs  += s.blownSaves ?? 0
+            cg  += s.completeGames ?? 0
+            sho += s.shutouts ?? 0
+            h   += s.hits ?? 0
+            r   += s.runs ?? 0
+            er  += s.earnedRuns ?? 0
+            hr  += s.homeRuns ?? 0
+            bb  += s.baseOnBalls ?? 0
+            ibb += s.intentionalWalks ?? 0
+            so  += s.strikeOuts ?? 0
+            hbp += s.hitByPitch ?? 0
+            wp  += s.wildPitches ?? 0
+            bk  += s.balks ?? 0
+            bf  += s.battersFaced ?? 0
+            totalIP += s.inningsPitched ?? 0
+        }
+
+        let era: Double? = totalIP > 0 ? (Double(er) / totalIP) * 9.0 : nil
+        let whip: Double? = totalIP > 0 ? Double(bb + h) / totalIP : nil
+        let avg: Double? = bf > 0 ? Double(h) / Double(bf - bb - hbp) : nil
+        let obpDenom = bf
+        let obp: Double? = obpDenom > 0 ? Double(h + bb + hbp) / Double(obpDenom) : nil
+        // For pitcher platoon, SLG and OPS require total bases which we don't
+        // have as a counting stat on pitching splits. Use BF-weighted average
+        // of per-split OPS values as a fallback.
+        var weightedOPS = 0.0
+        var opsBF = 0
+        for s in stats {
+            let sBF = s.battersFaced ?? 0
+            guard sBF > 0, let sOPS = s.ops else { continue }
+            weightedOPS += sOPS * Double(sBF)
+            opsBF += sBF
+        }
+        let ops: Double? = opsBF > 0 ? weightedOPS / Double(opsBF) : nil
+        // Approximate SLG from OPS - OBP
+        let slg: Double? = if let ops, let obp { ops - obp } else { nil }
+
+        return PitchingStats(
+            gamesPlayed: gp, gamesStarted: gs,
+            wins: w, losses: l, saves: sv,
+            saveOpportunities: svo, holds: hld,
+            blownSaves: bs, completeGames: cg, shutouts: sho,
+            hits: h, runs: r, earnedRuns: er, homeRuns: hr,
+            baseOnBalls: bb, intentionalWalks: ibb, strikeOuts: so,
+            hitByPitch: hbp, wildPitches: wp, balks: bk,
+            battersFaced: bf,
+            era: era, whip: whip, avg: avg,
+            obp: obp, slg: slg, ops: ops,
+            inningsPitched: totalIP
         )
     }
 
