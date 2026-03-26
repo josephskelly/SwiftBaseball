@@ -87,6 +87,24 @@ public struct QueryBuilder<T: Sendable>: Sendable {
         modifying { $0.adding(name: "gameType", value: type.rawValue) }
     }
 
+    /// Filters results to multiple game types (comma-separated in the query string).
+    ///
+    /// The MLB Stats API returns separate splits for each game type the player
+    /// has data in. Use this to fetch stats across spring training, regular
+    /// season, and exhibition in a single request.
+    ///
+    /// ```swift
+    /// let stats = try await SwiftBaseball.playerStats(id: 605141)
+    ///     .season(2026)
+    ///     .group(.batting)
+    ///     .gameTypes([.regularSeason, .springTraining, .exhibition])
+    ///     .fetch()
+    /// ```
+    public func gameTypes(_ types: [GameType]) -> QueryBuilder<T> {
+        let value = types.map(\.rawValue).joined(separator: ",")
+        return modifying { $0.adding(name: "gameType", value: value) }
+    }
+
     // MARK: - Private
 
     private func modifying(_ transform: (Endpoint) -> Endpoint) -> QueryBuilder<T> {
