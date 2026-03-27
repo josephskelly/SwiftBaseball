@@ -16,6 +16,8 @@ public enum SwiftBaseballError: Error, Sendable {
     case invalidResponse(statusCode: Int)
     /// The library configuration is invalid.
     case configurationError(String)
+    /// The requested resource was not found in the API response.
+    case notFound(String)
     /// The API returned an unexpected response format.
     case unexpectedResponse
 }
@@ -40,6 +42,8 @@ extension SwiftBaseballError: LocalizedError {
             return "Invalid HTTP response: \(code)"
         case .configurationError(let message):
             return "Configuration error: \(message)"
+        case .notFound(let resource):
+            return "Not found: \(resource)"
         case .unexpectedResponse:
             return "Unexpected response from server."
         }

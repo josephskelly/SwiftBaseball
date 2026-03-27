@@ -507,6 +507,46 @@ struct MLBSabermetricPayload: Decodable {
     let wSb: Double?
 }
 
+// MARK: - Venues
+
+struct MLBVenuesResponse: Decodable {
+    let venues: [MLBVenueDetail]
+}
+
+struct MLBVenueDetail: Decodable {
+    let id: Int
+    let name: String
+    let location: MLBVenueLocation?
+    let fieldInfo: MLBFieldInfo?
+    let active: Bool?
+}
+
+struct MLBVenueLocation: Decodable {
+    let city: String?
+    let state: String?
+    let stateAbbrev: String?
+    let country: String?
+    let defaultCoordinates: MLBCoordinates?
+}
+
+struct MLBCoordinates: Decodable {
+    let latitude: Double
+    let longitude: Double
+}
+
+struct MLBFieldInfo: Decodable {
+    let capacity: Int?
+    let turfType: String?
+    let roofType: String?
+    let leftLine: Int?
+    let left: Int?
+    let leftCenter: Int?
+    let center: Int?
+    let rightCenter: Int?
+    let right: Int?
+    let rightLine: Int?
+}
+
 // MARK: - Draft
 
 struct MLBDraftResponse: Decodable {

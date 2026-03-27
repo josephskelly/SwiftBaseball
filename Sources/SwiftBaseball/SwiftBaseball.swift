@@ -296,6 +296,29 @@ public enum SwiftBaseball {
         OAAQuery(client: statcastClient)
     }
 
+    // MARK: - Venues
+
+    /// Fetch all MLB venues with field dimensions and GPS coordinates.
+    ///
+    /// Returns both active and historical venues. Use `.season(_:)` to filter
+    /// to venues active in a specific year.
+    ///
+    ///     let venues = try await SwiftBaseball.venues().fetch()
+    ///     let yankeeStadium = venues.first { $0.id == 3313 }
+    ///     print(yankeeStadium?.dimensions?.center)  // Optional(408)
+    public static func venues() -> QueryBuilder<[Venue]> {
+        .venues(client: client)
+    }
+
+    /// Fetch a single venue by MLB venue ID.
+    ///
+    ///     let stadium = try await SwiftBaseball.venue(id: 3313).fetch()
+    ///     print(stadium.dimensions?.leftLine)   // Optional(318)
+    ///     print(stadium.coordinates?.latitude)  // Optional(40.82919482)
+    public static func venue(id: Int) -> QueryBuilder<Venue> {
+        .venue(id: id, client: client)
+    }
+
     // MARK: - Draft
 
     /// Fetch MLB draft picks for a given year.

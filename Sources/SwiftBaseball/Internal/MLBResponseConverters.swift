@@ -837,6 +837,39 @@ enum MLBResponseConverters {
         return iso.date(from: string) ?? parseDate(string)
     }
 
+    // MARK: - Venues
+
+    static func venues(from response: MLBVenuesResponse) -> [Venue] {
+        response.venues.map { venue(from: $0) }
+    }
+
+    static func venue(from raw: MLBVenueDetail) -> Venue {
+        let dims: FieldDimensions? = raw.fieldInfo.map { fi in
+            FieldDimensions(
+                leftLine: fi.leftLine, left: fi.left, leftCenter: fi.leftCenter,
+                center: fi.center, rightCenter: fi.rightCenter,
+                right: fi.right, rightLine: fi.rightLine
+            )
+        }
+        let coords: Coordinates? = raw.location?.defaultCoordinates.map { c in
+            Coordinates(latitude: c.latitude, longitude: c.longitude)
+        }
+        return Venue(
+            id: raw.id,
+            name: raw.name,
+            city: raw.location?.city,
+            state: raw.location?.state,
+            stateAbbrev: raw.location?.stateAbbrev,
+            country: raw.location?.country,
+            capacity: raw.fieldInfo?.capacity,
+            surface: raw.fieldInfo?.turfType,
+            roofType: raw.fieldInfo?.roofType,
+            active: raw.active,
+            dimensions: dims,
+            coordinates: coords
+        )
+    }
+
     // MARK: - Draft
 
     static func draftPicks(from response: MLBDraftResponse, year: Int) -> [DraftPick] {
