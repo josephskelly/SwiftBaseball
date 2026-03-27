@@ -199,9 +199,9 @@ struct StatcastLeaderboardTests {
 
     @Test("Parse catcher framing leaderboard from fixture")
     func parseCatcherFramingLeaderboard() throws {
-        let data = try Fixtures.load("catcher_framing_leaderboard_2024.html")
-        let html = String(data: data, encoding: .utf8)!
-        let entries = CatcherFramingParser.parse(html, season: 2024)
+        let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         #expect(entries.count == 5)
         #expect(entries.allSatisfy { $0.season == 2024 })
@@ -209,83 +209,68 @@ struct StatcastLeaderboardTests {
 
     @Test("Catcher framing: first entry parsed correctly")
     func catcherFramingTopEntry() throws {
-        let data = try Fixtures.load("catcher_framing_leaderboard_2024.html")
-        let html = String(data: data, encoding: .utf8)!
-        let entries = CatcherFramingParser.parse(html, season: 2024)
+        let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         let top = try #require(entries.first)
-        #expect(top.playerId == 678578)
+        #expect(top.playerId == 672275)
         #expect(top.playerName == "Bailey, Patrick")
-        #expect(top.team == "Giants")
-        #expect(abs(top.framingRunsAdded - 12.5) < 0.01)
-        #expect(abs(top.calledStrikeRate - 0.448) < 0.001)
-        #expect(top.pitchesSeen == 6891)
-        #expect(top.shadowPitches == 2781)
+        #expect(abs(top.framingRunsAdded - 25.06) < 0.01)
+        #expect(abs(top.calledStrikeRate - 0.4764) < 0.001)
+        #expect(top.pitchesSeen == 8913)
     }
 
     @Test("Catcher framing: negative framing runs parses correctly")
     func catcherFramingNegativeValue() throws {
-        let data = try Fixtures.load("catcher_framing_leaderboard_2024.html")
-        let html = String(data: data, encoding: .utf8)!
-        let entries = CatcherFramingParser.parse(html, season: 2024)
+        let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         let realmuto = try #require(entries.first { $0.playerId == 592663 })
         #expect(abs(realmuto.framingRunsAdded - (-8.37)) < 0.01)
         #expect(realmuto.playerName == "Realmuto, J.T.")
-        #expect(realmuto.team == "Phillies")
         #expect(realmuto.pitchesSeen == 9714)
-        #expect(realmuto.shadowPitches == 4002)
     }
 
     @Test("Catcher framing: all entries have valid player IDs and names")
     func catcherFramingAllEntriesValid() throws {
-        let data = try Fixtures.load("catcher_framing_leaderboard_2024.html")
-        let html = String(data: data, encoding: .utf8)!
-        let entries = CatcherFramingParser.parse(html, season: 2024)
+        let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         #expect(entries.allSatisfy { $0.playerId > 0 })
         #expect(entries.allSatisfy { !$0.playerName.isEmpty })
-        #expect(entries.allSatisfy { !$0.team.isEmpty })
     }
 
     @Test("Catcher framing: season is injected by parser")
     func catcherFramingSeasonInjected() throws {
-        let data = try Fixtures.load("catcher_framing_leaderboard_2024.html")
-        let html = String(data: data, encoding: .utf8)!
-        let entries = CatcherFramingParser.parse(html, season: 2023)
+        let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = CatcherFramingParser.parse(csv, season: 2023)
 
         #expect(entries.allSatisfy { $0.season == 2023 })
     }
 
-    @Test("Catcher framing: HTML with no data constant returns empty array")
-    func catcherFramingNoDataConstant() {
-        let html = "<html><body><script>const other = [];</script></body></html>"
-        let entries = CatcherFramingParser.parse(html, season: 2024)
-        #expect(entries.isEmpty)
+    @Test("Catcher framing: BOM-prefixed CSV is handled correctly")
+    func catcherFramingBOMHandled() {
+        // Real API responses include a UTF-8 BOM before the first header
+        let csv = "\u{FEFF}id,name,pitches,rv_tot,pct_tot,rv_11,pct_11,rv_12,pct_12,rv_13,pct_13,rv_14,pct_14,rv_16,pct_16,rv_17,pct_17,rv_18,pct_18,rv_19,pct_19\n672275,\"Bailey, Patrick\",8913,25.06,0.4764,2,0.229,5,0.529,3,0.268,6,0.612,3,0.596,2,0.366,2,0.505,2,0.237\n"
+        let entries = CatcherFramingParser.parse(csv, season: 2024)
+        #expect(entries.count == 1)
+        #expect(entries[0].playerId == 672275)
     }
 
-    @Test("Catcher framing: empty string returns empty array")
-    func catcherFramingEmptyInput() {
+    @Test("Catcher framing: row missing required field is skipped")
+    func catcherFramingSkipsMalformedRow() {
+        let csv = "id,name,pitches,rv_tot,pct_tot,rv_11,pct_11,rv_12,pct_12,rv_13,pct_13,rv_14,pct_14,rv_16,pct_16,rv_17,pct_17,rv_18,pct_18,rv_19,pct_19\n672275,\"Bailey, Patrick\",8913,25.06,0.4764,2,0.229,5,0.529,3,0.268,6,0.612,3,0.596,2,0.366,2,0.505,2,0.237\n,\"Missing ID\",5000,3.0,0.43,0,0.1,0,0.4,0,0.1,0,0.5,0,0.5,0,0.2,0,0.4,0,0.2\n"
+        let entries = CatcherFramingParser.parse(csv, season: 2024)
+        #expect(entries.count == 1)
+    }
+
+    @Test("Catcher framing: empty CSV returns empty array")
+    func catcherFramingEmptyCSV() {
         let entries = CatcherFramingParser.parse("", season: 2024)
-        #expect(entries.isEmpty)
-    }
-
-    @Test("Catcher framing: malformed JSON in data block returns empty array")
-    func catcherFramingMalformedJSON() {
-        let html = "<script>const data = [not valid json];</script>"
-        let entries = CatcherFramingParser.parse(html, season: 2024)
-        #expect(entries.isEmpty)
-    }
-
-    @Test("Catcher framing: entry missing required field is excluded")
-    func catcherFramingMissingRequiredField() {
-        // Missing fielder_2 (player ID) — decoder will fail, returning empty array
-        let html = """
-        <script>
-        const data = [{"f2_name_display_first_last":"Bailey, Patrick","team_name":"Giants","rv_tot":12.5,"pct_tot":0.448,"pitches":6891,"pitches_shadow":2781}];
-        </script>
-        """
-        let entries = CatcherFramingParser.parse(html, season: 2024)
         #expect(entries.isEmpty)
     }
 

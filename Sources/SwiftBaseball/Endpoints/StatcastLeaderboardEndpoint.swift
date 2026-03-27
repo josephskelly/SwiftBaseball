@@ -249,96 +249,49 @@ public struct CatcherFramingQuery: Sendable {
     /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
     public func fetch() async throws -> [CatcherFramingEntry] {
         let year = seasonYear ?? Calendar.current.component(.year, from: Date())
-        let html = try await client.fetchSavantPage(
+        let csv = try await client.fetchSavantCSV(
             path: "leaderboard/catcher-framing",
             queryItems: buildQueryItems(year: year)
         )
-        return CatcherFramingParser.parse(html, season: year)
+        return CatcherFramingParser.parse(csv, season: year)
     }
 
     private func buildQueryItems(year: Int) -> [URLQueryItem] {
         [
-            URLQueryItem(name: "type", value: "catching"),
+            URLQueryItem(name: "type", value: "catcher"),
             URLQueryItem(name: "min", value: _minPitches),
-            URLQueryItem(name: "inn", value: ""),
-            URLQueryItem(name: "dist", value: ""),
-            URLQueryItem(name: "statcast", value: ""),
             URLQueryItem(name: "year", value: String(year)),
-            URLQueryItem(name: "team", value: ""),
+            URLQueryItem(name: "csv", value: "true"),
         ]
     }
 }
 
 // MARK: - Catcher Framing Parser
 
-/// Parses Baseball Savant catcher framing leaderboard HTML into ``CatcherFramingEntry`` values.
-///
-/// The leaderboard page embeds data as `const data = [...];` in a script block.
-/// Player IDs and names are not available in the CSV export, so this parser
-/// extracts the embedded JSON instead.
+/// Parses Baseball Savant catcher framing leaderboard CSV into ``CatcherFramingEntry`` values.
 enum CatcherFramingParser {
+    static func parse(_ csv: String, season: Int) -> [CatcherFramingEntry] {
+        // Strip UTF-8 BOM if present — the framing CSV's first column header ("id")
+        // is the BOM-prefixed column, so stripping it ensures the key is just "id".
+        let input = csv.hasPrefix("\u{FEFF}") ? String(csv.dropFirst()) : csv
+        let rows = CSVParser.parse(input)
+        return rows.compactMap { row -> CatcherFramingEntry? in
+            guard
+                let idValue = row["id"], let playerId = Int(idValue),
+                let name = row["name"], !name.isEmpty,
+                let pitchesStr = row["pitches"], let pitches = Int(pitchesStr),
+                let rvStr = row["rv_tot"], let framingRuns = Double(rvStr),
+                let pctStr = row["pct_tot"], let strikeRate = Double(pctStr)
+            else { return nil }
 
-    private struct MLBFramingEntry: Decodable {
-        let playerId: Int
-        let playerName: String
-        let team: String
-        let framingRunsAdded: Double
-        let calledStrikeRate: Double
-        let pitchesSeen: Int
-        let shadowPitches: Int
-
-        enum CodingKeys: String, CodingKey {
-            case playerId = "fielder_2"
-            case playerName = "f2_name_display_first_last"
-            case team = "team_name"
-            case framingRunsAdded = "rv_tot"
-            case calledStrikeRate = "pct_tot"
-            case pitchesSeen = "pitches"
-            case shadowPitches = "pitches_shadow"
-        }
-    }
-
-    static func parse(_ html: String, season: Int) -> [CatcherFramingEntry] {
-        guard let jsonString = extractDataJSON(from: html) else { return [] }
-        guard let data = jsonString.data(using: .utf8),
-              let entries = try? JSONDecoder().decode([MLBFramingEntry].self, from: data)
-        else { return [] }
-
-        return entries.map { entry in
-            CatcherFramingEntry(
-                playerId: entry.playerId,
-                playerName: entry.playerName,
-                team: entry.team,
+            return CatcherFramingEntry(
+                playerId: playerId,
+                playerName: name,
                 season: season,
-                framingRunsAdded: entry.framingRunsAdded,
-                calledStrikeRate: entry.calledStrikeRate,
-                pitchesSeen: entry.pitchesSeen,
-                shadowPitches: entry.shadowPitches
+                framingRunsAdded: framingRuns,
+                calledStrikeRate: strikeRate,
+                pitchesSeen: pitches
             )
         }
-    }
-
-    /// Extracts the JSON array from a `const data = [...];` block in the HTML.
-    ///
-    /// Uses bracket-depth counting so no regex is needed. Baseball Savant player
-    /// names and team names never contain `[` or `]`, making simple depth tracking safe.
-    private static func extractDataJSON(from html: String) -> String? {
-        guard let dataRange = html.range(of: "const data = ") else { return nil }
-        let searchStart = dataRange.upperBound
-        guard let bracketStart = html[searchStart...].firstIndex(of: "[") else { return nil }
-
-        var depth = 0
-        for idx in html[bracketStart...].indices {
-            let char = html[idx]
-            if char == "[" {
-                depth += 1
-            } else if char == "]" {
-                depth -= 1
-                if depth == 0 {
-                    return String(html[bracketStart...idx])
-                }
-            }
-        }
-        return nil
     }
 }

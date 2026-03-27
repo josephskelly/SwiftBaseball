@@ -33,13 +33,14 @@ public struct SprintSpeedEntry: Sendable, Equatable, Codable {
 /// generates by converting borderline pitches into called strikes above what an average
 /// catcher would. Positive values indicate elite framers; negative values indicate
 /// below-average framers.
+///
+/// - Note: Team is not included in the Baseball Savant framing CSV export.
+///   Use ``playerId`` to look up team via ``SwiftBaseball/players(ids:)``.
 public struct CatcherFramingEntry: Sendable, Equatable, Codable {
     /// MLB player ID.
     public let playerId: Int
     /// Player's full name as returned by the leaderboard (Last, First format).
     public let playerName: String
-    /// Team abbreviation (e.g. "Rangers").
-    public let team: String
     /// Season year.
     public let season: Int
     /// Framing runs added above average. Positive = elite framer, negative = below average.
@@ -48,8 +49,6 @@ public struct CatcherFramingEntry: Sendable, Equatable, Codable {
     public let calledStrikeRate: Double
     /// Total pitches received in the sample.
     public let pitchesSeen: Int
-    /// Number of pitches in the shadow (borderline) zone.
-    public let shadowPitches: Int
 }
 
 // MARK: - Outs Above Average
