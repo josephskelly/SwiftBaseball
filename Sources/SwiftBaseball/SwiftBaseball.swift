@@ -305,6 +305,17 @@ public enum SwiftBaseball {
         OAAQuery(client: statcastClient)
     }
 
+    /// Fetch the Baseball Savant catcher framing leaderboard.
+    ///
+    /// Returns all qualified catchers for the requested season. `framingRunsAdded`
+    /// is the primary metric — the run value of called strikes earned above average.
+    ///
+    ///     let framing = try await SwiftBaseball.catcherFraming().season(2024).fetch()
+    ///     print(framing.first?.framingRunsAdded)  // top framer's run value
+    public static func catcherFraming() -> CatcherFramingQuery {
+        CatcherFramingQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

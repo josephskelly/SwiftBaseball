@@ -129,6 +129,13 @@ let trades = try await SwiftBaseball
     .transactions()
     .dateRange(start: "2024-07-01", end: "2024-07-31")
     .fetch()
+
+// Catcher framing leaderboard — framing runs added above average
+let framing = try await SwiftBaseball
+    .catcherFraming()
+    .season(2024)
+    .fetch()
+print(framing.first?.playerName, framing.first?.framingRunsAdded)
 ```
 
 ## Data Sources
@@ -136,7 +143,7 @@ let trades = try await SwiftBaseball
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions |
-| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix) |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing |
 | Baseball Reference | Planned | None (scraped) | Historical season stats, awards |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 

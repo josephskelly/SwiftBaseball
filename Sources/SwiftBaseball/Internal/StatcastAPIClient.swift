@@ -34,6 +34,14 @@ final class StatcastAPIClient: Sendable {
         try await fetchSavantCSV(path: "statcast_search/csv", queryItems: queryItems)
     }
 
+    /// Fetches an HTML page from Baseball Savant.
+    ///
+    /// Used by leaderboard endpoints (e.g. `leaderboard/catcher-framing`) that embed
+    /// their data in a `const data = [...]` JavaScript block rather than returning CSV.
+    func fetchSavantPage(path: String, queryItems: [URLQueryItem]) async throws -> String {
+        try await fetchSavantCSV(path: path, queryItems: queryItems)
+    }
+
     /// Fetches CSV data from an arbitrary Baseball Savant path.
     ///
     /// Used by leaderboard endpoints (e.g. `leaderboard/sprint-speed`) that share

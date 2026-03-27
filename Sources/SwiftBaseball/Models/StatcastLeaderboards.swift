@@ -25,6 +25,33 @@ public struct SprintSpeedEntry: Sendable, Equatable, Codable {
     public let homeToFirst: Double?
 }
 
+// MARK: - Catcher Framing
+
+/// A single catcher's framing entry from the Baseball Savant catcher framing leaderboard.
+///
+/// Framing runs added (`framingRunsAdded`) measures how many runs of value a catcher
+/// generates by converting borderline pitches into called strikes above what an average
+/// catcher would. Positive values indicate elite framers; negative values indicate
+/// below-average framers.
+public struct CatcherFramingEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Team abbreviation (e.g. "Rangers").
+    public let team: String
+    /// Season year.
+    public let season: Int
+    /// Framing runs added above average. Positive = elite framer, negative = below average.
+    public let framingRunsAdded: Double
+    /// Overall called strike rate on all pitches (0–1 scale).
+    public let calledStrikeRate: Double
+    /// Total pitches received in the sample.
+    public let pitchesSeen: Int
+    /// Number of pitches in the shadow (borderline) zone.
+    public let shadowPitches: Int
+}
+
 // MARK: - Outs Above Average
 
 /// A single player's Outs Above Average (OAA) entry from the Baseball Savant leaderboard.
