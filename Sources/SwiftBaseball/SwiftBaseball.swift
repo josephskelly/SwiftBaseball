@@ -273,6 +273,29 @@ public enum SwiftBaseball {
         StatcastBatchPitchingQuery(playerIds: playerIds, client: statcastClient)
     }
 
+    // MARK: - Baseball Savant Leaderboards
+
+    /// Fetch the Baseball Savant sprint-speed leaderboard.
+    ///
+    /// Returns all qualified players for the requested season, ordered by speed descending.
+    ///
+    ///     let speeds = try await SwiftBaseball.sprintSpeed().season(2024).fetch()
+    ///     print(speeds.first?.sprintSpeed)  // fastest player in ft/sec
+    public static func sprintSpeed() -> SprintSpeedQuery {
+        SprintSpeedQuery(client: statcastClient)
+    }
+
+    /// Fetch the Baseball Savant Outs Above Average (OAA) fielding leaderboard.
+    ///
+    /// Returns all qualified fielders for the requested season, ordered by OAA descending.
+    /// Use `.position("SS")` to filter to a specific position.
+    ///
+    ///     let oaa = try await SwiftBaseball.outsAboveAverage().season(2024).fetch()
+    ///     print(oaa.first?.oaa)  // top fielder's OAA
+    public static func outsAboveAverage() -> OAAQuery {
+        OAAQuery(client: statcastClient)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

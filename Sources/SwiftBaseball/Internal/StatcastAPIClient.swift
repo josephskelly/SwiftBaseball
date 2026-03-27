@@ -31,8 +31,16 @@ final class StatcastAPIClient: Sendable {
 
     /// Fetches CSV data from a Statcast search endpoint.
     func fetchCSV(queryItems: [URLQueryItem]) async throws -> String {
+        try await fetchSavantCSV(path: "statcast_search/csv", queryItems: queryItems)
+    }
+
+    /// Fetches CSV data from an arbitrary Baseball Savant path.
+    ///
+    /// Used by leaderboard endpoints (e.g. `leaderboard/sprint-speed`) that share
+    /// the same rate limiter and error-handling as the main Statcast search.
+    func fetchSavantCSV(path: String, queryItems: [URLQueryItem]) async throws -> String {
         var components = URLComponents(
-            url: baseURL.appendingPathComponent("statcast_search/csv"),
+            url: baseURL.appendingPathComponent(path),
             resolvingAgainstBaseURL: false
         )!
         components.queryItems = queryItems
