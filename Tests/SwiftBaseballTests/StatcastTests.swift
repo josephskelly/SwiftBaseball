@@ -290,6 +290,71 @@ struct StatcastTests {
         #expect(stats.pitchMix[0].avgSpinRate != nil)
     }
 
+    @Test("Pitcher aggregation: pitch movement (pfx_x / pfx_z) per pitch type")
+    func pitcherPitchMovement() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // pitch_name values sorted by count: 4-Seam(4), Sinker(3), then 4-way tie at 2
+        let ff = try #require(stats.pitchMix.first { $0.name == "4-Seam Fastball" })
+        // pfx_x: rows 5,7,8,14 → -0.29, -1.16, -0.04, 0.53 → avg = -0.24
+        #expect(abs((ff.avgHorizontalBreak ?? 0) - (-0.24)) < 0.01)
+        // pfx_z: 1.08, 0.64, 0.88, 1.44 → avg = 1.01
+        #expect(abs((ff.avgInducedVerticalBreak ?? 0) - 1.01) < 0.01)
+
+        let si = try #require(stats.pitchMix.first { $0.name == "Sinker" })
+        // pfx_x: rows 6,10,13 → -1.6, -0.9, -1.16 → avg = -1.22
+        #expect(abs((si.avgHorizontalBreak ?? 0) - (-1.22)) < 0.01)
+        // pfx_z: 0.28, 0.39, 0.31 → avg ≈ 0.327
+        #expect(abs((si.avgInducedVerticalBreak ?? 0) - 0.327) < 0.01)
+
+        let sw = try #require(stats.pitchMix.first { $0.name == "Sweeper" })
+        // pfx_x: rows 2,3 → 1.35, 1.33 → avg = 1.34
+        #expect(abs((sw.avgHorizontalBreak ?? 0) - 1.34) < 0.01)
+        // pfx_z: 0, 0.05 → avg = 0.025
+        #expect(abs((sw.avgInducedVerticalBreak ?? 0) - 0.025) < 0.01)
+    }
+
+    @Test("Pitcher aggregation: per-pitch whiff rate")
+    func pitcherPerPitchWhiffRate() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // 4-Seam: 1 foul swing, 0 whiffs → 0.0
+        let ff = try #require(stats.pitchMix.first { $0.name == "4-Seam Fastball" })
+        #expect(ff.whiffRate == 0.0)
+
+        // Sinker: 2 swings (hit_into_play + foul_tip), 1 whiff (foul_tip) → 0.5
+        let si = try #require(stats.pitchMix.first { $0.name == "Sinker" })
+        #expect(abs((si.whiffRate ?? 0) - 0.5) < 0.001)
+
+        // Slider: 1 swing (swinging_strike), 1 whiff → 1.0
+        let sl = try #require(stats.pitchMix.first { $0.name == "Slider" })
+        #expect(sl.whiffRate == 1.0)
+
+        // Curveball: 1 swing (swinging_strike), 1 whiff → 1.0
+        let cu = try #require(stats.pitchMix.first { $0.name == "Curveball" })
+        #expect(cu.whiffRate == 1.0)
+    }
+
+    @Test("Pitcher aggregation: pitch with no swings has nil whiff rate")
+    func pitcherNoSwingsNilWhiffRate() {
+        // A pitch that only appears as balls — no swings → whiffRate should be nil
+        let rows: [[String: String]] = [
+            ["pitch_name": "4-Seam Fastball", "description": "ball",
+             "release_speed": "95.0", "release_spin_rate": "2200", "pfx_x": "-0.5", "pfx_z": "1.0"],
+            ["pitch_name": "4-Seam Fastball", "description": "ball",
+             "release_speed": "94.5", "release_spin_rate": "2180", "pfx_x": "-0.4", "pfx_z": "0.9"],
+        ]
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+        let ff = stats.pitchMix.first { $0.name == "4-Seam Fastball" }
+        #expect(ff?.whiffRate == nil)
+    }
+
     @Test("Pitcher aggregation: empty rows produce zero state")
     func pitcherEmptyRows() {
         let stats = StatcastPitcherAggregator.aggregate([])

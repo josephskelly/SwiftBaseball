@@ -543,12 +543,27 @@ enum StatcastPitcherAggregator {
         let mix = pitchGroups.map { (name, pitches) -> PitchMixEntry in
             let velos = pitches.compactMap { $0["release_speed"].flatMap(Double.init) }
             let spinRates = pitches.compactMap { $0["release_spin_rate"].flatMap(Double.init) }
+            let hBreaks = pitches.compactMap { $0["pfx_x"].flatMap(Double.init) }
+            let vBreaks = pitches.compactMap { $0["pfx_z"].flatMap(Double.init) }
+
+            let pitchSwings = pitches.filter { row in
+                guard let desc = row["description"] else { return false }
+                return swingDescriptions.contains(desc)
+            }.count
+            let pitchWhiffs = pitches.filter { row in
+                guard let desc = row["description"] else { return false }
+                return whiffDescriptions.contains(desc)
+            }.count
+
             return PitchMixEntry(
                 name: name,
                 count: pitches.count,
                 percentage: totalPitches > 0 ? Double(pitches.count) / Double(totalPitches) : 0,
                 avgVelocity: velos.isEmpty ? nil : velos.reduce(0, +) / Double(velos.count),
-                avgSpinRate: spinRates.isEmpty ? nil : spinRates.reduce(0, +) / Double(spinRates.count)
+                avgSpinRate: spinRates.isEmpty ? nil : spinRates.reduce(0, +) / Double(spinRates.count),
+                avgHorizontalBreak: hBreaks.isEmpty ? nil : hBreaks.reduce(0, +) / Double(hBreaks.count),
+                avgInducedVerticalBreak: vBreaks.isEmpty ? nil : vBreaks.reduce(0, +) / Double(vBreaks.count),
+                whiffRate: pitchSwings > 0 ? Double(pitchWhiffs) / Double(pitchSwings) : nil
             )
         }.sorted { $0.count > $1.count }
 

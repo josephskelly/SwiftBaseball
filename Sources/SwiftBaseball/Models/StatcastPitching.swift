@@ -82,8 +82,23 @@ public struct PitchMixEntry: Sendable, Equatable, Identifiable, Codable {
     public let avgVelocity: Double?
     /// Average spin rate for this pitch type (RPM).
     public let avgSpinRate: Double?
+    /// Average horizontal movement (`pfx_x`) in feet (Baseball Savant CSV units).
+    ///
+    /// Positive values indicate arm-side run; negative values indicate glove-side break,
+    /// both from the catcher's perspective. Multiply by 12 to convert to inches.
+    public let avgHorizontalBreak: Double?
+    /// Average induced vertical break (`pfx_z`) in feet (Baseball Savant CSV units).
+    ///
+    /// Positive values indicate rise (less gravity-drop than a spinless pitch);
+    /// negative values indicate additional downward break. Multiply by 12 to convert to inches.
+    public let avgInducedVerticalBreak: Double?
+    /// Whiff rate for this pitch type: swinging strikes / total swings (0–1).
+    ///
+    /// `nil` when no swings were recorded against this pitch in the sample.
+    public let whiffRate: Double?
 
     enum CodingKeys: String, CodingKey {
         case name, count, percentage, avgVelocity, avgSpinRate
+        case avgHorizontalBreak, avgInducedVerticalBreak, whiffRate
     }
 }
