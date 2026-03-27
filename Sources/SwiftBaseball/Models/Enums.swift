@@ -259,6 +259,48 @@ public enum StatType: String, Codable, Sendable, Hashable, CaseIterable {
     case sabermetrics
 }
 
+// MARK: - Sport
+
+/// MLB and affiliated minor league sport levels.
+///
+/// Pass to ``QueryBuilder/sport(_:)`` to scope any query to a specific league level.
+/// Omitting `.sport()` defaults to MLB (``Sport/mlb``) for all endpoints.
+///
+///     let stats = try await SwiftBaseball.playerStats(id: 605141)
+///         .season(2024)
+///         .group(.batting)
+///         .sport(.tripleA)
+///         .fetch()
+public enum Sport: Int, Codable, Sendable, Hashable, CaseIterable {
+    /// Major League Baseball (default for all queries).
+    case mlb            = 1
+    /// Triple-A (AAA) — highest minor league level.
+    case tripleA        = 11
+    /// Double-A (AA).
+    case doubleA        = 12
+    /// High-A.
+    case highA          = 13
+    /// Single-A.
+    case singleA        = 14
+    /// Rookie level.
+    case rookie         = 16
+    /// Complex League (ACL / FCL).
+    case complexLeague  = 17
+
+    /// Human-readable display name.
+    public var displayName: String {
+        switch self {
+        case .mlb:           return "MLB"
+        case .tripleA:       return "Triple-A"
+        case .doubleA:       return "Double-A"
+        case .highA:         return "High-A"
+        case .singleA:       return "Single-A"
+        case .rookie:        return "Rookie"
+        case .complexLeague: return "Complex League"
+        }
+    }
+}
+
 // MARK: - GameStatus
 
 /// Current status of a game.

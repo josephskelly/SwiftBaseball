@@ -47,6 +47,19 @@ let exhibition = try await SwiftBaseball.playerStats(id: 592450)
     .group(.batting)
     .fetch()
 
+// Minor league stats — Triple-A batting stats for a player
+let aaaStats = try await SwiftBaseball.playerStats(id: 605141)
+    .season(2024)
+    .group(.batting)
+    .sport(.tripleA)
+    .fetch()
+
+// Minor league schedule — all Triple-A games on a date
+let aaaGames = try await SwiftBaseball
+    .schedule(.date("2024-07-04"))
+    .sport(.tripleA)
+    .fetch()
+
 // Fetch today's schedule
 let games = try await SwiftBaseball
     .schedule(.date("2024-07-04"))

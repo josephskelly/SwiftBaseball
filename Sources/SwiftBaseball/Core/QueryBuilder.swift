@@ -114,6 +114,24 @@ public struct QueryBuilder<T: Sendable>: Sendable {
         modifying { $0.adding(name: "round", value: String(number)) }
     }
 
+    /// Scopes the query to a specific sport/league level.
+    ///
+    /// Defaults to MLB (``Sport/mlb``) when omitted. Use this to access minor
+    /// league data for stats, schedule, and team queries.
+    ///
+    ///     let aaaStats = try await SwiftBaseball.playerStats(id: 605141)
+    ///         .season(2024)
+    ///         .group(.batting)
+    ///         .sport(.tripleA)
+    ///         .fetch()
+    ///
+    ///     let aaaSchedule = try await SwiftBaseball.schedule(.season(2024))
+    ///         .sport(.tripleA)
+    ///         .fetch()
+    public func sport(_ sport: Sport) -> QueryBuilder<T> {
+        modifying { $0.replacing(name: "sportId", value: String(sport.rawValue)) }
+    }
+
     // MARK: - Private
 
     private func modifying(_ transform: (Endpoint) -> Endpoint) -> QueryBuilder<T> {
