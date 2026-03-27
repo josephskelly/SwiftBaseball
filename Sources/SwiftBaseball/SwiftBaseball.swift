@@ -296,6 +296,20 @@ public enum SwiftBaseball {
         OAAQuery(client: statcastClient)
     }
 
+    // MARK: - Draft
+
+    /// Fetch MLB draft picks for a given year.
+    ///
+    /// Returns all picks across all rounds, ordered by overall pick number.
+    /// Use `.round(_:)` to narrow to a single round, or `.teamId(_:)` to see
+    /// one team's selections.
+    ///
+    ///     let picks = try await SwiftBaseball.draft(year: 2024).fetch()
+    ///     let firstRound = try await SwiftBaseball.draft(year: 2024).round(1).fetch()
+    public static func draft(year: Int) -> QueryBuilder<[DraftPick]> {
+        .draft(year: year, client: client)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

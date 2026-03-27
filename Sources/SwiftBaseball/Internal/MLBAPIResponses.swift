@@ -507,6 +507,45 @@ struct MLBSabermetricPayload: Decodable {
     let wSb: Double?
 }
 
+// MARK: - Draft
+
+struct MLBDraftResponse: Decodable {
+    let drafts: MLBDraftContainer
+}
+
+struct MLBDraftContainer: Decodable {
+    let draftYear: Int
+    let rounds: [MLBDraftRound]
+}
+
+struct MLBDraftRound: Decodable {
+    let round: String
+    let picks: [MLBDraftPickPayload]
+}
+
+struct MLBDraftPickPayload: Decodable {
+    let bisPlayerId: Int?
+    let pickRound: String?
+    let pickNumber: Int?
+    let roundPickNumber: Int?
+    let signingBonus: String?
+    let blurb: String?
+    let scoutingReport: String?
+    let team: MLBEntityRef?
+    let person: MLBEntityRef?
+    let school: MLBDraftSchool?
+    let isDrafted: Bool?
+    let isPass: Bool?
+}
+
+struct MLBDraftSchool: Decodable {
+    let name: String?
+    let schoolClass: String?
+    let city: String?
+    let state: String?
+    let country: String?
+}
+
 // MARK: - Shared
 
 struct MLBEntityRef: Decodable {

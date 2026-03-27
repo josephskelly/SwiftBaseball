@@ -836,6 +836,34 @@ enum MLBResponseConverters {
         iso.formatOptions = [.withInternetDateTime]
         return iso.date(from: string) ?? parseDate(string)
     }
+
+    // MARK: - Draft
+
+    static func draftPicks(from response: MLBDraftResponse, year: Int) -> [DraftPick] {
+        response.drafts.rounds.flatMap { round in
+            round.picks.compactMap { raw -> DraftPick? in
+                guard let pickNumber = raw.pickNumber else { return nil }
+                let school: School? = raw.school.map { s in
+                    School(name: s.name, schoolClass: s.schoolClass,
+                           city: s.city, state: s.state, country: s.country)
+                }
+                return DraftPick(
+                    id: pickNumber,
+                    year: year,
+                    round: raw.pickRound ?? round.round,
+                    roundPickNumber: raw.roundPickNumber,
+                    team: raw.team.map(teamReference),
+                    person: raw.person.map(playerReference),
+                    school: school,
+                    signingBonus: raw.signingBonus,
+                    blurb: raw.blurb,
+                    scoutingReport: raw.scoutingReport,
+                    isDrafted: raw.isDrafted ?? false,
+                    isPass: raw.isPass ?? false
+                )
+            }
+        }
+    }
 }
 
 // MARK: - StatGroup from MLB API group name

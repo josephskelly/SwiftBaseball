@@ -105,6 +105,15 @@ public struct QueryBuilder<T: Sendable>: Sendable {
         return modifying { $0.adding(name: "gameType", value: value) }
     }
 
+    /// Filters draft results to a specific round number.
+    ///
+    /// Used with ``SwiftBaseball/draft(year:)`` to narrow results to a single round.
+    ///
+    ///     let firstRound = try await SwiftBaseball.draft(year: 2024).round(1).fetch()
+    public func round(_ number: Int) -> QueryBuilder<T> {
+        modifying { $0.adding(name: "round", value: String(number)) }
+    }
+
     // MARK: - Private
 
     private func modifying(_ transform: (Endpoint) -> Endpoint) -> QueryBuilder<T> {

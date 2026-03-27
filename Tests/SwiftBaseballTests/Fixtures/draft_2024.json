@@ -1,0 +1,105 @@
+{
+  "drafts": {
+    "draftYear": 2024,
+    "rounds": [
+      {
+        "round": "1",
+        "picks": [
+          {
+            "bisPlayerId": 697912,
+            "pickRound": "1",
+            "pickNumber": 1,
+            "roundPickNumber": 1,
+            "rank": 1,
+            "signingBonus": "$9,500,000",
+            "blurb": "Crews is an exceptional all-around outfielder with elite bat-to-ball skills.",
+            "scoutingReport": "Plus hit tool, above-average power, plus speed, plus arm.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/v1/people/697912/headshot/draft/current",
+            "team": {
+              "id": 120,
+              "name": "Washington Nationals",
+              "link": "/api/v1/teams/120"
+            },
+            "person": {
+              "id": 697912,
+              "fullName": "Dylan Crews",
+              "link": "/api/v1/people/697912"
+            },
+            "school": {
+              "name": "LSU",
+              "schoolClass": "College",
+              "city": "Baton Rouge",
+              "state": "LA",
+              "country": "USA"
+            },
+            "isDrafted": true,
+            "isPass": false
+          },
+          {
+            "bisPlayerId": 697865,
+            "pickRound": "1",
+            "pickNumber": 2,
+            "roundPickNumber": 2,
+            "rank": 2,
+            "signingBonus": "$8,800,000",
+            "blurb": "Dollander is a polished college arm with a four-pitch mix.",
+            "scoutingReport": "Mid-90s fastball, plus slider, developing changeup.",
+            "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/v1/people/697865/headshot/draft/current",
+            "team": {
+              "id": 115,
+              "name": "Colorado Rockies",
+              "link": "/api/v1/teams/115"
+            },
+            "person": {
+              "id": 697865,
+              "fullName": "Chase Dollander",
+              "link": "/api/v1/people/697865"
+            },
+            "school": {
+              "name": "Tennessee",
+              "schoolClass": "College",
+              "city": "Knoxville",
+              "state": "TN",
+              "country": "USA"
+            },
+            "isDrafted": true,
+            "isPass": false
+          }
+        ]
+      },
+      {
+        "round": "2",
+        "picks": [
+          {
+            "bisPlayerId": 698100,
+            "pickRound": "2",
+            "pickNumber": 38,
+            "roundPickNumber": 7,
+            "rank": 55,
+            "signingBonus": "$1,850,000",
+            "blurb": "Athletic high school shortstop with a projectable frame and plus speed.",
+            "team": {
+              "id": 121,
+              "name": "New York Mets",
+              "link": "/api/v1/teams/121"
+            },
+            "person": {
+              "id": 698100,
+              "fullName": "Marco Testa",
+              "link": "/api/v1/people/698100"
+            },
+            "school": {
+              "name": "Eastside High School",
+              "schoolClass": "HS",
+              "city": "Paterson",
+              "state": "NJ",
+              "country": "USA"
+            },
+            "isDrafted": true,
+            "isPass": false
+          }
+        ]
+      }
+    ]
+  }
+}
