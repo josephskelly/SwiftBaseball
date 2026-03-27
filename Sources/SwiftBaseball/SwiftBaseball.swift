@@ -131,6 +131,29 @@ public enum SwiftBaseball {
         .playerStats(id: id, client: client)
     }
 
+    /// Fetch career (lifetime) stats for a player.
+    ///
+    /// Returns a single ``PlayerSeasonStats`` entry per requested group with
+    /// cumulative totals across the player's entire career. Use `.group(_:)` to
+    /// request batting, pitching, or fielding. The `season` property on the
+    /// returned entry will be empty (`""`).
+    ///
+    ///     let career = try await SwiftBaseball.playerCareerStats(id: 660271).group(.batting).fetch()
+    public static func playerCareerStats(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
+        .playerCareerStats(id: id, client: client)
+    }
+
+    /// Fetch year-by-year stats for a player.
+    ///
+    /// Returns one ``PlayerSeasonStats`` entry per season the player has
+    /// appeared in, ordered chronologically. Use `.group(_:)` to request batting,
+    /// pitching, or fielding.
+    ///
+    ///     let history = try await SwiftBaseball.playerYearByYear(id: 660271).group(.batting).fetch()
+    public static func playerYearByYear(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
+        .playerYearByYear(id: id, client: client)
+    }
+
     /// Fetch sabermetric stats (wOBA, wRC+, WAR, etc.) for a player.
     ///
     ///     let saber = try await SwiftBaseball.playerSabermetrics(id: 660271).season(2024).fetch()

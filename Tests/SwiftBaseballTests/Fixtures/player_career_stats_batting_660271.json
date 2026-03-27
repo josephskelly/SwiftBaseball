@@ -1,0 +1,53 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "career"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "splits": [
+        {
+          "stat": {
+            "gamesPlayed": 1024,
+            "plateAppearances": 4215,
+            "atBats": 3680,
+            "runs": 712,
+            "hits": 1102,
+            "doubles": 198,
+            "triples": 28,
+            "homeRuns": 305,
+            "rbi": 728,
+            "stolenBases": 179,
+            "caughtStealing": 28,
+            "baseOnBalls": 452,
+            "intentionalWalks": 89,
+            "strikeOuts": 1008,
+            "hitByPitch": 42,
+            "sacFlies": 29,
+            "sacBunts": 12,
+            "groundIntoDoublePlay": 56,
+            "totalBases": 2062,
+            "leftOnBase": 468,
+            "avg": ".299",
+            "obp": ".374",
+            "slg": ".560",
+            "ops": ".934",
+            "babip": ".320"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          }
+        }
+      ]
+    }
+  ]
+}

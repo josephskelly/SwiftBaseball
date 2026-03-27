@@ -552,6 +552,128 @@ struct StatsTests {
         #expect(vr.ops == 0.599)
     }
 
+    // MARK: - Career stats
+
+    @Test("Decode career batting stats from fixture")
+    func decodeCareerStats() throws {
+        let data = try Fixtures.load("player_career_stats_batting_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        #expect(stats.count == 1)
+        let entry = try #require(stats.first)
+        #expect(entry.player.id == 660271)
+        #expect(entry.group == .batting)
+        // Career splits have no season value in the API response
+        #expect(entry.season == "")
+
+        let batting = try #require(entry.batting)
+        #expect(batting.gamesPlayed == 1024)
+        #expect(batting.homeRuns == 305)
+        #expect(batting.stolenBases == 179)
+        #expect(abs((batting.avg ?? 0) - 0.299) < 0.001)
+        #expect(abs((batting.ops ?? 0) - 0.934) < 0.001)
+    }
+
+    @Test("Career stats endpoint builds correct URL parameter")
+    func careerStatsEndpointParam() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_career_stats_batting_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 660271, client: mock).fetch()
+        let endpoint = try #require(mock.lastEndpoint)
+        #expect(endpoint.path == "people/660271/stats")
+        #expect(endpoint.queryItems.contains { $0.name == "stats" && $0.value == "career" })
+    }
+
+    @Test("SwiftBaseball.playerCareerStats supports group and gameType modifiers")
+    func careerStatsModifiers() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_career_stats_batting_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 660271, client: mock)
+            .group(.batting)
+            .gameType(.regularSeason)
+            .fetch()
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "career" })
+        #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
+        #expect(items.contains { $0.name == "gameType" && $0.value == "R" })
+    }
+
+    // MARK: - Year-by-year stats
+
+    @Test("Decode year-by-year batting stats from fixture")
+    func decodeYearByYearStats() throws {
+        let data = try Fixtures.load("player_year_by_year_batting_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        #expect(stats.count == 3)
+        #expect(stats[0].season == "2018")
+        #expect(stats[1].season == "2021")
+        #expect(stats[2].season == "2024")
+        #expect(stats.allSatisfy { $0.group == .batting })
+    }
+
+    @Test("Year-by-year entries are ordered and have correct team references")
+    func yearByYearTeamRefs() throws {
+        let data = try Fixtures.load("player_year_by_year_batting_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        #expect(stats[0].team?.id == 108)   // Angels
+        #expect(stats[1].team?.id == 108)   // Angels
+        #expect(stats[2].team?.id == 119)   // Dodgers
+    }
+
+    @Test("Year-by-year batting values match fixture for each season")
+    func yearByYearBattingValues() throws {
+        let data = try Fixtures.load("player_year_by_year_batting_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let s2018 = try #require(stats[0].batting)
+        #expect(s2018.homeRuns == 22)
+        #expect(abs((s2018.avg ?? 0) - 0.285) < 0.001)
+
+        let s2021 = try #require(stats[1].batting)
+        #expect(s2021.homeRuns == 46)
+        #expect(abs((s2021.ops ?? 0) - 0.965) < 0.001)
+
+        let s2024 = try #require(stats[2].batting)
+        #expect(s2024.homeRuns == 54)
+        #expect(abs((s2024.avg ?? 0) - 0.310) < 0.001)
+    }
+
+    @Test("Year-by-year endpoint builds correct URL parameter")
+    func yearByYearEndpointParam() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_year_by_year_batting_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 660271, client: mock).fetch()
+        let endpoint = try #require(mock.lastEndpoint)
+        #expect(endpoint.path == "people/660271/stats")
+        #expect(endpoint.queryItems.contains { $0.name == "stats" && $0.value == "yearByYear" })
+    }
+
+    @Test("SwiftBaseball.playerYearByYear supports group modifier")
+    func yearByYearModifiers() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_year_by_year_batting_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 660271, client: mock)
+            .group(.pitching)
+            .fetch()
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "yearByYear" })
+        #expect(items.contains { $0.name == "group" && $0.value == "pitching" })
+    }
+
     @Test("Batter platoon with no gameType field still works (backwards compat)")
     func batterPlatoonNoGameType() throws {
         // Existing fixture has no gameType on splits — should still parse fine

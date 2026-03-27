@@ -1,0 +1,134 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "yearByYear"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "splits": [
+        {
+          "season": "2018",
+          "stat": {
+            "gamesPlayed": 104,
+            "plateAppearances": 367,
+            "atBats": 326,
+            "runs": 59,
+            "hits": 93,
+            "doubles": 21,
+            "triples": 2,
+            "homeRuns": 22,
+            "rbi": 61,
+            "stolenBases": 10,
+            "caughtStealing": 3,
+            "baseOnBalls": 37,
+            "intentionalWalks": 3,
+            "strikeOuts": 102,
+            "hitByPitch": 1,
+            "sacFlies": 2,
+            "sacBunts": 1,
+            "groundIntoDoublePlay": 6,
+            "totalBases": 184,
+            "leftOnBase": 44,
+            "avg": ".285",
+            "obp": ".361",
+            "slg": ".564",
+            "ops": ".925",
+            "babip": ".318"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          }
+        },
+        {
+          "season": "2021",
+          "stat": {
+            "gamesPlayed": 158,
+            "plateAppearances": 639,
+            "atBats": 537,
+            "runs": 103,
+            "hits": 138,
+            "doubles": 26,
+            "triples": 8,
+            "homeRuns": 46,
+            "rbi": 100,
+            "stolenBases": 26,
+            "caughtStealing": 10,
+            "baseOnBalls": 96,
+            "intentionalWalks": 20,
+            "strikeOuts": 189,
+            "hitByPitch": 4,
+            "sacFlies": 7,
+            "sacBunts": 0,
+            "groundIntoDoublePlay": 10,
+            "totalBases": 318,
+            "leftOnBase": 88,
+            "avg": ".257",
+            "obp": ".372",
+            "slg": ".592",
+            "ops": ".965",
+            "babip": ".298"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 108,
+            "name": "Los Angeles Angels",
+            "link": "/api/v1/teams/108"
+          }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 159,
+            "plateAppearances": 731,
+            "atBats": 636,
+            "runs": 134,
+            "hits": 197,
+            "doubles": 38,
+            "triples": 7,
+            "homeRuns": 54,
+            "rbi": 130,
+            "stolenBases": 59,
+            "caughtStealing": 4,
+            "baseOnBalls": 81,
+            "intentionalWalks": 20,
+            "strikeOuts": 162,
+            "hitByPitch": 7,
+            "sacFlies": 5,
+            "sacBunts": 2,
+            "groundIntoDoublePlay": 10,
+            "totalBases": 411,
+            "leftOnBase": 80,
+            "avg": ".310",
+            "obp": ".390",
+            "slg": ".646",
+            "ops": "1.036",
+            "babip": ".334"
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271"
+          },
+          "team": {
+            "id": 119,
+            "name": "Los Angeles Dodgers",
+            "link": "/api/v1/teams/119"
+          }
+        }
+      ]
+    }
+  ]
+}
