@@ -145,8 +145,8 @@ public struct StatcastPitcherQuery: Sendable {
 /// Query builder for Statcast batted ball data for multiple batters in a single request.
 ///
 /// Sends player IDs in batches using `batters_lookup[]` query parameters.
-/// Each batch of up to ``defaultBatchSize`` players is fetched in one HTTP request;
-/// the combined CSV is parsed and split by batter ID.
+/// All batches are dispatched concurrently via a task group; the ``StatcastAPIClient``
+/// rate limiter (capped at 4) prevents overloading Baseball Savant.
 ///
 /// ```swift
 /// let stats = try await SwiftBaseball
@@ -199,21 +199,35 @@ public struct StatcastBatchBattingQuery: Sendable {
 
     /// Executes the batch query and returns aggregated stats keyed by MLB player ID.
     ///
+    /// All chunks are dispatched concurrently; the ``StatcastAPIClient`` rate limiter
+    /// (capped at 4 simultaneous requests) prevents overloading Baseball Savant.
     /// Players with no batted ball events in the date window are omitted from the result.
+    /// Results may arrive in any order; the returned dictionary is keyed by player ID.
+    ///
     /// - Returns: Dictionary of player ID → ``StatcastBatting``.
     /// - Throws: ``SwiftBaseballError`` if any HTTP request fails.
     public func fetch() async throws -> [Int: StatcastBatting] {
         guard !playerIds.isEmpty else { return [:] }
-        var results: [Int: StatcastBatting] = [:]
-        for chunk in playerIds.chunked(into: _batchSize) {
-            let csv = try await client.fetchCSV(queryItems: buildQueryItems(for: chunk))
-            let rows = CSVParser.parse(csv)
-            let byPlayer = Dictionary(grouping: rows) { $0["batter"].flatMap(Int.init) ?? -1 }
-            for (id, playerRows) in byPlayer where id != -1 {
-                results[id] = StatcastAggregator.aggregate(playerRows)
+        let chunks = playerIds.chunked(into: _batchSize)
+        return try await withThrowingTaskGroup(of: [Int: StatcastBatting].self) { group in
+            for chunk in chunks {
+                group.addTask {
+                    let csv = try await self.client.fetchCSV(queryItems: self.buildQueryItems(for: chunk))
+                    let rows = CSVParser.parse(csv)
+                    let byPlayer = Dictionary(grouping: rows) { $0["batter"].flatMap(Int.init) ?? -1 }
+                    var partial: [Int: StatcastBatting] = [:]
+                    for (id, playerRows) in byPlayer where id != -1 {
+                        partial[id] = StatcastAggregator.aggregate(playerRows)
+                    }
+                    return partial
+                }
             }
+            var results: [Int: StatcastBatting] = [:]
+            for try await partial in group {
+                results.merge(partial) { _, new in new }
+            }
+            return results
         }
-        return results
     }
 
     private func buildQueryItems(for ids: [Int]) -> [URLQueryItem] {
@@ -239,8 +253,8 @@ public struct StatcastBatchBattingQuery: Sendable {
 /// Query builder for Statcast pitching data for multiple pitchers in a single request.
 ///
 /// Sends player IDs in batches using `pitchers_lookup[]` query parameters.
-/// Each batch of up to ``defaultBatchSize`` pitchers is fetched in one HTTP request;
-/// the combined CSV is parsed and split by pitcher ID.
+/// All batches are dispatched concurrently via a task group; the ``StatcastAPIClient``
+/// rate limiter (capped at 4) prevents overloading Baseball Savant.
 ///
 /// ```swift
 /// let stats = try await SwiftBaseball
@@ -292,21 +306,35 @@ public struct StatcastBatchPitchingQuery: Sendable {
 
     /// Executes the batch query and returns aggregated stats keyed by MLB player ID.
     ///
+    /// All chunks are dispatched concurrently; the ``StatcastAPIClient`` rate limiter
+    /// (capped at 4 simultaneous requests) prevents overloading Baseball Savant.
     /// Pitchers with no pitch data in the date window are omitted from the result.
+    /// Results may arrive in any order; the returned dictionary is keyed by player ID.
+    ///
     /// - Returns: Dictionary of player ID → ``StatcastPitching``.
     /// - Throws: ``SwiftBaseballError`` if any HTTP request fails.
     public func fetch() async throws -> [Int: StatcastPitching] {
         guard !playerIds.isEmpty else { return [:] }
-        var results: [Int: StatcastPitching] = [:]
-        for chunk in playerIds.chunked(into: _batchSize) {
-            let csv = try await client.fetchCSV(queryItems: buildQueryItems(for: chunk))
-            let rows = CSVParser.parse(csv)
-            let byPlayer = Dictionary(grouping: rows) { $0["pitcher"].flatMap(Int.init) ?? -1 }
-            for (id, playerRows) in byPlayer where id != -1 {
-                results[id] = StatcastPitcherAggregator.aggregate(playerRows)
+        let chunks = playerIds.chunked(into: _batchSize)
+        return try await withThrowingTaskGroup(of: [Int: StatcastPitching].self) { group in
+            for chunk in chunks {
+                group.addTask {
+                    let csv = try await self.client.fetchCSV(queryItems: self.buildQueryItems(for: chunk))
+                    let rows = CSVParser.parse(csv)
+                    let byPlayer = Dictionary(grouping: rows) { $0["pitcher"].flatMap(Int.init) ?? -1 }
+                    var partial: [Int: StatcastPitching] = [:]
+                    for (id, playerRows) in byPlayer where id != -1 {
+                        partial[id] = StatcastPitcherAggregator.aggregate(playerRows)
+                    }
+                    return partial
+                }
             }
+            var results: [Int: StatcastPitching] = [:]
+            for try await partial in group {
+                results.merge(partial) { _, new in new }
+            }
+            return results
         }
-        return results
     }
 
     private func buildQueryItems(for ids: [Int]) -> [URLQueryItem] {

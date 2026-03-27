@@ -555,4 +555,22 @@ struct StatcastTests {
         let query = SwiftBaseball.statcastBatchPitching(playerIds: [808967, 650633])
         #expect(query.playerIds == [808967, 650633])
     }
+
+    // MARK: - Parallel fetch merge logic
+
+    @Test("Batch merge: disjoint partials combine correctly")
+    func batchMergeDisjoint() {
+        var accumulated: [Int: Int] = [1: 10, 2: 20]
+        let incoming: [Int: Int] = [3: 30, 4: 40]
+        accumulated.merge(incoming) { _, new in new }
+        #expect(accumulated == [1: 10, 2: 20, 3: 30, 4: 40])
+    }
+
+    @Test("Batch merge: collision takes newer partial value")
+    func batchMergeCollision() {
+        var accumulated: [Int: Int] = [1: 10]
+        let incoming: [Int: Int] = [1: 99]
+        accumulated.merge(incoming) { _, new in new }
+        #expect(accumulated[1] == 99)
+    }
 }
