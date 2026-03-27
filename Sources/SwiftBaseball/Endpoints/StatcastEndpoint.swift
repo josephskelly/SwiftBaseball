@@ -151,13 +151,14 @@ public struct StatcastPitcherQuery: Sendable {
 /// ```swift
 /// let stats = try await SwiftBaseball
 ///     .statcastBatchBatting(playerIds: [660271, 592450, 665742])
-///     .dateRange(start: "2025-01-01", end: "2026-03-26")
+///     .season(2024)
 ///     .fetch()
 /// // stats[660271]?.gbPercent
 /// ```
 public struct StatcastBatchBattingQuery: Sendable {
     let playerIds: [Int]
     let client: StatcastAPIClient
+    private var seasonYear: Int?
     private var startDate: String?
     private var endDate: String?
     private var _batchSize: Int
@@ -172,6 +173,13 @@ public struct StatcastBatchBattingQuery: Sendable {
         self.playerIds = playerIds
         self.client = client
         self._batchSize = batchSize
+    }
+
+    /// Filters to a specific season. Sets date range to the full calendar year.
+    public func season(_ year: Int) -> StatcastBatchBattingQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
     }
 
     /// Filters to a custom date range in `"YYYY-MM-DD"` format.
@@ -218,6 +226,9 @@ public struct StatcastBatchBattingQuery: Sendable {
         if let start = startDate, let end = endDate {
             items.append(URLQueryItem(name: "game_date_gt", value: start))
             items.append(URLQueryItem(name: "game_date_lt", value: end))
+        } else if let year = seasonYear {
+            items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
+            items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
         }
         return items
     }
@@ -234,13 +245,14 @@ public struct StatcastBatchBattingQuery: Sendable {
 /// ```swift
 /// let stats = try await SwiftBaseball
 ///     .statcastBatchPitching(playerIds: [808967, 687717, 641154])
-///     .dateRange(start: "2025-01-01", end: "2026-03-26")
+///     .season(2024)
 ///     .fetch()
 /// // stats[808967]?.whiffRate
 /// ```
 public struct StatcastBatchPitchingQuery: Sendable {
     let playerIds: [Int]
     let client: StatcastAPIClient
+    private var seasonYear: Int?
     private var startDate: String?
     private var endDate: String?
     private var _batchSize: Int
@@ -254,6 +266,13 @@ public struct StatcastBatchPitchingQuery: Sendable {
         self.playerIds = playerIds
         self.client = client
         self._batchSize = batchSize
+    }
+
+    /// Filters to a specific season. Sets date range to the full calendar year.
+    public func season(_ year: Int) -> StatcastBatchPitchingQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
     }
 
     /// Filters to a custom date range in `"YYYY-MM-DD"` format.
@@ -300,6 +319,9 @@ public struct StatcastBatchPitchingQuery: Sendable {
         if let start = startDate, let end = endDate {
             items.append(URLQueryItem(name: "game_date_gt", value: start))
             items.append(URLQueryItem(name: "game_date_lt", value: end))
+        } else if let year = seasonYear {
+            items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
+            items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
         }
         return items
     }

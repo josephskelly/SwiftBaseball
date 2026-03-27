@@ -360,6 +360,14 @@ struct StatcastTests {
         #expect(query.playerIds == [660271])
     }
 
+    @Test("StatcastBatchBattingQuery season modifier compiles and preserves player IDs")
+    func batchBattingQuerySeason() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchBattingQuery(playerIds: [660271, 592450], client: client)
+            .season(2024)
+        #expect(query.playerIds == [660271, 592450])
+    }
+
     @Test("StatcastBatchBattingQuery batchSize modifier compiles")
     func batchBattingQueryBatchSize() {
         let client = StatcastAPIClient()
@@ -422,6 +430,14 @@ struct StatcastTests {
     func batchPitchingQueryStoresPlayerIds() {
         let client = StatcastAPIClient()
         let query = StatcastBatchPitchingQuery(playerIds: [808967, 687717], client: client)
+        #expect(query.playerIds == [808967, 687717])
+    }
+
+    @Test("StatcastBatchPitchingQuery season modifier compiles and preserves player IDs")
+    func batchPitchingQuerySeason() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchPitchingQuery(playerIds: [808967, 687717], client: client)
+            .season(2024)
         #expect(query.playerIds == [808967, 687717])
     }
 
