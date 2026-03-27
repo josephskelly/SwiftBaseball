@@ -13,8 +13,10 @@ final class StatcastAPIClient: Sendable {
 
     init(configuration: Configuration = .default) {
         self.baseURL = Self.savantBaseURL
-        // Savant is more rate-limit sensitive — use lower concurrency.
-        self.rateLimiter = RateLimiter(maxConcurrent: 1)
+        // Allow up to 4 concurrent Savant requests. Batch callers send 3–5
+        // requests total per roster load (vs the old 26 per-player approach),
+        // so 4 concurrent is safe and lets all batch chunks fly in parallel.
+        self.rateLimiter = RateLimiter(maxConcurrent: 4)
         let config = URLSessionConfiguration.default
         config.httpAdditionalHeaders = ["User-Agent": configuration.userAgent]
         self.session = URLSession(configuration: config)
