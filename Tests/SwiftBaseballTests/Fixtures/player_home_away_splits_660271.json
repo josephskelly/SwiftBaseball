@@ -1,0 +1,76 @@
+{
+  "stats": [
+    {
+      "type": { "displayName": "statSplits" },
+      "group": { "displayName": "hitting" },
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 79,
+            "plateAppearances": 365,
+            "atBats": 316,
+            "runs": 68,
+            "hits": 101,
+            "doubles": 20,
+            "triples": 3,
+            "homeRuns": 29,
+            "rbi": 67,
+            "stolenBases": 28,
+            "caughtStealing": 2,
+            "baseOnBalls": 42,
+            "intentionalWalks": 10,
+            "strikeOuts": 78,
+            "hitByPitch": 4,
+            "sacFlies": 3,
+            "sacBunts": 1,
+            "groundIntoDoublePlay": 5,
+            "totalBases": 209,
+            "leftOnBase": 40,
+            "avg": ".320",
+            "obp": ".400",
+            "slg": ".661",
+            "ops": "1.061",
+            "babip": ".340"
+          },
+          "player": { "id": 660271, "fullName": "Shohei Ohtani", "link": "/api/v1/people/660271" },
+          "team": { "id": 119, "name": "Los Angeles Dodgers", "link": "/api/v1/teams/119" },
+          "split": { "code": "h", "description": "Home" }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 80,
+            "plateAppearances": 366,
+            "atBats": 320,
+            "runs": 66,
+            "hits": 96,
+            "doubles": 18,
+            "triples": 4,
+            "homeRuns": 25,
+            "rbi": 63,
+            "stolenBases": 31,
+            "caughtStealing": 2,
+            "baseOnBalls": 39,
+            "intentionalWalks": 10,
+            "strikeOuts": 84,
+            "hitByPitch": 3,
+            "sacFlies": 2,
+            "sacBunts": 1,
+            "groundIntoDoublePlay": 5,
+            "totalBases": 202,
+            "leftOnBase": 40,
+            "avg": ".300",
+            "obp": ".379",
+            "slg": ".631",
+            "ops": "1.010",
+            "babip": ".328"
+          },
+          "player": { "id": 660271, "fullName": "Shohei Ohtani", "link": "/api/v1/people/660271" },
+          "team": { "id": 119, "name": "Los Angeles Dodgers", "link": "/api/v1/teams/119" },
+          "split": { "code": "a", "description": "Away" }
+        }
+      ]
+    }
+  ]
+}

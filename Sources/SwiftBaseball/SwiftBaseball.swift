@@ -161,6 +161,34 @@ public enum SwiftBaseball {
         .playerSabermetrics(id: id, client: client)
     }
 
+    /// Fetch home/away batting splits for a position player.
+    ///
+    ///     let splits = try await SwiftBaseball.playerHomeAwaySplits(id: 660271).season(2024).fetch()
+    public static func playerHomeAwaySplits(id: Int) -> QueryBuilder<PlayerHomeAwaySplits> {
+        .playerHomeAwaySplits(id: id, client: client)
+    }
+
+    /// Fetch home/away pitching splits for a pitcher.
+    ///
+    ///     let splits = try await SwiftBaseball.pitcherHomeAwaySplits(id: 543037).season(2024).fetch()
+    public static func pitcherHomeAwaySplits(id: Int) -> QueryBuilder<PitcherHomeAwaySplits> {
+        .pitcherHomeAwaySplits(id: id, client: client)
+    }
+
+    /// Fetch day/night batting splits for a position player.
+    ///
+    ///     let splits = try await SwiftBaseball.playerDayNightSplits(id: 660271).season(2024).fetch()
+    public static func playerDayNightSplits(id: Int) -> QueryBuilder<PlayerDayNightSplits> {
+        .playerDayNightSplits(id: id, client: client)
+    }
+
+    /// Fetch day/night pitching splits for a pitcher.
+    ///
+    ///     let splits = try await SwiftBaseball.pitcherDayNightSplits(id: 543037).season(2024).fetch()
+    public static func pitcherDayNightSplits(id: Int) -> QueryBuilder<PitcherDayNightSplits> {
+        .pitcherDayNightSplits(id: id, client: client)
+    }
+
     /// Fetch platoon batting splits (vs LHP / vs RHP) for a position player.
     ///
     ///     let splits = try await SwiftBaseball.playerPlatoonStats(id: 660271).season(2024).fetch()

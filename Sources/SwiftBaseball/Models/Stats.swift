@@ -465,3 +465,59 @@ public struct PitcherPlatoonStats: Sendable, Equatable {
         self.vsRight = vsRight
     }
 }
+
+// MARK: - Home/Away splits
+
+/// Batting stats split by home vs away games.
+public struct PlayerHomeAwaySplits: Sendable, Equatable {
+    /// Stats in home games.
+    public let home: BattingStats?
+    /// Stats in away games.
+    public let away: BattingStats?
+
+    public init(home: BattingStats?, away: BattingStats?) {
+        self.home = home
+        self.away = away
+    }
+}
+
+/// Pitching stats split by home vs away games.
+public struct PitcherHomeAwaySplits: Sendable, Equatable {
+    /// Stats in home games.
+    public let home: PitchingStats?
+    /// Stats in away games.
+    public let away: PitchingStats?
+
+    public init(home: PitchingStats?, away: PitchingStats?) {
+        self.home = home
+        self.away = away
+    }
+}
+
+// MARK: - Day/Night splits
+
+/// Batting stats split by day vs night games.
+public struct PlayerDayNightSplits: Sendable, Equatable {
+    /// Stats in day games.
+    public let day: BattingStats?
+    /// Stats in night games.
+    public let night: BattingStats?
+
+    public init(day: BattingStats?, night: BattingStats?) {
+        self.day = day
+        self.night = night
+    }
+}
+
+/// Pitching stats split by day vs night games.
+public struct PitcherDayNightSplits: Sendable, Equatable {
+    /// Stats in day games.
+    public let day: PitchingStats?
+    /// Stats in night games.
+    public let night: PitchingStats?
+
+    public init(day: PitchingStats?, night: PitchingStats?) {
+        self.day = day
+        self.night = night
+    }
+}

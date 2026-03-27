@@ -254,6 +254,66 @@ enum MLBResponseConverters {
         )
     }
 
+    // MARK: - Home/Away splits
+
+    /// Builds batter home/away splits by deduplicating and aggregating across game types.
+    static func playerHomeAwaySplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PlayerHomeAwaySplits {
+        let unique = deduplicatedSplits(from: response)
+        let homeStats = unique.filter { $0.split?.code == "h" }.map { battingStats(from: $0.stat) }
+        let awayStats = unique.filter { $0.split?.code == "a" }.map { battingStats(from: $0.stat) }
+        return PlayerHomeAwaySplits(
+            home: aggregateBattingStats(homeStats),
+            away: aggregateBattingStats(awayStats)
+        )
+    }
+
+    /// Builds pitcher home/away splits by deduplicating and aggregating across game types.
+    static func pitcherHomeAwaySplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PitcherHomeAwaySplits {
+        let unique = deduplicatedSplits(from: response)
+        let homeStats = unique.filter { $0.split?.code == "h" }.map { pitchingStats(from: $0.stat) }
+        let awayStats = unique.filter { $0.split?.code == "a" }.map { pitchingStats(from: $0.stat) }
+        return PitcherHomeAwaySplits(
+            home: aggregatePitchingStats(homeStats),
+            away: aggregatePitchingStats(awayStats)
+        )
+    }
+
+    // MARK: - Day/Night splits
+
+    /// Builds batter day/night splits by deduplicating and aggregating across game types.
+    static func playerDayNightSplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PlayerDayNightSplits {
+        let unique = deduplicatedSplits(from: response)
+        let dayStats = unique.filter { $0.split?.code == "d" }.map { battingStats(from: $0.stat) }
+        let nightStats = unique.filter { $0.split?.code == "n" }.map { battingStats(from: $0.stat) }
+        return PlayerDayNightSplits(
+            day: aggregateBattingStats(dayStats),
+            night: aggregateBattingStats(nightStats)
+        )
+    }
+
+    /// Builds pitcher day/night splits by deduplicating and aggregating across game types.
+    static func pitcherDayNightSplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PitcherDayNightSplits {
+        let unique = deduplicatedSplits(from: response)
+        let dayStats = unique.filter { $0.split?.code == "d" }.map { pitchingStats(from: $0.stat) }
+        let nightStats = unique.filter { $0.split?.code == "n" }.map { pitchingStats(from: $0.stat) }
+        return PitcherDayNightSplits(
+            day: aggregatePitchingStats(dayStats),
+            night: aggregatePitchingStats(nightStats)
+        )
+    }
+
     /// Removes duplicate splits produced by comma-separated gameType queries.
     ///
     /// The API returns identical `(splitCode, gameType)` pairs repeated once per

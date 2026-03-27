@@ -1,0 +1,72 @@
+{
+  "stats": [
+    {
+      "type": { "displayName": "statSplits" },
+      "group": { "displayName": "pitching" },
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 8,
+            "gamesStarted": 8,
+            "wins": 4,
+            "losses": 2,
+            "saves": 0,
+            "holds": 0,
+            "earnedRuns": 18,
+            "homeRunsAllowed": 4,
+            "baseOnBalls": 12,
+            "strikeOuts": 55,
+            "hitByPitch": 1,
+            "wildPitches": 1,
+            "balks": 0,
+            "battersFaced": 162,
+            "hits": 38,
+            "runs": 19,
+            "era": "3.27",
+            "whip": "0.91",
+            "inningsPitched": "49.1",
+            "avg": ".210",
+            "obp": ".267",
+            "slg": ".330",
+            "ops": ".597"
+          },
+          "player": { "id": 543037, "fullName": "Luis Castillo", "link": "/api/v1/people/543037" },
+          "team": { "id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136" },
+          "split": { "code": "d", "description": "Day" }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 25,
+            "gamesStarted": 25,
+            "wins": 9,
+            "losses": 7,
+            "saves": 0,
+            "holds": 0,
+            "earnedRuns": 46,
+            "homeRunsAllowed": 13,
+            "baseOnBalls": 38,
+            "strikeOuts": 151,
+            "hitByPitch": 4,
+            "wildPitches": 4,
+            "balks": 0,
+            "battersFaced": 432,
+            "hits": 112,
+            "runs": 50,
+            "era": "3.72",
+            "whip": "1.13",
+            "inningsPitched": "111.1",
+            "avg": ".234",
+            "obp": ".299",
+            "slg": ".385",
+            "ops": ".684"
+          },
+          "player": { "id": 543037, "fullName": "Luis Castillo", "link": "/api/v1/people/543037" },
+          "team": { "id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136" },
+          "split": { "code": "n", "description": "Night" }
+        }
+      ]
+    }
+  ]
+}
