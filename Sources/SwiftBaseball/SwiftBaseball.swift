@@ -68,9 +68,18 @@ public enum SwiftBaseball {
 
     /// Fetch a team's roster.
     ///
+    /// The default ``RosterType/active`` returns the 26-man active roster, suitable
+    /// for regular-season views. Pass ``RosterType/fortyMan`` or
+    /// ``RosterType/nonRosterInvitees`` for spring training / exhibition rosters.
+    ///
     ///     let roster = try await SwiftBaseball.roster(teamId: 147, season: 2024).fetch()
-    public static func roster(teamId: Int, season: Int) -> QueryBuilder<[RosterEntry]> {
-        .roster(teamId: teamId, season: season, client: client)
+    ///     let spring = try await SwiftBaseball.roster(teamId: 147, season: 2025, rosterType: .fortyMan).fetch()
+    public static func roster(
+        teamId: Int,
+        season: Int,
+        rosterType: RosterType = .active
+    ) -> QueryBuilder<[RosterEntry]> {
+        .roster(teamId: teamId, season: season, rosterType: rosterType, client: client)
     }
 
     // MARK: - Schedule

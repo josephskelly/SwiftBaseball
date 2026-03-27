@@ -133,6 +133,48 @@ struct TeamTests {
         #expect(seasonItem?.value == "2024")
     }
 
+    @Test("roster() omits rosterType param for default active")
+    func rosterQueryBuilderActiveOmitsParam() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("roster_147_2024.json")
+        mock.stub(path: "teams/147/roster", data: data)
+
+        _ = try await QueryBuilder<[RosterEntry]>.roster(
+            teamId: 147, season: 2024, rosterType: .active, client: mock
+        ).fetch()
+
+        let rosterTypeItem = mock.lastEndpoint?.queryItems.first { $0.name == "rosterType" }
+        #expect(rosterTypeItem == nil)
+    }
+
+    @Test("roster() sends rosterType=40Man for fortyMan")
+    func rosterQueryBuilderFortyMan() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("roster_147_2024.json")
+        mock.stub(path: "teams/147/roster", data: data)
+
+        _ = try await QueryBuilder<[RosterEntry]>.roster(
+            teamId: 147, season: 2024, rosterType: .fortyMan, client: mock
+        ).fetch()
+
+        let rosterTypeItem = mock.lastEndpoint?.queryItems.first { $0.name == "rosterType" }
+        #expect(rosterTypeItem?.value == "40Man")
+    }
+
+    @Test("roster() sends rosterType=nonRosterInvitees for NRI")
+    func rosterQueryBuilderNRI() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("roster_147_2024.json")
+        mock.stub(path: "teams/147/roster", data: data)
+
+        _ = try await QueryBuilder<[RosterEntry]>.roster(
+            teamId: 147, season: 2024, rosterType: .nonRosterInvitees, client: mock
+        ).fetch()
+
+        let rosterTypeItem = mock.lastEndpoint?.queryItems.first { $0.name == "rosterType" }
+        #expect(rosterTypeItem?.value == "nonRosterInvitees")
+    }
+
     // MARK: - Team model equality
 
     @Test("Team models with same data are equal")

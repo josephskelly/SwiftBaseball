@@ -123,4 +123,26 @@ struct EnumTests {
     func divisionDisplayName(_ division: Division) {
         #expect(!division.displayName.isEmpty)
     }
+
+    // MARK: - RosterType
+
+    @Test("RosterType.active has correct rawValue")
+    func rosterTypeActiveRawValue() {
+        #expect(RosterType.active.rawValue == "active")
+    }
+
+    @Test("RosterType.fortyMan has correct rawValue for API")
+    func rosterTypeFortyManRawValue() {
+        #expect(RosterType.fortyMan.rawValue == "40Man")
+    }
+
+    @Test("RosterType.nonRosterInvitees has correct rawValue")
+    func rosterTypeNRIRawValue() {
+        #expect(RosterType.nonRosterInvitees.rawValue == "nonRosterInvitees")
+    }
+
+    @Test("All RosterType cases round-trip through rawValue", arguments: RosterType.allCases)
+    func rosterTypeRoundTrip(_ type: RosterType) {
+        #expect(RosterType(rawValue: type.rawValue) == type)
+    }
 }
