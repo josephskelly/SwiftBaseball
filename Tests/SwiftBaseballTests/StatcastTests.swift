@@ -342,4 +342,136 @@ struct StatcastTests {
 
         #expect(query.playerId == 543037)
     }
+
+    // MARK: - Batch batting query
+
+    @Test("StatcastBatchBattingQuery stores player IDs")
+    func batchBattingQueryStoresPlayerIds() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchBattingQuery(playerIds: [660271, 592450], client: client)
+        #expect(query.playerIds == [660271, 592450])
+    }
+
+    @Test("StatcastBatchBattingQuery dateRange modifier compiles")
+    func batchBattingQueryDateRange() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchBattingQuery(playerIds: [660271], client: client)
+            .dateRange(start: "2025-01-01", end: "2026-03-26")
+        #expect(query.playerIds == [660271])
+    }
+
+    @Test("StatcastBatchBattingQuery batchSize modifier compiles")
+    func batchBattingQueryBatchSize() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchBattingQuery(playerIds: [660271], client: client)
+            .batchSize(4)
+        #expect(query.playerIds == [660271])
+    }
+
+    @Test("Empty player list returns empty batch batting result")
+    func batchBattingEmptyPlayers() async throws {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchBattingQuery(playerIds: [], client: client)
+        let results = try await query.fetch()
+        #expect(results.isEmpty)
+    }
+
+    @Test("Batch batting: groups rows by batter ID and aggregates each player")
+    func batchBattingGroupsAndAggregates() throws {
+        let data = try Fixtures.load("statcast_batch_batting.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+
+        // Simulate what StatcastBatchBattingQuery.fetch() does for one chunk
+        let byPlayer = Dictionary(grouping: rows) { $0["batter"].flatMap(Int.init) ?? -1 }
+        var results: [Int: StatcastBatting] = [:]
+        for (id, playerRows) in byPlayer where id != -1 {
+            results[id] = StatcastAggregator.aggregate(playerRows)
+        }
+
+        #expect(results.count == 2)
+        let ohtani = try #require(results[660271])
+        let judge = try #require(results[592450])
+
+        // Ohtani: 1 fly_ball + 1 ground_ball
+        #expect(ohtani.battedBallEvents == 2)
+        #expect(ohtani.flyBalls == 1)
+        #expect(ohtani.groundBalls == 1)
+        #expect(abs((ohtani.gbPercent ?? 0) - 0.5) < 0.001)
+        #expect(abs((ohtani.fbPercent ?? 0) - 0.5) < 0.001)
+        #expect(ohtani.maxExitVelocity == 108.5)
+
+        // Judge: 1 fly_ball + 1 line_drive + 1 ground_ball
+        #expect(judge.battedBallEvents == 3)
+        #expect(judge.flyBalls == 1)
+        #expect(judge.lineDrives == 1)
+        #expect(judge.groundBalls == 1)
+        #expect(abs((judge.gbPercent ?? 0) - 1.0 / 3.0) < 0.001)
+        #expect(abs((judge.ldPercent ?? 0) - 1.0 / 3.0) < 0.001)
+    }
+
+    @Test("SwiftBaseball.statcastBatchBatting returns correct query type")
+    func namespacedBatchBatting() {
+        let query = SwiftBaseball.statcastBatchBatting(playerIds: [660271, 592450])
+        #expect(query.playerIds == [660271, 592450])
+    }
+
+    // MARK: - Batch pitching query
+
+    @Test("StatcastBatchPitchingQuery stores player IDs")
+    func batchPitchingQueryStoresPlayerIds() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchPitchingQuery(playerIds: [808967, 687717], client: client)
+        #expect(query.playerIds == [808967, 687717])
+    }
+
+    @Test("Empty player list returns empty batch pitching result")
+    func batchPitchingEmptyPlayers() async throws {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchPitchingQuery(playerIds: [], client: client)
+        let results = try await query.fetch()
+        #expect(results.isEmpty)
+    }
+
+    @Test("Batch pitching: groups rows by pitcher ID and aggregates each pitcher")
+    func batchPitchingGroupsAndAggregates() throws {
+        let data = try Fixtures.load("statcast_batch_pitching.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+
+        // Simulate what StatcastBatchPitchingQuery.fetch() does for one chunk
+        let byPlayer = Dictionary(grouping: rows) { $0["pitcher"].flatMap(Int.init) ?? -1 }
+        var results: [Int: StatcastPitching] = [:]
+        for (id, playerRows) in byPlayer where id != -1 {
+            results[id] = StatcastPitcherAggregator.aggregate(playerRows)
+        }
+
+        #expect(results.count == 2)
+        let king = try #require(results[650633])
+        let castillo = try #require(results[622491])
+
+        // King: popup + ground_ball + called_strike (3 pitches, 2 batted balls)
+        #expect(king.battedBallEvents == 2)
+        #expect(king.popups == 1)
+        #expect(king.groundBalls == 1)
+        #expect(king.totalPitches == 3)
+        // Fastballs: FF (94.1) + SI (94.6) → avg = 94.35, max = 94.6
+        #expect(abs((king.avgFastballVelo ?? 0) - (94.1 + 94.6) / 2.0) < 0.01)
+        #expect(king.maxFastballVelo == 94.6)
+
+        // Castillo: ground_ball + swinging_strike + ball (3 pitches, 1 batted ball)
+        #expect(castillo.battedBallEvents == 1)
+        #expect(castillo.groundBalls == 1)
+        #expect(castillo.totalPitches == 3)
+        // Swings: hit_into_play(1) + swinging_strike(1) = 2; whiffs: swinging_strike(1) = 1
+        #expect(abs((castillo.whiffRate ?? 0) - 0.5) < 0.001)
+        // Pitch mix: Sinker, 4-Seam Fastball, Slider
+        #expect(castillo.pitchMix.count == 3)
+    }
+
+    @Test("SwiftBaseball.statcastBatchPitching returns correct query type")
+    func namespacedBatchPitching() {
+        let query = SwiftBaseball.statcastBatchPitching(playerIds: [808967, 650633])
+        #expect(query.playerIds == [808967, 650633])
+    }
 }

@@ -192,6 +192,36 @@ public enum SwiftBaseball {
         StatcastPitcherQuery(playerId: playerId, client: statcastClient)
     }
 
+    /// Fetch Statcast batted ball data for multiple batters in batched requests.
+    ///
+    /// Player IDs are sent in chunks of ``StatcastBatchBattingQuery/defaultBatchSize`` (8)
+    /// per HTTP request, keeping responses under the Savant 25 000-row cap.
+    /// Returns a dictionary keyed by MLB player ID.
+    ///
+    ///     let stats = try await SwiftBaseball
+    ///         .statcastBatchBatting(playerIds: [660271, 592450, 665742])
+    ///         .dateRange(start: "2025-01-01", end: "2026-03-26")
+    ///         .fetch()
+    ///     print(stats[660271]?.gbPercent)
+    public static func statcastBatchBatting(playerIds: [Int]) -> StatcastBatchBattingQuery {
+        StatcastBatchBattingQuery(playerIds: playerIds, client: statcastClient)
+    }
+
+    /// Fetch Statcast pitching data for multiple pitchers in batched requests.
+    ///
+    /// Player IDs are sent in chunks of ``StatcastBatchPitchingQuery/defaultBatchSize`` (8)
+    /// per HTTP request, keeping responses under the Savant 25 000-row cap.
+    /// Returns a dictionary keyed by MLB player ID.
+    ///
+    ///     let stats = try await SwiftBaseball
+    ///         .statcastBatchPitching(playerIds: [808967, 687717, 641154])
+    ///         .dateRange(start: "2025-01-01", end: "2026-03-26")
+    ///         .fetch()
+    ///     print(stats[808967]?.whiffRate)
+    public static func statcastBatchPitching(playerIds: [Int]) -> StatcastBatchPitchingQuery {
+        StatcastBatchPitchingQuery(playerIds: playerIds, client: statcastClient)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

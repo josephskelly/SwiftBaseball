@@ -140,6 +140,183 @@ public struct StatcastPitcherQuery: Sendable {
     }
 }
 
+// MARK: - Batch Batting Query
+
+/// Query builder for Statcast batted ball data for multiple batters in a single request.
+///
+/// Sends player IDs in batches using `batters_lookup[]` query parameters.
+/// Each batch of up to ``defaultBatchSize`` players is fetched in one HTTP request;
+/// the combined CSV is parsed and split by batter ID.
+///
+/// ```swift
+/// let stats = try await SwiftBaseball
+///     .statcastBatchBatting(playerIds: [660271, 592450, 665742])
+///     .dateRange(start: "2025-01-01", end: "2026-03-26")
+///     .fetch()
+/// // stats[660271]?.gbPercent
+/// ```
+public struct StatcastBatchBattingQuery: Sendable {
+    let playerIds: [Int]
+    let client: StatcastAPIClient
+    private var startDate: String?
+    private var endDate: String?
+    private var _batchSize: Int
+
+    /// Default number of player IDs per HTTP request.
+    ///
+    /// Set to 8 so that a typical roster chunk stays well under the Savant 25 000-row
+    /// response cap (≈ 2 700 rows/player × 8 = ≈ 21 600 rows).
+    public static let defaultBatchSize = 8
+
+    init(playerIds: [Int], client: StatcastAPIClient, batchSize: Int = defaultBatchSize) {
+        self.playerIds = playerIds
+        self.client = client
+        self._batchSize = batchSize
+    }
+
+    /// Filters to a custom date range in `"YYYY-MM-DD"` format.
+    public func dateRange(start: String, end: String) -> StatcastBatchBattingQuery {
+        var copy = self
+        copy.startDate = start
+        copy.endDate = end
+        return copy
+    }
+
+    /// Overrides the number of player IDs sent per HTTP request (default: ``defaultBatchSize``).
+    public func batchSize(_ size: Int) -> StatcastBatchBattingQuery {
+        var copy = self
+        copy._batchSize = size
+        return copy
+    }
+
+    /// Executes the batch query and returns aggregated stats keyed by MLB player ID.
+    ///
+    /// Players with no batted ball events in the date window are omitted from the result.
+    /// - Returns: Dictionary of player ID → ``StatcastBatting``.
+    /// - Throws: ``SwiftBaseballError`` if any HTTP request fails.
+    public func fetch() async throws -> [Int: StatcastBatting] {
+        guard !playerIds.isEmpty else { return [:] }
+        var results: [Int: StatcastBatting] = [:]
+        for chunk in playerIds.chunked(into: _batchSize) {
+            let csv = try await client.fetchCSV(queryItems: buildQueryItems(for: chunk))
+            let rows = CSVParser.parse(csv)
+            let byPlayer = Dictionary(grouping: rows) { $0["batter"].flatMap(Int.init) ?? -1 }
+            for (id, playerRows) in byPlayer where id != -1 {
+                results[id] = StatcastAggregator.aggregate(playerRows)
+            }
+        }
+        return results
+    }
+
+    private func buildQueryItems(for ids: [Int]) -> [URLQueryItem] {
+        var items: [URLQueryItem] = ids.map { URLQueryItem(name: "batters_lookup[]", value: String($0)) }
+        items += [
+            URLQueryItem(name: "all", value: "true"),
+            URLQueryItem(name: "type", value: "details"),
+            URLQueryItem(name: "player_type", value: "batter"),
+        ]
+        if let start = startDate, let end = endDate {
+            items.append(URLQueryItem(name: "game_date_gt", value: start))
+            items.append(URLQueryItem(name: "game_date_lt", value: end))
+        }
+        return items
+    }
+}
+
+// MARK: - Batch Pitching Query
+
+/// Query builder for Statcast pitching data for multiple pitchers in a single request.
+///
+/// Sends player IDs in batches using `pitchers_lookup[]` query parameters.
+/// Each batch of up to ``defaultBatchSize`` pitchers is fetched in one HTTP request;
+/// the combined CSV is parsed and split by pitcher ID.
+///
+/// ```swift
+/// let stats = try await SwiftBaseball
+///     .statcastBatchPitching(playerIds: [808967, 687717, 641154])
+///     .dateRange(start: "2025-01-01", end: "2026-03-26")
+///     .fetch()
+/// // stats[808967]?.whiffRate
+/// ```
+public struct StatcastBatchPitchingQuery: Sendable {
+    let playerIds: [Int]
+    let client: StatcastAPIClient
+    private var startDate: String?
+    private var endDate: String?
+    private var _batchSize: Int
+
+    /// Default number of player IDs per HTTP request.
+    ///
+    /// Set to 8 to keep batch responses under the Savant 25 000-row cap.
+    public static let defaultBatchSize = 8
+
+    init(playerIds: [Int], client: StatcastAPIClient, batchSize: Int = defaultBatchSize) {
+        self.playerIds = playerIds
+        self.client = client
+        self._batchSize = batchSize
+    }
+
+    /// Filters to a custom date range in `"YYYY-MM-DD"` format.
+    public func dateRange(start: String, end: String) -> StatcastBatchPitchingQuery {
+        var copy = self
+        copy.startDate = start
+        copy.endDate = end
+        return copy
+    }
+
+    /// Overrides the number of player IDs sent per HTTP request (default: ``defaultBatchSize``).
+    public func batchSize(_ size: Int) -> StatcastBatchPitchingQuery {
+        var copy = self
+        copy._batchSize = size
+        return copy
+    }
+
+    /// Executes the batch query and returns aggregated stats keyed by MLB player ID.
+    ///
+    /// Pitchers with no pitch data in the date window are omitted from the result.
+    /// - Returns: Dictionary of player ID → ``StatcastPitching``.
+    /// - Throws: ``SwiftBaseballError`` if any HTTP request fails.
+    public func fetch() async throws -> [Int: StatcastPitching] {
+        guard !playerIds.isEmpty else { return [:] }
+        var results: [Int: StatcastPitching] = [:]
+        for chunk in playerIds.chunked(into: _batchSize) {
+            let csv = try await client.fetchCSV(queryItems: buildQueryItems(for: chunk))
+            let rows = CSVParser.parse(csv)
+            let byPlayer = Dictionary(grouping: rows) { $0["pitcher"].flatMap(Int.init) ?? -1 }
+            for (id, playerRows) in byPlayer where id != -1 {
+                results[id] = StatcastPitcherAggregator.aggregate(playerRows)
+            }
+        }
+        return results
+    }
+
+    private func buildQueryItems(for ids: [Int]) -> [URLQueryItem] {
+        var items: [URLQueryItem] = ids.map { URLQueryItem(name: "pitchers_lookup[]", value: String($0)) }
+        items += [
+            URLQueryItem(name: "all", value: "true"),
+            URLQueryItem(name: "type", value: "details"),
+            URLQueryItem(name: "player_type", value: "pitcher"),
+        ]
+        if let start = startDate, let end = endDate {
+            items.append(URLQueryItem(name: "game_date_gt", value: start))
+            items.append(URLQueryItem(name: "game_date_lt", value: end))
+        }
+        return items
+    }
+}
+
+// MARK: - Array helper
+
+private extension Array {
+    /// Splits the array into sequential chunks of at most `size` elements.
+    func chunked(into size: Int) -> [[Element]] {
+        guard size > 0 else { return [] }
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
+}
+
 // MARK: - Batting Aggregator
 
 /// Aggregates pitch-level Statcast rows into ``StatcastBatting``.

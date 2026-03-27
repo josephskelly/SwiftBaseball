@@ -1,0 +1,7 @@
+pitch_type,game_date,release_speed,player_name,batter,pitcher,events,description,zone,des,game_type,stand,p_throws,home_team,away_team,type,bb_type,balls,strikes,game_year,pfx_x,pfx_z,plate_x,plate_z,hit_distance_sc,launch_speed,launch_angle,effective_speed,release_spin_rate,game_pk,estimated_ba_using_speedangle,estimated_woba_using_speedangle,estimated_slg_using_speedangle,pitch_name
+ST,2024-06-02,81.2,"King, Michael",669004,650633,field_out,hit_into_play,5,MJ Melendez pops out.,R,L,R,KC,SD,X,popup,1,0,2024,1.35,0,0.02,2.83,133,73.3,63.0,81.1,2580,746301,0.005,0.005,0.005,Sweeper
+FF,2024-06-02,94.1,"King, Michael",679845,650633,single,hit_into_play,8,Nick Loftin singles.,R,R,R,KC,SD,X,ground_ball,2,2,2024,-0.29,1.08,0.07,2.78,24,93.4,-4.0,94.0,2251,746301,0.297,0.287,0.367,4-Seam Fastball
+SI,2024-06-02,94.6,"King, Michael",679845,650633,,called_strike,9,Called Strike,R,R,R,KC,SD,S,,1,0,2024,-1.16,0.31,0.43,2.23,,,,92.5,2080,746301,,,,Sinker
+SI,2024-06-02,94.6,"Castillo, Luis",687263,622491,field_out,hit_into_play,4,Zach Neto grounds out.,R,R,R,SEA,LAA,X,ground_ball,3,2,2024,-1.6,0.28,-0.38,2.72,5,59.0,-29.0,92.8,1991,745252,0.079,0.072,0.087,Sinker
+FF,2024-06-02,95.1,"Castillo, Luis",687263,622491,,swinging_strike,14,Swinging Strike,R,R,R,SEA,LAA,S,,1,1,2024,-1.16,0.64,1.98,1.92,,,,93.3,2151,745252,,,,4-Seam Fastball
+SL,2024-06-02,85.2,"Castillo, Luis",687263,622491,,ball,14,Ball,R,R,R,SEA,LAA,B,,1,2,2024,0.01,-0.01,0.97,0.51,,,,84.2,2270,745252,,,,Slider
