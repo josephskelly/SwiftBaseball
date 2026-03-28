@@ -1,0 +1,57 @@
+{
+  "leagueLeaders": [
+    {
+      "leaderCategory": "earnedRunAverage",
+      "leaders": [
+        {
+          "rank": 1,
+          "value": "2.38",
+          "person": {
+            "id": 518516,
+            "fullName": "Chris Sale",
+            "link": "/api/v1/people/518516"
+          },
+          "team": {
+            "id": 144,
+            "name": "Atlanta Braves",
+            "link": "/api/v1/teams/144"
+          },
+          "season": "2024",
+          "leagueRank": 1
+        },
+        {
+          "rank": 2,
+          "value": "2.39",
+          "person": {
+            "id": 669923,
+            "fullName": "Tarik Skubal",
+            "link": "/api/v1/people/669923"
+          },
+          "team": {
+            "id": 116,
+            "name": "Detroit Tigers",
+            "link": "/api/v1/teams/116"
+          },
+          "season": "2024",
+          "leagueRank": 1
+        },
+        {
+          "rank": 3,
+          "value": "2.57",
+          "person": {
+            "id": 554430,
+            "fullName": "Zack Wheeler",
+            "link": "/api/v1/people/554430"
+          },
+          "team": {
+            "id": 143,
+            "name": "Philadelphia Phillies",
+            "link": "/api/v1/teams/143"
+          },
+          "season": "2024",
+          "leagueRank": 3
+        }
+      ]
+    }
+  ]
+}

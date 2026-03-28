@@ -51,8 +51,6 @@ public enum LeaderStatCategory: String, Codable, Sendable, CaseIterable {
     case doubles              = "doubles"
     /// Triples.
     case triples              = "triples"
-    /// Strikeouts per 9 innings (pitching).
-    case strikeoutsPer9Inn    = "strikeoutsPer9Inn"
 
     // Pitching
     /// Earned run average.
@@ -69,4 +67,6 @@ public enum LeaderStatCategory: String, Codable, Sendable, CaseIterable {
     case inningsPitched       = "inningsPitched"
     /// Walks and hits per inning pitched (full name).
     case walksAndHitsPerInningPitched = "walksAndHitsPerInningPitched"
+    /// Strikeouts per 9 innings.
+    case strikeoutsPer9Inn    = "strikeoutsPer9Inn"
 }

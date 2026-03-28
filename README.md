@@ -71,6 +71,23 @@ let standings = try await SwiftBaseball
     .league(.american)
     .fetch()
 
+// Batting leaders
+let hrLeaders = try await SwiftBaseball
+    .leaders(.homeRuns)
+    .season(2024)
+    .limit(10)
+    .fetch()
+hrLeaders.first?.leaders.first.map { print($0.player.fullName, $0.value) }  // "Shohei Ohtani 54"
+
+// Pitching leaders — ERA, WHIP, strikeouts, wins, saves, innings pitched, K/9
+let eraLeaders = try await SwiftBaseball.leaders(.earnedRunAverage).season(2024).limit(10).fetch()
+let whipLeaders = try await SwiftBaseball.leaders(.whip).season(2024).limit(10).fetch()
+let kLeaders   = try await SwiftBaseball.leaders(.strikeouts).season(2024).limit(10).fetch()
+let winLeaders = try await SwiftBaseball.leaders(.wins).season(2024).limit(10).fetch()
+let saveLeaders = try await SwiftBaseball.leaders(.saves).season(2024).limit(10).fetch()
+let ipLeaders  = try await SwiftBaseball.leaders(.inningsPitched).season(2024).limit(10).fetch()
+let k9Leaders  = try await SwiftBaseball.leaders(.strikeoutsPer9Inn).season(2024).limit(10).fetch()
+
 // Player detail
 let judge = try await SwiftBaseball.player(id: 592450).fetch()
 

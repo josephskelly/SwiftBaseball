@@ -9,7 +9,8 @@ struct LeadersCommand {
 
         guard let category = LeaderStatCategory(rawValue: statName) else {
             print("Unknown stat category: \(statName)")
-            print("Try: homeRuns, battingAverage, earnedRunAverage, strikeouts, wins, rbi, stolenBases, saves")
+            print("Batting:  homeRuns, battingAverage, onBasePlusSlugging, rbi, hits, runs, doubles, triples, stolenBases")
+            print("Pitching: earnedRunAverage, wins, strikeouts, saves, whip, inningsPitched, walksAndHitsPerInningPitched, strikeoutsPer9Inn")
             return
         }
 
@@ -53,6 +54,7 @@ struct LeadersCommand {
 
     private static func printUsage() {
         print("Usage: baseball-cli leaders <stat> [--season YEAR] [--limit N]")
-        print("Stats: homeRuns, battingAverage, earnedRunAverage, strikeouts, wins, rbi, stolenBases, saves")
+        print("Batting:  homeRuns, battingAverage, onBasePlusSlugging, rbi, hits, runs, doubles, triples, stolenBases")
+        print("Pitching: earnedRunAverage, wins, strikeouts, saves, whip, inningsPitched, walksAndHitsPerInningPitched, strikeoutsPer9Inn")
     }
 }

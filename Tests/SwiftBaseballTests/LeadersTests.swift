@@ -88,6 +88,74 @@ struct LeadersTests {
         #expect(endpoint.queryItems.contains { $0.name == "sportId" && $0.value == "1" })
     }
 
+    // MARK: - Pitching Leaders
+
+    @Test("Decode pitching leaders from fixture")
+    func decodePitchingLeaders() throws {
+        let data = try Fixtures.load("leaders_earnedRunAverage_2024.json")
+        let response = try JSONDecoder.mlb.decode(MLBLeadersResponse.self, from: data)
+        let categories = MLBResponseConverters.leaderEntries(from: response)
+
+        #expect(categories.count == 1)
+
+        let category = try #require(categories.first)
+        #expect(category.leaderCategory == "earnedRunAverage")
+        #expect(category.leaders.count == 3)
+    }
+
+    @Test("Pitching leader value is a decimal string")
+    func pitchingLeaderValue() throws {
+        let data = try Fixtures.load("leaders_earnedRunAverage_2024.json")
+        let response = try JSONDecoder.mlb.decode(MLBLeadersResponse.self, from: data)
+        let categories = MLBResponseConverters.leaderEntries(from: response)
+        let leader = try #require(categories.first?.leaders.first)
+
+        #expect(leader.value == "2.38")
+    }
+
+    @Test("Pitching leader player reference decoded")
+    func pitchingLeaderPlayerRef() throws {
+        let data = try Fixtures.load("leaders_earnedRunAverage_2024.json")
+        let response = try JSONDecoder.mlb.decode(MLBLeadersResponse.self, from: data)
+        let categories = MLBResponseConverters.leaderEntries(from: response)
+        let leader = try #require(categories.first?.leaders.first)
+
+        #expect(leader.player.id == 518516)
+        #expect(leader.player.fullName == "Chris Sale")
+    }
+
+    @Test("Pitching leaders query builder constructs correct path")
+    func pitchingLeadersQueryBuilder() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("leaders_earnedRunAverage_2024.json")
+        mock.stub(path: "stats/leaders", data: data)
+
+        let builder = QueryBuilder<[LeaderCategory]>.leaders(.earnedRunAverage, client: mock)
+        _ = try await builder.fetch()
+
+        let endpoint = try #require(mock.lastEndpoint)
+        #expect(endpoint.path == "stats/leaders")
+        #expect(endpoint.queryItems.contains { $0.name == "leaderCategories" && $0.value == "earnedRunAverage" })
+        #expect(endpoint.queryItems.contains { $0.name == "sportId" && $0.value == "1" })
+    }
+
+    @Test("All pitching categories round-trip through rawValue")
+    func allPitchingCategoriesRoundTrip() {
+        let pitchingCases: [(String, LeaderStatCategory)] = [
+            ("earnedRunAverage", .earnedRunAverage),
+            ("wins", .wins),
+            ("strikeouts", .strikeouts),
+            ("saves", .saves),
+            ("whip", .whip),
+            ("inningsPitched", .inningsPitched),
+            ("walksAndHitsPerInningPitched", .walksAndHitsPerInningPitched),
+            ("strikeoutsPer9Inn", .strikeoutsPer9Inn)
+        ]
+        for (raw, expected) in pitchingCases {
+            #expect(LeaderStatCategory(rawValue: raw) == expected)
+        }
+    }
+
     @Test("Empty leaders response")
     func emptyLeaders() throws {
         let json = """

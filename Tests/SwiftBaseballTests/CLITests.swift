@@ -30,12 +30,21 @@ struct CLITests {
         let known: [(String, LeaderStatCategory)] = [
             ("homeRuns", .homeRuns),
             ("battingAverage", .battingAverage),
-            ("earnedRunAverage", .earnedRunAverage),
-            ("strikeouts", .strikeouts),
-            ("wins", .wins),
+            ("onBasePlusSlugging", .onBasePlusSlugging),
             ("rbi", .rbi),
+            ("hits", .hits),
             ("stolenBases", .stolenBases),
-            ("saves", .saves)
+            ("runs", .runs),
+            ("doubles", .doubles),
+            ("triples", .triples),
+            ("earnedRunAverage", .earnedRunAverage),
+            ("wins", .wins),
+            ("strikeouts", .strikeouts),
+            ("saves", .saves),
+            ("whip", .whip),
+            ("inningsPitched", .inningsPitched),
+            ("walksAndHitsPerInningPitched", .walksAndHitsPerInningPitched),
+            ("strikeoutsPer9Inn", .strikeoutsPer9Inn)
         ]
         for (raw, expected) in known {
             #expect(LeaderStatCategory(rawValue: raw) == expected)
