@@ -213,15 +213,20 @@ public enum GameType: String, Codable, Sendable, Hashable, CaseIterable {
 ///
 /// Use ``active`` for the regular-season 26-man roster. Use ``fortyMan``
 /// and ``nonRosterInvitees`` together for spring training or exhibition
-/// rosters, where expanded participation rules apply.
+/// rosters, where expanded participation rules apply. Use ``fullSeason``
+/// for minor league teams to retrieve every player who appeared on the
+/// roster at any point during the season.
 public enum RosterType: String, Sendable, Hashable, CaseIterable {
-    /// The active 26-man roster (default for regular season).
+    /// The active 26-man roster (default for MLB regular season).
     case active
     /// The 40-man roster — includes players on the IL, optional list, and
     /// other controlled players beyond the active 26.
     case fortyMan = "40Man"
     /// Non-roster spring training invitees (NRIs) who are not on the 40-man.
     case nonRosterInvitees
+    /// Full-season roster — every player who appeared for the team during
+    /// the season. This is the default roster type for minor league teams.
+    case fullSeason
 }
 
 // MARK: - StatGroup

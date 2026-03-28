@@ -52,27 +52,51 @@ public enum SwiftBaseball {
 
     // MARK: - Teams
 
-    /// Query teams.
+    /// Query MLB teams. Chain `.sport(_:)` to list minor league teams at a given level.
     ///
-    ///     let teams = try await SwiftBaseball.teams(.all(season: 2024)).fetch()
+    ///     let mlbTeams   = try await SwiftBaseball.teams(.all(season: 2024)).fetch()
+    ///     let aaaTeams   = try await SwiftBaseball.teams(.all(season: 2024)).sport(.tripleA).fetch()
+    ///     let doubleATeams = try await SwiftBaseball.teams(.all(season: 2024)).sport(.doubleA).fetch()
     public static func teams(_ query: TeamQuery) -> QueryBuilder<[Team]> {
         .teams(query, client: client)
     }
 
-    /// Fetch a single team by MLB ID.
+    /// Fetch a single team by MLB or minor league team ID.
     ///
-    ///     let yankees = try await SwiftBaseball.team(id: 147).fetch()
+    ///     let yankees    = try await SwiftBaseball.team(id: 147).fetch()
+    ///     let railRiders = try await SwiftBaseball.team(id: 531).fetch()  // SWB AAA affiliate
     public static func team(id: Int) -> QueryBuilder<Team> {
         .singleTeam(id: id, client: client)
     }
 
+    /// Fetch all affiliate teams for an MLB organization.
+    ///
+    /// Returns the MLB club plus every affiliated minor league team. Each
+    /// ``Team`` in the result carries ``Team/parentOrgId``, ``Team/parentOrgName``,
+    /// and ``Team/sportName`` so you can identify the level without extra calls.
+    /// Use the returned team IDs directly with ``roster(teamId:season:rosterType:)``.
+    ///
+    ///     let affiliates = try await SwiftBaseball.affiliates(teamId: 147, season: 2024).fetch()
+    ///     let aaaAffiliate = affiliates.first { $0.sportName == "Triple-A" }
+    ///     let aaaRoster = try await SwiftBaseball.roster(teamId: aaaAffiliate!.id, season: 2024).fetch()
+    ///
+    /// - SeeAlso: ``Team/sportName``, ``Team/parentOrgId``, ``roster(teamId:season:rosterType:)``
+    public static func affiliates(teamId: Int, season: Int) -> QueryBuilder<[Team]> {
+        .affiliates(teamId: teamId, season: season, client: client)
+    }
+
     /// Fetch a team's roster.
     ///
-    /// The default ``RosterType/active`` returns the 26-man active roster, suitable
-    /// for regular-season views. Pass ``RosterType/fortyMan`` or
-    /// ``RosterType/nonRosterInvitees`` for spring training / exhibition rosters.
+    /// Works for both MLB and minor league team IDs. The default
+    /// ``RosterType/active`` returns the current active roster.
+    /// For minor league teams, use ``RosterType/fullSeason`` to get every
+    /// player who appeared on the team during the season.
     ///
+    ///     // MLB active 26-man
     ///     let roster = try await SwiftBaseball.roster(teamId: 147, season: 2024).fetch()
+    ///     // Minor league full-season roster
+    ///     let mibRoster = try await SwiftBaseball.roster(teamId: 531, season: 2024, rosterType: .fullSeason).fetch()
+    ///     // Spring training 40-man
     ///     let spring = try await SwiftBaseball.roster(teamId: 147, season: 2025, rosterType: .fortyMan).fetch()
     public static func roster(
         teamId: Int,

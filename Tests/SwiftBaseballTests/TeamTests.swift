@@ -188,6 +188,133 @@ struct TeamTests {
         #expect(team1 == team2)
     }
 
+    // MARK: - Minor league teams (sport modifier)
+
+    @Test("teams(.all) with sport modifier replaces sportId param")
+    func teamsAllSportModifier() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("teams_2024.json")
+        mock.stub(path: "teams", data: data)
+
+        _ = try await QueryBuilder<[Team]>.teams(.all(season: 2024), client: mock)
+            .sport(.tripleA)
+            .fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "sportId" && $0.value == "11" })
+        #expect(!items.contains { $0.name == "sportId" && $0.value == "1" })
+    }
+
+    // MARK: - Affiliates
+
+    @Test("affiliates fixture decodes correct count")
+    func affiliatesCount() async throws {
+        let data = try Fixtures.load("affiliates_147_2024.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "teams/147/affiliates", data: data)
+
+        let affiliates = try await QueryBuilder<[Team]>.affiliates(teamId: 147, season: 2024, client: mock).fetch()
+
+        #expect(affiliates.count == 4)
+    }
+
+    @Test("affiliates includes MLB parent team with no parentOrgId")
+    func affiliatesMLBTeam() async throws {
+        let data = try Fixtures.load("affiliates_147_2024.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "teams/147/affiliates", data: data)
+
+        let affiliates = try await QueryBuilder<[Team]>.affiliates(teamId: 147, season: 2024, client: mock).fetch()
+
+        let yankees = try #require(affiliates.first { $0.id == 147 })
+        #expect(yankees.parentOrgId == nil)
+        #expect(yankees.parentOrgName == nil)
+        #expect(yankees.sportName == "Major League Baseball")
+    }
+
+    @Test("affiliates includes minor league teams with parentOrg fields")
+    func affiliatesMinorLeagueTeam() async throws {
+        let data = try Fixtures.load("affiliates_147_2024.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "teams/147/affiliates", data: data)
+
+        let affiliates = try await QueryBuilder<[Team]>.affiliates(teamId: 147, season: 2024, client: mock).fetch()
+
+        let swb = try #require(affiliates.first { $0.id == 531 })
+        #expect(swb.name == "Scranton/Wilkes-Barre RailRiders")
+        #expect(swb.sportName == "Triple-A")
+        #expect(swb.parentOrgId == 147)
+        #expect(swb.parentOrgName == "New York Yankees")
+
+        let somerset = try #require(affiliates.first { $0.id == 1956 })
+        #expect(somerset.sportName == "Double-A")
+        #expect(somerset.parentOrgId == 147)
+
+        let tampa = try #require(affiliates.first { $0.id == 587 })
+        #expect(tampa.sportName == "Single-A")
+    }
+
+    @Test("affiliates query uses correct path and season param")
+    func affiliatesQueryBuilder() async throws {
+        let data = try Fixtures.load("affiliates_147_2024.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "teams/147/affiliates", data: data)
+
+        _ = try await QueryBuilder<[Team]>.affiliates(teamId: 147, season: 2024, client: mock).fetch()
+
+        #expect(mock.lastEndpoint?.path == "teams/147/affiliates")
+        let seasonItem = mock.lastEndpoint?.queryItems.first { $0.name == "season" }
+        #expect(seasonItem?.value == "2024")
+    }
+
+    @Test("SwiftBaseball.affiliates returns correct type")
+    func namespacedAffiliates() {
+        _ = SwiftBaseball.affiliates(teamId: 147, season: 2024)
+    }
+
+    // MARK: - Minor league roster
+
+    @Test("Decode minor league roster fixture")
+    func decodeMinorLeagueRoster() throws {
+        let data = try Fixtures.load("roster_531_2024.json")
+        let response = try JSONDecoder.mlb.decode(MLBRosterResponse.self, from: data)
+        let entries = response.roster.map(MLBResponseConverters.rosterEntry)
+
+        #expect(entries.count == 3)
+        let first = try #require(entries.first { $0.person.id == 656185 })
+        #expect(first.person.fullName == "Greg Allen")
+        #expect(first.position == .centerField)
+        #expect(first.status == "Active")
+    }
+
+    @Test("roster() with minor league teamId uses correct path")
+    func minorLeagueRosterQueryBuilder() async throws {
+        let data = try Fixtures.load("roster_531_2024.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "teams/531/roster", data: data)
+
+        let entries = try await QueryBuilder<[RosterEntry]>.roster(
+            teamId: 531, season: 2024, client: mock
+        ).fetch()
+
+        #expect(entries.count == 3)
+        #expect(mock.lastEndpoint?.path == "teams/531/roster")
+    }
+
+    @Test("roster() sends rosterType=fullSeason for fullSeason")
+    func rosterQueryBuilderFullSeason() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("roster_531_2024.json")
+        mock.stub(path: "teams/531/roster", data: data)
+
+        _ = try await QueryBuilder<[RosterEntry]>.roster(
+            teamId: 531, season: 2024, rosterType: .fullSeason, client: mock
+        ).fetch()
+
+        let rosterTypeItem = mock.lastEndpoint?.queryItems.first { $0.name == "rosterType" }
+        #expect(rosterTypeItem?.value == "fullSeason")
+    }
+
     // MARK: - Division enum
 
     @Test("Division enum maps correctly to league")

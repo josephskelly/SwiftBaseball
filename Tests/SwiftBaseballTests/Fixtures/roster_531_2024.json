@@ -1,0 +1,61 @@
+{
+    "roster": [
+        {
+            "person": {
+                "id": 656185,
+                "fullName": "Greg Allen",
+                "link": "/api/v1/people/656185"
+            },
+            "jerseyNumber": "2",
+            "position": {
+                "code": "8",
+                "name": "Outfielder",
+                "type": "Outfielder",
+                "abbreviation": "CF"
+            },
+            "status": {
+                "code": "A",
+                "description": "Active"
+            }
+        },
+        {
+            "person": {
+                "id": 677076,
+                "fullName": "Clayton Andrews",
+                "link": "/api/v1/people/677076"
+            },
+            "jerseyNumber": "",
+            "position": {
+                "code": "1",
+                "name": "Pitcher",
+                "type": "Pitcher",
+                "abbreviation": "P"
+            },
+            "status": {
+                "code": "FA",
+                "description": "Free Agent"
+            }
+        },
+        {
+            "person": {
+                "id": 687607,
+                "fullName": "Edgar Barclay",
+                "link": "/api/v1/people/687607"
+            },
+            "jerseyNumber": "35",
+            "position": {
+                "code": "1",
+                "name": "Pitcher",
+                "type": "Pitcher",
+                "abbreviation": "P"
+            },
+            "status": {
+                "code": "A",
+                "description": "Active"
+            }
+        }
+    ],
+    "link": "/api/v1/teams/531/roster",
+    "teamId": 531,
+    "rosterType": "fullSeason"
+}

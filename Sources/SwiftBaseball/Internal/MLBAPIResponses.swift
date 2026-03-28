@@ -63,6 +63,9 @@ struct MLBTeam: Decodable {
     let league: MLBEntityRef?
     let division: MLBEntityRef?
     let venue: MLBEntityRef?
+    let sport: MLBEntityRef?
+    let parentOrgId: Int?
+    let parentOrgName: String?
 }
 
 struct MLBRosterResponse: Decodable {

@@ -61,12 +61,15 @@ extension QueryBuilder where T == Team {
 extension QueryBuilder where T == [RosterEntry] {
     /// Fetches a team roster for the given season and roster type.
     ///
+    /// Works for both MLB and minor league team IDs. For minor league teams,
+    /// omitting `rosterType` (using the default ``RosterType/active``) returns
+    /// the active roster; pass ``RosterType/fullSeason`` to get every player
+    /// who appeared on the team during the season.
+    ///
     /// - Parameters:
-    ///   - teamId: The MLB team identifier.
+    ///   - teamId: The MLB or minor league team identifier.
     ///   - season: The season year (e.g. 2025).
-    ///   - rosterType: Which roster list to fetch. Defaults to ``RosterType/active``
-    ///     (26-man active roster). Use ``RosterType/fortyMan`` or
-    ///     ``RosterType/nonRosterInvitees`` for spring training.
+    ///   - rosterType: Which roster list to fetch. Defaults to ``RosterType/active``.
     static func roster(
         teamId: Int,
         season: Int,
@@ -81,6 +84,21 @@ extension QueryBuilder where T == [RosterEntry] {
         return QueryBuilder(endpoint: endpoint, client: client) { data in
             let response = try JSONDecoder.mlb.decode(MLBRosterResponse.self, from: data)
             return response.roster.map(MLBResponseConverters.rosterEntry)
+        }
+    }
+}
+
+// MARK: - Affiliates
+
+extension QueryBuilder where T == [Team] {
+    /// Fetches all affiliate teams for an MLB organization.
+    static func affiliates(teamId: Int, season: Int, client: any APIClient) -> QueryBuilder<[Team]> {
+        let endpoint = Endpoint(path: "teams/\(teamId)/affiliates", queryItems: [
+            URLQueryItem(name: "season", value: String(season))
+        ])
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBTeamsResponse.self, from: data)
+            return response.teams.map(MLBResponseConverters.team)
         }
     }
 }

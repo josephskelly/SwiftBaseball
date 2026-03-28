@@ -54,7 +54,10 @@ enum MLBResponseConverters {
             active: raw.active ?? true,
             league: leagueReference(from: raw.league),
             division: divisionReference(from: raw.division),
-            venue: venueReference(from: raw.venue)
+            venue: venueReference(from: raw.venue),
+            sportName: raw.sport?.name,
+            parentOrgId: raw.parentOrgId,
+            parentOrgName: raw.parentOrgName
         )
     }
 

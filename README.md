@@ -124,6 +124,20 @@ let pitching = try await SwiftBaseball
     .fetch()
 print(pitching.whiffRate, pitching.avgFastballVelo, pitching.pitchMix)
 
+// Minor league farm system — all affiliates of an MLB team
+let affiliates = try await SwiftBaseball.affiliates(teamId: 147, season: 2024).fetch()
+let aaaTeam = affiliates.first { $0.sportName == "Triple-A" }!
+print(aaaTeam.name)             // "Scranton/Wilkes-Barre RailRiders"
+print(aaaTeam.parentOrgName!)   // "New York Yankees"
+
+// Minor league roster — full season (everyone who appeared)
+let mibRoster = try await SwiftBaseball
+    .roster(teamId: aaaTeam.id, season: 2024, rosterType: .fullSeason)
+    .fetch()
+
+// List all Triple-A teams
+let aaaTeams = try await SwiftBaseball.teams(.all(season: 2024)).sport(.tripleA).fetch()
+
 // Award recipients — AL MVP winners
 let mvpWinners = try await SwiftBaseball
     .awardRecipients(awardId: "ALMVP")
