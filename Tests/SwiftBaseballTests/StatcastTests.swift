@@ -380,6 +380,75 @@ struct StatcastTests {
         #expect(stats.avgSpinRate! < 3000)
     }
 
+    // MARK: - xERA / xFIP
+
+    @Test("Pitcher aggregation: K / BB / HBP counts from xFIP fixture")
+    func pitcherAggregatorCountsKBBHBP() throws {
+        let data = try Fixtures.load("statcast_pitching_xfip.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        #expect(stats.strikeouts == 5)
+        #expect(stats.walks == 2)
+        #expect(stats.hitByPitch == 0)
+    }
+
+    @Test("Pitcher aggregation: innings pitched from xFIP fixture")
+    func pitcherAggregatorInningsPitched() throws {
+        let data = try Fixtures.load("statcast_pitching_xfip.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // 5 strikeout outs + 4 field_out outs = 9 outs → 3.0 IP
+        #expect(stats.inningsPitched == 3.0)
+    }
+
+    @Test("Pitcher aggregation: xFIP from xFIP fixture")
+    func pitcherAggregatorXFIP() throws {
+        let data = try Fixtures.load("statcast_pitching_xfip.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // xHR = 3 × 0.105 = 0.315
+        // numerator = 13×0.315 + 3×(2+0) − 2×5 = 4.095 + 6.0 − 10.0 = 0.095
+        // xFIP = 0.095 / 3.0 + 3.10 ≈ 3.1317
+        let expected = 0.095 / 3.0 + 3.10
+        let xFIP = try #require(stats.xFIP)
+        #expect(abs(xFIP - expected) < 0.0001)
+    }
+
+    @Test("Pitcher aggregation: xERA from xFIP fixture")
+    func pitcherAggregatorXERA() throws {
+        let data = try Fixtures.load("statcast_pitching_xfip.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // xwOBA contact sum = 0.040+0.060+0.130+0.050+0.310+0.700 = 1.290
+        // full-PA xwOBA = (1.290 + 0.690×2) / 13 = 2.670 / 13 ≈ 0.20538
+        // xERA = 0.20538 × 13.0 ≈ 2.670
+        let expected = (1.290 + 0.690 * 2.0) / 13.0 * 13.0  // simplifies to 2.670
+        let xERA = try #require(stats.xERA)
+        #expect(abs(xERA - expected) < 0.01)
+    }
+
+    @Test("Pitcher aggregation: xERA and xFIP are nil when insufficient data")
+    func pitcherAggregatorNilWhenInsufficientData() {
+        // Fewer than 3 PA-terminating events → xERA nil
+        // Fewer than 1.0 IP → xFIP nil
+        let rows: [[String: String]] = [
+            ["pitch_type": "FF", "description": "ball", "events": ""],
+            ["pitch_type": "FF", "description": "ball", "events": ""],
+        ]
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        #expect(stats.xERA == nil)
+        #expect(stats.xFIP == nil)
+    }
+
     // MARK: - StatcastQuery builder
 
     @Test("StatcastQuery season sets date range for full year")

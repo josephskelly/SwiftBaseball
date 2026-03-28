@@ -1,0 +1,14 @@
+pitch_type,game_date,release_speed,player_name,batter,pitcher,events,description,zone,des,game_type,stand,p_throws,home_team,away_team,type,bb_type,balls,strikes,game_year,pfx_x,pfx_z,plate_x,plate_z,hit_distance_sc,launch_speed,launch_angle,effective_speed,release_spin_rate,game_pk,estimated_ba_using_speedangle,estimated_woba_using_speedangle,estimated_slg_using_speedangle,pitch_name
+FF,2024-04-01,94.1,"Doe, John",1001,999,strikeout,swinging_strike,5,John Doe strikes out swinging.,R,R,R,NYY,BOS,S,,2,2,2024,-0.30,1.10,0.08,2.55,,,94.0,2300,750001,,,,4-Seam Fastball
+FF,2024-04-01,93.8,"Doe, John",1002,999,strikeout,swinging_strike,5,John Doe strikes out swinging.,R,R,R,NYY,BOS,S,,2,2,2024,-0.28,1.08,0.10,2.60,,,93.7,2310,750001,,,,4-Seam Fastball
+SL,2024-04-01,86.5,"Doe, John",1003,999,strikeout,swinging_strike,14,John Doe strikes out swinging.,R,L,R,NYY,BOS,S,,1,2,2024,0.05,-0.30,1.20,2.10,,,86.3,2450,750001,,,,Slider
+FF,2024-04-01,94.3,"Doe, John",1004,999,walk,ball,14,Walk.,R,R,R,NYY,BOS,B,,3,2,2024,-0.31,1.05,1.85,1.90,,,94.1,2280,750001,,,,4-Seam Fastball
+FF,2024-04-01,93.5,"Doe, John",1005,999,field_out,hit_into_play,6,Batter flies out to left.,R,R,R,NYY,BOS,X,fly_ball,1,2,2024,-0.25,1.02,0.15,2.40,280,78.0,35,93.3,2265,750001,0.040,0.040,0.040,4-Seam Fastball
+SI,2024-04-01,93.0,"Doe, John",1006,999,field_out,hit_into_play,7,Batter flies out to center.,R,R,R,NYY,BOS,X,fly_ball,2,1,2024,-1.10,0.30,0.05,2.20,310,75.0,38,92.8,2150,750001,0.060,0.060,0.060,Sinker
+SL,2024-04-01,86.2,"Doe, John",1007,999,field_out,hit_into_play,4,Batter grounds out.,R,R,R,NYY,BOS,X,ground_ball,0,2,2024,0.04,-0.28,-0.30,2.00,18,85.0,-15,86.0,2430,750001,0.130,0.130,0.130,Slider
+FF,2024-04-01,94.5,"Doe, John",1008,999,strikeout,called_strike,9,John Doe called out on strikes.,R,R,R,NYY,BOS,S,,2,2,2024,-0.29,1.07,-0.12,2.50,,,94.3,2290,750001,,,,4-Seam Fastball
+SL,2024-04-01,86.8,"Doe, John",1009,999,strikeout,swinging_strike,14,John Doe strikes out swinging.,R,L,R,NYY,BOS,S,,2,2,2024,0.06,-0.31,1.18,2.05,,,86.6,2460,750001,,,,Slider
+FF,2024-04-01,93.9,"Doe, John",1010,999,walk,ball,14,Walk.,R,R,R,NYY,BOS,B,,3,1,2024,-0.32,1.09,1.90,2.00,,,93.7,2275,750001,,,,4-Seam Fastball
+FF,2024-04-01,93.7,"Doe, John",1011,999,field_out,hit_into_play,6,Batter flies out to right.,R,R,R,NYY,BOS,X,fly_ball,1,1,2024,-0.27,1.04,0.20,2.45,295,72.0,40,93.5,2270,750001,0.050,0.050,0.050,4-Seam Fastball
+SI,2024-04-01,92.8,"Doe, John",1012,999,single,hit_into_play,4,Batter singles on a ground ball.,R,R,R,NYY,BOS,X,ground_ball,1,0,2024,-1.15,0.28,-0.25,2.15,60,88.0,-5,92.6,2140,750001,0.297,0.310,0.480,Sinker
+FF,2024-04-01,94.0,"Doe, John",1013,999,single,hit_into_play,5,Batter singles on a line drive.,R,R,R,NYY,BOS,X,line_drive,2,2,2024,-0.30,1.06,0.05,2.50,165,100.0,12,93.8,2285,750001,0.650,0.700,1.200,4-Seam Fastball

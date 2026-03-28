@@ -50,6 +50,39 @@ public struct StatcastPitching: Sendable, Equatable, Codable {
     /// Expected weighted on-base average against.
     public let xwOBA: Double?
 
+    // MARK: - PA Event Counts
+
+    /// Strikeouts recorded against this pitcher in the sample.
+    public let strikeouts: Int
+    /// Walks (BB) allowed in the sample.
+    public let walks: Int
+    /// Hit-by-pitches (HBP) allowed in the sample.
+    public let hitByPitch: Int
+    /// Innings pitched derived from recorded outs in the sample.
+    public let inningsPitched: Double
+
+    // MARK: - Expected Performance
+
+    /// Expected ERA derived from per-PA xwOBA.
+    ///
+    /// Computed by blending xwOBA on contact (`estimated_woba_using_speedangle`) with
+    /// per-event linear weights for strikeouts (0.000), walks (0.690), and HBP (0.720)
+    /// across all plate appearances, then scaling via the linear approximation
+    /// `xERA = fullPAxwOBA × 13.0`.
+    ///
+    /// This is an approximation; values calibrate so that an average xwOBA (~0.320) maps
+    /// to roughly league-average ERA (~4.16). `nil` when fewer than 3 PA-terminating
+    /// events exist in the sample.
+    public let xERA: Double?
+
+    /// Expected FIP using `xHR = flyBalls × leagueHRperFBRate`.
+    ///
+    /// Formula: `((13 × xHR + 3 × (BB + HBP) − 2 × K) / IP) + FIPconstant`
+    ///
+    /// Uses hardcoded constants: `leagueHRperFBRate = 0.105`, `FIPconstant = 3.10`.
+    /// `nil` when fewer than 1.0 innings pitched exists in the sample.
+    public let xFIP: Double?
+
     // MARK: - Pitch Arsenal
 
     /// Total pitches thrown in the sample.

@@ -523,6 +523,62 @@ enum StatcastPitcherAggregator {
     /// Fastball pitch type codes for velocity aggregation.
     private static let fastballCodes: Set<String> = ["FF", "SI", "FC"]
 
+    /// PA-terminating `events` values that record exactly one out.
+    private static let singleOutEvents: Set<String> = [
+        "strikeout", "field_out", "force_out", "sac_fly", "sac_bunt",
+        "fielder_choice_out", "catcher_interf",
+    ]
+
+    /// PA-terminating `events` values that record two outs.
+    private static let doublePlayEvents: Set<String> = [
+        "double_play", "grounded_into_double_play",
+        "sac_fly_double_play", "sac_bunt_double_play", "strikeout_double_play",
+    ]
+
+    /// League-average HR-per-fly-ball rate used for xFIP.
+    private static let leagueHRperFBRate: Double = 0.105
+
+    /// FIP constant added to the FIP numerator/IP quotient.
+    private static let fipConstant: Double = 3.10
+
+    /// wOBA linear weight assigned to a walk for full-PA xwOBA blending.
+    private static let walkWOBA: Double = 0.690
+
+    /// wOBA linear weight assigned to a hit-by-pitch for full-PA xwOBA blending.
+    private static let hbpWOBA: Double = 0.720
+
+    /// Counts PA-outcome events from the `events` CSV field.
+    ///
+    /// The `events` field is non-empty only on the final pitch of a plate appearance.
+    /// Returns strikeout count, walk count, hit-by-pitch count, and total outs recorded.
+    private static func countPAEvents(
+        _ rows: [[String: String]]
+    ) -> (k: Int, bb: Int, hbp: Int, outs: Int) {
+        var k = 0, bb = 0, hbp = 0, outs = 0
+        for row in rows {
+            guard let ev = row["events"], !ev.isEmpty else { continue }
+            switch ev {
+            case "strikeout":
+                k += 1; outs += 1
+            case "strikeout_double_play":
+                k += 1; outs += 2
+            case "walk":
+                bb += 1
+            case "hit_by_pitch":
+                hbp += 1
+            case "triple_play":
+                outs += 3
+            default:
+                if doublePlayEvents.contains(ev) {
+                    outs += 2
+                } else if singleOutEvents.contains(ev) {
+                    outs += 1
+                }
+            }
+        }
+        return (k, bb, hbp, outs)
+    }
+
     static func aggregate(_ rows: [[String: String]]) -> StatcastPitching {
         // Batted ball against — reuse shared logic
         let battedBalls = rows.filter { $0["bb_type"] != nil }
@@ -560,6 +616,35 @@ enum StatcastPitcherAggregator {
             return cswDescriptions.contains(desc)
         }.count
         let csw = totalPitches > 0 ? Double(cswCount) / Double(totalPitches) : nil
+
+        // PA event counts (K, BB, HBP, outs) for xERA and xFIP
+        let paEvents = countPAEvents(rows)
+        let ip = Double(paEvents.outs) / 3.0
+
+        // Full-PA xwOBA: blend contact xwOBA values with per-event weights for K / BB / HBP.
+        // Strikeouts contribute 0.000; walks contribute walkWOBA; HBP contributes hbpWOBA.
+        let xwOBAContactSum = battedBalls
+            .compactMap { $0["estimated_woba_using_speedangle"].flatMap(Double.init) }
+            .reduce(0.0, +)
+        let totalPA = battedBalls.count + paEvents.k + paEvents.bb + paEvents.hbp
+        let fullPAxwOBA = totalPA > 0
+            ? (xwOBAContactSum + walkWOBA * Double(paEvents.bb) + hbpWOBA * Double(paEvents.hbp))
+              / Double(totalPA)
+            : nil
+        // xERA ≈ fullPAxwOBA × 13.0  (linear calibration: avg xwOBA ~0.320 → ~4.16 ERA)
+        let xERA: Double? = (totalPA >= 3 && fullPAxwOBA != nil)
+            ? max(0.0, fullPAxwOBA! * 13.0)
+            : nil
+
+        // xFIP = ((13 × xHR + 3 × (BB + HBP) − 2 × K) / IP) + fipConstant
+        let xFIP: Double?
+        if ip >= 1.0 {
+            let xHR = Double(bb.flyBalls) * leagueHRperFBRate
+            let numerator = 13.0 * xHR + 3.0 * Double(paEvents.bb + paEvents.hbp) - 2.0 * Double(paEvents.k)
+            xFIP = numerator / ip + fipConstant
+        } else {
+            xFIP = nil
+        }
 
         // Pitch mix
         var pitchGroups: [String: [Dictionary<String, String>]] = [:]
@@ -613,6 +698,12 @@ enum StatcastPitcherAggregator {
             xBA: bb.xBA,
             xSLG: bb.xSLG,
             xwOBA: bb.xwOBA,
+            strikeouts: paEvents.k,
+            walks: paEvents.bb,
+            hitByPitch: paEvents.hbp,
+            inningsPitched: ip,
+            xERA: xERA,
+            xFIP: xFIP,
             totalPitches: totalPitches,
             avgFastballVelo: avgFBV,
             maxFastballVelo: maxFBV,
