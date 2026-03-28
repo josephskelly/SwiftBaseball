@@ -667,6 +667,18 @@ enum StatcastPitcherAggregator {
                 guard let desc = row["description"] else { return false }
                 return whiffDescriptions.contains(desc)
             }.count
+            let pitchCSWCount = pitches.filter { row in
+                guard let desc = row["description"] else { return false }
+                return cswDescriptions.contains(desc)
+            }.count
+            let pitchCSW: Double? = pitches.isEmpty ? nil : Double(pitchCSWCount) / Double(pitches.count)
+            let pitchXwOBAValues = pitches.compactMap { row -> Double? in
+                guard row["bb_type"] != nil else { return nil }
+                return row["estimated_woba_using_speedangle"].flatMap(Double.init)
+            }
+            let pitchXwOBA: Double? = pitchXwOBAValues.isEmpty
+                ? nil
+                : pitchXwOBAValues.reduce(0, +) / Double(pitchXwOBAValues.count)
 
             return PitchMixEntry(
                 name: name,
@@ -676,7 +688,9 @@ enum StatcastPitcherAggregator {
                 avgSpinRate: spinRates.isEmpty ? nil : spinRates.reduce(0, +) / Double(spinRates.count),
                 avgHorizontalBreak: hBreaks.isEmpty ? nil : hBreaks.reduce(0, +) / Double(hBreaks.count),
                 avgInducedVerticalBreak: vBreaks.isEmpty ? nil : vBreaks.reduce(0, +) / Double(vBreaks.count),
-                whiffRate: pitchSwings > 0 ? Double(pitchWhiffs) / Double(pitchSwings) : nil
+                whiffRate: pitchSwings > 0 ? Double(pitchWhiffs) / Double(pitchSwings) : nil,
+                csw: pitchCSW,
+                xwOBA: pitchXwOBA
             )
         }.sorted { $0.count > $1.count }
 

@@ -129,9 +129,19 @@ public struct PitchMixEntry: Sendable, Equatable, Identifiable, Codable {
     ///
     /// `nil` when no swings were recorded against this pitch in the sample.
     public let whiffRate: Double?
+    /// Called strikes + whiffs rate for this pitch type:
+    /// (called strikes + swinging strikes) / total pitches of this type (0–1).
+    ///
+    /// `nil` when no pitches of this type were recorded in the sample.
+    public let csw: Double?
+    /// Expected weighted on-base average on contact for this pitch type.
+    ///
+    /// Averaged from `estimated_woba_using_speedangle` across batted balls of this
+    /// pitch type only. `nil` when no batted ball events exist for this pitch in the sample.
+    public let xwOBA: Double?
 
     enum CodingKeys: String, CodingKey {
         case name, count, percentage, avgVelocity, avgSpinRate
-        case avgHorizontalBreak, avgInducedVerticalBreak, whiffRate
+        case avgHorizontalBreak, avgInducedVerticalBreak, whiffRate, csw, xwOBA
     }
 }

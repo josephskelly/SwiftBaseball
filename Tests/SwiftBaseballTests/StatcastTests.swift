@@ -341,6 +341,58 @@ struct StatcastTests {
         #expect(cu.whiffRate == 1.0)
     }
 
+    @Test("Pitcher aggregation: per-pitch CSW from fixture")
+    func pitcherPerPitchCSW() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // 4-Seam Fastball (4 pitches): foul, ball, ball, ball → 0 CSW events → 0.0
+        let ff = try #require(stats.pitchMix.first { $0.name == "4-Seam Fastball" })
+        #expect(ff.csw == 0.0)
+
+        // Sinker (3 pitches): hit_into_play, foul_tip, called_strike → 1 CSW event → 1/3
+        let si = try #require(stats.pitchMix.first { $0.name == "Sinker" })
+        #expect(abs((si.csw ?? 0) - 1.0 / 3.0) < 0.001)
+
+        // Slider (2 pitches): ball, swinging_strike → 1 CSW event → 0.5
+        let sl = try #require(stats.pitchMix.first { $0.name == "Slider" })
+        #expect(sl.csw == 0.5)
+
+        // Curveball (2 pitches): swinging_strike, ball → 1 CSW event → 0.5
+        let cu = try #require(stats.pitchMix.first { $0.name == "Curveball" })
+        #expect(cu.csw == 0.5)
+    }
+
+    @Test("Pitcher aggregation: per-pitch xwOBA from fixture")
+    func pitcherPerPitchXwOBA() throws {
+        let data = try Fixtures.load("statcast_pitching_543037.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastPitcherAggregator.aggregate(rows)
+
+        // Sinker: 1 batted ball (ground_ball) with estimated_woba = 0.072
+        let si = try #require(stats.pitchMix.first { $0.name == "Sinker" })
+        #expect(abs((si.xwOBA ?? 0) - 0.072) < 0.001)
+
+        // Sweeper: 1 batted ball (popup) with estimated_woba = 0.005
+        let sw = try #require(stats.pitchMix.first { $0.name == "Sweeper" })
+        #expect(abs((sw.xwOBA ?? 0) - 0.005) < 0.001)
+
+        // Changeup: 1 batted ball (ground_ball) with estimated_woba = 0.287
+        let ch = try #require(stats.pitchMix.first { $0.name == "Changeup" })
+        #expect(abs((ch.xwOBA ?? 0) - 0.287) < 0.001)
+
+        // 4-Seam Fastball: no batted ball events → nil
+        let ff = try #require(stats.pitchMix.first { $0.name == "4-Seam Fastball" })
+        #expect(ff.xwOBA == nil)
+
+        // Slider: no batted ball events → nil
+        let sl = try #require(stats.pitchMix.first { $0.name == "Slider" })
+        #expect(sl.xwOBA == nil)
+    }
+
     @Test("Pitcher aggregation: pitch with no swings has nil whiff rate")
     func pitcherNoSwingsNilWhiffRate() {
         // A pitch that only appears as balls — no swings → whiffRate should be nil
@@ -353,6 +405,10 @@ struct StatcastTests {
         let stats = StatcastPitcherAggregator.aggregate(rows)
         let ff = stats.pitchMix.first { $0.name == "4-Seam Fastball" }
         #expect(ff?.whiffRate == nil)
+        // Balls only → no CSW events → csw = 0.0
+        #expect(ff?.csw == 0.0)
+        // No batted balls → xwOBA = nil
+        #expect(ff?.xwOBA == nil)
     }
 
     @Test("Pitcher aggregation: empty rows produce zero state")
