@@ -985,6 +985,37 @@ enum MLBResponseConverters {
             }
         }
     }
+
+    // MARK: - Awards
+
+    static func awards(from response: MLBAwardsListResponse) -> [Award] {
+        response.awards.map { raw in
+            Award(
+                id: raw.id,
+                name: raw.name ?? raw.id,
+                description: raw.description,
+                active: raw.active ?? true,
+                leagueId: raw.league?.id,
+                sportId: raw.sport?.id
+            )
+        }
+    }
+
+    static func awardRecipients(from response: MLBAwardRecipientsResponse) -> [AwardRecipient] {
+        response.awards.map { raw in
+            let player: PlayerReference? = raw.player.map { p in
+                PlayerReference(id: p.id, fullName: p.nameFirstLast ?? "")
+            }
+            return AwardRecipient(
+                awardId: raw.id,
+                awardName: raw.name ?? raw.id,
+                season: raw.season,
+                date: raw.date.flatMap { parseDate($0) },
+                player: player,
+                teamId: raw.team?.id
+            )
+        }
+    }
 }
 
 // MARK: - StatGroup from MLB API group name

@@ -124,6 +124,17 @@ let pitching = try await SwiftBaseball
     .fetch()
 print(pitching.whiffRate, pitching.avgFastballVelo, pitching.pitchMix)
 
+// Award recipients — AL MVP winners
+let mvpWinners = try await SwiftBaseball
+    .awardRecipients(awardId: "ALMVP")
+    .season(2024)
+    .fetch()
+print(mvpWinners.first?.player?.fullName)  // Optional("Aaron Judge")
+
+// All defined MLB awards
+let allAwards = try await SwiftBaseball.awards().fetch()
+let active = allAwards.filter(\.active)
+
 // Trade deadline transactions
 let trades = try await SwiftBaseball
     .transactions()
@@ -149,9 +160,9 @@ print(popTimes.first?.popTimeTo2B, popTimes.first?.exchangeTime)
 
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
-| **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions |
+| **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions, awards |
 | **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing |
-| Baseball Reference | Planned | None (scraped) | Historical season stats, awards |
+| Baseball Reference | Planned | None (scraped) | Historical season stats |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 
 ## Architecture
@@ -213,6 +224,7 @@ Then add it as a dependency to your target:
 | **Endpoints/Statcast** | Batted ball profile, exit velocity, launch angle, barrel rate (via Baseball Savant CSV) |
 | **Endpoints/Standings** | Division, league, and wildcard standings |
 | **Endpoints/Leaders** | League leaders by stat category |
+| **Endpoints/Awards** | Award definitions and season recipients |
 | **Cache** | Actor-based response caching with TTL |
 
 ## Comparison with pybaseball

@@ -586,6 +586,39 @@ struct MLBDraftSchool: Decodable {
     let country: String?
 }
 
+// MARK: - Awards
+
+struct MLBAwardsListResponse: Decodable {
+    let awards: [MLBAwardPayload]
+}
+
+struct MLBAwardPayload: Decodable {
+    let id: String
+    let name: String?
+    let description: String?
+    let active: Bool?
+    let league: MLBEntityRef?
+    let sport: MLBEntityRef?
+}
+
+struct MLBAwardRecipientsResponse: Decodable {
+    let awards: [MLBAwardRecipientPayload]
+}
+
+struct MLBAwardRecipientPayload: Decodable {
+    let id: String
+    let name: String?
+    let date: String?
+    let season: String?
+    let team: MLBEntityRef?
+    let player: MLBAwardPlayerRef?
+}
+
+struct MLBAwardPlayerRef: Decodable {
+    let id: Int
+    let nameFirstLast: String?
+}
+
 // MARK: - Shared
 
 struct MLBEntityRef: Decodable {

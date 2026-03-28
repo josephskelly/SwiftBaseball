@@ -419,6 +419,35 @@ public enum SwiftBaseball {
         .draft(year: year, client: client)
     }
 
+    // MARK: - Awards
+
+    /// Fetch recipients of a specific MLB award, optionally filtered by season.
+    ///
+    /// Pass any valid MLB award ID (e.g. `"ALMVP"`, `"NLCY"`, `"MLBHOF"`).
+    /// Use ``awards()`` to retrieve the full list of award IDs.
+    ///
+    ///     let winners = try await SwiftBaseball.awardRecipients(awardId: "ALMVP").season(2024).fetch()
+    ///     print(winners.first?.player?.fullName)  // Optional("Aaron Judge")
+    ///
+    /// - SeeAlso: ``Award``, ``AwardRecipient``, ``awards()``
+    public static func awardRecipients(awardId: String) -> QueryBuilder<[AwardRecipient]> {
+        .awardRecipients(awardId: awardId, client: client)
+    }
+
+    /// Fetch all defined MLB award types.
+    ///
+    /// Returns every award in the MLB Stats API including historical and
+    /// inactive awards. Use the returned ``Award/id`` values with
+    /// ``awardRecipients(awardId:)`` to fetch winners.
+    ///
+    ///     let awards = try await SwiftBaseball.awards().fetch()
+    ///     let active = awards.filter(\.active)
+    ///
+    /// - SeeAlso: ``Award``, ``awardRecipients(awardId:)``
+    public static func awards() -> QueryBuilder<[Award]> {
+        .allAwards(client: client)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

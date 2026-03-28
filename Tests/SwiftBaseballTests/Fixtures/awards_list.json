@@ -1,0 +1,36 @@
+{
+    "copyright": "Copyright 2026 MLB Advanced Media, L.P.",
+    "awards": [
+        {
+            "id": "MLBHOF",
+            "name": "Hall Of Fame",
+            "description": "Member of Hall of Fame",
+            "sortOrder": 1,
+            "sport": {
+                "id": 1,
+                "link": "/api/v1/sports/1"
+            },
+            "active": true
+        },
+        {
+            "id": "ALMVP",
+            "name": "AL MVP",
+            "sortOrder": 7,
+            "league": {
+                "id": 103,
+                "link": "/api/v1/league/103"
+            },
+            "active": true
+        },
+        {
+            "id": "NLMVP",
+            "name": "NL MVP",
+            "sortOrder": 7,
+            "league": {
+                "id": 104,
+                "link": "/api/v1/league/104"
+            },
+            "active": true
+        }
+    ]
+}
