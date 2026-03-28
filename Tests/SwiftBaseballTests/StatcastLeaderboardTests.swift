@@ -300,4 +300,106 @@ struct StatcastLeaderboardTests {
         _ = client
         // Compile-time check that fetchSavantPage is accessible alongside fetchSavantCSV
     }
+
+    // MARK: - Pop Time Parser
+
+    @Test("Parse pop time leaderboard from fixture")
+    func parsePopTimeLeaderboard() throws {
+        let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = PopTimeParser.parse(csv, season: 2024)
+
+        #expect(entries.count == 5)
+        #expect(entries.allSatisfy { $0.season == 2024 })
+    }
+
+    @Test("Pop time: first entry parsed correctly")
+    func popTimeTopEntry() throws {
+        let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = PopTimeParser.parse(csv, season: 2024)
+
+        let top = try #require(entries.first)
+        #expect(top.playerId == 672275)
+        #expect(top.playerName == "Bailey, Patrick")
+        #expect(abs(top.popTimeTo2B - 1.85) < 0.001)
+        #expect(top.throwsTo2B == 58)
+        #expect(abs(top.exchangeTime - 0.60) < 0.001)
+        #expect(abs(top.armStrength - 84.6) < 0.01)
+    }
+
+    @Test("Pop time: CS and SB splits parsed correctly")
+    func popTimeSplits() throws {
+        let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = PopTimeParser.parse(csv, season: 2024)
+
+        let bailey = try #require(entries.first { $0.playerId == 672275 })
+        #expect(abs((bailey.popTimeTo2BOnCS ?? 0) - 1.83) < 0.001)
+        #expect(abs((bailey.popTimeTo2BOnSB ?? 0) - 1.86) < 0.001)
+    }
+
+    @Test("Pop time: 3B fields parsed when present")
+    func popTime3BFields() throws {
+        let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = PopTimeParser.parse(csv, season: 2024)
+
+        let realmuto = try #require(entries.first { $0.playerId == 592663 })
+        #expect(realmuto.throwsTo3B == 4)
+        #expect(abs((realmuto.popTimeTo3B ?? 0) - 1.42) < 0.001)
+    }
+
+    @Test("Pop time: 3B fields nil when no 3B attempts")
+    func popTimeNo3BAttempts() throws {
+        let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = PopTimeParser.parse(csv, season: 2024)
+
+        let haase = try #require(entries.first { $0.playerId == 606992 })
+        #expect(haase.throwsTo3B == 0)
+        #expect(haase.popTimeTo3B == nil)
+    }
+
+    @Test("Pop time: season injected by parser")
+    func popTimeSeasonInjected() throws {
+        let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let entries = PopTimeParser.parse(csv, season: 2023)
+
+        #expect(entries.allSatisfy { $0.season == 2023 })
+    }
+
+    @Test("Pop time: row missing required field is skipped")
+    func popTimeSkipsMalformedRow() {
+        let csv = "entity_name,entity_id,team_id,age,maxeff_arm_2b_3b_sba,exchange_2b_3b_sba,pop_2b_sba_count,pop_2b_sba,pop_2b_cs,pop_2b_sb,pop_3b_sba_count,pop_3b_sba,pop_3b_cs,pop_3b_sb\n\"Bailey, Patrick\",672275,137,25,84.6,0.60,58,1.85,1.83,1.86,2,1.40,1.42,1.37\n\"No ID\",,137,25,84.0,0.62,30,1.90,1.88,1.91,0,,,\n"
+        let entries = PopTimeParser.parse(csv, season: 2024)
+        #expect(entries.count == 1)
+    }
+
+    @Test("Pop time: empty CSV returns empty array")
+    func popTimeEmptyCSV() {
+        let entries = PopTimeParser.parse("", season: 2024)
+        #expect(entries.isEmpty)
+    }
+
+    @Test("PopTimeQuery season modifier compiles")
+    func popTimeQuerySeason() {
+        let client = StatcastAPIClient()
+        let query = PopTimeQuery(client: client).season(2024)
+        _ = query
+    }
+
+    @Test("PopTimeQuery minAttempts modifier compiles")
+    func popTimeQueryMinAttempts() {
+        let client = StatcastAPIClient()
+        let query = PopTimeQuery(client: client).season(2024).minAttempts(10)
+        _ = query
+    }
+
+    @Test("SwiftBaseball.catcherPopTime() returns PopTimeQuery")
+    func namespacedPopTime() {
+        let query = SwiftBaseball.catcherPopTime()
+        _ = query.season(2024).minAttempts(10)
+    }
 }

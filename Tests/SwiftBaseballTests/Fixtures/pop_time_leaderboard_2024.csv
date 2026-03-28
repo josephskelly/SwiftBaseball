@@ -1,0 +1,6 @@
+entity_name,entity_id,team_id,age,maxeff_arm_2b_3b_sba,exchange_2b_3b_sba,pop_2b_sba_count,pop_2b_sba,pop_2b_cs,pop_2b_sb,pop_3b_sba_count,pop_3b_sba,pop_3b_cs,pop_3b_sb
+"Bailey, Patrick",672275,137,25,84.6,0.60,58,1.85,1.83,1.86,2,1.40,1.42,1.37
+"Lee, Korey",686676,145,25,88.3,0.64,46,1.85,1.85,1.85,2,1.49,1.56,1.42
+"Realmuto, J.T.",592663,143,33,85.1,0.65,39,1.85,1.85,1.84,4,1.42,1.41,1.45
+"Langeliers, Shea",669127,133,26,86.4,0.65,70,1.91,1.90,1.91,5,1.45,1.48,1.44
+"Haase, Eric",606992,158,31,82.9,0.65,12,1.94,1.84,1.95,0,,,

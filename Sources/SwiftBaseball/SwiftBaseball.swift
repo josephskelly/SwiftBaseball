@@ -316,6 +316,19 @@ public enum SwiftBaseball {
         CatcherFramingQuery(client: statcastClient)
     }
 
+    /// Fetch the Baseball Savant catcher pop time leaderboard.
+    ///
+    /// Returns catchers with at least `minAttempts` steal attempts for the requested season.
+    /// Pop time is the total elapsed time from pitch receipt to the fielder at 2B or 3B
+    /// receiving the throw. Use `.minAttempts(_:)` to adjust the threshold (default: 5).
+    ///
+    ///     let popTimes = try await SwiftBaseball.catcherPopTime().season(2024).fetch()
+    ///     print(popTimes.first?.popTimeTo2B)   // fastest pop time to 2B in seconds
+    ///     print(popTimes.first?.exchangeTime)  // reaction + exchange in seconds
+    public static func catcherPopTime() -> PopTimeQuery {
+        PopTimeQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

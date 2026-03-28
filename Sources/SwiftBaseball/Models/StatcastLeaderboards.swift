@@ -51,6 +51,42 @@ public struct CatcherFramingEntry: Sendable, Equatable, Codable {
     public let pitchesSeen: Int
 }
 
+// MARK: - Catcher Pop Time
+
+/// A single catcher's pop time entry from the Baseball Savant pop time leaderboard.
+///
+/// Pop time is the total elapsed time from the pitch reaching the catcher's mitt to the
+/// fielder at 2B or 3B receiving the throw. It combines reaction time, exchange time
+/// (glove to throwing position), and arm speed.
+///
+/// - Note: Team is not included in the Baseball Savant pop time CSV export.
+///   Use ``playerId`` to look up team via ``SwiftBaseball/players(ids:)``.
+public struct PopTimeEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Season year.
+    public let season: Int
+    /// Average pop time to 2B on steal attempts, in seconds.
+    public let popTimeTo2B: Double
+    /// Number of 2B steal attempts in the sample.
+    public let throwsTo2B: Int
+    /// Time from receiving the pitch to releasing the throw, in seconds.
+    /// Combined across 2B and 3B attempts.
+    public let exchangeTime: Double
+    /// Maximum arm strength (velocity) on steal attempts, in mph.
+    public let armStrength: Double
+    /// Pop time to 2B on caught-stealing attempts. `nil` if no CS in sample.
+    public let popTimeTo2BOnCS: Double?
+    /// Pop time to 2B on stolen-base attempts. `nil` if no SB in sample.
+    public let popTimeTo2BOnSB: Double?
+    /// Average pop time to 3B on steal attempts. `nil` if fewer than threshold.
+    public let popTimeTo3B: Double?
+    /// Number of 3B steal attempts. `nil` if below threshold.
+    public let throwsTo3B: Int?
+}
+
 // MARK: - Outs Above Average
 
 /// A single player's Outs Above Average (OAA) entry from the Baseball Savant leaderboard.

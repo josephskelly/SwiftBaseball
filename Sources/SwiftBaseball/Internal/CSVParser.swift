@@ -7,8 +7,12 @@ import Foundation
 enum CSVParser {
 
     /// Parses CSV text into an array of dictionaries keyed by header name.
+    ///
+    /// Strips a leading UTF-8 BOM (`U+FEFF`) if present — several Baseball Savant
+    /// CSV exports prepend one, which would otherwise corrupt the first header key.
     static func parse(_ text: String) -> [[String: String]] {
-        let lines = text.components(separatedBy: "\n")
+        let stripped = text.hasPrefix("\u{FEFF}") ? String(text.dropFirst()) : text
+        let lines = stripped.components(separatedBy: "\n")
             .map { $0.trimmingCharacters(in: .carriageReturns) }
             .filter { !$0.isEmpty }
         guard let headerLine = lines.first else { return [] }

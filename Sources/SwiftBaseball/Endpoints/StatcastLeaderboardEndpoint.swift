@@ -271,10 +271,7 @@ public struct CatcherFramingQuery: Sendable {
 /// Parses Baseball Savant catcher framing leaderboard CSV into ``CatcherFramingEntry`` values.
 enum CatcherFramingParser {
     static func parse(_ csv: String, season: Int) -> [CatcherFramingEntry] {
-        // Strip UTF-8 BOM if present — the framing CSV's first column header ("id")
-        // is the BOM-prefixed column, so stripping it ensures the key is just "id".
-        let input = csv.hasPrefix("\u{FEFF}") ? String(csv.dropFirst()) : csv
-        let rows = CSVParser.parse(input)
+        let rows = CSVParser.parse(csv)
         return rows.compactMap { row -> CatcherFramingEntry? in
             guard
                 let idValue = row["id"], let playerId = Int(idValue),
@@ -291,6 +288,108 @@ enum CatcherFramingParser {
                 framingRunsAdded: framingRuns,
                 calledStrikeRate: strikeRate,
                 pitchesSeen: pitches
+            )
+        }
+    }
+}
+
+// MARK: - Pop Time Query
+
+/// Query builder for the Baseball Savant catcher pop time leaderboard.
+///
+/// Returns catchers with a minimum number of steal attempts for a given season.
+/// Pop time measures the total elapsed time from pitch receipt to the fielder
+/// at 2B (or 3B) receiving the throw.
+///
+/// ```swift
+/// let popTimes = try await SwiftBaseball
+///     .catcherPopTime()
+///     .season(2024)
+///     .fetch()
+/// print(popTimes.first?.popTimeTo2B)   // fastest pop time to 2B in seconds
+/// print(popTimes.first?.exchangeTime)  // reaction + exchange time in seconds
+/// ```
+public struct PopTimeQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+    private var _minAttempts: Int
+
+    static let defaultMinAttempts = 5
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+        self._minAttempts = Self.defaultMinAttempts
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PopTimeQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Sets the minimum number of steal attempts required for inclusion (default: 5).
+    public func minAttempts(_ count: Int) -> PopTimeQuery {
+        var copy = self
+        copy._minAttempts = count
+        return copy
+    }
+
+    /// Executes the query and returns pop time entries.
+    ///
+    /// - Returns: An array of ``PopTimeEntry`` for all catchers meeting the attempt threshold.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PopTimeEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/poptime",
+            queryItems: buildQueryItems(year: year)
+        )
+        return PopTimeParser.parse(csv, season: year)
+    }
+
+    private func buildQueryItems(year: Int) -> [URLQueryItem] {
+        [
+            URLQueryItem(name: "min", value: String(_minAttempts)),
+            URLQueryItem(name: "year", value: String(year)),
+            URLQueryItem(name: "csv", value: "true"),
+        ]
+    }
+}
+
+// MARK: - Pop Time Parser
+
+/// Parses Baseball Savant pop time leaderboard CSV into ``PopTimeEntry`` values.
+enum PopTimeParser {
+    static func parse(_ csv: String, season: Int) -> [PopTimeEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PopTimeEntry? in
+            guard
+                let idStr = row["entity_id"], let playerId = Int(idStr),
+                let name = row["entity_name"], !name.isEmpty,
+                let countStr = row["pop_2b_sba_count"], let throwsTo2B = Int(countStr),
+                let popStr = row["pop_2b_sba"], let popTimeTo2B = Double(popStr),
+                let exchStr = row["exchange_2b_3b_sba"], let exchangeTime = Double(exchStr),
+                let armStr = row["maxeff_arm_2b_3b_sba"], let armStrength = Double(armStr)
+            else { return nil }
+
+            let popTimeTo2BOnCS = row["pop_2b_cs"].flatMap(Double.init)
+            let popTimeTo2BOnSB = row["pop_2b_sb"].flatMap(Double.init)
+            let throwsTo3B = row["pop_3b_sba_count"].flatMap(Int.init)
+            let popTimeTo3B = row["pop_3b_sba"].flatMap(Double.init)
+
+            return PopTimeEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                popTimeTo2B: popTimeTo2B,
+                throwsTo2B: throwsTo2B,
+                exchangeTime: exchangeTime,
+                armStrength: armStrength,
+                popTimeTo2BOnCS: popTimeTo2BOnCS,
+                popTimeTo2BOnSB: popTimeTo2BOnSB,
+                popTimeTo3B: popTimeTo3B,
+                throwsTo3B: throwsTo3B
             )
         }
     }

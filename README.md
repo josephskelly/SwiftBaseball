@@ -136,6 +136,13 @@ let framing = try await SwiftBaseball
     .season(2024)
     .fetch()
 print(framing.first?.playerName, framing.first?.framingRunsAdded)
+
+// Catcher pop time — reaction/exchange time and arm strength
+let popTimes = try await SwiftBaseball
+    .catcherPopTime()
+    .season(2024)
+    .fetch()
+print(popTimes.first?.popTimeTo2B, popTimes.first?.exchangeTime)
 ```
 
 ## Data Sources
