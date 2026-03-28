@@ -35,6 +35,17 @@ extension QueryBuilder where T == [PlayerSeasonStats] {
             return MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
         }
     }
+
+    static func playerProjectedStats(id: Int, client: any APIClient) -> QueryBuilder<[PlayerSeasonStats]> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "projected")
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+        }
+    }
 }
 
 extension QueryBuilder where T == PlayerPlatoonStats {

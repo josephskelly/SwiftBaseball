@@ -258,6 +258,58 @@ struct StatsTests {
         #expect(batting.ops == 0.0)
     }
 
+    // MARK: - Projected stats
+
+    @Test("Decode projected batting stats from fixture")
+    func decodeProjectedBattingStats() throws {
+        let data = try Fixtures.load("player_stats_projected_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let entry = try #require(stats.first)
+        #expect(entry.season == "2024")
+        #expect(entry.group == .batting)
+        #expect(entry.player.id == 660271)
+
+        let batting = try #require(entry.batting)
+        #expect(batting.gamesPlayed == 155)
+        #expect(batting.homeRuns == 48)
+        #expect(batting.stolenBases == 52)
+        #expect(abs((batting.avg ?? 0) - 0.305) < 0.001)
+        #expect(abs((batting.ops ?? 0) - 1.015) < 0.001)
+    }
+
+    @Test("playerProjectedStats endpoint uses stats=projected")
+    func playerProjectedStatsEndpointParams() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_stats_projected_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>
+            .playerProjectedStats(id: 660271, client: mock)
+            .group(.batting)
+            .fetch()
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "projected" })
+        #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
+    }
+
+    @Test("SwiftBaseball.playerProjectedStats is accessible")
+    func namespacedPlayerProjected() {
+        _ = SwiftBaseball.playerProjectedStats(id: 660271)
+    }
+
+    @Test("Projected stats empty response returns empty array")
+    func projectedStatsEmptyResponse() throws {
+        let json = """
+        { "stats": [] }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 660271, fullName: "")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+        #expect(stats.isEmpty)
+    }
+
     // MARK: - Query builder
 
     @Test("playerStats() query builder constructs correct path")

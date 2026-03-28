@@ -163,6 +163,17 @@ public enum SwiftBaseball {
         .playerYearByYear(id: id, client: client)
     }
 
+    /// Fetch full-season projected stats for an active player.
+    ///
+    /// Returns projected totals as a ``PlayerSeasonStats`` entry. Only available
+    /// mid-season for active players; returns an empty array in the off-season.
+    /// Use `.group(_:)` to request batting or pitching projections.
+    ///
+    ///     let proj = try await SwiftBaseball.playerProjectedStats(id: 660271).group(.batting).fetch()
+    public static func playerProjectedStats(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
+        .playerProjectedStats(id: id, client: client)
+    }
+
     /// Fetch sabermetric stats (wOBA, wRC+, WAR, etc.) for a player.
     ///
     ///     let saber = try await SwiftBaseball.playerSabermetrics(id: 660271).season(2024).fetch()
