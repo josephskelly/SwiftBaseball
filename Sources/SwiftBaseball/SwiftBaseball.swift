@@ -135,6 +135,18 @@ public enum SwiftBaseball {
         .linescore(gamePk: gamePk, client: client)
     }
 
+    /// Fetch highlight videos and condensed game clips for a completed game.
+    ///
+    ///     let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
+    ///     for clip in content.highlights {
+    ///         print(clip.title ?? "", clip.duration ?? "")
+    ///     }
+    ///     // Access the best playback URL:
+    ///     let url = content.highlights.first?.playbacks.first?.url
+    public static func gameHighlights(gamePk: Int) -> QueryBuilder<GameHighlights> {
+        .gameHighlights(gamePk: gamePk, client: client)
+    }
+
     // MARK: - Game Log
 
     /// Fetch per-game stat lines for a player.

@@ -636,6 +636,52 @@ struct MLBAwardPlayerRef: Decodable {
     let nameFirstLast: String?
 }
 
+// MARK: - Game Content / Highlights
+
+struct MLBGameContentResponse: Decodable {
+    let highlights: MLBGameHighlightsSection?
+}
+
+struct MLBGameHighlightsSection: Decodable {
+    let gameCenter: MLBHighlightCollection?
+    let scoreboard: MLBHighlightCollection?
+}
+
+struct MLBHighlightCollection: Decodable {
+    let items: [MLBHighlightItem]?
+}
+
+struct MLBHighlightItem: Decodable {
+    let id: String?
+    let date: String?
+    let title: String?
+    let headline: String?
+    let blurb: String?
+    let duration: String?
+    let playbacks: [MLBVideoPlayback]?
+    let image: MLBHighlightImage?
+}
+
+/// Width and height are serialised as strings in the MLB content API (e.g. `"1280"`).
+struct MLBVideoPlayback: Decodable {
+    let name: String?
+    let url: String?
+    let width: String?
+    let height: String?
+}
+
+struct MLBHighlightImage: Decodable {
+    let altText: String?
+    let cuts: [MLBImageCut]?
+}
+
+struct MLBImageCut: Decodable {
+    let aspectRatio: String?
+    let width: Int?
+    let height: Int?
+    let src: String?
+}
+
 // MARK: - Shared
 
 struct MLBEntityRef: Decodable {

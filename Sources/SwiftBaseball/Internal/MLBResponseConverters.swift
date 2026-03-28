@@ -1025,6 +1025,59 @@ enum MLBResponseConverters {
             )
         }
     }
+
+    // MARK: - Game Highlights
+
+    /// Converts an ``MLBGameContentResponse`` into a ``GameHighlights`` value.
+    static func gameHighlights(from response: MLBGameContentResponse) -> GameHighlights {
+        let gameCenterItems = response.highlights?.gameCenter?.items ?? []
+        let scoreboardItems = response.highlights?.scoreboard?.items ?? []
+        return GameHighlights(
+            highlights: gameCenterItems.compactMap(highlight(from:)),
+            scoreboardHighlights: scoreboardItems.compactMap(highlight(from:))
+        )
+    }
+
+    private static func highlight(from raw: MLBHighlightItem) -> Highlight? {
+        guard let id = raw.id, !id.isEmpty else { return nil }
+        return Highlight(
+            id: id,
+            date: raw.date.flatMap { parseDateTime($0) },
+            title: raw.title,
+            headline: raw.headline,
+            blurb: raw.blurb,
+            duration: raw.duration,
+            playbacks: (raw.playbacks ?? []).compactMap(videoPlayback(from:)),
+            image: raw.image.map(highlightImage(from:))
+        )
+    }
+
+    private static func videoPlayback(from raw: MLBVideoPlayback) -> VideoPlayback? {
+        guard let name = raw.name, !name.isEmpty else { return nil }
+        return VideoPlayback(
+            name: name,
+            url: raw.url.flatMap { URL(string: $0) },
+            width: raw.width.flatMap { Int($0) },
+            height: raw.height.flatMap { Int($0) }
+        )
+    }
+
+    private static func highlightImage(from raw: MLBHighlightImage) -> HighlightImage {
+        HighlightImage(
+            altText: raw.altText,
+            cuts: (raw.cuts ?? []).compactMap(imageCut(from:))
+        )
+    }
+
+    private static func imageCut(from raw: MLBImageCut) -> ImageCut? {
+        guard let w = raw.width, let h = raw.height else { return nil }
+        return ImageCut(
+            aspectRatio: raw.aspectRatio,
+            width: w,
+            height: h,
+            src: raw.src.flatMap { URL(string: $0) }
+        )
+    }
 }
 
 // MARK: - StatGroup from MLB API group name

@@ -1,0 +1,111 @@
+{
+  "highlights": {
+    "gameCenter": {
+      "items": [
+        {
+          "id": "2024-07-04-ohtani-hr",
+          "date": "2024-07-04T23:15:00Z",
+          "title": "Ohtani's 30th home run",
+          "headline": "Shohei Ohtani crushes his 30th home run of the season",
+          "blurb": "Shohei Ohtani launches a no-doubt solo shot to left field in the 5th inning.",
+          "duration": "00:01:05",
+          "playbacks": [
+            {
+              "name": "mp4Avc",
+              "url": "https://mlb-cuts-diamond.mlb.com/FORGE/2024/2024-07/04/1234-ohtani-hr-home.mp4",
+              "width": "1280",
+              "height": "720"
+            },
+            {
+              "name": "FLASH_2500K_1280X720",
+              "url": "https://mlb-cuts-diamond.mlb.com/FORGE/2024/2024-07/04/1234-ohtani-hr-flash.mp4",
+              "width": "1280",
+              "height": "720"
+            }
+          ],
+          "image": {
+            "altText": null,
+            "cuts": [
+              {
+                "aspectRatio": "16:9",
+                "width": 1280,
+                "height": 720,
+                "src": "https://img.mlbstatic.com/mlb-photos/image/upload/ar_1280:720/ohtani-hr-thumb.jpg"
+              },
+              {
+                "aspectRatio": "16:9",
+                "width": 640,
+                "height": 360,
+                "src": "https://img.mlbstatic.com/mlb-photos/image/upload/ar_640:360/ohtani-hr-thumb.jpg"
+              }
+            ]
+          }
+        },
+        {
+          "id": "2024-07-04-skubal-k",
+          "date": "2024-07-04T22:45:00Z",
+          "title": "Skubal's 7th strikeout",
+          "headline": "Tarik Skubal fans the side in the 6th",
+          "blurb": "Tarik Skubal punches out three straight batters to strand the bases loaded.",
+          "duration": "00:00:48",
+          "playbacks": [
+            {
+              "name": "mp4Avc",
+              "url": "https://mlb-cuts-diamond.mlb.com/FORGE/2024/2024-07/04/5678-skubal-k-home.mp4",
+              "width": "1280",
+              "height": "720"
+            },
+            {
+              "name": "FLASH_2500K_1280X720",
+              "url": "https://mlb-cuts-diamond.mlb.com/FORGE/2024/2024-07/04/5678-skubal-k-flash.mp4",
+              "width": "1280",
+              "height": "720"
+            }
+          ],
+          "image": {
+            "altText": "Tarik Skubal strikeout",
+            "cuts": [
+              {
+                "aspectRatio": "16:9",
+                "width": 1280,
+                "height": 720,
+                "src": "https://img.mlbstatic.com/mlb-photos/image/upload/ar_1280:720/skubal-k-thumb.jpg"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "scoreboard": {
+      "items": [
+        {
+          "id": "2024-07-04-condensed",
+          "date": "2024-07-05T02:00:00Z",
+          "title": "Condensed Game: LAD @ DET - 7/4/24",
+          "headline": "Condensed game: Dodgers at Tigers, 7/4/24",
+          "blurb": "Watch the full condensed game from July 4th, 2024.",
+          "duration": "00:08:30",
+          "playbacks": [
+            {
+              "name": "mp4Avc",
+              "url": "https://mlb-cuts-diamond.mlb.com/FORGE/2024/2024-07/04/9999-condensed-home.mp4",
+              "width": "1280",
+              "height": "720"
+            }
+          ],
+          "image": {
+            "altText": null,
+            "cuts": [
+              {
+                "aspectRatio": "16:9",
+                "width": 1280,
+                "height": 720,
+                "src": "https://img.mlbstatic.com/mlb-photos/image/upload/ar_1280:720/condensed-thumb.jpg"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

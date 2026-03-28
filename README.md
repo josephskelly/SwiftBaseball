@@ -127,6 +127,16 @@ let pbp = try await SwiftBaseball
     .playByPlay(gamePk: 745612)
     .fetch()
 
+// Game highlights — key-play clips and condensed game
+let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
+for clip in content.highlights {
+    print(clip.title ?? "", clip.duration ?? "")
+}
+// Best quality stream URL:
+let videoURL = content.highlights.first?.playbacks.first?.url
+// Condensed game clip:
+let condensed = content.scoreboardHighlights.first
+
 // Statcast batted ball profile — GB%, FB%, exit velo, barrel rate
 let statcast = try await SwiftBaseball
     .statcastBatting(playerId: 660271)
