@@ -198,6 +198,48 @@ public enum SwiftBaseball {
         .pitcherDayNightSplits(id: id, client: client)
     }
 
+    /// Fetch per-month batting splits for a position player.
+    ///
+    ///     let splits = try await SwiftBaseball.playerMonthlySplits(id: 660271).season(2024).fetch()
+    public static func playerMonthlySplits(id: Int) -> QueryBuilder<PlayerMonthlySplits> {
+        .playerMonthlySplits(id: id, client: client)
+    }
+
+    /// Fetch per-month pitching splits for a pitcher.
+    ///
+    ///     let splits = try await SwiftBaseball.pitcherMonthlySplits(id: 543037).season(2024).fetch()
+    public static func pitcherMonthlySplits(id: Int) -> QueryBuilder<PitcherMonthlySplits> {
+        .pitcherMonthlySplits(id: id, client: client)
+    }
+
+    /// Fetch runners-on-base / RISP batting splits for a position player.
+    ///
+    ///     let splits = try await SwiftBaseball.playerRunnersOnSplits(id: 660271).season(2024).fetch()
+    public static func playerRunnersOnSplits(id: Int) -> QueryBuilder<PlayerRunnersOnSplits> {
+        .playerRunnersOnSplits(id: id, client: client)
+    }
+
+    /// Fetch runners-on-base / RISP pitching splits for a pitcher.
+    ///
+    ///     let splits = try await SwiftBaseball.pitcherRunnersOnSplits(id: 543037).season(2024).fetch()
+    public static func pitcherRunnersOnSplits(id: Int) -> QueryBuilder<PitcherRunnersOnSplits> {
+        .pitcherRunnersOnSplits(id: id, client: client)
+    }
+
+    /// Fetch leverage batting splits (low / medium / high) for a position player.
+    ///
+    ///     let splits = try await SwiftBaseball.playerLeverageSplits(id: 660271).season(2024).fetch()
+    public static func playerLeverageSplits(id: Int) -> QueryBuilder<PlayerLeverageSplits> {
+        .playerLeverageSplits(id: id, client: client)
+    }
+
+    /// Fetch leverage pitching splits (low / medium / high) for a pitcher.
+    ///
+    ///     let splits = try await SwiftBaseball.pitcherLeverageSplits(id: 543037).season(2024).fetch()
+    public static func pitcherLeverageSplits(id: Int) -> QueryBuilder<PitcherLeverageSplits> {
+        .pitcherLeverageSplits(id: id, client: client)
+    }
+
     /// Fetch platoon batting splits (vs LHP / vs RHP) for a position player.
     ///
     ///     let splits = try await SwiftBaseball.playerPlatoonStats(id: 660271).season(2024).fetch()

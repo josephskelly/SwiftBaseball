@@ -1,0 +1,103 @@
+{
+  "stats": [
+    {
+      "type": { "displayName": "statSplits" },
+      "group": { "displayName": "pitching" },
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 33,
+            "gamesStarted": 33,
+            "wins": 13,
+            "losses": 9,
+            "saves": 0,
+            "holds": 0,
+            "earnedRuns": 21,
+            "homeRunsAllowed": 6,
+            "baseOnBalls": 18,
+            "strikeOuts": 84,
+            "hitByPitch": 2,
+            "wildPitches": 1,
+            "balks": 0,
+            "battersFaced": 248,
+            "hits": 60,
+            "runs": 23,
+            "era": "2.73",
+            "whip": "1.01",
+            "inningsPitched": "69.1",
+            "avg": ".230",
+            "obp": ".288",
+            "slg": ".351",
+            "ops": ".639"
+          },
+          "player": { "id": 543037, "fullName": "Luis Castillo", "link": "/api/v1/people/543037" },
+          "team": { "id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136" },
+          "split": { "code": "le", "description": "Low Leverage" }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 33,
+            "gamesStarted": 33,
+            "wins": 13,
+            "losses": 9,
+            "saves": 0,
+            "holds": 0,
+            "earnedRuns": 18,
+            "homeRunsAllowed": 5,
+            "baseOnBalls": 14,
+            "strikeOuts": 62,
+            "hitByPitch": 2,
+            "wildPitches": 2,
+            "balks": 0,
+            "battersFaced": 196,
+            "hits": 48,
+            "runs": 21,
+            "era": "3.27",
+            "whip": "1.13",
+            "inningsPitched": "49.2",
+            "avg": ".237",
+            "obp": ".296",
+            "slg": ".360",
+            "ops": ".656"
+          },
+          "player": { "id": 543037, "fullName": "Luis Castillo", "link": "/api/v1/people/543037" },
+          "team": { "id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136" },
+          "split": { "code": "lm", "description": "Medium Leverage" }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 33,
+            "gamesStarted": 33,
+            "wins": 13,
+            "losses": 9,
+            "saves": 0,
+            "holds": 0,
+            "earnedRuns": 25,
+            "homeRunsAllowed": 6,
+            "baseOnBalls": 18,
+            "strikeOuts": 60,
+            "hitByPitch": 1,
+            "wildPitches": 2,
+            "balks": 0,
+            "battersFaced": 150,
+            "hits": 42,
+            "runs": 25,
+            "era": "5.40",
+            "whip": "1.30",
+            "inningsPitched": "41.2",
+            "avg": ".268",
+            "obp": ".333",
+            "slg": ".408",
+            "ops": ".741"
+          },
+          "player": { "id": 543037, "fullName": "Luis Castillo", "link": "/api/v1/people/543037" },
+          "team": { "id": 136, "name": "Seattle Mariners", "link": "/api/v1/teams/136" },
+          "split": { "code": "lh", "description": "High Leverage" }
+        }
+      ]
+    }
+  ]
+}

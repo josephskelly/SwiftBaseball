@@ -314,6 +314,94 @@ enum MLBResponseConverters {
         )
     }
 
+    /// Builds batter monthly splits by deduplicating and aggregating across game types.
+    static func playerMonthlySplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PlayerMonthlySplits {
+        let unique = deduplicatedSplits(from: response)
+        func bat(_ code: String) -> BattingStats? {
+            aggregateBattingStats(unique.filter { $0.split?.code == code }.map { battingStats(from: $0.stat) })
+        }
+        return PlayerMonthlySplits(
+            march: bat("m3"), april: bat("m4"), may: bat("m5"), june: bat("m6"),
+            july: bat("m7"), august: bat("m8"), september: bat("m9"), october: bat("m10")
+        )
+    }
+
+    /// Builds pitcher monthly splits by deduplicating and aggregating across game types.
+    static func pitcherMonthlySplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PitcherMonthlySplits {
+        let unique = deduplicatedSplits(from: response)
+        func pit(_ code: String) -> PitchingStats? {
+            aggregatePitchingStats(unique.filter { $0.split?.code == code }.map { pitchingStats(from: $0.stat) })
+        }
+        return PitcherMonthlySplits(
+            march: pit("m3"), april: pit("m4"), may: pit("m5"), june: pit("m6"),
+            july: pit("m7"), august: pit("m8"), september: pit("m9"), october: pit("m10")
+        )
+    }
+
+    /// Builds batter runners-on-base splits by deduplicating and aggregating across game types.
+    static func playerRunnersOnSplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PlayerRunnersOnSplits {
+        let unique = deduplicatedSplits(from: response)
+        func bat(_ code: String) -> BattingStats? {
+            aggregateBattingStats(unique.filter { $0.split?.code == code }.map { battingStats(from: $0.stat) })
+        }
+        return PlayerRunnersOnSplits(
+            basesEmpty: bat("ne"),
+            runnersOn: bat("ro"),
+            risp: bat("ri"),
+            rispTwoOut: bat("sf")
+        )
+    }
+
+    /// Builds pitcher runners-on-base splits by deduplicating and aggregating across game types.
+    static func pitcherRunnersOnSplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PitcherRunnersOnSplits {
+        let unique = deduplicatedSplits(from: response)
+        func pit(_ code: String) -> PitchingStats? {
+            aggregatePitchingStats(unique.filter { $0.split?.code == code }.map { pitchingStats(from: $0.stat) })
+        }
+        return PitcherRunnersOnSplits(
+            basesEmpty: pit("ne"),
+            runnersOn: pit("ro"),
+            risp: pit("ri"),
+            rispTwoOut: pit("sf")
+        )
+    }
+
+    /// Builds batter leverage splits by deduplicating and aggregating across game types.
+    static func playerLeverageSplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PlayerLeverageSplits {
+        let unique = deduplicatedSplits(from: response)
+        func bat(_ code: String) -> BattingStats? {
+            aggregateBattingStats(unique.filter { $0.split?.code == code }.map { battingStats(from: $0.stat) })
+        }
+        return PlayerLeverageSplits(low: bat("le"), medium: bat("lm"), high: bat("lh"))
+    }
+
+    /// Builds pitcher leverage splits by deduplicating and aggregating across game types.
+    static func pitcherLeverageSplits(
+        from response: MLBPlayerStatsResponse,
+        playerRef: PlayerReference
+    ) -> PitcherLeverageSplits {
+        let unique = deduplicatedSplits(from: response)
+        func pit(_ code: String) -> PitchingStats? {
+            aggregatePitchingStats(unique.filter { $0.split?.code == code }.map { pitchingStats(from: $0.stat) })
+        }
+        return PitcherLeverageSplits(low: pit("le"), medium: pit("lm"), high: pit("lh"))
+    }
+
     /// Removes duplicate splits produced by comma-separated gameType queries.
     ///
     /// The API returns identical `(splitCode, gameType)` pairs repeated once per

@@ -521,3 +521,169 @@ public struct PitcherDayNightSplits: Sendable, Equatable {
         self.night = night
     }
 }
+
+// MARK: - Monthly Splits
+
+/// Batting stats broken down by calendar month across the season.
+public struct PlayerMonthlySplits: Sendable, Equatable {
+    /// Stats in March (and any March games).
+    public let march: BattingStats?
+    /// Stats in April.
+    public let april: BattingStats?
+    /// Stats in May.
+    public let may: BattingStats?
+    /// Stats in June.
+    public let june: BattingStats?
+    /// Stats in July.
+    public let july: BattingStats?
+    /// Stats in August.
+    public let august: BattingStats?
+    /// Stats in September.
+    public let september: BattingStats?
+    /// Stats in October (postseason / late-season games).
+    public let october: BattingStats?
+
+    public init(
+        march: BattingStats?,
+        april: BattingStats?,
+        may: BattingStats?,
+        june: BattingStats?,
+        july: BattingStats?,
+        august: BattingStats?,
+        september: BattingStats?,
+        october: BattingStats?
+    ) {
+        self.march = march
+        self.april = april
+        self.may = may
+        self.june = june
+        self.july = july
+        self.august = august
+        self.september = september
+        self.october = october
+    }
+}
+
+/// Pitching stats broken down by calendar month across the season.
+public struct PitcherMonthlySplits: Sendable, Equatable {
+    /// Stats in March.
+    public let march: PitchingStats?
+    /// Stats in April.
+    public let april: PitchingStats?
+    /// Stats in May.
+    public let may: PitchingStats?
+    /// Stats in June.
+    public let june: PitchingStats?
+    /// Stats in July.
+    public let july: PitchingStats?
+    /// Stats in August.
+    public let august: PitchingStats?
+    /// Stats in September.
+    public let september: PitchingStats?
+    /// Stats in October.
+    public let october: PitchingStats?
+
+    public init(
+        march: PitchingStats?,
+        april: PitchingStats?,
+        may: PitchingStats?,
+        june: PitchingStats?,
+        july: PitchingStats?,
+        august: PitchingStats?,
+        september: PitchingStats?,
+        october: PitchingStats?
+    ) {
+        self.march = march
+        self.april = april
+        self.may = may
+        self.june = june
+        self.july = july
+        self.august = august
+        self.september = september
+        self.october = october
+    }
+}
+
+// MARK: - Runners On Base / RISP Splits
+
+/// Batting stats split by baserunner situation.
+public struct PlayerRunnersOnSplits: Sendable, Equatable {
+    /// Stats with bases empty.
+    public let basesEmpty: BattingStats?
+    /// Stats with at least one runner on base.
+    public let runnersOn: BattingStats?
+    /// Stats with runners in scoring position (2nd or 3rd).
+    public let risp: BattingStats?
+    /// Stats with runners in scoring position and two outs.
+    public let rispTwoOut: BattingStats?
+
+    public init(
+        basesEmpty: BattingStats?,
+        runnersOn: BattingStats?,
+        risp: BattingStats?,
+        rispTwoOut: BattingStats?
+    ) {
+        self.basesEmpty = basesEmpty
+        self.runnersOn = runnersOn
+        self.risp = risp
+        self.rispTwoOut = rispTwoOut
+    }
+}
+
+/// Pitching stats split by baserunner situation.
+public struct PitcherRunnersOnSplits: Sendable, Equatable {
+    /// Stats with bases empty.
+    public let basesEmpty: PitchingStats?
+    /// Stats with at least one runner on base.
+    public let runnersOn: PitchingStats?
+    /// Stats with runners in scoring position (2nd or 3rd).
+    public let risp: PitchingStats?
+    /// Stats with runners in scoring position and two outs.
+    public let rispTwoOut: PitchingStats?
+
+    public init(
+        basesEmpty: PitchingStats?,
+        runnersOn: PitchingStats?,
+        risp: PitchingStats?,
+        rispTwoOut: PitchingStats?
+    ) {
+        self.basesEmpty = basesEmpty
+        self.runnersOn = runnersOn
+        self.risp = risp
+        self.rispTwoOut = rispTwoOut
+    }
+}
+
+// MARK: - Leverage Splits
+
+/// Batting stats split by leverage index (game situation pressure).
+public struct PlayerLeverageSplits: Sendable, Equatable {
+    /// Stats in low-leverage situations.
+    public let low: BattingStats?
+    /// Stats in medium-leverage situations.
+    public let medium: BattingStats?
+    /// Stats in high-leverage situations.
+    public let high: BattingStats?
+
+    public init(low: BattingStats?, medium: BattingStats?, high: BattingStats?) {
+        self.low = low
+        self.medium = medium
+        self.high = high
+    }
+}
+
+/// Pitching stats split by leverage index (game situation pressure).
+public struct PitcherLeverageSplits: Sendable, Equatable {
+    /// Stats in low-leverage situations.
+    public let low: PitchingStats?
+    /// Stats in medium-leverage situations.
+    public let medium: PitchingStats?
+    /// Stats in high-leverage situations.
+    public let high: PitchingStats?
+
+    public init(low: PitchingStats?, medium: PitchingStats?, high: PitchingStats?) {
+        self.low = low
+        self.medium = medium
+        self.high = high
+    }
+}

@@ -144,3 +144,93 @@ extension QueryBuilder where T == PitcherDayNightSplits {
         }
     }
 }
+
+extension QueryBuilder where T == PlayerMonthlySplits {
+    static func playerMonthlySplits(id: Int, client: any APIClient) -> QueryBuilder<PlayerMonthlySplits> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "statSplits"),
+            URLQueryItem(name: "group", value: "hitting"),
+            URLQueryItem(name: "sitCodes", value: "m3,m4,m5,m6,m7,m8,m9,m10"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.playerMonthlySplits(from: response, playerRef: ref)
+        }
+    }
+}
+
+extension QueryBuilder where T == PitcherMonthlySplits {
+    static func pitcherMonthlySplits(id: Int, client: any APIClient) -> QueryBuilder<PitcherMonthlySplits> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "statSplits"),
+            URLQueryItem(name: "group", value: "pitching"),
+            URLQueryItem(name: "sitCodes", value: "m3,m4,m5,m6,m7,m8,m9,m10"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.pitcherMonthlySplits(from: response, playerRef: ref)
+        }
+    }
+}
+
+extension QueryBuilder where T == PlayerRunnersOnSplits {
+    static func playerRunnersOnSplits(id: Int, client: any APIClient) -> QueryBuilder<PlayerRunnersOnSplits> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "statSplits"),
+            URLQueryItem(name: "group", value: "hitting"),
+            URLQueryItem(name: "sitCodes", value: "ne,ro,ri,sf"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.playerRunnersOnSplits(from: response, playerRef: ref)
+        }
+    }
+}
+
+extension QueryBuilder where T == PitcherRunnersOnSplits {
+    static func pitcherRunnersOnSplits(id: Int, client: any APIClient) -> QueryBuilder<PitcherRunnersOnSplits> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "statSplits"),
+            URLQueryItem(name: "group", value: "pitching"),
+            URLQueryItem(name: "sitCodes", value: "ne,ro,ri,sf"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.pitcherRunnersOnSplits(from: response, playerRef: ref)
+        }
+    }
+}
+
+extension QueryBuilder where T == PlayerLeverageSplits {
+    static func playerLeverageSplits(id: Int, client: any APIClient) -> QueryBuilder<PlayerLeverageSplits> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "statSplits"),
+            URLQueryItem(name: "group", value: "hitting"),
+            URLQueryItem(name: "sitCodes", value: "le,lm,lh"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.playerLeverageSplits(from: response, playerRef: ref)
+        }
+    }
+}
+
+extension QueryBuilder where T == PitcherLeverageSplits {
+    static func pitcherLeverageSplits(id: Int, client: any APIClient) -> QueryBuilder<PitcherLeverageSplits> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "statSplits"),
+            URLQueryItem(name: "group", value: "pitching"),
+            URLQueryItem(name: "sitCodes", value: "le,lm,lh"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.pitcherLeverageSplits(from: response, playerRef: ref)
+        }
+    }
+}

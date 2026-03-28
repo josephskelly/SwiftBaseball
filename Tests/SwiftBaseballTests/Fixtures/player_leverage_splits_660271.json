@@ -1,0 +1,109 @@
+{
+  "stats": [
+    {
+      "type": { "displayName": "statSplits" },
+      "group": { "displayName": "hitting" },
+      "splits": [
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 159,
+            "plateAppearances": 267,
+            "atBats": 237,
+            "runs": 53,
+            "hits": 76,
+            "doubles": 14,
+            "triples": 2,
+            "homeRuns": 21,
+            "rbi": 38,
+            "stolenBases": 24,
+            "caughtStealing": 2,
+            "baseOnBalls": 27,
+            "intentionalWalks": 3,
+            "strikeOuts": 61,
+            "hitByPitch": 2,
+            "sacFlies": 1,
+            "sacBunts": 0,
+            "groundIntoDoublePlay": 3,
+            "totalBases": 157,
+            "leftOnBase": 22,
+            "avg": ".321",
+            "obp": ".393",
+            "slg": ".662",
+            "ops": "1.055",
+            "babip": ".338"
+          },
+          "player": { "id": 660271, "fullName": "Shohei Ohtani", "link": "/api/v1/people/660271" },
+          "team": { "id": 119, "name": "Los Angeles Dodgers", "link": "/api/v1/teams/119" },
+          "split": { "code": "le", "description": "Low Leverage" }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 159,
+            "plateAppearances": 213,
+            "atBats": 186,
+            "runs": 42,
+            "hits": 57,
+            "doubles": 12,
+            "triples": 2,
+            "homeRuns": 15,
+            "rbi": 45,
+            "stolenBases": 18,
+            "caughtStealing": 1,
+            "baseOnBalls": 23,
+            "intentionalWalks": 8,
+            "strikeOuts": 48,
+            "hitByPitch": 3,
+            "sacFlies": 1,
+            "sacBunts": 1,
+            "groundIntoDoublePlay": 4,
+            "totalBases": 118,
+            "leftOnBase": 30,
+            "avg": ".306",
+            "obp": ".387",
+            "slg": ".634",
+            "ops": "1.021",
+            "babip": ".329"
+          },
+          "player": { "id": 660271, "fullName": "Shohei Ohtani", "link": "/api/v1/people/660271" },
+          "team": { "id": 119, "name": "Los Angeles Dodgers", "link": "/api/v1/teams/119" },
+          "split": { "code": "lm", "description": "Medium Leverage" }
+        },
+        {
+          "season": "2024",
+          "stat": {
+            "gamesPlayed": 159,
+            "plateAppearances": 251,
+            "atBats": 213,
+            "runs": 39,
+            "hits": 64,
+            "doubles": 12,
+            "triples": 3,
+            "homeRuns": 18,
+            "rbi": 47,
+            "stolenBases": 17,
+            "caughtStealing": 1,
+            "baseOnBalls": 31,
+            "intentionalWalks": 9,
+            "strikeOuts": 53,
+            "hitByPitch": 3,
+            "sacFlies": 3,
+            "sacBunts": 1,
+            "groundIntoDoublePlay": 3,
+            "totalBases": 136,
+            "leftOnBase": 28,
+            "avg": ".300",
+            "obp": ".393",
+            "slg": ".638",
+            "ops": "1.031",
+            "babip": ".321"
+          },
+          "player": { "id": 660271, "fullName": "Shohei Ohtani", "link": "/api/v1/people/660271" },
+          "team": { "id": 119, "name": "Los Angeles Dodgers", "link": "/api/v1/teams/119" },
+          "split": { "code": "lh", "description": "High Leverage" }
+        }
+      ]
+    }
+  ]
+}
