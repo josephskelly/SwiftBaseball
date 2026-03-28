@@ -372,6 +372,55 @@ private extension Array {
 /// Aggregates pitch-level Statcast rows into ``StatcastBatting``.
 enum StatcastAggregator {
 
+    /// wOBA linear weight assigned to a walk.
+    private static let walkWOBA: Double = 0.690
+    /// wOBA linear weight assigned to a hit-by-pitch.
+    private static let hbpWOBA: Double = 0.720
+
+    /// PA-terminating `events` values that record exactly one out.
+    private static let singleOutEvents: Set<String> = [
+        "field_out", "force_out", "sac_fly", "sac_bunt",
+        "fielder_choice_out", "catcher_interf",
+    ]
+
+    /// PA-terminating `events` values that record two outs.
+    private static let doublePlayEvents: Set<String> = [
+        "double_play", "grounded_into_double_play",
+        "sac_fly_double_play", "sac_bunt_double_play", "strikeout_double_play",
+    ]
+
+    /// Counts PA-outcome events (K, BB, HBP, outs) from the `events` CSV field.
+    ///
+    /// The `events` field is non-empty only on the final pitch of a plate appearance.
+    /// Shared by ``StatcastAggregator`` (batters) and ``StatcastPitcherAggregator`` (pitchers).
+    static func countPAEvents(
+        _ rows: [[String: String]]
+    ) -> (k: Int, bb: Int, hbp: Int, outs: Int) {
+        var k = 0, bb = 0, hbp = 0, outs = 0
+        for row in rows {
+            guard let ev = row["events"], !ev.isEmpty else { continue }
+            switch ev {
+            case "strikeout":
+                k += 1; outs += 1
+            case "strikeout_double_play":
+                k += 1; outs += 2
+            case "walk":
+                bb += 1
+            case "hit_by_pitch":
+                hbp += 1
+            case "triple_play":
+                outs += 3
+            default:
+                if doublePlayEvents.contains(ev) {
+                    outs += 2
+                } else if singleOutEvents.contains(ev) {
+                    outs += 1
+                }
+            }
+        }
+        return (k, bb, hbp, outs)
+    }
+
     static func aggregate(_ rows: [[String: String]]) -> StatcastBatting {
         // Filter to rows with a batted ball type (in-play events only).
         let battedBalls = rows.filter { $0["bb_type"] != nil }
@@ -414,14 +463,23 @@ enum StatcastAggregator {
         let hardHit = exitVelos.filter { $0 >= 95.0 }.count
         let hardHitRate = total > 0 ? Double(hardHit) / Double(total) : nil
 
-        // Expected stats: average across all batted ball events
+        // xBA/xSLG: mean of per-BBE estimated values (matches Savant leaderboard methodology).
         let xBAs = battedBalls.compactMap { $0["estimated_ba_using_speedangle"].flatMap(Double.init) }
         let xSLGs = battedBalls.compactMap { $0["estimated_slg_using_speedangle"].flatMap(Double.init) }
-        let xwOBAs = battedBalls.compactMap { $0["estimated_woba_using_speedangle"].flatMap(Double.init) }
-
         let xBA = xBAs.isEmpty ? nil : xBAs.reduce(0, +) / Double(xBAs.count)
         let xSLG = xSLGs.isEmpty ? nil : xSLGs.reduce(0, +) / Double(xSLGs.count)
-        let xwOBA = xwOBAs.isEmpty ? nil : xwOBAs.reduce(0, +) / Double(xwOBAs.count)
+
+        // Full-PA xwOBA: blend contact xwOBA with per-event weights for K/BB/HBP,
+        // identical to the methodology used in ``StatcastPitcherAggregator``.
+        let paEvents = countPAEvents(rows)
+        let xwOBAContactSum = battedBalls
+            .compactMap { $0["estimated_woba_using_speedangle"].flatMap(Double.init) }
+            .reduce(0.0, +)
+        let totalPA = total + paEvents.k + paEvents.bb + paEvents.hbp
+        let xwOBA: Double? = totalPA > 0
+            ? (xwOBAContactSum + walkWOBA * Double(paEvents.bb) + hbpWOBA * Double(paEvents.hbp))
+              / Double(totalPA)
+            : nil
 
         return StatcastBatting(
             battedBallEvents: total,
@@ -440,7 +498,11 @@ enum StatcastAggregator {
             hardHitRate: hardHitRate,
             xBA: xBA,
             xSLG: xSLG,
-            xwOBA: xwOBA
+            xwOBA: xwOBA,
+            strikeouts: paEvents.k,
+            walks: paEvents.bb,
+            hitByPitches: paEvents.hbp,
+            plateAppearances: totalPA
         )
     }
 
@@ -523,18 +585,6 @@ enum StatcastPitcherAggregator {
     /// Fastball pitch type codes for velocity aggregation.
     private static let fastballCodes: Set<String> = ["FF", "SI", "FC"]
 
-    /// PA-terminating `events` values that record exactly one out.
-    private static let singleOutEvents: Set<String> = [
-        "strikeout", "field_out", "force_out", "sac_fly", "sac_bunt",
-        "fielder_choice_out", "catcher_interf",
-    ]
-
-    /// PA-terminating `events` values that record two outs.
-    private static let doublePlayEvents: Set<String> = [
-        "double_play", "grounded_into_double_play",
-        "sac_fly_double_play", "sac_bunt_double_play", "strikeout_double_play",
-    ]
-
     /// League-average HR-per-fly-ball rate used for xFIP.
     private static let leagueHRperFBRate: Double = 0.105
 
@@ -546,38 +596,6 @@ enum StatcastPitcherAggregator {
 
     /// wOBA linear weight assigned to a hit-by-pitch for full-PA xwOBA blending.
     private static let hbpWOBA: Double = 0.720
-
-    /// Counts PA-outcome events from the `events` CSV field.
-    ///
-    /// The `events` field is non-empty only on the final pitch of a plate appearance.
-    /// Returns strikeout count, walk count, hit-by-pitch count, and total outs recorded.
-    private static func countPAEvents(
-        _ rows: [[String: String]]
-    ) -> (k: Int, bb: Int, hbp: Int, outs: Int) {
-        var k = 0, bb = 0, hbp = 0, outs = 0
-        for row in rows {
-            guard let ev = row["events"], !ev.isEmpty else { continue }
-            switch ev {
-            case "strikeout":
-                k += 1; outs += 1
-            case "strikeout_double_play":
-                k += 1; outs += 2
-            case "walk":
-                bb += 1
-            case "hit_by_pitch":
-                hbp += 1
-            case "triple_play":
-                outs += 3
-            default:
-                if doublePlayEvents.contains(ev) {
-                    outs += 2
-                } else if singleOutEvents.contains(ev) {
-                    outs += 1
-                }
-            }
-        }
-        return (k, bb, hbp, outs)
-    }
 
     static func aggregate(_ rows: [[String: String]]) -> StatcastPitching {
         // Batted ball against — reuse shared logic
@@ -618,7 +636,7 @@ enum StatcastPitcherAggregator {
         let csw = totalPitches > 0 ? Double(cswCount) / Double(totalPitches) : nil
 
         // PA event counts (K, BB, HBP, outs) for xERA and xFIP
-        let paEvents = countPAEvents(rows)
+        let paEvents = StatcastAggregator.countPAEvents(rows)
         let ip = Double(paEvents.outs) / 3.0
 
         // Full-PA xwOBA: blend contact xwOBA values with per-event weights for K / BB / HBP.

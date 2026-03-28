@@ -137,12 +137,63 @@ struct StatcastTests {
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
-        // xBA: average of 7 values
+        // xBA: mean of per-BBE estimated values (7 batted balls)
         let xBAs = [0.420, 0.910, 0.050, 0.780, 0.010, 0.280, 0.650]
         let expectedXBA = xBAs.reduce(0, +) / Double(xBAs.count)
         #expect(abs((stats.xBA ?? 0) - expectedXBA) < 0.001)
         #expect(stats.xSLG != nil)
-        #expect(stats.xwOBA != nil)
+        // Fixture has 0 strikeouts, walks, HBP — full-PA xwOBA equals contact-only xwOBA
+        let xwOBAs = [0.460, 0.980, 0.040, 0.850, 0.010, 0.350, 0.720]
+        let expectedXwOBA = xwOBAs.reduce(0, +) / 7.0  // totalPA = 7 BBEs + 0 K + 0 BB + 0 HBP
+        #expect(abs((stats.xwOBA ?? 0) - expectedXwOBA) < 0.001)
+    }
+
+    @Test("Aggregate PA event counts from fixture")
+    func aggregatePAEventCounts() throws {
+        let data = try Fixtures.load("statcast_batting_660271.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let stats = StatcastAggregator.aggregate(rows)
+
+        // Fixture: 7 in-play events, 0 strikeouts, 0 walks, 0 HBP
+        #expect(stats.strikeouts == 0)
+        #expect(stats.walks == 0)
+        #expect(stats.hitByPitches == 0)
+        #expect(stats.plateAppearances == 7)
+    }
+
+    @Test("Full-PA xwOBA blends K and BB weights into overall average")
+    func fullPAxwOBABlending() {
+        // 2 BBEs + 1 strikeout + 2 walks
+        let rows: [[String: String]] = [
+            ["bb_type": "ground_ball", "launch_speed": "85.0", "launch_angle": "-5.0",
+             "estimated_ba_using_speedangle": "0.100",
+             "estimated_slg_using_speedangle": "0.100",
+             "estimated_woba_using_speedangle": "0.100",
+             "events": "field_out"],
+            ["bb_type": "fly_ball", "launch_speed": "105.0", "launch_angle": "30.0",
+             "estimated_ba_using_speedangle": "0.900",
+             "estimated_slg_using_speedangle": "2.000",
+             "estimated_woba_using_speedangle": "0.900",
+             "events": "home_run"],
+            // Strikeout (weight 0.000)
+            ["pitch_type": "FF", "description": "swinging_strike", "events": "strikeout"],
+            // Walk (weight 0.690)
+            ["pitch_type": "FF", "description": "ball", "events": "walk"],
+            // Walk (weight 0.690)
+            ["pitch_type": "SL", "description": "ball", "events": "walk"],
+        ]
+        let stats = StatcastAggregator.aggregate(rows)
+
+        #expect(stats.strikeouts == 1)
+        #expect(stats.walks == 2)
+        #expect(stats.hitByPitches == 0)
+        #expect(stats.plateAppearances == 5)
+
+        // Full-PA xwOBA = (0.100 + 0.900 + 0×1 + 0.690×2) / 5 = 2.380 / 5 = 0.476
+        // Contact-only mean = (0.100 + 0.900) / 2 = 0.500 — different from full-PA
+        let expected = (0.100 + 0.900 + 0.690 * 2.0) / 5.0
+        #expect(abs((stats.xwOBA ?? 0) - expected) < 0.001)
     }
 
     // MARK: - Edge cases
@@ -156,6 +207,10 @@ struct StatcastTests {
         #expect(stats.gbPercent == nil)
         #expect(stats.avgExitVelocity == nil)
         #expect(stats.xBA == nil)
+        #expect(stats.strikeouts == 0)
+        #expect(stats.walks == 0)
+        #expect(stats.hitByPitches == 0)
+        #expect(stats.plateAppearances == 0)
     }
 
     @Test("Rows with no batted ball type are excluded")

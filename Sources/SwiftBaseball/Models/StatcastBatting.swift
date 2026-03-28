@@ -40,10 +40,25 @@ public struct StatcastBatting: Sendable, Equatable, Codable {
     /// Hard-hit rate: fraction of batted balls with exit velocity >= 95 mph (0–1).
     public let hardHitRate: Double?
 
-    /// Expected batting average based on exit velocity and launch angle.
+    /// Expected batting average based on exit velocity and launch angle (BBE mean).
     public let xBA: Double?
-    /// Expected slugging based on exit velocity and launch angle.
+    /// Expected slugging based on exit velocity and launch angle (BBE mean).
     public let xSLG: Double?
-    /// Expected weighted on-base average based on exit velocity and launch angle.
+    /// Full-PA expected weighted on-base average.
+    ///
+    /// Blends contact xwOBA (`estimated_woba_using_speedangle`) over batted ball events
+    /// with per-event linear weights for strikeouts (0.000), walks (0.690), and HBP (0.720),
+    /// then divides by total plate appearances. Matches Baseball Savant xwOBA methodology.
     public let xwOBA: Double?
+
+    // MARK: - Plate Appearance Counts
+
+    /// Strikeouts in the sample.
+    public let strikeouts: Int
+    /// Walks (unintentional) in the sample.
+    public let walks: Int
+    /// Hit by pitches in the sample.
+    public let hitByPitches: Int
+    /// Total plate appearances (BBE + strikeouts + walks + HBP).
+    public let plateAppearances: Int
 }
