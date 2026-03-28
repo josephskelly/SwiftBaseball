@@ -273,6 +273,20 @@ struct MLBStatSplit: Decodable {
     let team: MLBEntityRef?
     let split: MLBCodeDescription?
     let gameType: String?
+    /// Present on minor league stat splits; contains `id` and `name`.
+    let league: MLBEntityRef?
+    /// Present on minor league stat splits; contains `id` and `abbreviation`.
+    let sport: MLBSportRef?
+}
+
+/// Minimal sport reference returned inside stat splits.
+///
+/// Unlike ``MLBEntityRef``, this type uses `abbreviation` instead of `name`
+/// (e.g. `"AAA"` for Triple-A) because the API does not return a display name
+/// in stat-split sport objects.
+struct MLBSportRef: Decodable {
+    let id: Int
+    let abbreviation: String?
 }
 
 struct MLBStatPayload: Decodable {

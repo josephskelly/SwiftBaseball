@@ -159,7 +159,18 @@ public enum SwiftBaseball {
 
     /// Fetch season stats for a player.
     ///
+    /// Chain `.group(_:)` to scope to batting, pitching, or fielding. Chain
+    /// `.sport(_:)` to fetch stats from a minor league level instead of MLB.
+    ///
+    ///     // MLB 2024 batting stats
     ///     let stats = try await SwiftBaseball.playerStats(id: 660271).season(2024).group(.batting).fetch()
+    ///     // Triple-A 2024 batting stats
+    ///     let aaaStats = try await SwiftBaseball.playerStats(id: 605141)
+    ///         .season(2024).group(.batting).sport(.tripleA).fetch()
+    ///
+    /// The returned ``PlayerSeasonStats`` carries ``PlayerSeasonStats/sport`` and
+    /// ``PlayerSeasonStats/league`` when the response includes them (minor league
+    /// queries always do).
     public static func playerStats(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
         .playerStats(id: id, client: client)
     }
@@ -167,22 +178,24 @@ public enum SwiftBaseball {
     /// Fetch career (lifetime) stats for a player.
     ///
     /// Returns a single ``PlayerSeasonStats`` entry per requested group with
-    /// cumulative totals across the player's entire career. Use `.group(_:)` to
-    /// request batting, pitching, or fielding. The `season` property on the
-    /// returned entry will be empty (`""`).
+    /// cumulative totals. Chain `.sport(_:)` to scope to a minor league level.
+    /// The `season` property on returned entries will be empty (`""`).
     ///
-    ///     let career = try await SwiftBaseball.playerCareerStats(id: 660271).group(.batting).fetch()
+    ///     let career    = try await SwiftBaseball.playerCareerStats(id: 660271).group(.batting).fetch()
+    ///     let aaaCareer = try await SwiftBaseball.playerCareerStats(id: 605141).group(.batting).sport(.tripleA).fetch()
     public static func playerCareerStats(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
         .playerCareerStats(id: id, client: client)
     }
 
     /// Fetch year-by-year stats for a player.
     ///
-    /// Returns one ``PlayerSeasonStats`` entry per season the player has
-    /// appeared in, ordered chronologically. Use `.group(_:)` to request batting,
-    /// pitching, or fielding.
+    /// Returns one ``PlayerSeasonStats`` entry per season. Chain `.sport(_:)` to
+    /// scope to a minor league level; each returned entry's
+    /// ``PlayerSeasonStats/sport`` and ``PlayerSeasonStats/league`` identify the
+    /// level and league for that season.
     ///
-    ///     let history = try await SwiftBaseball.playerYearByYear(id: 660271).group(.batting).fetch()
+    ///     let history    = try await SwiftBaseball.playerYearByYear(id: 660271).group(.batting).fetch()
+    ///     let aaaHistory = try await SwiftBaseball.playerYearByYear(id: 656185).group(.batting).sport(.tripleA).fetch()
     public static func playerYearByYear(id: Int) -> QueryBuilder<[PlayerSeasonStats]> {
         .playerYearByYear(id: id, client: client)
     }

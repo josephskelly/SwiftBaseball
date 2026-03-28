@@ -743,4 +743,140 @@ struct StatsTests {
         #expect(vsRight.gamesPlayed == 145)
         #expect(vsRight.ops == 1.128)
     }
+
+    // MARK: - Minor league stats
+
+    @Test("Minor league batting stats decode sport and league fields")
+    func minorLeagueBattingStatsSportAndLeague() throws {
+        let data = try Fixtures.load("player_stats_batting_mib_656185.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 656185, fullName: "Greg Allen")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        #expect(stats.count == 1)
+        let entry = try #require(stats.first)
+        #expect(entry.sport == .tripleA)
+        #expect(entry.league?.id == 117)
+        #expect(entry.league?.name == "International League")
+        #expect(entry.team?.id == 531)
+        #expect(entry.team?.name == "Scranton/Wilkes-Barre RailRiders")
+        #expect(entry.season == "2024")
+    }
+
+    @Test("Minor league batting stat values decode correctly")
+    func minorLeagueBattingStatValues() throws {
+        let data = try Fixtures.load("player_stats_batting_mib_656185.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 656185, fullName: "Greg Allen")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let batting = try #require(stats.first?.batting)
+        #expect(batting.gamesPlayed == 58)
+        #expect(batting.homeRuns == 3)
+        #expect(batting.stolenBases == 13)
+        #expect(batting.avg == 0.225)
+        #expect(batting.ops == 0.698)
+    }
+
+    @Test("Minor league pitching stats decode sport and league fields")
+    func minorLeaguePitchingStatsSportAndLeague() throws {
+        let data = try Fixtures.load("player_stats_pitching_mib_687607.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 687607, fullName: "Edgar Barclay")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        #expect(stats.count == 1)
+        let entry = try #require(stats.first)
+        #expect(entry.sport == .tripleA)
+        #expect(entry.league?.id == 117)
+        #expect(entry.group == .pitching)
+    }
+
+    @Test("Minor league pitching stat values decode correctly")
+    func minorLeaguePitchingStatValues() throws {
+        let data = try Fixtures.load("player_stats_pitching_mib_687607.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 687607, fullName: "Edgar Barclay")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let pitching = try #require(stats.first?.pitching)
+        #expect(pitching.gamesPlayed == 29)
+        #expect(pitching.gamesStarted == 29)
+        #expect(pitching.wins == 7)
+        #expect(pitching.losses == 9)
+        #expect(pitching.era == 5.98)
+        #expect(pitching.whip == 1.54)
+    }
+
+    @Test("MLB season stats have nil sport and league (API omits these for MLB)")
+    func mlbStatsHaveNilSportAndLeague() throws {
+        let data = try Fixtures.load("player_stats_batting_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
+
+        let entry = try #require(stats.first)
+        #expect(entry.sport == nil)
+        #expect(entry.league == nil)
+    }
+
+    @Test("playerStats sport modifier appends sportId query param")
+    func playerStatsSportModifier() async throws {
+        let data = try Fixtures.load("player_stats_batting_mib_656185.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "people/656185/stats", data: data)
+
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 656185, client: mock)
+            .season(2024)
+            .group(.batting)
+            .sport(.tripleA)
+            .fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "sportId" && $0.value == "11" })
+        #expect(items.contains { $0.name == "season" && $0.value == "2024" })
+        #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
+    }
+
+    @Test("playerYearByYear sport modifier appends sportId")
+    func playerYearByYearSportModifier() async throws {
+        let data = try Fixtures.load("player_stats_batting_mib_656185.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "people/656185/stats", data: data)
+
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 656185, client: mock)
+            .group(.batting)
+            .sport(.tripleA)
+            .fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "yearByYear" })
+        #expect(items.contains { $0.name == "sportId" && $0.value == "11" })
+    }
+
+    @Test("playerCareerStats sport modifier appends sportId")
+    func playerCareerStatsSportModifier() async throws {
+        let data = try Fixtures.load("player_stats_batting_mib_656185.json")
+        let mock = MockAPIClient()
+        mock.stub(path: "people/656185/stats", data: data)
+
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 656185, client: mock)
+            .group(.batting)
+            .sport(.doubleA)
+            .fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "sportId" && $0.value == "12" })
+    }
+
+    @Test("All Sport enum cases map to expected sportId values")
+    func sportEnumRawValues() {
+        #expect(Sport.mlb.rawValue == 1)
+        #expect(Sport.tripleA.rawValue == 11)
+        #expect(Sport.doubleA.rawValue == 12)
+        #expect(Sport.highA.rawValue == 13)
+        #expect(Sport.singleA.rawValue == 14)
+        #expect(Sport.rookie.rawValue == 16)
+        #expect(Sport.complexLeague.rawValue == 17)
+    }
 }

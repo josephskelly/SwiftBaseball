@@ -190,7 +190,9 @@ enum MLBResponseConverters {
             let groupCode = statGroup.group?.displayName ?? ""
             let group = StatGroup(apiValue: groupCode)
             return statGroup.splits.map { split in
-                PlayerSeasonStats(
+                let sport = split.sport.flatMap { Sport(rawValue: $0.id) }
+                let league = split.league.map { leagueReference(from: $0) }
+                return PlayerSeasonStats(
                     player: split.player.map(playerReference) ?? playerRef,
                     team: split.team.map(teamReference),
                     season: split.season ?? "",
@@ -198,7 +200,9 @@ enum MLBResponseConverters {
                     batting: group == .batting ? battingStats(from: split.stat) : nil,
                     pitching: group == .pitching ? pitchingStats(from: split.stat) : nil,
                     fielding: group == .fielding ? fieldingStats(from: split.stat) : nil,
-                    sabermetrics: nil
+                    sabermetrics: nil,
+                    sport: sport,
+                    league: league
                 )
             }
         }
@@ -603,7 +607,9 @@ enum MLBResponseConverters {
                     batting: nil,
                     pitching: nil,
                     fielding: nil,
-                    sabermetrics: sabermetricStats(from: split.stat)
+                    sabermetrics: sabermetricStats(from: split.stat),
+                    sport: nil,
+                    league: nil
                 )
             }
         }

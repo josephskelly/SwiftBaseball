@@ -1,0 +1,65 @@
+{
+    "stats": [
+        {
+            "type": {
+                "displayName": "season"
+            },
+            "group": {
+                "displayName": "hitting"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2024",
+                    "stat": {
+                        "gamesPlayed": 58,
+                        "runs": 29,
+                        "doubles": 9,
+                        "triples": 3,
+                        "homeRuns": 3,
+                        "strikeOuts": 47,
+                        "baseOnBalls": 23,
+                        "intentionalWalks": 0,
+                        "hits": 40,
+                        "hitByPitch": 9,
+                        "avg": ".225",
+                        "atBats": 178,
+                        "obp": ".338",
+                        "slg": ".360",
+                        "ops": ".698",
+                        "caughtStealing": 2,
+                        "stolenBases": 13,
+                        "plateAppearances": 218,
+                        "totalBases": 64,
+                        "rbi": 22,
+                        "leftOnBase": 84,
+                        "sacBunts": 5,
+                        "sacFlies": 3,
+                        "babip": ".282"
+                    },
+                    "team": {
+                        "id": 531,
+                        "name": "Scranton/Wilkes-Barre RailRiders",
+                        "link": "/api/v1/teams/531"
+                    },
+                    "player": {
+                        "id": 656185,
+                        "fullName": "Greg Allen",
+                        "link": "/api/v1/people/656185"
+                    },
+                    "league": {
+                        "id": 117,
+                        "name": "International League",
+                        "link": "/api/v1/league/117"
+                    },
+                    "sport": {
+                        "id": 11,
+                        "link": "/api/v1/sports/11",
+                        "abbreviation": "AAA"
+                    },
+                    "gameType": "R"
+                }
+            ]
+        }
+    ]
+}

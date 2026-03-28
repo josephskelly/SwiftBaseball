@@ -427,15 +427,38 @@ public struct SabermetricStats: Codable, Sendable, Equatable {
 // MARK: - Player season stats wrapper
 
 /// Aggregated stats for a player in a single season, broken down by stat group.
+/// Aggregated statistics for a player for a single season (or career/projected).
+///
+/// Returned by ``SwiftBaseball/playerStats(id:)``, ``SwiftBaseball/playerCareerStats(id:)``,
+/// ``SwiftBaseball/playerYearByYear(id:)``, and related queries.
+///
+/// For minor league stats, chain `.sport(_:)` on the query:
+///
+///     let aaaStats = try await SwiftBaseball.playerStats(id: 605141)
+///         .season(2024).group(.batting).sport(.tripleA).fetch()
+///
+/// ``sport`` and ``league`` identify the competition level when a result set
+/// mixes entries from multiple levels (e.g. a `yearByYear` query scoped to
+/// a specific sport).
 public struct PlayerSeasonStats: Codable, Sendable, Equatable {
+    /// The player these stats belong to.
     public let player: PlayerReference
+    /// The team the player was on when these stats were accumulated.
     public let team: TeamReference?
+    /// The season year string (e.g. `"2024"`), or `""` for career totals.
     public let season: String
+    /// The stat category group (batting, pitching, or fielding).
     public let group: StatGroup
     public let batting: BattingStats?
     public let pitching: PitchingStats?
     public let fielding: FieldingStats?
     public let sabermetrics: SabermetricStats?
+    /// The competition level for these stats (e.g. ``Sport/tripleA``).
+    /// `nil` when the API response does not include a sport field (MLB default).
+    public let sport: Sport?
+    /// The league these stats were accumulated in (e.g. International League).
+    /// `nil` when the API response does not include a league field.
+    public let league: LeagueReference?
 }
 
 // MARK: - Platoon splits

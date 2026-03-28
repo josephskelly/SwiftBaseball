@@ -1,0 +1,65 @@
+{
+    "stats": [
+        {
+            "type": {
+                "displayName": "season"
+            },
+            "group": {
+                "displayName": "pitching"
+            },
+            "exemptions": [],
+            "splits": [
+                {
+                    "season": "2024",
+                    "stat": {
+                        "gamesPlayed": 29,
+                        "gamesStarted": 29,
+                        "runs": 104,
+                        "homeRuns": 30,
+                        "strikeOuts": 118,
+                        "baseOnBalls": 70,
+                        "intentionalWalks": 0,
+                        "hits": 150,
+                        "hitByPitch": 7,
+                        "avg": ".265",
+                        "atBats": 567,
+                        "obp": ".351",
+                        "slg": ".489",
+                        "ops": ".840",
+                        "era": "5.98",
+                        "inningsPitched": "143.0",
+                        "wins": 7,
+                        "losses": 9,
+                        "saves": 0,
+                        "holds": 0,
+                        "blownSaves": 0,
+                        "earnedRuns": 95,
+                        "whip": "1.54",
+                        "battersFaced": 648
+                    },
+                    "team": {
+                        "id": 531,
+                        "name": "Scranton/Wilkes-Barre RailRiders",
+                        "link": "/api/v1/teams/531"
+                    },
+                    "player": {
+                        "id": 687607,
+                        "fullName": "Edgar Barclay",
+                        "link": "/api/v1/people/687607"
+                    },
+                    "league": {
+                        "id": 117,
+                        "name": "International League",
+                        "link": "/api/v1/league/117"
+                    },
+                    "sport": {
+                        "id": 11,
+                        "link": "/api/v1/sports/11",
+                        "abbreviation": "AAA"
+                    },
+                    "gameType": "R"
+                }
+            ]
+        }
+    ]
+}
