@@ -1,0 +1,80 @@
+{
+  "totalItems": 1,
+  "totalEvents": 0,
+  "totalGames": 1,
+  "totalGamesInProgress": 0,
+  "dates": [
+    {
+      "date": "2026-04-01",
+      "totalItems": 1,
+      "totalEvents": 0,
+      "totalGames": 1,
+      "totalGamesInProgress": 0,
+      "games": [
+        {
+          "gamePk": 778001,
+          "gameType": "R",
+          "season": "2026",
+          "gameDate": "2026-04-01T18:10:00Z",
+          "officialDate": "2026-04-01",
+          "status": {
+            "abstractGameState": "Preview",
+            "codedGameState": "S",
+            "detailedState": "Scheduled",
+            "statusCode": "S",
+            "startTimeTBD": false,
+            "abstractGameCode": "P"
+          },
+          "teams": {
+            "away": {
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 0,
+                "pct": ".000"
+              },
+              "team": {
+                "id": 143,
+                "name": "Philadelphia Phillies",
+                "link": "/api/v1/teams/143"
+              },
+              "probablePitcher": {
+                "id": 605483,
+                "fullName": "Zack Wheeler",
+                "link": "/api/v1/people/605483"
+              },
+              "isWinner": false,
+              "splitSquad": false
+            },
+            "home": {
+              "leagueRecord": {
+                "wins": 0,
+                "losses": 0,
+                "pct": ".000"
+              },
+              "team": {
+                "id": 121,
+                "name": "New York Mets",
+                "link": "/api/v1/teams/121"
+              },
+              "probablePitcher": {
+                "id": 656945,
+                "fullName": "Kodai Senga",
+                "link": "/api/v1/people/656945"
+              },
+              "isWinner": false,
+              "splitSquad": false
+            }
+          },
+          "venue": {
+            "id": 3289,
+            "name": "Citi Field",
+            "link": "/api/v1/venues/3289"
+          },
+          "gamesInSeries": 3,
+          "seriesGameNumber": 1,
+          "seriesDescription": "Regular Season"
+        }
+      ]
+    }
+  ]
+}

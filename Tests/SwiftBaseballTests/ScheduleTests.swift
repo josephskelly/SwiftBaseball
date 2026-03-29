@@ -282,6 +282,66 @@ struct ScheduleTests {
         #expect(game.venue == nil)
     }
 
+    // MARK: - Probable pitcher
+
+    @Test("Probable pitchers decode when hydrate=probablePitcher is present")
+    func probablePitcherDecodes() throws {
+        let data = try Fixtures.load("schedule_probable_pitcher.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+
+        let awayPitcher = try #require(game.teams.away.probablePitcher)
+        #expect(awayPitcher.id == 605483)
+        #expect(awayPitcher.fullName == "Zack Wheeler")
+
+        let homePitcher = try #require(game.teams.home.probablePitcher)
+        #expect(homePitcher.id == 656945)
+        #expect(homePitcher.fullName == "Kodai Senga")
+    }
+
+    @Test("Probable pitcher is nil when not included in response")
+    func probablePitcherNilWhenAbsent() throws {
+        let data = try Fixtures.load("schedule_2024_07_04.json")
+        let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: data)
+        let entries = MLBResponseConverters.scheduleEntries(from: response)
+
+        let game = try #require(entries.first)
+        #expect(game.teams.away.probablePitcher == nil)
+        #expect(game.teams.home.probablePitcher == nil)
+    }
+
+    @Test("schedule() query builder appends hydrate=probablePitcher query item")
+    func scheduleQueryBuilderHydrateProbablePitcher() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("schedule_probable_pitcher.json")
+        mock.stub(path: "schedule", data: data)
+
+        let builder = QueryBuilder<[ScheduleEntry]>.schedule(
+            .date("2026-04-01"),
+            hydrate: [.probablePitcher],
+            client: mock
+        )
+        _ = try await builder.fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "hydrate" && $0.value == "probablePitcher" })
+    }
+
+    @Test("schedule() query builder without hydrate omits hydrate query item")
+    func scheduleQueryBuilderNoHydrate() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("schedule_2024_07_04.json")
+        mock.stub(path: "schedule", data: data)
+
+        let builder = QueryBuilder<[ScheduleEntry]>.schedule(.date("2024-07-04"), client: mock)
+        _ = try await builder.fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(!items.contains { $0.name == "hydrate" })
+    }
+
     @Test("schedule() query builder uses dateRange parameter")
     func scheduleQueryBuilderDateRange() async throws {
         let mock = MockAPIClient()

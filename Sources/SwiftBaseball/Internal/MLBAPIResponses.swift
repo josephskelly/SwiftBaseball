@@ -123,6 +123,7 @@ struct MLBGameTeamEntry: Decodable {
     let isWinner: Bool?
     let splitSquad: Bool?
     let leagueRecord: MLBLeagueRecord?
+    let probablePitcher: MLBEntityRef?
 }
 
 struct MLBLeagueRecord: Decodable {

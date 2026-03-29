@@ -81,14 +81,16 @@ enum MLBResponseConverters {
             score: teamsRaw.away.score,
             isWinner: teamsRaw.away.isWinner,
             splitSquad: teamsRaw.away.splitSquad,
-            leagueRecord: teamsRaw.away.leagueRecord.map(leagueRecord)
+            leagueRecord: teamsRaw.away.leagueRecord.map(leagueRecord),
+            probablePitcher: teamsRaw.away.probablePitcher.map(playerReference)
         )
         let homeEntry = ScheduleTeamEntry(
             team: TeamReference(id: homeTeam.id, name: homeTeam.displayName),
             score: teamsRaw.home.score,
             isWinner: teamsRaw.home.isWinner,
             splitSquad: teamsRaw.home.splitSquad,
-            leagueRecord: teamsRaw.home.leagueRecord.map(leagueRecord)
+            leagueRecord: teamsRaw.home.leagueRecord.map(leagueRecord),
+            probablePitcher: teamsRaw.home.probablePitcher.map(playerReference)
         )
 
         return ScheduleEntry(

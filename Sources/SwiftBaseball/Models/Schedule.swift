@@ -52,6 +52,9 @@ public struct ScheduleTeamEntry: Codable, Sendable, Equatable {
     public let splitSquad: Bool?
     /// Team's current league record (W-L-Pct).
     public let leagueRecord: LeagueRecord?
+    /// Probable starting pitcher. Only populated when the schedule is fetched
+    /// with ``ScheduleHydration/probablePitcher``.
+    public let probablePitcher: PlayerReference?
 }
 
 /// A team's win-loss record and winning percentage.
