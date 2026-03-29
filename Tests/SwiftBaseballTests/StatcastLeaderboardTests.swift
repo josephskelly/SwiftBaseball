@@ -26,7 +26,7 @@ struct StatcastLeaderboardTests {
 
         let top = try #require(entries.first)
         #expect(top.playerId == 682829)
-        #expect(top.playerName == "De La Cruz, Elly")
+        #expect(top.playerName == "De La Cruz, Elly")  // parsed from "last_name, first_name" column
         #expect(top.team == "CIN")
         #expect(abs(top.sprintSpeed - 30.5) < 0.01)
         #expect(top.sprintAttempts == 312)
@@ -51,8 +51,8 @@ struct StatcastLeaderboardTests {
     @Test("Sprint speed: row with missing optional fields uses nil")
     func sprintSpeedMissingOptionals() throws {
         let csv = """
-        player_id,player_name,team,sprint_speed,attempts
-        682829,"De La Cruz, Elly",CIN,30.5,312
+        "last_name, first_name",player_id,team,sprint_speed,competitive_runs
+        "De La Cruz, Elly",682829,CIN,30.5,312
         """
         let entries = SprintSpeedParser.parse(csv, season: 2024)
         #expect(entries.count == 1)
@@ -63,9 +63,9 @@ struct StatcastLeaderboardTests {
     @Test("Sprint speed: row missing required fields is skipped")
     func sprintSpeedSkipsMalformedRow() throws {
         let csv = """
-        player_id,player_name,team,sprint_speed,attempts
-        682829,"De La Cruz, Elly",CIN,30.5,312
-        ,missing_id,LAD,29.0,100
+        "last_name, first_name",player_id,team,sprint_speed,competitive_runs
+        "De La Cruz, Elly",682829,CIN,30.5,312
+        "missing_id",,LAD,29.0,100
         """
         let entries = SprintSpeedParser.parse(csv, season: 2024)
         #expect(entries.count == 1)

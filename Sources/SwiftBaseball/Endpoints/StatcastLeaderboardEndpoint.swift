@@ -48,7 +48,7 @@ public struct SprintSpeedQuery: Sendable {
     /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
     public func fetch() async throws -> [SprintSpeedEntry] {
         let csv = try await client.fetchSavantCSV(
-            path: "leaderboard/sprint-speed",
+            path: "leaderboard/sprint_speed",
             queryItems: buildQueryItems()
         )
         return SprintSpeedParser.parse(csv, season: seasonYear ?? Calendar.current.component(.year, from: Date()))
@@ -144,12 +144,13 @@ enum SprintSpeedParser {
         return rows.compactMap { row -> SprintSpeedEntry? in
             guard
                 let idStr = row["player_id"], let playerId = Int(idStr),
-                let name = row["player_name"],
                 let team = row["team"],
                 let speedStr = row["sprint_speed"], let speed = Double(speedStr)
             else { return nil }
 
-            let attempts = row["attempts"].flatMap(Int.init) ?? 0
+            // CSV header is the quoted string "last_name, first_name"
+            let name = row["last_name, first_name"] ?? ""
+            let attempts = row["competitive_runs"].flatMap(Int.init) ?? 0
             let percentile = row["percentile"].flatMap(Int.init)
             let homeToFirst = row["hp_to_1b"].flatMap(Double.init)
 

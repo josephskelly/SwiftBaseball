@@ -1,6 +1,6 @@
-player_id,player_name,team,sprint_speed,hp_to_1b,attempts,percentile,age,pos
-682829,"De La Cruz, Elly",CIN,30.5,4.08,312,100,22,SS
-677951,"Witt Jr., Bobby",KC,30.1,4.12,289,99,24,SS
-660670,"Acuña Jr., Ronald",ATL,29.8,4.15,178,98,26,RF
-592450,"Judge, Aaron",NYY,27.6,4.34,261,72,32,RF
-660271,"Ohtani, Shohei",LAD,27.2,4.39,142,65,30,DH
+"last_name, first_name",player_id,team_id,team,position,age,competitive_runs,bolts,hp_to_1b,sprint_speed,percentile
+"De La Cruz, Elly",682829,113,CIN,SS,22,312,89,4.08,30.5,100
+"Witt Jr., Bobby",677951,118,KC,SS,24,289,81,4.12,30.1,99
+"Acuña Jr., Ronald",660670,144,ATL,RF,26,178,62,4.15,29.8,98
+"Judge, Aaron",592450,147,NYY,RF,32,261,41,4.34,27.6,72
+"Ohtani, Shohei",660271,119,LAD,DH,30,142,30,4.39,27.2,65
