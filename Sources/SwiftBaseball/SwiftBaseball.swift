@@ -325,6 +325,29 @@ public enum SwiftBaseball {
         .pitcherPlatoonStats(id: id, client: client)
     }
 
+    /// Fetch career platoon batting splits (vs LHP / vs RHP) for a position player.
+    ///
+    /// Uses `stats=careerStatSplits`, which returns pre-aggregated career totals per
+    /// split code. No season filter is needed or applicable.
+    ///
+    ///     let career = try await SwiftBaseball.playerCareerPlatoonStats(id: 660271).fetch()
+    ///     print(career.vsLeft?.homeRuns)   // career HRs vs LHP
+    ///     print(career.vsRight?.ops)       // career OPS vs RHP
+    public static func playerCareerPlatoonStats(id: Int) -> QueryBuilder<PlayerCareerPlatoonStats> {
+        .playerCareerPlatoonStats(id: id, client: client)
+    }
+
+    /// Fetch career platoon pitching splits (vs LHB / vs RHB) for a pitcher.
+    ///
+    /// Uses `stats=careerStatSplits`, which returns pre-aggregated career totals per
+    /// split code. No season filter is needed or applicable.
+    ///
+    ///     let career = try await SwiftBaseball.pitcherCareerPlatoonStats(id: 543037).fetch()
+    ///     print(career.vsLeft?.strikeOuts)  // career Ks vs LHB
+    public static func pitcherCareerPlatoonStats(id: Int) -> QueryBuilder<PitcherCareerPlatoonStats> {
+        .pitcherCareerPlatoonStats(id: id, client: client)
+    }
+
     /// Fetch season stats for multiple players concurrently.
     ///
     ///     let stats = try await SwiftBaseball

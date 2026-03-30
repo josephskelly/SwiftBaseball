@@ -1,0 +1,92 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "careerStatSplits"
+      },
+      "group": {
+        "displayName": "pitching"
+      },
+      "splits": [
+        {
+          "stat": {
+            "gamesPlayed": 86,
+            "doubles": 16,
+            "triples": 1,
+            "homeRuns": 19,
+            "strikeOuts": 295,
+            "baseOnBalls": 69,
+            "intentionalWalks": 2,
+            "hits": 169,
+            "hitByPitch": 7,
+            "avg": ".198",
+            "atBats": 853,
+            "obp": ".271",
+            "slg": ".363",
+            "ops": ".634",
+            "groundIntoDoublePlay": 18,
+            "inningsPitched": "230.2",
+            "whip": "1.03",
+            "battersFaced": 936,
+            "balks": 0,
+            "wildPitches": 21,
+            "runs": 86,
+            "earnedRuns": 80,
+            "sacBunts": 0,
+            "sacFlies": 4
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "split": {
+            "code": "vl",
+            "description": "vs Left"
+          }
+        },
+        {
+          "stat": {
+            "gamesPlayed": 86,
+            "doubles": 14,
+            "triples": 0,
+            "homeRuns": 12,
+            "strikeOuts": 325,
+            "baseOnBalls": 78,
+            "intentionalWalks": 1,
+            "hits": 148,
+            "hitByPitch": 11,
+            "avg": ".172",
+            "atBats": 861,
+            "obp": ".254",
+            "slg": ".289",
+            "ops": ".543",
+            "groundIntoDoublePlay": 28,
+            "inningsPitched": "240.1",
+            "whip": "0.94",
+            "battersFaced": 961,
+            "balks": 0,
+            "wildPitches": 16,
+            "runs": 72,
+            "earnedRuns": 65,
+            "sacBunts": 0,
+            "sacFlies": 3
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "split": {
+            "code": "vr",
+            "description": "vs Right"
+          }
+        }
+      ]
+    }
+  ]
+}

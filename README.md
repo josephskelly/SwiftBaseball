@@ -115,6 +115,18 @@ let pitcherSplits = try await SwiftBaseball
     .season(2023)
     .fetch()
 
+// Career platoon splits — pre-aggregated career totals vs LHP / vs RHP (no season filter needed)
+let careerSplits = try await SwiftBaseball
+    .playerCareerPlatoonStats(id: 660271)
+    .fetch()
+print(careerSplits.vsLeft?.ops)   // career OPS vs LHP
+print(careerSplits.vsRight?.ops)  // career OPS vs RHP
+
+// Career pitcher platoon splits — pre-aggregated career totals vs LHB / vs RHB
+let careerPitcherSplits = try await SwiftBaseball
+    .pitcherCareerPlatoonStats(id: 543037)
+    .fetch()
+
 // Game log — per-game stat lines
 let log = try await SwiftBaseball
     .gameLog(playerId: 660271)

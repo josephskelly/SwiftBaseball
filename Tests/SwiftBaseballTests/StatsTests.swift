@@ -604,6 +604,116 @@ struct StatsTests {
         #expect(vr.ops == 0.599)
     }
 
+    // MARK: - Career platoon splits (batter)
+
+    @Test("Decode career batter platoon splits from fixture")
+    func decodeCareerBatterPlatoonSplits() throws {
+        let data = try Fixtures.load("player_career_stats_platoon_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let p = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
+        let career = PlayerCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
+
+        let vsLeft = try #require(career.vsLeft)
+        #expect(vsLeft.homeRuns == 70)
+        #expect(vsLeft.gamesPlayed == 420)
+        #expect(vsLeft.ops == 0.937)
+
+        let vsRight = try #require(career.vsRight)
+        #expect(vsRight.homeRuns == 247)
+        #expect(vsRight.gamesPlayed == 710)
+        #expect(vsRight.ops == 0.984)
+    }
+
+    @Test("Career batter platoon fixture splits have no season field")
+    func careerBatterPlatoonNoSeason() throws {
+        let data = try Fixtures.load("player_career_stats_platoon_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let allSplits = response.stats.flatMap(\.splits)
+        #expect(allSplits.allSatisfy { $0.season == nil })
+    }
+
+    @Test("playerCareerPlatoonStats() query builder sends careerStatSplits param")
+    func careerBatterPlatoonQueryBuilder() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("player_career_stats_platoon_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+
+        let builder = QueryBuilder<PlayerCareerPlatoonStats>.playerCareerPlatoonStats(id: 660271, client: mock)
+        _ = try await builder.fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "careerStatSplits" })
+        #expect(items.contains { $0.name == "sitCodes" && $0.value == "vl,vr" })
+        #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
+        #expect(!items.contains { $0.name == "season" })
+    }
+
+    @Test("Empty career batter platoon splits returns both nil")
+    func emptyCareerBatterPlatoonSplits() throws {
+        let json = """
+        { "stats": [{ "type": {"displayName":"careerStatSplits"}, "group": {"displayName":"hitting"}, "splits": [] }] }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 1, fullName: "")
+        let p = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
+        let career = PlayerCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
+
+        #expect(career.vsLeft == nil)
+        #expect(career.vsRight == nil)
+    }
+
+    // MARK: - Career platoon splits (pitcher)
+
+    @Test("Decode career pitcher platoon splits from fixture")
+    func decodeCareerPitcherPlatoonSplits() throws {
+        let data = try Fixtures.load("pitcher_career_stats_platoon_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+        let career = PitcherCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
+
+        let vsLeft = try #require(career.vsLeft)
+        #expect(vsLeft.strikeOuts == 295)
+        #expect(vsLeft.battersFaced == 936)
+        #expect(vsLeft.ops == 0.634)
+
+        let vsRight = try #require(career.vsRight)
+        #expect(vsRight.strikeOuts == 325)
+        #expect(vsRight.battersFaced == 961)
+        #expect(vsRight.ops == 0.543)
+    }
+
+    @Test("pitcherCareerPlatoonStats() query builder sends careerStatSplits param")
+    func careerPitcherPlatoonQueryBuilder() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("pitcher_career_stats_platoon_660271.json")
+        mock.stub(path: "people/660271/stats", data: data)
+
+        let builder = QueryBuilder<PitcherCareerPlatoonStats>.pitcherCareerPlatoonStats(id: 660271, client: mock)
+        _ = try await builder.fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "careerStatSplits" })
+        #expect(items.contains { $0.name == "sitCodes" && $0.value == "vl,vr" })
+        #expect(items.contains { $0.name == "group" && $0.value == "pitching" })
+        #expect(!items.contains { $0.name == "season" })
+    }
+
+    @Test("Empty career pitcher platoon splits returns both nil")
+    func emptyCareerPitcherPlatoonSplits() throws {
+        let json = """
+        { "stats": [{ "type": {"displayName":"careerStatSplits"}, "group": {"displayName":"pitching"}, "splits": [] }] }
+        """.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
+        let ref = PlayerReference(id: 1, fullName: "")
+        let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+        let career = PitcherCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
+
+        #expect(career.vsLeft == nil)
+        #expect(career.vsRight == nil)
+    }
+
     // MARK: - Career stats
 
     @Test("Decode career batting stats from fixture")

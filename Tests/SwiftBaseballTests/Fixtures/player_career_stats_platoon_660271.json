@@ -1,0 +1,94 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "careerStatSplits"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "splits": [
+        {
+          "stat": {
+            "gamesPlayed": 420,
+            "doubles": 54,
+            "triples": 7,
+            "homeRuns": 70,
+            "strikeOuts": 273,
+            "baseOnBalls": 115,
+            "intentionalWalks": 4,
+            "hits": 333,
+            "hitByPitch": 11,
+            "avg": ".315",
+            "atBats": 1057,
+            "obp": ".384",
+            "slg": ".553",
+            "ops": ".937",
+            "groundIntoDoublePlay": 18,
+            "plateAppearances": 1199,
+            "totalBases": 585,
+            "rbi": 209,
+            "leftOnBase": 433,
+            "sacBunts": 0,
+            "sacFlies": 7,
+            "babip": ".358",
+            "runs": 160,
+            "stolenBases": 55,
+            "caughtStealing": 11
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "split": {
+            "code": "vl",
+            "description": "vs Left"
+          }
+        },
+        {
+          "stat": {
+            "gamesPlayed": 710,
+            "doubles": 115,
+            "triples": 19,
+            "homeRuns": 247,
+            "strikeOuts": 682,
+            "baseOnBalls": 346,
+            "intentionalWalks": 52,
+            "hits": 762,
+            "hitByPitch": 27,
+            "avg": ".299",
+            "atBats": 2548,
+            "obp": ".382",
+            "slg": ".602",
+            "ops": ".984",
+            "groundIntoDoublePlay": 43,
+            "plateAppearances": 2958,
+            "totalBases": 1534,
+            "rbi": 745,
+            "leftOnBase": 946,
+            "sacBunts": 0,
+            "sacFlies": 22,
+            "babip": ".328",
+            "runs": 497,
+            "stolenBases": 163,
+            "caughtStealing": 19
+          },
+          "player": {
+            "id": 660271,
+            "fullName": "Shohei Ohtani",
+            "link": "/api/v1/people/660271",
+            "firstName": "Shohei",
+            "lastName": "Ohtani"
+          },
+          "split": {
+            "code": "vr",
+            "description": "vs Right"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -92,6 +92,42 @@ extension QueryBuilder where T == PitcherPlatoonStats {
     }
 }
 
+// MARK: - Career platoon split factories
+
+extension QueryBuilder where T == PlayerCareerPlatoonStats {
+    /// Builds a request for career-aggregated platoon batting splits using `stats=careerStatSplits`.
+    static func playerCareerPlatoonStats(id: Int, client: any APIClient) -> QueryBuilder<PlayerCareerPlatoonStats> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "careerStatSplits"),
+            URLQueryItem(name: "group", value: "hitting"),
+            URLQueryItem(name: "sitCodes", value: "vl,vr"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            let p = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
+            return PlayerCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
+        }
+    }
+}
+
+extension QueryBuilder where T == PitcherCareerPlatoonStats {
+    /// Builds a request for career-aggregated platoon pitching splits using `stats=careerStatSplits`.
+    static func pitcherCareerPlatoonStats(id: Int, client: any APIClient) -> QueryBuilder<PitcherCareerPlatoonStats> {
+        let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
+            URLQueryItem(name: "stats", value: "careerStatSplits"),
+            URLQueryItem(name: "group", value: "pitching"),
+            URLQueryItem(name: "sitCodes", value: "vl,vr"),
+        ])
+        let ref = PlayerReference(id: id, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+            return PitcherCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
+        }
+    }
+}
+
 // MARK: - Home/Away split factories
 
 extension QueryBuilder where T == PlayerHomeAwaySplits {

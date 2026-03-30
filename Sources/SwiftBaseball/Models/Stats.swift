@@ -489,6 +489,43 @@ public struct PitcherPlatoonStats: Sendable, Equatable {
     }
 }
 
+// MARK: - Career platoon splits
+
+/// Career-aggregated batting splits by opposing pitcher handedness.
+///
+/// Returned by ``SwiftBaseball/playerCareerPlatoonStats(id:)`` using the
+/// `careerStatSplits` MLB Stats API endpoint, which pre-aggregates all plate
+/// appearances across a player's entire MLB career into a single `vl` and `vr`
+/// row — no client-side season aggregation required.
+public struct PlayerCareerPlatoonStats: Sendable, Equatable {
+    /// Career stats vs left-handed pitchers.
+    public let vsLeft: BattingStats?
+    /// Career stats vs right-handed pitchers.
+    public let vsRight: BattingStats?
+
+    public init(vsLeft: BattingStats?, vsRight: BattingStats?) {
+        self.vsLeft = vsLeft
+        self.vsRight = vsRight
+    }
+}
+
+/// Career-aggregated pitching splits by opposing batter handedness.
+///
+/// Returned by ``SwiftBaseball/pitcherCareerPlatoonStats(id:)`` using the
+/// `careerStatSplits` MLB Stats API endpoint, which pre-aggregates all batters
+/// faced across a pitcher's entire MLB career into a single `vl` and `vr` row.
+public struct PitcherCareerPlatoonStats: Sendable, Equatable {
+    /// Career stats vs left-handed batters.
+    public let vsLeft: PitchingStats?
+    /// Career stats vs right-handed batters.
+    public let vsRight: PitchingStats?
+
+    public init(vsLeft: PitchingStats?, vsRight: PitchingStats?) {
+        self.vsLeft = vsLeft
+        self.vsRight = vsRight
+    }
+}
+
 // MARK: - Home/Away splits
 
 /// Batting stats split by home vs away games.
