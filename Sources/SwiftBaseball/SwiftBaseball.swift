@@ -112,8 +112,19 @@ public enum SwiftBaseball {
     ///
     ///     let games  = try await SwiftBaseball.schedule(.date("2024-07-04")).fetch()
     ///     let season = try await SwiftBaseball.schedule(.season(2024)).teamId(147).fetch()
-    public static func schedule(_ query: ScheduleQuery) -> QueryBuilder<[ScheduleEntry]> {
-        .schedule(query, client: client)
+    ///
+    /// Pass ``ScheduleHydration`` values to embed additional data in the response:
+    ///
+    ///     let games = try await SwiftBaseball.schedule(.date("2024-07-04"), hydrate: [.probablePitcher]).fetch()
+    ///
+    /// - Parameters:
+    ///   - query: The date, range, or season to fetch.
+    ///   - hydrate: Additional data to embed. Defaults to none.
+    public static func schedule(
+        _ query: ScheduleQuery,
+        hydrate: [ScheduleHydration] = []
+    ) -> QueryBuilder<[ScheduleEntry]> {
+        .schedule(query, hydrate: hydrate, client: client)
     }
 
     // MARK: - Games
