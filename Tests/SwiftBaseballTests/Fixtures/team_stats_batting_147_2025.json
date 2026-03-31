@@ -1,0 +1,137 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "season"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "splits": [
+        {
+          "season": "2025",
+          "stat": {
+            "gamesPlayed": 40,
+            "plateAppearances": 172,
+            "atBats": 148,
+            "runs": 38,
+            "hits": 52,
+            "doubles": 10,
+            "triples": 1,
+            "homeRuns": 18,
+            "rbi": 40,
+            "stolenBases": 4,
+            "caughtStealing": 1,
+            "baseOnBalls": 20,
+            "intentionalWalks": 6,
+            "strikeOuts": 44,
+            "hitByPitch": 2,
+            "sacFlies": 1,
+            "sacBunts": 0,
+            "groundIntoDoublePlay": 3,
+            "totalBases": 118,
+            "leftOnBase": 62,
+            "avg": ".351",
+            "obp": ".430",
+            "slg": ".797",
+            "ops": "1.227",
+            "babip": ".333"
+          },
+          "player": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450"
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "gameType": "R"
+        },
+        {
+          "season": "2025",
+          "stat": {
+            "gamesPlayed": 35,
+            "plateAppearances": 142,
+            "atBats": 125,
+            "runs": 22,
+            "hits": 38,
+            "doubles": 8,
+            "triples": 0,
+            "homeRuns": 9,
+            "rbi": 28,
+            "stolenBases": 0,
+            "caughtStealing": 0,
+            "baseOnBalls": 15,
+            "intentionalWalks": 2,
+            "strikeOuts": 38,
+            "hitByPitch": 1,
+            "sacFlies": 1,
+            "sacBunts": 0,
+            "groundIntoDoublePlay": 5,
+            "totalBases": 73,
+            "leftOnBase": 45,
+            "avg": ".304",
+            "obp": ".373",
+            "slg": ".584",
+            "ops": ".957",
+            "babip": ".340"
+          },
+          "player": {
+            "id": 665742,
+            "fullName": "Giancarlo Stanton",
+            "link": "/api/v1/people/665742"
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "gameType": "R"
+        },
+        {
+          "season": "2025",
+          "stat": {
+            "gamesPlayed": 38,
+            "plateAppearances": 163,
+            "atBats": 144,
+            "runs": 30,
+            "hits": 44,
+            "doubles": 9,
+            "triples": 3,
+            "homeRuns": 7,
+            "rbi": 22,
+            "stolenBases": 12,
+            "caughtStealing": 2,
+            "baseOnBalls": 16,
+            "intentionalWalks": 0,
+            "strikeOuts": 42,
+            "hitByPitch": 1,
+            "sacFlies": 1,
+            "sacBunts": 1,
+            "groundIntoDoublePlay": 2,
+            "totalBases": 80,
+            "leftOnBase": 55,
+            "avg": ".306",
+            "obp": ".374",
+            "slg": ".556",
+            "ops": ".930",
+            "babip": ".368"
+          },
+          "player": {
+            "id": 677551,
+            "fullName": "Jazz Chisholm Jr.",
+            "link": "/api/v1/people/677551"
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "gameType": "R"
+        }
+      ]
+    }
+  ]
+}

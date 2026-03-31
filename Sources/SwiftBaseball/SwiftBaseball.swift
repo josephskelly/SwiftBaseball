@@ -241,6 +241,27 @@ public enum SwiftBaseball {
         .playerSabermetrics(id: id, client: client)
     }
 
+    /// Fetch sabermetric stats (wOBA, wRC+, WAR) for every player on a team in one call.
+    ///
+    /// Uses the top-level `/stats?teamId` endpoint, which returns all players in a single
+    /// response instead of requiring one request per player. Chain `.season(_:)` for the year.
+    ///
+    ///     let stats = try await SwiftBaseball.teamSabermetrics(teamId: 147).season(2025).fetch()
+    public static func teamSabermetrics(teamId: Int) -> QueryBuilder<[PlayerSeasonStats]> {
+        .teamSabermetrics(teamId: teamId, client: client)
+    }
+
+    /// Fetch season stats for every player on a team in one call.
+    ///
+    /// Uses the top-level `/stats?teamId` endpoint. Chain `.season(_:)` and `.gameType(_:)`.
+    /// Use `gameType("R")` to restrict to regular season (recommended for sabermetric context).
+    ///
+    ///     let batting = try await SwiftBaseball.teamStats(teamId: 147, group: .batting)
+    ///         .season(2025).gameType("R").fetch()
+    public static func teamStats(teamId: Int, group: StatGroup) -> QueryBuilder<[PlayerSeasonStats]> {
+        .teamStats(teamId: teamId, group: group, client: client)
+    }
+
     /// Fetch home/away batting splits for a position player.
     ///
     ///     let splits = try await SwiftBaseball.playerHomeAwaySplits(id: 660271).season(2024).fetch()

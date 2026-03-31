@@ -109,6 +109,20 @@ let saber = try await SwiftBaseball
     .season(2024)
     .fetch()
 
+// Team sabermetrics — wOBA, wRC+, WAR for every player on a team in one call
+let teamSaber = try await SwiftBaseball
+    .teamSabermetrics(teamId: 147)
+    .season(2025)
+    .fetch()
+teamSaber.first.map { print($0.player.fullName, $0.sabermetrics?.woba ?? 0) }
+
+// Team season stats — batting stats for every player on a team in one call
+let teamBatting = try await SwiftBaseball
+    .teamStats(teamId: 147, group: .batting)
+    .season(2025)
+    .gameType("R")
+    .fetch()
+
 // Pitcher platoon splits — OPS against vs LHB / vs RHB
 let pitcherSplits = try await SwiftBaseball
     .pitcherPlatoonStats(id: 660271)

@@ -1,0 +1,110 @@
+{
+  "stats": [
+    {
+      "type": {
+        "displayName": "sabermetrics"
+      },
+      "group": {
+        "displayName": "hitting"
+      },
+      "splits": [
+        {
+          "season": "2025",
+          "stat": {
+            "woba": 0.430549,
+            "wRaa": 70.8202,
+            "wRc": 156.331,
+            "wRcPlus": 179.678,
+            "rar": 86.6456,
+            "war": 8.94856,
+            "batting": 69.6496,
+            "fielding": 0.0,
+            "baseRunning": 9.73535,
+            "positional": -17.1759,
+            "wLeague": 2.33332,
+            "replacement": 22.1032,
+            "spd": 8.10565,
+            "ubr": 1.9,
+            "wGdp": 2.2,
+            "wSb": 8.7988
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "player": {
+            "id": 592450,
+            "fullName": "Aaron Judge",
+            "link": "/api/v1/people/592450"
+          },
+          "gameType": "R"
+        },
+        {
+          "season": "2025",
+          "stat": {
+            "woba": 0.381200,
+            "wRaa": 42.1100,
+            "wRc": 118.440,
+            "wRcPlus": 148.320,
+            "rar": 55.3200,
+            "war": 5.71000,
+            "batting": 41.2200,
+            "fielding": 3.1000,
+            "baseRunning": 2.4400,
+            "positional": -6.2000,
+            "wLeague": 1.9800,
+            "replacement": 18.7600,
+            "spd": 4.32000,
+            "ubr": 0.8,
+            "wGdp": 1.1,
+            "wSb": 1.2200
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "player": {
+            "id": 665742,
+            "fullName": "Giancarlo Stanton",
+            "link": "/api/v1/people/665742"
+          },
+          "gameType": "R"
+        },
+        {
+          "season": "2025",
+          "stat": {
+            "woba": 0.352000,
+            "wRaa": 18.9000,
+            "wRc": 98.2000,
+            "wRcPlus": 122.500,
+            "rar": 38.1000,
+            "war": 3.93000,
+            "batting": 18.2000,
+            "fielding": 8.4000,
+            "baseRunning": 4.1100,
+            "positional": 2.5000,
+            "wLeague": 1.5500,
+            "replacement": 15.8800,
+            "spd": 6.77000,
+            "ubr": 1.4,
+            "wGdp": 0.9,
+            "wSb": 3.3400
+          },
+          "team": {
+            "id": 147,
+            "name": "New York Yankees",
+            "link": "/api/v1/teams/147"
+          },
+          "player": {
+            "id": 677551,
+            "fullName": "Jazz Chisholm Jr.",
+            "link": "/api/v1/people/677551"
+          },
+          "gameType": "R"
+        }
+      ]
+    }
+  ]
+}

@@ -989,4 +989,98 @@ struct StatsTests {
         #expect(Sport.rookie.rawValue == 16)
         #expect(Sport.complexLeague.rawValue == 17)
     }
+
+    // MARK: - Team bulk stats
+
+    @Test("Decode team sabermetrics from fixture returns all players")
+    func decodeTeamSabermetrics() throws {
+        let data = try Fixtures.load("team_sabermetrics_147_2025.json")
+        let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: data)
+        let stub = PlayerReference(id: 0, fullName: "")
+        let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: stub)
+
+        #expect(stats.count == 3)
+        let judge = try #require(stats.first { $0.player.id == 592450 })
+        #expect(judge.player.fullName == "Aaron Judge")
+        #expect(judge.season == "2025")
+        let saber = try #require(judge.sabermetrics)
+        #expect(abs((saber.woba ?? 0) - 0.430549) < 0.000001)
+        #expect(abs((saber.wRcPlus ?? 0) - 179.678) < 0.001)
+    }
+
+    @Test("teamSabermetrics QueryBuilder sends correct parameters")
+    func teamSabermetricsQueryBuilderParams() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("team_sabermetrics_147_2025.json")
+        mock.stub(path: "stats", data: data)
+
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.teamSabermetrics(teamId: 147, client: mock)
+            .season(2025)
+            .fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "sabermetrics" })
+        #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
+        #expect(items.contains { $0.name == "teamId" && $0.value == "147" })
+        #expect(items.contains { $0.name == "playerPool" && $0.value == "All" })
+        #expect(items.contains { $0.name == "season" && $0.value == "2025" })
+        #expect(!items.contains { $0.name == "stats" && $0.value == "season" })
+    }
+
+    @Test("teamSabermetrics with empty splits returns empty array")
+    func emptyTeamSabermetrics() throws {
+        let json = #"{"stats":[{"type":{"displayName":"sabermetrics"},"group":{"displayName":"hitting"},"splits":[]}]}"#
+        let data = Data(json.utf8)
+        let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: data)
+        let stub = PlayerReference(id: 0, fullName: "")
+        let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: stub)
+        #expect(stats.isEmpty)
+    }
+
+    @Test("Decode team batting stats from fixture returns all players")
+    func decodeTeamBattingStats() throws {
+        let data = try Fixtures.load("team_stats_batting_147_2025.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let stub = PlayerReference(id: 0, fullName: "")
+        let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: stub)
+
+        #expect(stats.count == 3)
+        let judge = try #require(stats.first { $0.player.id == 592450 })
+        #expect(judge.player.fullName == "Aaron Judge")
+        #expect(judge.season == "2025")
+        let batting = try #require(judge.batting)
+        #expect(batting.homeRuns == 18)
+        #expect(batting.gamesPlayed == 40)
+    }
+
+    @Test("teamStats QueryBuilder sends correct parameters")
+    func teamStatsQueryBuilderParams() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("team_stats_batting_147_2025.json")
+        mock.stub(path: "stats", data: data)
+
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.teamStats(teamId: 147, group: .batting, client: mock)
+            .season(2025)
+            .fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "stats" && $0.value == "season" })
+        #expect(items.contains { $0.name == "group" && $0.value == "hitting" })
+        #expect(items.contains { $0.name == "teamId" && $0.value == "147" })
+        #expect(items.contains { $0.name == "playerPool" && $0.value == "All" })
+        #expect(items.contains { $0.name == "season" && $0.value == "2025" })
+    }
+
+    @Test("teamStats group parameter uses StatGroup apiValue")
+    func teamStatsGroupParam() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("team_stats_batting_147_2025.json")
+        mock.stub(path: "stats", data: data)
+
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.teamStats(teamId: 147, group: .pitching, client: mock).fetch()
+
+        let items = mock.lastEndpoint?.queryItems ?? []
+        #expect(items.contains { $0.name == "group" && $0.value == "pitching" })
+        #expect(!items.contains { $0.name == "group" && $0.value == "hitting" })
+    }
 }

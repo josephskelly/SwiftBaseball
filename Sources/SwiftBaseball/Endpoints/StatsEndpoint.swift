@@ -128,6 +128,42 @@ extension QueryBuilder where T == PitcherCareerPlatoonStats {
     }
 }
 
+// MARK: - Team bulk stat factories
+
+extension QueryBuilder where T == [PlayerSeasonStats] {
+    /// Fetches sabermetric stats (wOBA, wRC+, WAR) for all players on a team via the
+    /// top-level `/stats` endpoint with `teamId` — one call replaces N per-player calls.
+    static func teamSabermetrics(teamId: Int, client: any APIClient) -> QueryBuilder<[PlayerSeasonStats]> {
+        let endpoint = Endpoint(path: "stats", queryItems: [
+            URLQueryItem(name: "stats", value: "sabermetrics"),
+            URLQueryItem(name: "group", value: "hitting"),
+            URLQueryItem(name: "teamId", value: String(teamId)),
+            URLQueryItem(name: "playerPool", value: "All"),
+        ])
+        let stub = PlayerReference(id: 0, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: data)
+            return MLBResponseConverters.playerSabermetrics(from: response, playerRef: stub)
+        }
+    }
+
+    /// Fetches season stats for all players on a team by stat group via the top-level
+    /// `/stats` endpoint with `teamId` — one call replaces N per-player calls.
+    static func teamStats(teamId: Int, group: StatGroup, client: any APIClient) -> QueryBuilder<[PlayerSeasonStats]> {
+        let endpoint = Endpoint(path: "stats", queryItems: [
+            URLQueryItem(name: "stats", value: "season"),
+            URLQueryItem(name: "group", value: group.apiValue),
+            URLQueryItem(name: "teamId", value: String(teamId)),
+            URLQueryItem(name: "playerPool", value: "All"),
+        ])
+        let stub = PlayerReference(id: 0, fullName: "")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+            return MLBResponseConverters.playerSeasonStats(from: response, playerRef: stub)
+        }
+    }
+}
+
 // MARK: - Home/Away split factories
 
 extension QueryBuilder where T == PlayerHomeAwaySplits {
