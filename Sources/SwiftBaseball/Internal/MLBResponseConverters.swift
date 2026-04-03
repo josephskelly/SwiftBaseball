@@ -496,8 +496,8 @@ enum MLBResponseConverters {
 
         var gp = 0, gs = 0, w = 0, l = 0, sv = 0, svo = 0
         var hld = 0, bs = 0, cg = 0, sho = 0
-        var h = 0, r = 0, er = 0, hr = 0
-        var bb = 0, ibb = 0, so = 0, hbp = 0
+        var h = 0, d = 0, t = 0, r = 0, er = 0, hr = 0
+        var ab = 0, bb = 0, ibb = 0, so = 0, hbp = 0, sf = 0
         var wp = 0, bk = 0, bf = 0
         var totalIP = 0.0
 
@@ -513,13 +513,17 @@ enum MLBResponseConverters {
             cg  += s.completeGames ?? 0
             sho += s.shutouts ?? 0
             h   += s.hits ?? 0
+            d   += s.doubles ?? 0
+            t   += s.triples ?? 0
             r   += s.runs ?? 0
             er  += s.earnedRuns ?? 0
             hr  += s.homeRuns ?? 0
+            ab  += s.atBats ?? 0
             bb  += s.baseOnBalls ?? 0
             ibb += s.intentionalWalks ?? 0
             so  += s.strikeOuts ?? 0
             hbp += s.hitByPitch ?? 0
+            sf  += s.sacFlies ?? 0
             wp  += s.wildPitches ?? 0
             bk  += s.balks ?? 0
             bf  += s.battersFaced ?? 0
@@ -551,9 +555,9 @@ enum MLBResponseConverters {
             wins: w, losses: l, saves: sv,
             saveOpportunities: svo, holds: hld,
             blownSaves: bs, completeGames: cg, shutouts: sho,
-            hits: h, runs: r, earnedRuns: er, homeRuns: hr,
-            baseOnBalls: bb, intentionalWalks: ibb, strikeOuts: so,
-            hitByPitch: hbp, wildPitches: wp, balks: bk,
+            hits: h, doubles: d, triples: t, runs: r, earnedRuns: er, homeRuns: hr,
+            atBats: ab, baseOnBalls: bb, intentionalWalks: ibb, strikeOuts: so,
+            hitByPitch: hbp, sacFlies: sf, wildPitches: wp, balks: bk,
             battersFaced: bf,
             era: era, whip: whip, avg: avg,
             obp: obp, slg: slg, ops: ops,
@@ -567,11 +571,13 @@ enum MLBResponseConverters {
             wins: raw.wins, losses: raw.losses, saves: raw.saves,
             saveOpportunities: raw.saveOpportunities, holds: raw.holds,
             blownSaves: raw.blownSaves, completeGames: raw.completeGames,
-            shutouts: raw.shutouts, hits: raw.hits, runs: raw.runs,
-            earnedRuns: raw.earnedRuns, homeRuns: raw.homeRunsAllowed,
-            baseOnBalls: raw.baseOnBalls, intentionalWalks: raw.intentionalWalks,
+            shutouts: raw.shutouts, hits: raw.hits, doubles: raw.doubles,
+            triples: raw.triples, runs: raw.runs,
+            earnedRuns: raw.earnedRuns, homeRuns: raw.homeRunsAllowed ?? raw.homeRuns,
+            atBats: raw.atBats, baseOnBalls: raw.baseOnBalls,
+            intentionalWalks: raw.intentionalWalks,
             strikeOuts: raw.strikeOuts, hitByPitch: raw.hitByPitch,
-            wildPitches: raw.wildPitches, balks: raw.balks,
+            sacFlies: raw.sacFlies, wildPitches: raw.wildPitches, balks: raw.balks,
             battersFaced: raw.battersFaced,
             era: raw.era.flatMap(Double.init), whip: raw.whip.flatMap(Double.init),
             avg: raw.avg.flatMap(Double.init),

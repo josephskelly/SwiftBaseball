@@ -677,11 +677,20 @@ struct StatsTests {
         #expect(vsLeft.strikeOuts == 295)
         #expect(vsLeft.battersFaced == 936)
         #expect(vsLeft.ops == 0.634)
+        // New fields decoded from API response
+        #expect(vsLeft.atBats == 853)
+        #expect(vsLeft.doubles == 16)
+        #expect(vsLeft.triples == 1)
+        #expect(vsLeft.sacFlies == 4)
 
         let vsRight = try #require(career.vsRight)
         #expect(vsRight.strikeOuts == 325)
         #expect(vsRight.battersFaced == 961)
         #expect(vsRight.ops == 0.543)
+        #expect(vsRight.atBats == 861)
+        #expect(vsRight.doubles == 14)
+        #expect(vsRight.triples == 0)
+        #expect(vsRight.sacFlies == 3)
     }
 
     @Test("pitcherCareerPlatoonStats() query builder sends careerStatSplits param")
@@ -1111,6 +1120,62 @@ struct StatsTests {
     @Test("BattingStats.woba returns nil when any required field is nil")
     func wobaNilField() {
         #expect(BattingStats.empty.woba == nil)
+    }
+
+    // MARK: - wobaAgainst
+
+    @Test("PitchingStats.wobaAgainst computes correctly from career platoon fixture values")
+    func wobaAgainstNormalCase() throws {
+        // vsLeft from pitcher_career_stats_platoon_660271.json:
+        // AB=853 H=169 2B=16 3B=1 HR=19 BB=69 IBB=2 HBP=7 SF=4
+        // 1B=133 uBB=67
+        // num = 0.696*67 + 0.726*7 + 0.883*133 + 1.244*16 + 1.569*1 + 2.007*19 = 228.759
+        // den = 853 + 67 + 4 + 7 = 931
+        let stats = PitchingStats(
+            gamesPlayed: nil, gamesStarted: nil, wins: nil, losses: nil,
+            saves: nil, saveOpportunities: nil, holds: nil, blownSaves: nil,
+            completeGames: nil, shutouts: nil, hits: 169, doubles: 16, triples: 1,
+            runs: nil, earnedRuns: nil, homeRuns: 19, atBats: 853, baseOnBalls: 69,
+            intentionalWalks: 2, strikeOuts: 295, hitByPitch: 7, sacFlies: 4,
+            wildPitches: nil, balks: nil, battersFaced: 936,
+            era: nil, whip: nil, avg: nil, obp: nil, slg: nil, ops: nil,
+            inningsPitched: nil
+        )
+        let expected = 228.759 / 931.0
+        let result = try #require(stats.wobaAgainst)
+        #expect(abs(result - expected) < 0.001)
+    }
+
+    @Test("PitchingStats.wobaAgainst returns nil when required fields are missing")
+    func wobaAgainstNilField() {
+        #expect(PitchingStats.empty.wobaAgainst == nil)
+    }
+
+    @Test("PitchingStats.wobaAgainst returns nil when denominator is zero")
+    func wobaAgainstZeroDenominator() {
+        let stats = PitchingStats(
+            gamesPlayed: nil, gamesStarted: nil, wins: nil, losses: nil,
+            saves: nil, saveOpportunities: nil, holds: nil, blownSaves: nil,
+            completeGames: nil, shutouts: nil, hits: 0, doubles: 0, triples: 0,
+            runs: nil, earnedRuns: nil, homeRuns: 0, atBats: 0, baseOnBalls: 0,
+            intentionalWalks: 0, strikeOuts: 0, hitByPitch: 0, sacFlies: 0,
+            wildPitches: nil, balks: nil, battersFaced: nil,
+            era: nil, whip: nil, avg: nil, obp: nil, slg: nil, ops: nil,
+            inningsPitched: nil
+        )
+        #expect(stats.wobaAgainst == nil)
+    }
+
+    @Test("PitchingStats.wobaAgainst decoded from career platoon fixture end-to-end")
+    func wobaAgainstFromFixture() throws {
+        let data = try Fixtures.load("pitcher_career_stats_platoon_660271.json")
+        let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
+        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
+        let vsLeft = try #require(p.vsLeft)
+        let result = try #require(vsLeft.wobaAgainst)
+        let expected = 228.759 / 931.0
+        #expect(abs(result - expected) < 0.001)
     }
 
     @Test("BattingStats.woba returns nil when denominator is zero")

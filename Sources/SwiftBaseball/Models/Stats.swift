@@ -174,16 +174,44 @@ public struct PitchingStats: Codable, Sendable, Equatable {
     public let completeGames: Int?
     public let shutouts: Int?
     public let hits: Int?
+    public let doubles: Int?
+    public let triples: Int?
     public let runs: Int?
     public let earnedRuns: Int?
     public let homeRuns: Int?
+    public let atBats: Int?
     public let baseOnBalls: Int?
     public let intentionalWalks: Int?
     public let strikeOuts: Int?
     public let hitByPitch: Int?
+    public let sacFlies: Int?
     public let wildPitches: Int?
     public let balks: Int?
     public let battersFaced: Int?
+
+    // MARK: - Computed
+
+    /// wOBA-against computed from counting stats using FanGraphs linear weights.
+    ///
+    /// Uses the same formula as ``BattingStats/woba`` applied to opposing-batter stats.
+    /// Returns `nil` if `atBats`, `doubles`, `triples`, `sacFlies`, or any other
+    /// required field is `nil`, or if the denominator is zero.
+    ///
+    /// - Note: `atBats`, `doubles`, `triples`, and `sacFlies` are only present on
+    ///   platoon-split responses (`pitcherCareerPlatoonStats` / `pitcherStatSplits`),
+    ///   not on standard season-total pitching lines.
+    public var wobaAgainst: Double? {
+        guard let ab = atBats, let h = hits, let d = doubles, let t = triples,
+              let hr = homeRuns, let bb = baseOnBalls, let ibb = intentionalWalks,
+              let hbp = hitByPitch, let sf = sacFlies else { return nil }
+        let singles = h - d - t - hr
+        let ubb = bb - ibb
+        let num = 0.696 * Double(ubb) + 0.726 * Double(hbp) + 0.883 * Double(singles)
+                + 1.244 * Double(d) + 1.569 * Double(t) + 2.007 * Double(hr)
+        let den = Double(ab + ubb + sf + hbp)
+        guard den > 0 else { return nil }
+        return num / den
+    }
 
     // Rate stats
     public let era: Double?
@@ -202,9 +230,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
     enum CodingKeys: String, CodingKey {
         case gamesPlayed, gamesStarted, wins, losses
         case saves, saveOpportunities, holds, blownSaves
-        case completeGames, shutouts, hits, runs, earnedRuns
-        case homeRuns, baseOnBalls, intentionalWalks, strikeOuts
-        case hitByPitch, wildPitches, balks, battersFaced
+        case completeGames, shutouts, hits, doubles, triples, runs, earnedRuns
+        case homeRuns, atBats, baseOnBalls, intentionalWalks, strikeOuts
+        case hitByPitch, sacFlies, wildPitches, balks, battersFaced
         case era, whip, avg, obp, slg, ops, inningsPitched
     }
 
@@ -221,13 +249,17 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         completeGames     = try c.decodeIfPresent(Int.self, forKey: .completeGames)
         shutouts          = try c.decodeIfPresent(Int.self, forKey: .shutouts)
         hits              = try c.decodeIfPresent(Int.self, forKey: .hits)
+        doubles           = try c.decodeIfPresent(Int.self, forKey: .doubles)
+        triples           = try c.decodeIfPresent(Int.self, forKey: .triples)
         runs              = try c.decodeIfPresent(Int.self, forKey: .runs)
         earnedRuns        = try c.decodeIfPresent(Int.self, forKey: .earnedRuns)
         homeRuns          = try c.decodeIfPresent(Int.self, forKey: .homeRuns)
+        atBats            = try c.decodeIfPresent(Int.self, forKey: .atBats)
         baseOnBalls       = try c.decodeIfPresent(Int.self, forKey: .baseOnBalls)
         intentionalWalks  = try c.decodeIfPresent(Int.self, forKey: .intentionalWalks)
         strikeOuts        = try c.decodeIfPresent(Int.self, forKey: .strikeOuts)
         hitByPitch        = try c.decodeIfPresent(Int.self, forKey: .hitByPitch)
+        sacFlies          = try c.decodeIfPresent(Int.self, forKey: .sacFlies)
         wildPitches       = try c.decodeIfPresent(Int.self, forKey: .wildPitches)
         balks             = try c.decodeIfPresent(Int.self, forKey: .balks)
         battersFaced      = try c.decodeIfPresent(Int.self, forKey: .battersFaced)
@@ -254,9 +286,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
     static let empty = PitchingStats(
         gamesPlayed: nil, gamesStarted: nil, wins: nil, losses: nil,
         saves: nil, saveOpportunities: nil, holds: nil, blownSaves: nil,
-        completeGames: nil, shutouts: nil, hits: nil, runs: nil,
-        earnedRuns: nil, homeRuns: nil, baseOnBalls: nil,
-        intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil,
+        completeGames: nil, shutouts: nil, hits: nil, doubles: nil, triples: nil,
+        runs: nil, earnedRuns: nil, homeRuns: nil, atBats: nil, baseOnBalls: nil,
+        intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil, sacFlies: nil,
         wildPitches: nil, balks: nil, battersFaced: nil,
         era: nil, whip: nil, avg: nil,
         obp: nil, slg: nil, ops: nil, inningsPitched: nil
@@ -265,9 +297,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
     init(
         gamesPlayed: Int?, gamesStarted: Int?, wins: Int?, losses: Int?,
         saves: Int?, saveOpportunities: Int?, holds: Int?, blownSaves: Int?,
-        completeGames: Int?, shutouts: Int?, hits: Int?, runs: Int?,
-        earnedRuns: Int?, homeRuns: Int?, baseOnBalls: Int?,
-        intentionalWalks: Int?, strikeOuts: Int?, hitByPitch: Int?,
+        completeGames: Int?, shutouts: Int?, hits: Int?, doubles: Int?, triples: Int?,
+        runs: Int?, earnedRuns: Int?, homeRuns: Int?, atBats: Int?, baseOnBalls: Int?,
+        intentionalWalks: Int?, strikeOuts: Int?, hitByPitch: Int?, sacFlies: Int?,
         wildPitches: Int?, balks: Int?, battersFaced: Int?,
         era: Double?, whip: Double?, avg: Double?,
         obp: Double?, slg: Double?, ops: Double?,
@@ -284,13 +316,17 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         self.completeGames = completeGames
         self.shutouts = shutouts
         self.hits = hits
+        self.doubles = doubles
+        self.triples = triples
         self.runs = runs
         self.earnedRuns = earnedRuns
         self.homeRuns = homeRuns
+        self.atBats = atBats
         self.baseOnBalls = baseOnBalls
         self.intentionalWalks = intentionalWalks
         self.strikeOuts = strikeOuts
         self.hitByPitch = hitByPitch
+        self.sacFlies = sacFlies
         self.wildPitches = wildPitches
         self.balks = balks
         self.battersFaced = battersFaced
