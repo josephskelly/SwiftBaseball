@@ -439,6 +439,34 @@ public enum SwiftBaseball {
         StatcastBatchPitchingQuery(playerIds: playerIds, client: statcastClient)
     }
 
+    /// Fetch career Statcast batting splits vs LHP and RHP from Baseball Savant.
+    ///
+    /// Fires two concurrent requests — one for `p_throws=L` and one for `p_throws=R` —
+    /// with no date filter, covering the full Statcast era (2015–present).
+    ///
+    ///     let splits = try await SwiftBaseball
+    ///         .statcastCareerSplits(playerId: 660271)
+    ///         .fetch()
+    ///     print(splits.vsLHP.xwOBA)   // career xwOBA vs LHP
+    ///     print(splits.vsRHP.pa)      // career PA vs RHP
+    public static func statcastCareerSplits(playerId: Int) -> StatcastCareerSplitBattingQuery {
+        StatcastCareerSplitBattingQuery(playerId: playerId, client: statcastClient)
+    }
+
+    /// Fetch career Statcast batting splits for multiple batters in batched requests.
+    ///
+    /// Player IDs are sent in chunks of ``StatcastBatchCareerSplitBattingQuery/defaultBatchSize`` (4)
+    /// per request pair, keeping each response under the Savant 25,000-row cap.
+    /// Returns a dictionary keyed by MLB player ID.
+    ///
+    ///     let splits = try await SwiftBaseball
+    ///         .statcastBatchCareerSplits([660271, 592450, 665742])
+    ///         .fetch()
+    ///     print(splits[660271]?.vsLHP.xwOBA)
+    public static func statcastBatchCareerSplits(_ ids: [Int]) -> StatcastBatchCareerSplitBattingQuery {
+        StatcastBatchCareerSplitBattingQuery(playerIds: ids, client: statcastClient)
+    }
+
     // MARK: - Baseball Savant Leaderboards
 
     /// Fetch the Baseball Savant sprint-speed leaderboard.

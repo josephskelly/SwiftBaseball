@@ -1083,4 +1083,48 @@ struct StatsTests {
         #expect(items.contains { $0.name == "group" && $0.value == "pitching" })
         #expect(!items.contains { $0.name == "group" && $0.value == "hitting" })
     }
+
+    // MARK: - wOBA computed property
+
+    @Test("BattingStats.woba computes correctly from known values")
+    func wobaNormalCase() throws {
+        // Shohei Ohtani 2024: AB=636 H=197 2B=38 3B=7 HR=54 BB=81 IBB=20 HBP=7 SF=5
+        // 1B=98  uBB=61
+        // num = 0.696*61 + 0.726*7 + 0.883*98 + 1.244*38 + 1.569*7 + 2.007*54
+        //     = 42.456 + 5.082 + 86.534 + 47.272 + 10.983 + 108.378 = 300.705
+        // den = 636 + 61 + 5 + 7 = 709
+        // wOBA ≈ 0.424
+        let stats = BattingStats(
+            gamesPlayed: 159, plateAppearances: 731, atBats: 636, runs: 134,
+            hits: 197, doubles: 38, triples: 7, homeRuns: 54, rbi: 130,
+            stolenBases: 59, caughtStealing: 4, baseOnBalls: 81,
+            intentionalWalks: 20, strikeOuts: 162, hitByPitch: 7,
+            sacFlies: 5, sacBunts: 2, groundIntoDoublePlay: 10,
+            totalBases: 411, leftOnBase: 80,
+            avg: 0.310, obp: 0.390, slg: 0.646, ops: 1.036, babip: 0.334
+        )
+        let expected = 300.705 / 709.0
+        let result = try #require(stats.woba)
+        #expect(abs(result - expected) < 0.001)
+    }
+
+    @Test("BattingStats.woba returns nil when any required field is nil")
+    func wobaNilField() {
+        #expect(BattingStats.empty.woba == nil)
+    }
+
+    @Test("BattingStats.woba returns nil when denominator is zero")
+    func wobaZeroDenominator() {
+        // AB=0, BB=0, IBB=0, SF=0, HBP=0 → den = 0
+        let stats = BattingStats(
+            gamesPlayed: 0, plateAppearances: 0, atBats: 0, runs: 0,
+            hits: 0, doubles: 0, triples: 0, homeRuns: 0, rbi: 0,
+            stolenBases: 0, caughtStealing: 0, baseOnBalls: 0,
+            intentionalWalks: 0, strikeOuts: 0, hitByPitch: 0,
+            sacFlies: 0, sacBunts: 0, groundIntoDoublePlay: 0,
+            totalBases: 0, leftOnBase: 0,
+            avg: nil, obp: nil, slg: nil, ops: nil, babip: nil
+        )
+        #expect(stats.woba == nil)
+    }
 }

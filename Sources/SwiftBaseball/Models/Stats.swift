@@ -29,6 +29,29 @@ public struct BattingStats: Codable, Sendable, Equatable {
     public let totalBases: Int?
     public let leftOnBase: Int?
 
+    // MARK: - Computed
+
+    /// wOBA computed from counting stats using FanGraphs linear weights.
+    ///
+    /// Uses approximate career-era averages (wBB=0.696, wHBP=0.726, w1B=0.883,
+    /// w2B=1.244, w3B=1.569, wHR=2.007). Returns `nil` if any required field is `nil`
+    /// or the denominator is zero.
+    ///
+    /// - Note: This is a counting-stat approximation. For contact quality–adjusted
+    ///   wOBA from Statcast, use ``StatcastCareerSplits``.
+    public var woba: Double? {
+        guard let ab = atBats, let h = hits, let d = doubles, let t = triples,
+              let hr = homeRuns, let bb = baseOnBalls, let ibb = intentionalWalks,
+              let hbp = hitByPitch, let sf = sacFlies else { return nil }
+        let singles = h - d - t - hr
+        let ubb = bb - ibb
+        let num = 0.696 * Double(ubb) + 0.726 * Double(hbp) + 0.883 * Double(singles)
+                + 1.244 * Double(d) + 1.569 * Double(t) + 2.007 * Double(hr)
+        let den = Double(ab + ubb + sf + hbp)
+        guard den > 0 else { return nil }
+        return num / den
+    }
+
     // Rate stats — encoded as strings in MLB API ("0.310")
     public let avg: Double?
     public let obp: Double?

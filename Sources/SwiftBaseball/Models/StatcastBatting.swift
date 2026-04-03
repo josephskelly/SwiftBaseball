@@ -62,3 +62,35 @@ public struct StatcastBatting: Sendable, Equatable, Codable {
     /// Total plate appearances (BBE + strikeouts + walks + HBP).
     public let plateAppearances: Int
 }
+
+// MARK: - Career splits
+
+/// Career plate-appearance stats for one opposing-pitcher-handedness split,
+/// sourced from Baseball Savant. Covers the Statcast era (2015–present).
+public struct CareerSplitStats: Sendable, Equatable {
+    /// Full-PA career xwOBA (contact xwOBA blended with walk/HBP linear weights).
+    ///
+    /// Mirrors the Baseball Savant xwOBA methodology: each in-play event contributes
+    /// its `estimated_woba_using_speedangle` value; walks contribute 0.690;
+    /// HBP contributes 0.720; strikeouts contribute 0.000.
+    public let xwOBA: Double?
+    /// Total plate appearances in this split.
+    public let pa: Int
+    /// `true` if the Savant response hit the 25,000-row cap and data may be incomplete.
+    ///
+    /// When `true`, treat `xwOBA` and `pa` as lower bounds, not exact career totals.
+    /// Career leaders with long tenures (e.g. 10+ Statcast seasons vs one handedness)
+    /// are most likely to be affected.
+    public let isTruncated: Bool
+}
+
+/// Career Statcast batting splits keyed by opposing pitcher handedness.
+///
+/// Returned by ``SwiftBaseball/statcastCareerSplits(playerId:)`` and
+/// ``SwiftBaseball/statcastBatchCareerSplits(_:)``.
+public struct StatcastCareerSplits: Sendable, Equatable {
+    /// Career stats vs left-handed pitchers.
+    public let vsLHP: CareerSplitStats
+    /// Career stats vs right-handed pitchers.
+    public let vsRHP: CareerSplitStats
+}

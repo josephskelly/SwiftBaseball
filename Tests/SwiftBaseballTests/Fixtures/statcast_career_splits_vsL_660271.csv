@@ -1,0 +1,7 @@
+pitch_type,game_date,batter,pitcher,events,description,bb_type,p_throws,estimated_woba_using_speedangle,game_pk,at_bat_number
+FF,2024-06-01,660271,543037,single,hit_into_play,ground_ball,L,0.460,745001,1
+SL,2024-06-02,660271,543037,home_run,hit_into_play,fly_ball,L,0.980,745002,2
+CH,2024-06-03,660271,543037,field_out,hit_into_play,line_drive,L,0.140,745003,3
+FF,2024-06-04,660271,543037,walk,ball,,L,,745004,4
+SL,2024-06-05,660271,543037,strikeout,swinging_strike,,L,,745005,5
+CH,2024-06-06,660271,543037,field_out,hit_into_play,ground_ball,L,0.080,745006,6

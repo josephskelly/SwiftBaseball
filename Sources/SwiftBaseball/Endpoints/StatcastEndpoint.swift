@@ -140,6 +140,56 @@ public struct StatcastPitcherQuery: Sendable {
     }
 }
 
+// MARK: - Career Split Batting Query
+
+/// Query builder for career Statcast batting splits by opposing pitcher handedness.
+///
+/// Fires two concurrent Baseball Savant requests (`p_throws=L` and `p_throws=R`) with
+/// no date filter, covering the full Statcast era (2015–present).
+///
+/// ```swift
+/// let splits = try await SwiftBaseball
+///     .statcastCareerSplits(playerId: 660271)
+///     .fetch()
+/// // splits.vsLHP.xwOBA, splits.vsRHP.pa
+/// ```
+public struct StatcastCareerSplitBattingQuery: Sendable {
+    let playerId: Int
+    let client: StatcastAPIClient
+
+    init(playerId: Int, client: StatcastAPIClient) {
+        self.playerId = playerId
+        self.client = client
+    }
+
+    /// Executes the query and returns career Statcast splits vs LHP and RHP.
+    ///
+    /// Two HTTP requests are fired concurrently — one for `p_throws=L` and one for
+    /// `p_throws=R`. No date range is applied; the result covers the entire Statcast era.
+    ///
+    /// - Returns: ``StatcastCareerSplits`` with vsLHP and vsRHP ``CareerSplitStats``.
+    /// - Throws: ``SwiftBaseballError`` if either request or CSV parse fails.
+    public func fetch() async throws -> StatcastCareerSplits {
+        async let lCSV = client.fetchCSV(queryItems: buildQueryItems(pThrows: "L"))
+        async let rCSV = client.fetchCSV(queryItems: buildQueryItems(pThrows: "R"))
+        let (lText, rText) = try await (lCSV, rCSV)
+        let lSplit = StatcastCareerSplitAggregator.aggregate(CSVParser.parse(lText))
+        let rSplit = StatcastCareerSplitAggregator.aggregate(CSVParser.parse(rText))
+        return StatcastCareerSplits(vsLHP: lSplit, vsRHP: rSplit)
+    }
+
+    private func buildQueryItems(pThrows: String) -> [URLQueryItem] {
+        // No game_date_gt / game_date_lt — career = all Statcast era data.
+        [
+            URLQueryItem(name: "batters_lookup[]", value: String(playerId)),
+            URLQueryItem(name: "all", value: "true"),
+            URLQueryItem(name: "type", value: "details"),
+            URLQueryItem(name: "player_type", value: "batter"),
+            URLQueryItem(name: "p_throws", value: pThrows),
+        ]
+    }
+}
+
 // MARK: - Batch Batting Query
 
 /// Query builder for Statcast batted ball data for multiple batters in a single request.
@@ -355,6 +405,106 @@ public struct StatcastBatchPitchingQuery: Sendable {
     }
 }
 
+// MARK: - Batch Career Split Batting Query
+
+/// Query builder for career Statcast batting splits for multiple batters in batched requests.
+///
+/// Sends player IDs in batches using `batters_lookup[]` query parameters. For each batch,
+/// two concurrent requests are fired — one for `p_throws=L` and one for `p_throws=R`.
+/// No date filter is applied; results cover the full Statcast era (2015–present).
+///
+/// The default batch size is 4 (half of ``StatcastBatchBattingQuery/defaultBatchSize``)
+/// because career rows are approximately 3× larger than single-season rows, keeping
+/// each response well under the Savant 25,000-row cap.
+///
+/// ```swift
+/// let splits = try await SwiftBaseball
+///     .statcastBatchCareerSplits([660271, 592450, 665742])
+///     .fetch()
+/// // splits[660271]?.vsLHP.xwOBA
+/// ```
+public struct StatcastBatchCareerSplitBattingQuery: Sendable {
+    let playerIds: [Int]
+    let client: StatcastAPIClient
+    private var _batchSize: Int
+
+    /// Default number of player IDs per HTTP request pair (L + R).
+    ///
+    /// Set to 4 because career rows are ~3× larger than single-season rows.
+    /// A batch of 4 players × ~8,000 career rows/player = ~32,000 rows total,
+    /// split across two requests (L and R), keeping each under the 25,000-row cap.
+    public static let defaultBatchSize = 4
+
+    init(playerIds: [Int], client: StatcastAPIClient, batchSize: Int = defaultBatchSize) {
+        self.playerIds = playerIds
+        self.client = client
+        self._batchSize = batchSize
+    }
+
+    /// Overrides the number of player IDs sent per HTTP request pair (default: ``defaultBatchSize``).
+    public func batchSize(_ size: Int) -> StatcastBatchCareerSplitBattingQuery {
+        var copy = self
+        copy._batchSize = size
+        return copy
+    }
+
+    /// Executes the batch query and returns career splits keyed by MLB player ID.
+    ///
+    /// All chunks are dispatched concurrently; within each chunk, the `p_throws=L`
+    /// and `p_throws=R` requests are also concurrent. The ``StatcastAPIClient`` rate
+    /// limiter (capped at 4) prevents overloading Baseball Savant.
+    ///
+    /// - Returns: Dictionary of player ID → ``StatcastCareerSplits``.
+    /// - Throws: ``SwiftBaseballError`` if any HTTP request fails.
+    public func fetch() async throws -> [Int: StatcastCareerSplits] {
+        guard !playerIds.isEmpty else { return [:] }
+        let chunks = playerIds.chunked(into: _batchSize)
+        return try await withThrowingTaskGroup(of: [Int: StatcastCareerSplits].self) { group in
+            for chunk in chunks {
+                group.addTask {
+                    async let lCSV = self.client.fetchCSV(
+                        queryItems: self.buildQueryItems(for: chunk, pThrows: "L"))
+                    async let rCSV = self.client.fetchCSV(
+                        queryItems: self.buildQueryItems(for: chunk, pThrows: "R"))
+                    let (lText, rText) = try await (lCSV, rCSV)
+                    let lByPlayer = Dictionary(grouping: CSVParser.parse(lText)) {
+                        $0["batter"].flatMap(Int.init) ?? -1
+                    }
+                    let rByPlayer = Dictionary(grouping: CSVParser.parse(rText)) {
+                        $0["batter"].flatMap(Int.init) ?? -1
+                    }
+                    var partial: [Int: StatcastCareerSplits] = [:]
+                    let allIds = Set(lByPlayer.keys).union(rByPlayer.keys).subtracting([-1])
+                    for id in allIds {
+                        partial[id] = StatcastCareerSplits(
+                            vsLHP: StatcastCareerSplitAggregator.aggregate(lByPlayer[id] ?? []),
+                            vsRHP: StatcastCareerSplitAggregator.aggregate(rByPlayer[id] ?? [])
+                        )
+                    }
+                    return partial
+                }
+            }
+            var results: [Int: StatcastCareerSplits] = [:]
+            for try await partial in group {
+                results.merge(partial) { _, new in new }
+            }
+            return results
+        }
+    }
+
+    private func buildQueryItems(for ids: [Int], pThrows: String) -> [URLQueryItem] {
+        var items: [URLQueryItem] = ids.map { URLQueryItem(name: "batters_lookup[]", value: String($0)) }
+        items += [
+            URLQueryItem(name: "all", value: "true"),
+            URLQueryItem(name: "type", value: "details"),
+            URLQueryItem(name: "player_type", value: "batter"),
+            URLQueryItem(name: "p_throws", value: pThrows),
+        ]
+        // No date range — career = all Statcast era data.
+        return items
+    }
+}
+
 // MARK: - Array helper
 
 private extension Array {
@@ -558,6 +708,43 @@ enum StatcastAggregator {
 
         return (gb, fb, ld, pu, gbPct, fbPct, ldPct, puPct,
                 avgEV, maxEV, avgLA, barrelRate, hardHitRate, xBA, xSLG, xwOBA)
+    }
+}
+
+// MARK: - Career Split Aggregator
+
+/// Aggregates pitch-level Statcast rows into ``CareerSplitStats``.
+///
+/// Reuses ``StatcastAggregator/countPAEvents(_:)`` for PA outcome counting and
+/// applies the same full-PA xwOBA blend (contact + walk/HBP weights) used by
+/// ``StatcastAggregator/aggregate(_:)``.
+enum StatcastCareerSplitAggregator {
+
+    /// wOBA linear weight assigned to a walk.
+    private static let walkWOBA: Double = 0.690
+    /// wOBA linear weight assigned to a hit-by-pitch.
+    private static let hbpWOBA: Double = 0.720
+
+    /// Aggregates rows for a single pitcher-handedness split.
+    ///
+    /// - Parameter rows: Pitch-level rows from a Savant CSV already filtered to one `p_throws` value.
+    /// - Returns: ``CareerSplitStats`` with full-PA xwOBA, total PA, and truncation flag.
+    static func aggregate(_ rows: [[String: String]]) -> CareerSplitStats {
+        let isTruncated = rows.count == 25_000
+        if isTruncated {
+            print("[SwiftBaseball] Warning: Savant returned 25,000 rows — career split data may be truncated.")
+        }
+        let battedBalls = rows.filter { $0["bb_type"] != nil }
+        let paEvents = StatcastAggregator.countPAEvents(rows)
+        let totalPA = battedBalls.count + paEvents.k + paEvents.bb + paEvents.hbp
+        let contactSum = battedBalls
+            .compactMap { $0["estimated_woba_using_speedangle"].flatMap(Double.init) }
+            .reduce(0.0, +)
+        let xwOBA: Double? = totalPA > 0
+            ? (contactSum + walkWOBA * Double(paEvents.bb) + hbpWOBA * Double(paEvents.hbp))
+              / Double(totalPA)
+            : nil
+        return CareerSplitStats(xwOBA: xwOBA, pa: totalPA, isTruncated: isTruncated)
     }
 }
 

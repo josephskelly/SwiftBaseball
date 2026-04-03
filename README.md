@@ -177,6 +177,24 @@ let pitching = try await SwiftBaseball
     .fetch()
 print(pitching.whiffRate, pitching.avgFastballVelo, pitching.pitchMix)
 
+// Career Statcast splits vs LHP / RHP — full Statcast era (2015–present), no date filter needed
+let careerSplits = try await SwiftBaseball
+    .statcastCareerSplits(playerId: 660271)
+    .fetch()
+print(careerSplits.vsLHP.xwOBA)   // career xwOBA vs left-handed pitchers
+print(careerSplits.vsRHP.pa)      // career plate appearances vs right-handed pitchers
+
+// Batch career splits for a roster
+let rosterSplits = try await SwiftBaseball
+    .statcastBatchCareerSplits([660271, 592450, 665742])
+    .fetch()
+print(rosterSplits[660271]?.vsLHP.xwOBA)   // Ohtani vs LHP
+
+// Computed wOBA from counting stats (FanGraphs linear weights)
+// Returns nil if any required field is missing or the denominator is zero
+let stats: BattingStats = ...
+print(stats.woba)  // Optional(0.424)
+
 // Minor league farm system — all affiliates of an MLB team
 let affiliates = try await SwiftBaseball.affiliates(teamId: 147, season: 2024).fetch()
 let aaaTeam = affiliates.first { $0.sportName == "Triple-A" }!
@@ -228,7 +246,7 @@ print(popTimes.first?.popTimeTo2B, popTimes.first?.exchangeTime)
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions, awards |
-| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing |
 | Baseball Reference | Planned | None (scraped) | Historical season stats |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 

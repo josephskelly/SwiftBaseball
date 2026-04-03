@@ -753,4 +753,109 @@ struct StatcastTests {
         accumulated.merge(incoming) { _, new in new }
         #expect(accumulated[1] == 99)
     }
+
+    // MARK: - Career split aggregator
+
+    @Test("CareerSplitAggregator computes correct PA and xwOBA from vsL fixture")
+    func careerSplitAggregateVsL() throws {
+        let data = try Fixtures.load("statcast_career_splits_vsL_660271.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let split = StatcastCareerSplitAggregator.aggregate(rows)
+
+        // 4 BBEs + 1 walk + 1 strikeout = 6 PA
+        #expect(split.pa == 6)
+        #expect(split.isTruncated == false)
+
+        // xwOBA = (0.460 + 0.980 + 0.140 + 0.080 + 0.690*1) / 6 = 2.350/6
+        let expected = 2.350 / 6.0
+        let result = try #require(split.xwOBA)
+        #expect(abs(result - expected) < 0.001)
+    }
+
+    @Test("CareerSplitAggregator computes correct PA and xwOBA from vsR fixture")
+    func careerSplitAggregateVsR() throws {
+        let data = try Fixtures.load("statcast_career_splits_vsR_660271.csv")
+        let csv = String(data: data, encoding: .utf8)!
+        let rows = CSVParser.parse(csv)
+        let split = StatcastCareerSplitAggregator.aggregate(rows)
+
+        // 5 BBEs + 1 walk + 1 strikeout + 1 HBP = 8 PA
+        #expect(split.pa == 8)
+        #expect(split.isTruncated == false)
+
+        // xwOBA = (0.970+0.500+0.810+0.060+0.050 + 0.690*1 + 0.720*1) / 8 = 3.800/8
+        let expected = 3.800 / 8.0
+        let result = try #require(split.xwOBA)
+        #expect(abs(result - expected) < 0.001)
+    }
+
+    @Test("CareerSplitAggregator returns xwOBA=nil and pa=0 for empty rows")
+    func careerSplitAggregateEmpty() {
+        let split = StatcastCareerSplitAggregator.aggregate([])
+        #expect(split.xwOBA == nil)
+        #expect(split.pa == 0)
+        #expect(split.isTruncated == false)
+    }
+
+    @Test("CareerSplitAggregator sets isTruncated=true when row count equals 25,000")
+    func careerSplitTruncationFlag() {
+        let rows = Array(repeating: [String: String](), count: 25_000)
+        let split = StatcastCareerSplitAggregator.aggregate(rows)
+        #expect(split.isTruncated == true)
+    }
+
+    @Test("StatcastCareerSplitBattingQuery stores playerId")
+    func careerSplitQueryStoresPlayerId() {
+        let client = StatcastAPIClient()
+        let query = StatcastCareerSplitBattingQuery(playerId: 660271, client: client)
+        #expect(query.playerId == 660271)
+    }
+
+    @Test("StatcastBatchCareerSplitBattingQuery defaultBatchSize is 4")
+    func batchCareerSplitDefaultBatchSize() {
+        #expect(StatcastBatchCareerSplitBattingQuery.defaultBatchSize == 4)
+    }
+
+    @Test("StatcastBatchCareerSplitBattingQuery stores player IDs")
+    func batchCareerSplitStoresPlayerIds() {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchCareerSplitBattingQuery(playerIds: [660271, 592450], client: client)
+        #expect(query.playerIds == [660271, 592450])
+    }
+
+    @Test("Empty batch career splits returns empty dictionary")
+    func batchCareerSplitEmptyPlayers() async throws {
+        let client = StatcastAPIClient()
+        let query = StatcastBatchCareerSplitBattingQuery(playerIds: [], client: client)
+        let results = try await query.fetch()
+        #expect(results.isEmpty)
+    }
+
+    @Test("Batch career split groups rows by batter ID and aggregates each split")
+    func batchCareerSplitGroupsAndAggregates() throws {
+        let lData = try Fixtures.load("statcast_career_splits_vsL_660271.csv")
+        let rData = try Fixtures.load("statcast_career_splits_vsR_660271.csv")
+        let lRows = CSVParser.parse(String(data: lData, encoding: .utf8)!)
+        let rRows = CSVParser.parse(String(data: rData, encoding: .utf8)!)
+
+        // Simulate what StatcastBatchCareerSplitBattingQuery.fetch() does for one chunk
+        let lByPlayer = Dictionary(grouping: lRows) { $0["batter"].flatMap(Int.init) ?? -1 }
+        let rByPlayer = Dictionary(grouping: rRows) { $0["batter"].flatMap(Int.init) ?? -1 }
+        let allIds = Set(lByPlayer.keys).union(rByPlayer.keys).subtracting([-1])
+
+        var partial: [Int: StatcastCareerSplits] = [:]
+        for id in allIds {
+            partial[id] = StatcastCareerSplits(
+                vsLHP: StatcastCareerSplitAggregator.aggregate(lByPlayer[id] ?? []),
+                vsRHP: StatcastCareerSplitAggregator.aggregate(rByPlayer[id] ?? [])
+            )
+        }
+
+        let splits = try #require(partial[660271])
+        #expect(splits.vsLHP.pa == 6)
+        #expect(splits.vsRHP.pa == 8)
+        #expect(splits.vsLHP.xwOBA != nil)
+        #expect(splits.vsRHP.xwOBA != nil)
+    }
 }
