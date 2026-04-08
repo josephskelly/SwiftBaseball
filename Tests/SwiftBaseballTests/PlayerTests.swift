@@ -58,6 +58,28 @@ struct PlayerTests {
         #expect(player.birthCountry == "USA")
     }
 
+    // MARK: - Utility positions
+
+    @Test("Utility outfielder decodes to .outfield via abbreviation")
+    func decodeUtilityOutfielder() throws {
+        let json = #"""
+        {"people":[{"id":1,"fullName":"Test OF","primaryPosition":{"code":"O","name":"Outfielder","type":"Outfielder","abbreviation":"OF"}}]}
+        """#.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPeopleResponse.self, from: json)
+        let player = MLBResponseConverters.player(from: try #require(response.people.first))
+        #expect(player.primaryPosition == .outfield)
+    }
+
+    @Test("Utility infielder decodes to .infield via abbreviation")
+    func decodeUtilityInfielder() throws {
+        let json = #"""
+        {"people":[{"id":2,"fullName":"Test IF","primaryPosition":{"code":"I","name":"Infielder","type":"Infielder","abbreviation":"IF"}}]}
+        """#.data(using: .utf8)!
+        let response = try JSONDecoder.mlb.decode(MLBPeopleResponse.self, from: json)
+        let player = MLBResponseConverters.player(from: try #require(response.people.first))
+        #expect(player.primaryPosition == .infield)
+    }
+
     // MARK: - Date parsing
 
     @Test("Decode player birth date")

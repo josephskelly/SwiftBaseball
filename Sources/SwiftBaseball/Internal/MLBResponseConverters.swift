@@ -865,8 +865,14 @@ enum MLBResponseConverters {
     // MARK: - Private helpers
 
     private static func position(from raw: MLBPositionObject?) -> Position {
-        guard let code = raw?.code else { return .unknown }
-        return Position(rawValue: code) ?? .unknown
+        guard let raw else { return .unknown }
+        // Try the abbreviation first so utility codes ("O"/"I") map to the
+        // enum's "OF"/"IF" cases. Fall back to the numeric code for standard
+        // positions ("1".."10").
+        if let abbr = raw.abbreviation, let pos = Position(rawValue: abbr) {
+            return pos
+        }
+        return Position(rawValue: raw.code) ?? .unknown
     }
 
     private static func handSide(from code: String?) -> HandSide {
