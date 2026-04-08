@@ -314,6 +314,8 @@ public enum Sport: Int, Codable, Sendable, Hashable, CaseIterable {
 public enum GameStatus: String, Codable, Sendable, Hashable, CaseIterable {
     /// Game is scheduled but has not started.
     case scheduled   = "Scheduled"
+    /// Lineups have been posted; game has not yet started.
+    case preGame     = "Pre-Game"
     /// Teams are warming up.
     case warmup      = "Warmup"
     /// Game is currently being played.

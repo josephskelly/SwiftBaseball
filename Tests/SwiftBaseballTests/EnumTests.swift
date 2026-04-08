@@ -83,6 +83,7 @@ struct EnumTests {
     @Test("GameStatus new cases round-trip through rawValue")
     func gameStatusNewCasesRoundTrip() {
         let cases: [(GameStatus, String)] = [
+            (.preGame,        "Pre-Game"),
             (.completedEarly, "Completed Early"),
             (.gameOver,       "Game Over"),
             (.rainDelay,      "Rain Delay"),
