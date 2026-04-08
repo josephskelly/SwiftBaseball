@@ -333,6 +333,7 @@ struct MLBStatPayload: Decodable {
     let wildPitches: Int?
     let balks: Int?
     let battersFaced: Int?
+    let numberOfPitches: Int?
     let era: String?
     let whip: String?
     let inningsPitched: String?

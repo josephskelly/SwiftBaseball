@@ -188,6 +188,9 @@ public struct PitchingStats: Codable, Sendable, Equatable {
     public let wildPitches: Int?
     public let balks: Int?
     public let battersFaced: Int?
+    /// Total pitches thrown. Populated on game-log responses (`gameLog` group `pitching`)
+    /// and season totals when the API includes it; `nil` on platoon split rows.
+    public let numberOfPitches: Int?
 
     // MARK: - Computed
 
@@ -233,6 +236,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         case completeGames, shutouts, hits, doubles, triples, runs, earnedRuns
         case homeRuns, atBats, baseOnBalls, intentionalWalks, strikeOuts
         case hitByPitch, sacFlies, wildPitches, balks, battersFaced
+        case numberOfPitches
         case era, whip, avg, obp, slg, ops, inningsPitched
     }
 
@@ -263,6 +267,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         wildPitches       = try c.decodeIfPresent(Int.self, forKey: .wildPitches)
         balks             = try c.decodeIfPresent(Int.self, forKey: .balks)
         battersFaced      = try c.decodeIfPresent(Int.self, forKey: .battersFaced)
+        numberOfPitches   = try c.decodeIfPresent(Int.self, forKey: .numberOfPitches)
 
         era             = try Self.decodeStatString(c, key: .era)
         whip            = try Self.decodeStatString(c, key: .whip)
@@ -290,6 +295,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         runs: nil, earnedRuns: nil, homeRuns: nil, atBats: nil, baseOnBalls: nil,
         intentionalWalks: nil, strikeOuts: nil, hitByPitch: nil, sacFlies: nil,
         wildPitches: nil, balks: nil, battersFaced: nil,
+        numberOfPitches: nil,
         era: nil, whip: nil, avg: nil,
         obp: nil, slg: nil, ops: nil, inningsPitched: nil
     )
@@ -301,6 +307,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         runs: Int?, earnedRuns: Int?, homeRuns: Int?, atBats: Int?, baseOnBalls: Int?,
         intentionalWalks: Int?, strikeOuts: Int?, hitByPitch: Int?, sacFlies: Int?,
         wildPitches: Int?, balks: Int?, battersFaced: Int?,
+        numberOfPitches: Int?,
         era: Double?, whip: Double?, avg: Double?,
         obp: Double?, slg: Double?, ops: Double?,
         inningsPitched: Double?
@@ -330,6 +337,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         self.wildPitches = wildPitches
         self.balks = balks
         self.battersFaced = battersFaced
+        self.numberOfPitches = numberOfPitches
         self.era = era
         self.whip = whip
         self.avg = avg

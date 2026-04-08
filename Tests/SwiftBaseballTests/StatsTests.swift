@@ -1138,6 +1138,7 @@ struct StatsTests {
             runs: nil, earnedRuns: nil, homeRuns: 19, atBats: 853, baseOnBalls: 69,
             intentionalWalks: 2, strikeOuts: 295, hitByPitch: 7, sacFlies: 4,
             wildPitches: nil, balks: nil, battersFaced: 936,
+            numberOfPitches: nil,
             era: nil, whip: nil, avg: nil, obp: nil, slg: nil, ops: nil,
             inningsPitched: nil
         )
@@ -1160,6 +1161,7 @@ struct StatsTests {
             runs: nil, earnedRuns: nil, homeRuns: 0, atBats: 0, baseOnBalls: 0,
             intentionalWalks: 0, strikeOuts: 0, hitByPitch: 0, sacFlies: 0,
             wildPitches: nil, balks: nil, battersFaced: nil,
+            numberOfPitches: nil,
             era: nil, whip: nil, avg: nil, obp: nil, slg: nil, ops: nil,
             inningsPitched: nil
         )

@@ -498,7 +498,7 @@ enum MLBResponseConverters {
         var hld = 0, bs = 0, cg = 0, sho = 0
         var h = 0, d = 0, t = 0, r = 0, er = 0, hr = 0
         var ab = 0, bb = 0, ibb = 0, so = 0, hbp = 0, sf = 0
-        var wp = 0, bk = 0, bf = 0
+        var wp = 0, bk = 0, bf = 0, np = 0
         var totalIP = 0.0
 
         for s in stats {
@@ -527,6 +527,7 @@ enum MLBResponseConverters {
             wp  += s.wildPitches ?? 0
             bk  += s.balks ?? 0
             bf  += s.battersFaced ?? 0
+            np  += s.numberOfPitches ?? 0
             totalIP += s.inningsPitched ?? 0
         }
 
@@ -559,6 +560,7 @@ enum MLBResponseConverters {
             atBats: ab, baseOnBalls: bb, intentionalWalks: ibb, strikeOuts: so,
             hitByPitch: hbp, sacFlies: sf, wildPitches: wp, balks: bk,
             battersFaced: bf,
+            numberOfPitches: np > 0 ? np : nil,
             era: era, whip: whip, avg: avg,
             obp: obp, slg: slg, ops: ops,
             inningsPitched: totalIP
@@ -579,6 +581,7 @@ enum MLBResponseConverters {
             strikeOuts: raw.strikeOuts, hitByPitch: raw.hitByPitch,
             sacFlies: raw.sacFlies, wildPitches: raw.wildPitches, balks: raw.balks,
             battersFaced: raw.battersFaced,
+            numberOfPitches: raw.numberOfPitches,
             era: raw.era.flatMap(Double.init), whip: raw.whip.flatMap(Double.init),
             avg: raw.avg.flatMap(Double.init),
             obp: raw.obp.flatMap(Double.init),
