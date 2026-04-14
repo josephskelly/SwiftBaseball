@@ -41,9 +41,9 @@ public struct StatcastQuery: Sendable {
 
     /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
     ///
-    /// When omitted, Baseball Savant returns all game types within the date window,
-    /// including spring training and exhibition games. Pass `"R"` to match the default
-    /// view on the Savant website.
+    /// Savant's CSV endpoint does not filter server-side by game type — it always returns
+    /// all rows in the date window. This filter is applied client-side against the
+    /// `game_type` column present in every CSV row.
     public func gameType(_ type: String) -> StatcastQuery {
         var copy = self
         copy.gameTypeFilter = type
@@ -57,7 +57,10 @@ public struct StatcastQuery: Sendable {
     public func fetch() async throws -> StatcastBatting {
         let items = buildQueryItems()
         let csv = try await client.fetchCSV(queryItems: items)
-        let rows = CSVParser.parse(csv)
+        var rows = CSVParser.parse(csv)
+        if let gt = gameTypeFilter {
+            rows = rows.filter { $0["game_type"] == gt }
+        }
         return StatcastAggregator.aggregate(rows)
     }
 
@@ -75,9 +78,6 @@ public struct StatcastQuery: Sendable {
         } else if let year = seasonYear {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
-        }
-        if let gt = gameTypeFilter {
-            items.append(URLQueryItem(name: "game_type", value: gt))
         }
 
         return items
@@ -143,7 +143,10 @@ public struct StatcastPitcherQuery: Sendable {
     public func fetch() async throws -> StatcastPitching {
         let items = buildQueryItems()
         let csv = try await client.fetchCSV(queryItems: items)
-        let rows = CSVParser.parse(csv)
+        var rows = CSVParser.parse(csv)
+        if let gt = gameTypeFilter {
+            rows = rows.filter { $0["game_type"] == gt }
+        }
         return StatcastPitcherAggregator.aggregate(rows)
     }
 
@@ -161,9 +164,6 @@ public struct StatcastPitcherQuery: Sendable {
         } else if let year = seasonYear {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
-        }
-        if let gt = gameTypeFilter {
-            items.append(URLQueryItem(name: "game_type", value: gt))
         }
 
         return items
@@ -301,11 +301,15 @@ public struct StatcastBatchBattingQuery: Sendable {
     public func fetch() async throws -> [Int: StatcastBatting] {
         guard !playerIds.isEmpty else { return [:] }
         let chunks = playerIds.chunked(into: _batchSize)
+        let gtFilter = gameTypeFilter
         return try await withThrowingTaskGroup(of: [Int: StatcastBatting].self) { group in
             for chunk in chunks {
                 group.addTask {
                     let csv = try await self.client.fetchCSV(queryItems: self.buildQueryItems(for: chunk))
-                    let rows = CSVParser.parse(csv)
+                    var rows = CSVParser.parse(csv)
+                    if let gt = gtFilter {
+                        rows = rows.filter { $0["game_type"] == gt }
+                    }
                     let byPlayer = Dictionary(grouping: rows) { $0["batter"].flatMap(Int.init) ?? -1 }
                     var partial: [Int: StatcastBatting] = [:]
                     for (id, playerRows) in byPlayer where id != -1 {
@@ -335,9 +339,6 @@ public struct StatcastBatchBattingQuery: Sendable {
         } else if let year = seasonYear {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
-        }
-        if let gt = gameTypeFilter {
-            items.append(URLQueryItem(name: "game_type", value: gt))
         }
         return items
     }
@@ -423,11 +424,15 @@ public struct StatcastBatchPitchingQuery: Sendable {
     public func fetch() async throws -> [Int: StatcastPitching] {
         guard !playerIds.isEmpty else { return [:] }
         let chunks = playerIds.chunked(into: _batchSize)
+        let gtFilter = gameTypeFilter
         return try await withThrowingTaskGroup(of: [Int: StatcastPitching].self) { group in
             for chunk in chunks {
                 group.addTask {
                     let csv = try await self.client.fetchCSV(queryItems: self.buildQueryItems(for: chunk))
-                    let rows = CSVParser.parse(csv)
+                    var rows = CSVParser.parse(csv)
+                    if let gt = gtFilter {
+                        rows = rows.filter { $0["game_type"] == gt }
+                    }
                     let byPlayer = Dictionary(grouping: rows) { $0["pitcher"].flatMap(Int.init) ?? -1 }
                     var partial: [Int: StatcastPitching] = [:]
                     for (id, playerRows) in byPlayer where id != -1 {
@@ -457,9 +462,6 @@ public struct StatcastBatchPitchingQuery: Sendable {
         } else if let year = seasonYear {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
-        }
-        if let gt = gameTypeFilter {
-            items.append(URLQueryItem(name: "game_type", value: gt))
         }
         return items
     }
