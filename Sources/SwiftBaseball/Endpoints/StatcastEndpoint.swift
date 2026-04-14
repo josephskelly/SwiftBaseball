@@ -17,6 +17,7 @@ public struct StatcastQuery: Sendable {
     private var seasonYear: Int?
     private var startDate: String?
     private var endDate: String?
+    private var gameTypeFilter: String?
 
     init(playerId: Int, client: StatcastAPIClient) {
         self.playerId = playerId
@@ -35,6 +36,17 @@ public struct StatcastQuery: Sendable {
         var copy = self
         copy.startDate = start
         copy.endDate = end
+        return copy
+    }
+
+    /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
+    ///
+    /// When omitted, Baseball Savant returns all game types within the date window,
+    /// including spring training and exhibition games. Pass `"R"` to match the default
+    /// view on the Savant website.
+    public func gameType(_ type: String) -> StatcastQuery {
+        var copy = self
+        copy.gameTypeFilter = type
         return copy
     }
 
@@ -64,6 +76,9 @@ public struct StatcastQuery: Sendable {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
         }
+        if let gt = gameTypeFilter {
+            items.append(URLQueryItem(name: "game_type", value: gt))
+        }
 
         return items
     }
@@ -88,6 +103,7 @@ public struct StatcastPitcherQuery: Sendable {
     private var seasonYear: Int?
     private var startDate: String?
     private var endDate: String?
+    private var gameTypeFilter: String?
 
     init(playerId: Int, client: StatcastAPIClient) {
         self.playerId = playerId
@@ -106,6 +122,17 @@ public struct StatcastPitcherQuery: Sendable {
         var copy = self
         copy.startDate = start
         copy.endDate = end
+        return copy
+    }
+
+    /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
+    ///
+    /// When omitted, Baseball Savant returns all game types within the date window,
+    /// including spring training and exhibition games. Pass `"R"` to match the default
+    /// view on the Savant website.
+    public func gameType(_ type: String) -> StatcastPitcherQuery {
+        var copy = self
+        copy.gameTypeFilter = type
         return copy
     }
 
@@ -134,6 +161,9 @@ public struct StatcastPitcherQuery: Sendable {
         } else if let year = seasonYear {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
+        }
+        if let gt = gameTypeFilter {
+            items.append(URLQueryItem(name: "game_type", value: gt))
         }
 
         return items
@@ -211,6 +241,7 @@ public struct StatcastBatchBattingQuery: Sendable {
     private var seasonYear: Int?
     private var startDate: String?
     private var endDate: String?
+    private var gameTypeFilter: String?
     private var _batchSize: Int
 
     /// Default number of player IDs per HTTP request.
@@ -244,6 +275,17 @@ public struct StatcastBatchBattingQuery: Sendable {
     public func batchSize(_ size: Int) -> StatcastBatchBattingQuery {
         var copy = self
         copy._batchSize = size
+        return copy
+    }
+
+    /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
+    ///
+    /// When omitted, Baseball Savant returns all game types within the date window,
+    /// including spring training and exhibition games. Pass `"R"` to match the default
+    /// view on the Savant website.
+    public func gameType(_ type: String) -> StatcastBatchBattingQuery {
+        var copy = self
+        copy.gameTypeFilter = type
         return copy
     }
 
@@ -294,6 +336,9 @@ public struct StatcastBatchBattingQuery: Sendable {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
         }
+        if let gt = gameTypeFilter {
+            items.append(URLQueryItem(name: "game_type", value: gt))
+        }
         return items
     }
 }
@@ -319,6 +364,7 @@ public struct StatcastBatchPitchingQuery: Sendable {
     private var seasonYear: Int?
     private var startDate: String?
     private var endDate: String?
+    private var gameTypeFilter: String?
     private var _batchSize: Int
 
     /// Default number of player IDs per HTTP request.
@@ -351,6 +397,17 @@ public struct StatcastBatchPitchingQuery: Sendable {
     public func batchSize(_ size: Int) -> StatcastBatchPitchingQuery {
         var copy = self
         copy._batchSize = size
+        return copy
+    }
+
+    /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
+    ///
+    /// When omitted, Baseball Savant returns all game types within the date window,
+    /// including spring training and exhibition games. Pass `"R"` to match the default
+    /// view on the Savant website.
+    public func gameType(_ type: String) -> StatcastBatchPitchingQuery {
+        var copy = self
+        copy.gameTypeFilter = type
         return copy
     }
 
@@ -400,6 +457,9 @@ public struct StatcastBatchPitchingQuery: Sendable {
         } else if let year = seasonYear {
             items.append(URLQueryItem(name: "game_date_gt", value: "\(year)-01-01"))
             items.append(URLQueryItem(name: "game_date_lt", value: "\(year)-12-31"))
+        }
+        if let gt = gameTypeFilter {
+            items.append(URLQueryItem(name: "game_type", value: gt))
         }
         return items
     }
