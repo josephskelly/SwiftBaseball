@@ -92,8 +92,13 @@ public enum SwiftBaseball {
     /// For minor league teams, use ``RosterType/fullSeason`` to get every
     /// player who appeared on the team during the season.
     ///
+    /// Pass a `date` string (`"YYYY-MM-DD"`) to fetch the roster as of a
+    /// specific date — useful for viewing historical active rosters.
+    ///
     ///     // MLB active 26-man
     ///     let roster = try await SwiftBaseball.roster(teamId: 147, season: 2024).fetch()
+    ///     // Historical roster on a specific date
+    ///     let historical = try await SwiftBaseball.roster(teamId: 147, season: 2024, date: "2024-07-04").fetch()
     ///     // Minor league full-season roster
     ///     let mibRoster = try await SwiftBaseball.roster(teamId: 531, season: 2024, rosterType: .fullSeason).fetch()
     ///     // Spring training 40-man
@@ -101,9 +106,10 @@ public enum SwiftBaseball {
     public static func roster(
         teamId: Int,
         season: Int,
-        rosterType: RosterType = .active
+        rosterType: RosterType = .active,
+        date: String? = nil
     ) -> QueryBuilder<[RosterEntry]> {
-        .roster(teamId: teamId, season: season, rosterType: rosterType, client: client)
+        .roster(teamId: teamId, season: season, rosterType: rosterType, date: date, client: client)
     }
 
     // MARK: - Schedule

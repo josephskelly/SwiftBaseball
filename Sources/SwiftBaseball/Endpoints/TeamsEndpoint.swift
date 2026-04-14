@@ -70,15 +70,20 @@ extension QueryBuilder where T == [RosterEntry] {
     ///   - teamId: The MLB or minor league team identifier.
     ///   - season: The season year (e.g. 2025).
     ///   - rosterType: Which roster list to fetch. Defaults to ``RosterType/active``.
+    ///   - date: Optional date string (`"YYYY-MM-DD"`) for historical roster lookups.
     static func roster(
         teamId: Int,
         season: Int,
         rosterType: RosterType = .active,
+        date: String? = nil,
         client: any APIClient
     ) -> QueryBuilder<[RosterEntry]> {
         var queryItems = [URLQueryItem(name: "season", value: String(season))]
         if rosterType != .active {
             queryItems.append(URLQueryItem(name: "rosterType", value: rosterType.rawValue))
+        }
+        if let date {
+            queryItems.append(URLQueryItem(name: "date", value: date))
         }
         let endpoint = Endpoint(path: "teams/\(teamId)/roster", queryItems: queryItems)
         return QueryBuilder(endpoint: endpoint, client: client) { data in
