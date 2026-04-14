@@ -164,16 +164,20 @@ let videoURL = content.highlights.first?.playbacks.first?.url
 let condensed = content.scoreboardHighlights.first
 
 // Statcast batted ball profile — GB%, FB%, exit velo, barrel rate
+// Use .gameType("R") to restrict to regular-season events only (Baseball Savant
+// ignores the game_type URL parameter; filtering is applied client-side on the CSV rows).
 let statcast = try await SwiftBaseball
     .statcastBatting(playerId: 660271)
-    .season(2024)
+    .dateRange(start: "2024-01-01", end: "2025-04-10")
+    .gameType("R")
     .fetch()
 print(statcast.gbPercent, statcast.avgExitVelocity, statcast.barrelRate)
 
 // Statcast pitching — batted ball against, pitch arsenal, whiff rate
 let pitching = try await SwiftBaseball
     .statcastPitching(playerId: 543037)
-    .season(2024)
+    .dateRange(start: "2024-01-01", end: "2025-04-10")
+    .gameType("R")
     .fetch()
 print(pitching.whiffRate, pitching.avgFastballVelo, pitching.pitchMix)
 

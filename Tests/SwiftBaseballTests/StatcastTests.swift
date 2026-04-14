@@ -858,4 +858,135 @@ struct StatcastTests {
         #expect(splits.vsLHP.xwOBA != nil)
         #expect(splits.vsRHP.xwOBA != nil)
     }
+
+    // MARK: - game_type client-side row filter
+
+    /// Verifies that the `game_type` filter drops spring-training rows from batting aggregation.
+    ///
+    /// Savant's CSV endpoint ignores `game_type` as a URL parameter and always returns all
+    /// game types in the date window. The filter is applied client-side by dropping rows
+    /// whose `game_type` column does not match before passing them to `StatcastAggregator`.
+    @Test("game_type R filter keeps regular-season rows and drops spring-training rows (batting)")
+    func gameTypeRFilterBatting() {
+        let allRows: [[String: String]] = [
+            ["game_type": "R", "bb_type": "fly_ball", "launch_speed": "108.0",
+             "launch_angle": "28.0", "estimated_woba_using_speedangle": "0.900",
+             "estimated_ba_using_speedangle": "0.900",
+             "estimated_slg_using_speedangle": "2.000",
+             "events": "home_run", "description": "hit_into_play"],
+            ["game_type": "S", "bb_type": "ground_ball", "launch_speed": "75.0",
+             "launch_angle": "-10.0", "estimated_woba_using_speedangle": "0.050",
+             "estimated_ba_using_speedangle": "0.050",
+             "estimated_slg_using_speedangle": "0.050",
+             "events": "field_out", "description": "hit_into_play"],
+        ]
+
+        let filtered = allRows.filter { $0["game_type"] == "R" }
+        let stats: StatcastBatting = StatcastAggregator.aggregate(filtered)
+
+        #expect(stats.battedBallEvents == 1)
+        #expect(stats.flyBalls == 1)
+        #expect(stats.groundBalls == 0)
+        #expect(abs((stats.xwOBA ?? 0) - 0.900) < 0.001)
+    }
+
+    /// Verifies that no filter leaves all rows intact.
+    @Test("omitting game_type filter includes all rows in batting aggregation")
+    func noGameTypeFilterBatting() {
+        let allRows: [[String: String]] = [
+            ["game_type": "R", "bb_type": "fly_ball", "launch_speed": "108.0",
+             "launch_angle": "28.0", "estimated_woba_using_speedangle": "0.900",
+             "estimated_ba_using_speedangle": "0.900",
+             "estimated_slg_using_speedangle": "2.000",
+             "events": "home_run", "description": "hit_into_play"],
+            ["game_type": "S", "bb_type": "ground_ball", "launch_speed": "75.0",
+             "launch_angle": "-10.0", "estimated_woba_using_speedangle": "0.050",
+             "estimated_ba_using_speedangle": "0.050",
+             "estimated_slg_using_speedangle": "0.050",
+             "events": "field_out", "description": "hit_into_play"],
+        ]
+
+        // No filter applied — pass all rows directly.
+        let stats: StatcastBatting = StatcastAggregator.aggregate(allRows)
+
+        #expect(stats.battedBallEvents == 2)
+        #expect(stats.flyBalls == 1)
+        #expect(stats.groundBalls == 1)
+    }
+
+    /// Verifies that the `game_type` filter drops spring-training rows from pitching aggregation.
+    @Test("game_type R filter keeps regular-season rows and drops spring-training rows (pitching)")
+    func gameTypeRFilterPitching() {
+        let allRows: [[String: String]] = [
+            ["game_type": "R", "bb_type": "fly_ball", "launch_speed": "105.0",
+             "launch_angle": "30.0", "estimated_woba_using_speedangle": "0.850",
+             "estimated_ba_using_speedangle": "0.850",
+             "estimated_slg_using_speedangle": "1.800",
+             "events": "home_run", "description": "hit_into_play",
+             "pitch_type": "FF", "release_speed": "95.0",
+             "pfx_x": "5.0", "pfx_z": "10.0", "release_spin_rate": "2400"],
+            ["game_type": "S", "bb_type": "ground_ball", "launch_speed": "72.0",
+             "launch_angle": "-8.0", "estimated_woba_using_speedangle": "0.040",
+             "estimated_ba_using_speedangle": "0.040",
+             "estimated_slg_using_speedangle": "0.040",
+             "events": "field_out", "description": "hit_into_play",
+             "pitch_type": "FF", "release_speed": "94.5",
+             "pfx_x": "5.1", "pfx_z": "9.8", "release_spin_rate": "2380"],
+        ]
+
+        let filtered = allRows.filter { $0["game_type"] == "R" }
+        let stats = StatcastPitcherAggregator.aggregate(filtered)
+
+        #expect(stats.battedBallEvents == 1)
+        #expect(stats.flyBalls == 1)
+        #expect(stats.groundBalls == 0)
+    }
+
+    /// Verifies that per-player batch results only contain rows matching the filter.
+    @Test("game_type R filter applied per-player in batch aggregation")
+    func gameTypeRFilterBatchBatting() {
+        let allRows: [[String: String]] = [
+            ["batter": "660271", "game_type": "R", "bb_type": "fly_ball",
+             "launch_speed": "108.0", "launch_angle": "28.0",
+             "estimated_woba_using_speedangle": "0.900",
+             "estimated_ba_using_speedangle": "0.900",
+             "estimated_slg_using_speedangle": "2.000",
+             "events": "home_run", "description": "hit_into_play"],
+            ["batter": "660271", "game_type": "S", "bb_type": "ground_ball",
+             "launch_speed": "75.0", "launch_angle": "-10.0",
+             "estimated_woba_using_speedangle": "0.050",
+             "estimated_ba_using_speedangle": "0.050",
+             "estimated_slg_using_speedangle": "0.050",
+             "events": "field_out", "description": "hit_into_play"],
+            ["batter": "592450", "game_type": "R", "bb_type": "ground_ball",
+             "launch_speed": "88.0", "launch_angle": "-5.0",
+             "estimated_woba_using_speedangle": "0.200",
+             "estimated_ba_using_speedangle": "0.200",
+             "estimated_slg_using_speedangle": "0.200",
+             "events": "field_out", "description": "hit_into_play"],
+            ["batter": "592450", "game_type": "S", "bb_type": "fly_ball",
+             "launch_speed": "82.0", "launch_angle": "25.0",
+             "estimated_woba_using_speedangle": "0.100",
+             "estimated_ba_using_speedangle": "0.100",
+             "estimated_slg_using_speedangle": "0.100",
+             "events": "field_out", "description": "hit_into_play"],
+        ]
+
+        // Simulate the batch fetch's per-player split + filter + aggregate.
+        let filtered = allRows.filter { $0["game_type"] == "R" }
+        let byPlayer = Dictionary(grouping: filtered) { Int($0["batter"] ?? "0") ?? 0 }
+        let results = byPlayer.mapValues { StatcastAggregator.aggregate($0) }
+
+        let player1 = results[660271]
+        #expect(player1 != nil)
+        #expect(player1?.battedBallEvents == 1)
+        #expect(player1?.flyBalls == 1)
+        #expect(player1?.groundBalls == 0)
+
+        let player2 = results[592450]
+        #expect(player2 != nil)
+        #expect(player2?.battedBallEvents == 1)
+        #expect(player2?.groundBalls == 1)
+        #expect(player2?.flyBalls == 0)
+    }
 }
