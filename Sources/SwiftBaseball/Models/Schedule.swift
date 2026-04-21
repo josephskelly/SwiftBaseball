@@ -63,6 +63,25 @@ public struct LeagueRecord: Codable, Sendable, Equatable {
     public let wins: Int
     /// Number of losses.
     public let losses: Int
+    /// Number of ties. Rare in MLB; reported by the live game feed.
+    public let ties: Int
     /// Winning percentage as a string (e.g. ".600").
     public let pct: String
+
+    /// Creates a league record.
+    public init(wins: Int, losses: Int, ties: Int = 0, pct: String) {
+        self.wins = wins
+        self.losses = losses
+        self.ties = ties
+        self.pct = pct
+    }
+
+    /// Decode with a `ties` fallback of `0` when the upstream payload omits it.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.wins = try container.decode(Int.self, forKey: .wins)
+        self.losses = try container.decode(Int.self, forKey: .losses)
+        self.ties = try container.decodeIfPresent(Int.self, forKey: .ties) ?? 0
+        self.pct = try container.decode(String.self, forKey: .pct)
+    }
 }
