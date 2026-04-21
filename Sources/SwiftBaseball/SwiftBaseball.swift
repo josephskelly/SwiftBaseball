@@ -11,24 +11,62 @@ public enum SwiftBaseball {
 
     // MARK: - Configuration
 
-    // Class wrapper allows safe mutation from configure() before concurrent use.
+    /// Thread-safe holder for the library's shared state. All reads and writes
+    /// are serialized through `NSLock`, which is why `@unchecked Sendable` is
+    /// sound here — the lock supplies the synchronization that the compiler
+    /// cannot prove on its own. Keeping the holder as a class (not an actor)
+    /// lets ``configure(_:)`` remain synchronous, which consumers rely on
+    /// during app launch before any `await` is reachable.
     private final class State: @unchecked Sendable {
-        var client: any APIClient = URLSessionAPIClient()
-        var statcastClient: StatcastAPIClient = StatcastAPIClient()
-        var configuration: Configuration = .default
+        private let lock = NSLock()
+        private var _client: any APIClient = URLSessionAPIClient()
+        private var _statcastClient: StatcastAPIClient = StatcastAPIClient()
+        private var _configuration: Configuration = .default
+
+        var client: any APIClient {
+            lock.lock()
+            defer { lock.unlock() }
+            return _client
+        }
+
+        var statcastClient: StatcastAPIClient {
+            lock.lock()
+            defer { lock.unlock() }
+            return _statcastClient
+        }
+
+        var configuration: Configuration {
+            lock.lock()
+            defer { lock.unlock() }
+            return _configuration
+        }
+
+        func apply(_ configuration: Configuration) {
+            let base = URLSessionAPIClient(configuration: configuration)
+            let newClient: any APIClient
+            if configuration.cacheEnabled {
+                let cache = CacheManager(defaultTTL: configuration.cacheTTL)
+                newClient = CachingAPIClient(wrapped: base, cache: cache, ttl: configuration.cacheTTL)
+            } else {
+                newClient = base
+            }
+            let newStatcast = StatcastAPIClient(configuration: configuration)
+
+            lock.lock()
+            defer { lock.unlock() }
+            _configuration = configuration
+            _client = newClient
+            _statcastClient = newStatcast
+        }
     }
     private static let _state = State()
 
+    /// Replaces the library's shared configuration.
+    ///
+    /// Safe to call concurrently; access is serialized internally. Typically
+    /// invoked once during app launch before any queries are started.
     public static func configure(_ configuration: Configuration) {
-        _state.configuration = configuration
-        let base = URLSessionAPIClient(configuration: configuration)
-        if configuration.cacheEnabled {
-            let cache = CacheManager(defaultTTL: configuration.cacheTTL)
-            _state.client = CachingAPIClient(wrapped: base, cache: cache, ttl: configuration.cacheTTL)
-        } else {
-            _state.client = base
-        }
-        _state.statcastClient = StatcastAPIClient(configuration: configuration)
+        _state.apply(configuration)
     }
 
     private static var client: any APIClient { _state.client }
