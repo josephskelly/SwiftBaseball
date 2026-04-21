@@ -4,8 +4,8 @@
 
 [![Swift CI](https://github.com/josephskelly/SwiftBaseball/actions/workflows/swift.yml/badge.svg?branch=main)](https://github.com/josephskelly/SwiftBaseball/actions/workflows/swift.yml)
 [![codecov](https://codecov.io/gh/josephskelly/SwiftBaseball/branch/main/graph/badge.svg)](https://codecov.io/gh/josephskelly/SwiftBaseball)
-[![Swift 6.0+](https://img.shields.io/badge/Swift-6.0+-orange.svg)](https://swift.org)
-[![Platforms](https://img.shields.io/badge/Platforms-macOS%20|%20iOS%20|%20iPadOS%20|%20tvOS%20|%20watchOS%20|%20visionOS%20|%20Linux-blue.svg)](https://swift.org)
+[![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fjosephskelly%2FSwiftBaseball%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/josephskelly/SwiftBaseball)
+[![Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fjosephskelly%2FSwiftBaseball%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/josephskelly/SwiftBaseball)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## Overview

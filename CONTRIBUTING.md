@@ -67,11 +67,26 @@ Every PR must pass:
 
 ## Swift Package Index submission
 
-SwiftBaseball is (or will be) listed on [Swift Package Index](https://swiftpackageindex.com).
-If you're the maintainer preparing a release, verify the SPI compatibility
-grid for the tag before publishing. The one-time submission is a PR to
+SwiftBaseball is listed on [Swift Package Index](https://swiftpackageindex.com).
+The `.spi.yml` at the repo root declares the builder configuration SPI
+uses to generate DocC and the compatibility grid. Before cutting a
+release, the maintainer should:
+
+1. Bump the version in `CHANGELOG.md` and `Configuration.swift`
+   (`swiftBaseballVersion`), commit, and tag.
+2. Push the tag. SPI auto-picks up new tags on registered packages.
+3. Check the SPI build log for the tag at
+   `https://swiftpackageindex.com/josephskelly/SwiftBaseball/builds`
+   — every platform in `Package.swift` should be green.
+4. If a platform regresses, cut a patch release rather than editing the
+   tag in place.
+
+**One-time registration** (already done for this repo, recorded here
+for future forks): submit a PR to
 [SwiftPackageIndex/PackageList](https://github.com/SwiftPackageIndex/PackageList)
-adding the repo URL to `packages.json`.
+adding the `https://github.com/josephskelly/SwiftBaseball.git` URL to
+`packages.json` in alphabetical order. Nothing else is required —
+SPI discovers `Package.swift` and `.spi.yml` automatically.
 
 ## Code style
 
