@@ -1,0 +1,54 @@
+# SwiftFormat configuration for SwiftBaseball.
+# Matches the project's existing style and pairs with .swiftlint.yml.
+
+--swiftversion 6.0
+
+# Scope
+--exclude .build,.docbuild,Tests/SwiftBaseballTests/Fixtures
+
+# Indentation & whitespace
+--indent 4
+--tabwidth 4
+--smarttabs enabled
+--trimwhitespace always
+--linebreaks lf
+--maxwidth 140
+
+# Braces & formatting rules
+--allman false
+--commas inline
+--closingparen balanced
+--elseposition same-line
+--guardelse auto
+--ifdef no-indent
+--patternlet hoist
+--self init-only
+--semicolons never
+--stripunusedargs closure-only
+--wraparguments preserve
+--wrapcollections preserve
+--wrapparameters preserve
+--wrapreturntype preserve
+
+# Enabled rules
+--enable isEmpty
+--enable redundantSelf
+--enable redundantReturn
+--enable redundantRawValues
+--enable redundantType
+--enable redundantParens
+--enable sortedImports
+--enable duplicateImports
+--enable trailingCommas
+--enable strongifiedSelf
+--enable unusedArguments
+--enable wrapMultilineStatementBraces
+
+# Disabled rules — preserve existing idioms
+--disable andOperator
+--disable hoistPatternLet
+--disable redundantNilInit
+--disable wrapSwitchCases
+
+# DocC comment style
+--doccomments preserve

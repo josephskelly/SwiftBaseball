@@ -1,0 +1,75 @@
+name: DocC
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: docc-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build DocC
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Build documentation
+        run: |
+          xcodebuild docbuild \
+            -scheme SwiftBaseball \
+            -destination 'generic/platform=macOS' \
+            -derivedDataPath .docbuild \
+            OTHER_DOCC_FLAGS="--hosting-base-path SwiftBaseball"
+
+      - name: Transform for static hosting
+        run: |
+          ARCHIVE=$(find .docbuild -name '*.doccarchive' -print -quit)
+          test -n "$ARCHIVE" || { echo "no doccarchive"; exit 1; }
+          "$(xcrun --find docc)" process-archive transform-for-static-hosting \
+            "$ARCHIVE" \
+            --hosting-base-path SwiftBaseball \
+            --output-path ./_site
+
+      - name: Add index redirect
+        run: |
+          cat > ./_site/index.html <<'HTML'
+          <!DOCTYPE html>
+          <html><head><meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=/SwiftBaseball/documentation/swiftbaseball/">
+          <link rel="canonical" href="/SwiftBaseball/documentation/swiftbaseball/">
+          </head><body><a href="/SwiftBaseball/documentation/swiftbaseball/">SwiftBaseball documentation</a></body></html>
+          HTML
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
