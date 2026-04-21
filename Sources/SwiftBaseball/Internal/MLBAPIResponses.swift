@@ -694,3 +694,154 @@ struct MLBEntityRef: Decodable {
 
     var displayName: String { name ?? fullName ?? "" }
 }
+
+// MARK: - Live Game Feed
+
+struct MLBLiveGameFeedResponse: Decodable {
+    let gamePk: Int
+    let metaData: MLBLiveFeedMeta
+    let gameData: MLBLiveGameData
+    let liveData: MLBLiveData
+}
+
+struct MLBLiveFeedMeta: Decodable {
+    let wait: Int?
+    let timeStamp: String?
+    let gameEvents: [String]?
+    let logicalEvents: [String]?
+}
+
+struct MLBLiveGameData: Decodable {
+    let game: MLBLiveGameInfo
+    let datetime: MLBLiveGameDatetime
+    let status: MLBLiveGameStatus
+    let teams: MLBLiveTeams
+    let players: [String: MLBLivePlayer]?
+    let venue: MLBEntityRef?
+    let weather: MLBGameWeather?
+    let gameInfo: MLBGameInfo?
+    let flags: MLBGameFlags?
+    let probablePitchers: MLBProbablePitchers?
+}
+
+struct MLBLiveGameInfo: Decodable {
+    let pk: Int
+    let type: String?
+    let doubleHeader: String?
+    let season: String?
+    let seasonDisplay: String?
+}
+
+struct MLBLiveGameDatetime: Decodable {
+    let dateTime: String?
+    let originalDate: String?
+    let officialDate: String?
+    let dayNight: String?
+    let time: String?
+    let ampm: String?
+}
+
+struct MLBLiveGameStatus: Decodable {
+    let abstractGameState: String?
+    let codedGameState: String?
+    let detailedState: String?
+    let statusCode: String?
+    let startTimeTBD: Bool?
+    let abstractGameCode: String?
+}
+
+struct MLBLiveTeams: Decodable {
+    let away: MLBLiveTeam
+    let home: MLBLiveTeam
+}
+
+struct MLBLiveTeam: Decodable {
+    let id: Int
+    let name: String?
+    let teamName: String?
+    let abbreviation: String?
+    let locationName: String?
+    let record: MLBLiveTeamRecord?
+}
+
+struct MLBLiveTeamRecord: Decodable {
+    let wins: Int?
+    let losses: Int?
+    let winningPercentage: String?
+    let leagueRecord: MLBLiveLeagueRecord?
+}
+
+struct MLBLiveLeagueRecord: Decodable {
+    let wins: Int?
+    let losses: Int?
+    let ties: Int?
+    let pct: String?
+}
+
+struct MLBLivePlayer: Decodable {
+    let id: Int
+    let fullName: String?
+    let firstName: String?
+    let lastName: String?
+    let primaryNumber: String?
+    let currentAge: Int?
+    let birthDate: String?
+    let primaryPosition: MLBPositionObject?
+    let batSide: MLBCodeDescription?
+    let pitchHand: MLBCodeDescription?
+    let active: Bool?
+    let mlbDebutDate: String?
+}
+
+struct MLBGameWeather: Decodable {
+    let condition: String?
+    let temp: String?
+    let wind: String?
+}
+
+struct MLBGameInfo: Decodable {
+    let attendance: Int?
+    let firstPitch: String?
+    let gameDurationMinutes: Int?
+}
+
+struct MLBGameFlags: Decodable {
+    let noHitter: Bool?
+    let perfectGame: Bool?
+    let awayTeamNoHitter: Bool?
+    let awayTeamPerfectGame: Bool?
+    let homeTeamNoHitter: Bool?
+    let homeTeamPerfectGame: Bool?
+}
+
+struct MLBProbablePitchers: Decodable {
+    let away: MLBEntityRef?
+    let home: MLBEntityRef?
+}
+
+struct MLBLiveData: Decodable {
+    let plays: MLBLivePlays
+    let linescore: Linescore
+    let boxscore: MLBBoxscoreResponse
+    let decisions: MLBGameDecisions?
+}
+
+struct MLBLivePlays: Decodable {
+    let allPlays: [MLBPlay]
+    let currentPlay: MLBPlay?
+    let scoringPlays: [Int]?
+    let playsByInning: [MLBInningPlays]?
+}
+
+struct MLBInningPlays: Decodable {
+    let startIndex: Int?
+    let endIndex: Int?
+    let top: [Int]?
+    let bottom: [Int]?
+}
+
+struct MLBGameDecisions: Decodable {
+    let winner: MLBEntityRef?
+    let loser: MLBEntityRef?
+    let save: MLBEntityRef?
+}

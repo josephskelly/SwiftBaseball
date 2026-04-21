@@ -190,6 +190,26 @@ public enum SwiftBaseball {
         .linescore(gamePk: gamePk, client: client)
     }
 
+    /// Fetch the complete live game feed for a game.
+    ///
+    /// The live feed is MLB's real-time composite payload — a single snapshot
+    /// covering game metadata, every play, the current at-bat, linescore,
+    /// boxscore, and decisions (winning/losing/save pitchers). This is the
+    /// same feed the MLB app polls during live games.
+    ///
+    ///     let feed = try await SwiftBaseball.liveGameFeed(gamePk: 745612).fetch()
+    ///     print(feed.gameData.status.abstractGameState)   // e.g. .final
+    ///     print(feed.liveData.plays.currentPlay?.result.event ?? "No current play")
+    ///
+    /// During an active game, clients typically poll this endpoint using
+    /// ``LiveFeedMeta/wait`` (seconds) as the recommended interval.
+    ///
+    /// - Parameter gamePk: The MLB game primary key.
+    /// - Returns: A ``QueryBuilder`` producing a ``LiveGameFeed``.
+    public static func liveGameFeed(gamePk: Int) -> QueryBuilder<LiveGameFeed> {
+        .liveGameFeed(gamePk: gamePk, client: client)
+    }
+
     /// Fetch highlight videos and condensed game clips for a completed game.
     ///
     ///     let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()

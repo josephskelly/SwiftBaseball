@@ -1109,3 +1109,192 @@ private extension StatGroup {
         }
     }
 }
+
+// MARK: - Live Game Feed converter
+
+extension MLBResponseConverters {
+    static func liveGameFeed(from response: MLBLiveGameFeedResponse) -> LiveGameFeed {
+        let liveData = liveData(from: response.liveData)
+        // Lift per-team current scores from the linescore into teams so callers
+        // can read both sides of the scoreboard off gameData.teams directly.
+        let gameData = liveGameData(
+            from: response.gameData,
+            awayScore: liveData.linescore.teams.away.runs,
+            homeScore: liveData.linescore.teams.home.runs
+        )
+        return LiveGameFeed(
+            gamePk: response.gamePk,
+            meta: liveFeedMeta(from: response.metaData),
+            gameData: gameData,
+            liveData: liveData
+        )
+    }
+
+    private static func liveFeedMeta(from raw: MLBLiveFeedMeta) -> LiveFeedMeta {
+        LiveFeedMeta(
+            wait: raw.wait ?? 0,
+            timeStamp: raw.timeStamp ?? "",
+            gameEvents: raw.gameEvents ?? [],
+            logicalEvents: raw.logicalEvents ?? []
+        )
+    }
+
+    private static func liveGameData(
+        from raw: MLBLiveGameData,
+        awayScore: Int?,
+        homeScore: Int?
+    ) -> LiveGameData {
+        let players: [Int: LivePlayer] = Dictionary(uniqueKeysWithValues:
+            (raw.players ?? [:]).compactMap { key, value -> (Int, LivePlayer)? in
+                let trimmed = key.hasPrefix("ID") ? String(key.dropFirst(2)) : key
+                guard let id = Int(trimmed) else { return nil }
+                return (id, livePlayer(from: value))
+            }
+        )
+        return LiveGameData(
+            game: liveGameInfo(from: raw.game),
+            datetime: liveGameDatetime(from: raw.datetime),
+            status: liveGameStatus(from: raw.status),
+            teams: LiveGameTeams(
+                away: liveGameTeam(from: raw.teams.away, score: awayScore),
+                home: liveGameTeam(from: raw.teams.home, score: homeScore)
+            ),
+            players: players,
+            venue: venueReference(from: raw.venue),
+            weather: raw.weather.map(gameWeather),
+            gameInfo: raw.gameInfo.map(gameInfo),
+            flags: gameFlags(from: raw.flags),
+            probablePitchers: probablePitchers(from: raw.probablePitchers)
+        )
+    }
+
+    private static func liveGameInfo(from raw: MLBLiveGameInfo) -> LiveGameInfo {
+        LiveGameInfo(
+            pk: raw.pk,
+            type: GameType(rawValue: raw.type ?? "") ?? .unknown,
+            doubleHeader: raw.doubleHeader ?? "N",
+            season: raw.season ?? "",
+            seasonDisplay: raw.seasonDisplay ?? raw.season ?? ""
+        )
+    }
+
+    private static func liveGameDatetime(from raw: MLBLiveGameDatetime) -> LiveGameDatetime {
+        LiveGameDatetime(
+            dateTime: raw.dateTime.flatMap(parseDateTime),
+            originalDate: raw.originalDate.flatMap(parseDate),
+            officialDate: raw.officialDate.flatMap(parseDate),
+            dayNight: DayNight(rawValue: raw.dayNight ?? "") ?? .unknown,
+            time: raw.time ?? "",
+            ampm: raw.ampm ?? ""
+        )
+    }
+
+    private static func liveGameStatus(from raw: MLBLiveGameStatus) -> LiveGameStatus {
+        LiveGameStatus(
+            abstractGameState: AbstractGameState(rawValue: raw.abstractGameState ?? "") ?? .unknown,
+            codedGameState: raw.codedGameState ?? "",
+            detailedState: raw.detailedState ?? "",
+            statusCode: raw.statusCode ?? "",
+            startTimeTBD: raw.startTimeTBD ?? false
+        )
+    }
+
+    private static func liveGameTeam(from raw: MLBLiveTeam, score: Int?) -> LiveGameTeam {
+        LiveGameTeam(
+            team: TeamReference(id: raw.id, name: raw.name ?? raw.teamName ?? ""),
+            leagueRecord: liveLeagueRecord(from: raw.record?.leagueRecord),
+            score: score
+        )
+    }
+
+    private static func liveLeagueRecord(from raw: MLBLiveLeagueRecord?) -> LeagueRecord {
+        LeagueRecord(
+            wins: raw?.wins ?? 0,
+            losses: raw?.losses ?? 0,
+            ties: raw?.ties ?? 0,
+            pct: raw?.pct ?? ""
+        )
+    }
+
+    private static func livePlayer(from raw: MLBLivePlayer) -> LivePlayer {
+        LivePlayer(
+            id: raw.id,
+            fullName: raw.fullName ?? "",
+            primaryNumber: raw.primaryNumber,
+            currentAge: raw.currentAge,
+            primaryPosition: Position(rawValue: raw.primaryPosition?.code ?? "") ?? .unknown,
+            batSide: HandSide(rawValue: raw.batSide?.code ?? "") ?? .unknown,
+            pitchHand: HandSide(rawValue: raw.pitchHand?.code ?? "") ?? .unknown,
+            active: raw.active
+        )
+    }
+
+    private static func gameWeather(from raw: MLBGameWeather) -> GameWeather {
+        GameWeather(
+            condition: raw.condition ?? "",
+            temp: raw.temp ?? "",
+            wind: raw.wind ?? ""
+        )
+    }
+
+    private static func gameInfo(from raw: MLBGameInfo) -> GameInfo {
+        GameInfo(
+            attendance: raw.attendance,
+            firstPitch: raw.firstPitch,
+            gameDurationMinutes: raw.gameDurationMinutes
+        )
+    }
+
+    private static func gameFlags(from raw: MLBGameFlags?) -> GameFlags {
+        GameFlags(
+            noHitter: raw?.noHitter ?? false,
+            perfectGame: raw?.perfectGame ?? false,
+            awayTeamNoHitter: raw?.awayTeamNoHitter ?? false,
+            awayTeamPerfectGame: raw?.awayTeamPerfectGame ?? false,
+            homeTeamNoHitter: raw?.homeTeamNoHitter ?? false,
+            homeTeamPerfectGame: raw?.homeTeamPerfectGame ?? false
+        )
+    }
+
+    private static func probablePitchers(from raw: MLBProbablePitchers?) -> ProbablePitchers {
+        ProbablePitchers(
+            away: raw?.away.map(playerReference),
+            home: raw?.home.map(playerReference)
+        )
+    }
+
+    private static func liveData(from raw: MLBLiveData) -> LiveData {
+        LiveData(
+            plays: livePlays(from: raw.plays),
+            linescore: raw.linescore,
+            boxscore: boxscore(from: raw.boxscore),
+            decisions: raw.decisions.map(gameDecisions)
+        )
+    }
+
+    private static func livePlays(from raw: MLBLivePlays) -> LivePlays {
+        LivePlays(
+            allPlays: raw.allPlays.map(play),
+            currentPlay: raw.currentPlay.map(play),
+            scoringPlays: raw.scoringPlays ?? [],
+            playsByInning: (raw.playsByInning ?? []).enumerated().map { index, item in
+                InningPlays(
+                    inning: index + 1,
+                    startIndex: item.startIndex,
+                    endIndex: item.endIndex,
+                    top: item.top ?? [],
+                    bottom: item.bottom ?? []
+                )
+            }
+        )
+    }
+
+    private static func gameDecisions(from raw: MLBGameDecisions) -> GameDecisions {
+        GameDecisions(
+            winner: raw.winner.map(playerReference),
+            loser: raw.loser.map(playerReference),
+            save: raw.save.map(playerReference)
+        )
+    }
+}
+

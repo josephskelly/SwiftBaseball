@@ -1,0 +1,2909 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "gamePk": 745612,
+  "link": "/api/v1.1/game/745612/feed/live",
+  "metaData": {
+    "wait": 10,
+    "timeStamp": "20240905_222835",
+    "gameEvents": [
+      "strikeout",
+      "game_finished"
+    ],
+    "logicalEvents": [
+      "midInning",
+      "countChange",
+      "count13",
+      "gameStateChangeToGameOver"
+    ]
+  },
+  "gameData": {
+    "game": {
+      "pk": 745612,
+      "type": "R",
+      "doubleHeader": "N",
+      "id": "2024/09/05/seamlb-oakmlb-1",
+      "gamedayType": "P",
+      "tiebreaker": "N",
+      "gameNumber": 1,
+      "calendarEventID": "14-745612-2024-09-05",
+      "season": "2024",
+      "seasonDisplay": "2024"
+    },
+    "datetime": {
+      "dateTime": "2024-09-05T19:37:00Z",
+      "originalDate": "2024-09-05",
+      "officialDate": "2024-09-05",
+      "dayNight": "day",
+      "time": "12:37",
+      "ampm": "PM"
+    },
+    "status": {
+      "abstractGameState": "Final",
+      "codedGameState": "F",
+      "detailedState": "Final",
+      "statusCode": "F",
+      "startTimeTBD": false,
+      "abstractGameCode": "F"
+    },
+    "teams": {
+      "away": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 136,
+        "name": "Seattle Mariners",
+        "link": "/api/v1/teams/136",
+        "season": 2024,
+        "venue": {
+          "id": 680,
+          "name": "T-Mobile Park",
+          "link": "/api/v1/venues/680"
+        },
+        "springVenue": {
+          "id": 2530,
+          "link": "/api/v1/venues/2530"
+        },
+        "teamCode": "sea",
+        "fileCode": "sea",
+        "abbreviation": "SEA",
+        "teamName": "Mariners",
+        "locationName": "Seattle",
+        "firstYearOfPlay": "1977",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Seattle",
+        "record": {
+          "gamesPlayed": 141,
+          "wildCardGamesBack": "-",
+          "leagueGamesBack": "-",
+          "springLeagueGamesBack": "-",
+          "sportGamesBack": "-",
+          "divisionGamesBack": "-",
+          "conferenceGamesBack": "-",
+          "leagueRecord": {
+            "wins": 71,
+            "losses": 70,
+            "ties": 0,
+            "pct": ".504"
+          },
+          "records": {},
+          "divisionLeader": false,
+          "wins": 71,
+          "losses": 70,
+          "winningPercentage": ".504"
+        },
+        "franchiseName": "Seattle",
+        "clubName": "Mariners",
+        "active": true
+      },
+      "home": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 133,
+        "name": "Oakland Athletics",
+        "link": "/api/v1/teams/133",
+        "season": 2024,
+        "venue": {
+          "id": 10,
+          "name": "Oakland Coliseum",
+          "link": "/api/v1/venues/10"
+        },
+        "springVenue": {
+          "id": 2507,
+          "link": "/api/v1/venues/2507"
+        },
+        "teamCode": "oak",
+        "fileCode": "oak",
+        "abbreviation": "OAK",
+        "teamName": "Athletics",
+        "locationName": "Oakland",
+        "firstYearOfPlay": "1901",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Oakland",
+        "record": {
+          "gamesPlayed": 141,
+          "wildCardGamesBack": "-",
+          "leagueGamesBack": "-",
+          "springLeagueGamesBack": "-",
+          "sportGamesBack": "-",
+          "divisionGamesBack": "-",
+          "conferenceGamesBack": "-",
+          "leagueRecord": {
+            "wins": 61,
+            "losses": 80,
+            "ties": 0,
+            "pct": ".433"
+          },
+          "records": {},
+          "divisionLeader": false,
+          "wins": 61,
+          "losses": 80,
+          "winningPercentage": ".433"
+        },
+        "franchiseName": "Oakland",
+        "clubName": "Athletics",
+        "active": true
+      }
+    },
+    "players": {
+      "ID671732": {
+        "id": 671732,
+        "fullName": "Lawrence Butler",
+        "link": "/api/v1/people/671732",
+        "firstName": "Lawrence",
+        "lastName": "Butler",
+        "primaryNumber": "4",
+        "birthDate": "2000-07-10",
+        "currentAge": 25,
+        "birthCity": "Burlington",
+        "birthStateProvince": "NJ",
+        "birthCountry": "USA",
+        "height": "6' 3\"",
+        "weight": 210,
+        "active": true,
+        "primaryPosition": {
+          "code": "9",
+          "name": "Outfielder",
+          "type": "Outfielder",
+          "abbreviation": "RF"
+        },
+        "useName": "Lawrence",
+        "useLastName": "Butler",
+        "middleName": "Evan",
+        "boxscoreName": "Butler, L",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2018,
+        "mlbDebutDate": "2023-08-11",
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Lawrence Butler",
+        "nameSlug": "lawrence-butler-671732",
+        "firstLastName": "Lawrence Butler",
+        "lastFirstName": "Butler, Lawrence",
+        "lastInitName": "Butler, L",
+        "initLastName": "L Butler",
+        "fullFMLName": "Lawrence Evan Butler",
+        "fullLFMName": "Butler, Lawrence Evan",
+        "strikeZoneTop": 3.344,
+        "strikeZoneBottom": 1.688
+      },
+      "ID669137": {
+        "id": 669137,
+        "fullName": "Armando Alvarez",
+        "link": "/api/v1/people/669137",
+        "firstName": "Armando",
+        "lastName": "Alvarez",
+        "primaryNumber": "56",
+        "birthDate": "1994-07-14",
+        "currentAge": 31,
+        "birthCity": "Miami",
+        "birthStateProvince": "FL",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 189,
+        "active": true,
+        "primaryPosition": {
+          "code": "5",
+          "name": "Third Base",
+          "type": "Infielder",
+          "abbreviation": "3B"
+        },
+        "useName": "Armando",
+        "useLastName": "Alvarez",
+        "middleName": "Francisco",
+        "boxscoreName": "Alvarez, A",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": false,
+        "draftYear": 2016,
+        "mlbDebutDate": "2024-06-22",
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Armando Alvarez",
+        "nameSlug": "armando-alvarez-669137",
+        "firstLastName": "Armando Alvarez",
+        "lastFirstName": "Alvarez, Armando",
+        "lastInitName": "Alvarez, A",
+        "initLastName": "A Alvarez",
+        "fullFMLName": "Armando Francisco Alvarez",
+        "fullLFMName": "Alvarez, Armando Francisco",
+        "strikeZoneTop": 3.207,
+        "strikeZoneBottom": 1.618
+      }
+    },
+    "venue": {
+      "id": 10,
+      "name": "Oakland Coliseum",
+      "link": "/api/v1/venues/10",
+      "location": {
+        "address1": "7000 Coliseum Way",
+        "city": "Oakland",
+        "state": "California",
+        "stateAbbrev": "CA",
+        "postalCode": "94621",
+        "defaultCoordinates": {
+          "latitude": 37.751511,
+          "longitude": -122.200698
+        },
+        "azimuthAngle": 55.0,
+        "elevation": 10,
+        "country": "USA",
+        "phone": "(510) 638-4900"
+      },
+      "timeZone": {
+        "tz": "PDT",
+        "id": "America/Los_Angeles",
+        "offset": -7,
+        "offsetAtGameTime": -7
+      },
+      "fieldInfo": {
+        "capacity": 46847,
+        "turfType": "Grass",
+        "roofType": "Open",
+        "leftLine": 330,
+        "left": 367,
+        "leftCenter": 388,
+        "center": 400,
+        "rightCenter": 388,
+        "right": 367,
+        "rightLine": 330
+      },
+      "active": true,
+      "season": "2024"
+    },
+    "weather": {
+      "condition": "Sunny",
+      "temp": "76",
+      "wind": "9 mph, Varies"
+    },
+    "gameInfo": {
+      "attendance": 5581,
+      "firstPitch": "2024-09-05T19:37:00.000Z",
+      "gameDurationMinutes": 171
+    },
+    "flags": {
+      "noHitter": false,
+      "perfectGame": false,
+      "awayTeamNoHitter": false,
+      "awayTeamPerfectGame": false,
+      "homeTeamNoHitter": false,
+      "homeTeamPerfectGame": false
+    },
+    "probablePitchers": {
+      "away": {
+        "id": 693433,
+        "fullName": "Bryan Woo",
+        "link": "/api/v1/people/693433"
+      },
+      "home": {
+        "id": 683155,
+        "fullName": "Joey Estes",
+        "link": "/api/v1/people/683155"
+      }
+    }
+  },
+  "liveData": {
+    "plays": {
+      "allPlays": [
+        {
+          "result": {
+            "type": "atBat",
+            "event": "Hit By Pitch",
+            "eventType": "hit_by_pitch",
+            "description": "Victor Robles hit by pitch.",
+            "rbi": 0,
+            "awayScore": 0,
+            "homeScore": 0,
+            "isOut": false
+          },
+          "about": {
+            "atBatIndex": 0,
+            "halfInning": "top",
+            "isTopInning": true,
+            "inning": 1,
+            "startTime": "2024-09-05T19:37:46.531Z",
+            "endTime": "2024-09-05T19:38:52.745Z",
+            "isComplete": true,
+            "isScoringPlay": false,
+            "hasReview": false,
+            "hasOut": false,
+            "captivatingIndex": 11
+          },
+          "count": {
+            "balls": 4,
+            "strikes": 1,
+            "outs": 0
+          },
+          "matchup": {
+            "batter": {
+              "id": 645302,
+              "fullName": "Victor Robles",
+              "link": "/api/v1/people/645302"
+            },
+            "batSide": {
+              "code": "R",
+              "description": "Right"
+            },
+            "pitcher": {
+              "id": 683155,
+              "fullName": "Joey Estes",
+              "link": "/api/v1/people/683155"
+            },
+            "pitchHand": {
+              "code": "R",
+              "description": "Right"
+            },
+            "postOnFirst": {
+              "id": 645302,
+              "fullName": "Victor Robles",
+              "link": "/api/v1/people/645302"
+            },
+            "batterHotColdZones": [],
+            "pitcherHotColdZones": [],
+            "splits": {
+              "batter": "vs_RHP",
+              "pitcher": "vs_RHB",
+              "menOnBase": "Men_On"
+            }
+          },
+          "pitchIndex": [
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "actionIndex": [
+            0,
+            1,
+            2
+          ],
+          "runnerIndex": [
+            0
+          ],
+          "runners": [
+            {
+              "movement": {
+                "originBase": null,
+                "start": null,
+                "end": "1B",
+                "outBase": null,
+                "isOut": false,
+                "outNumber": null
+              },
+              "details": {
+                "event": "Hit By Pitch",
+                "eventType": "hit_by_pitch",
+                "movementReason": null,
+                "runner": {
+                  "id": 645302,
+                  "fullName": "Victor Robles",
+                  "link": "/api/v1/people/645302"
+                },
+                "responsiblePitcher": null,
+                "isScoringEvent": false,
+                "rbi": false,
+                "earned": false,
+                "teamUnearned": false,
+                "playIndex": 7
+              },
+              "credits": []
+            }
+          ],
+          "playEvents": [
+            {
+              "details": {
+                "description": "Status Change - Pre-Game",
+                "event": "Game Advisory",
+                "eventType": "game_advisory",
+                "awayScore": 0,
+                "homeScore": 0,
+                "isScoringPlay": false,
+                "isOut": false,
+                "hasReview": false
+              },
+              "count": {
+                "balls": 0,
+                "strikes": 0,
+                "outs": 0
+              },
+              "index": 0,
+              "startTime": "2024-09-05T16:37:37.944Z",
+              "endTime": "2024-09-05T19:11:22.473Z",
+              "isPitch": false,
+              "type": "action",
+              "player": {
+                "id": 645302,
+                "link": "/api/v1/people/645302"
+              }
+            },
+            {
+              "details": {
+                "description": "Status Change - Warmup",
+                "event": "Game Advisory",
+                "eventType": "game_advisory",
+                "awayScore": 0,
+                "homeScore": 0,
+                "isScoringPlay": false,
+                "isOut": false,
+                "hasReview": false
+              },
+              "count": {
+                "balls": 0,
+                "strikes": 0,
+                "outs": 0
+              },
+              "index": 1,
+              "startTime": "2024-09-05T19:11:22.473Z",
+              "endTime": "2024-09-05T19:36:45.367Z",
+              "isPitch": false,
+              "type": "action",
+              "player": {
+                "id": 645302,
+                "link": "/api/v1/people/645302"
+              }
+            }
+          ],
+          "playEndTime": "2024-09-05T19:38:52.745Z",
+          "atBatIndex": 0
+        },
+        {
+          "result": {
+            "type": "atBat",
+            "event": "Groundout",
+            "eventType": "field_out",
+            "description": "Julio Rodr\u00edguez grounds out to first baseman Tristan Gray.",
+            "rbi": 0,
+            "awayScore": 0,
+            "homeScore": 0,
+            "isOut": true
+          },
+          "about": {
+            "atBatIndex": 1,
+            "halfInning": "top",
+            "isTopInning": true,
+            "inning": 1,
+            "startTime": "2024-09-05T19:38:53.073Z",
+            "endTime": "2024-09-05T19:42:58.066Z",
+            "isComplete": true,
+            "isScoringPlay": false,
+            "hasReview": false,
+            "hasOut": true,
+            "captivatingIndex": 0
+          },
+          "count": {
+            "balls": 2,
+            "strikes": 2,
+            "outs": 1
+          },
+          "matchup": {
+            "batter": {
+              "id": 677594,
+              "fullName": "Julio Rodr\u00edguez",
+              "link": "/api/v1/people/677594"
+            },
+            "batSide": {
+              "code": "R",
+              "description": "Right"
+            },
+            "pitcher": {
+              "id": 683155,
+              "fullName": "Joey Estes",
+              "link": "/api/v1/people/683155"
+            },
+            "pitchHand": {
+              "code": "R",
+              "description": "Right"
+            },
+            "postOnThird": {
+              "id": 645302,
+              "fullName": "Victor Robles",
+              "link": "/api/v1/people/645302"
+            },
+            "batterHotColdZones": [],
+            "pitcherHotColdZones": [],
+            "splits": {
+              "batter": "vs_RHP",
+              "pitcher": "vs_RHB",
+              "menOnBase": "RISP"
+            }
+          },
+          "pitchIndex": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10,
+            11
+          ],
+          "actionIndex": [
+            2
+          ],
+          "runnerIndex": [
+            0,
+            1,
+            2
+          ],
+          "runners": [
+            {
+              "movement": {
+                "originBase": "1B",
+                "start": "1B",
+                "end": "2B",
+                "outBase": null,
+                "isOut": false,
+                "outNumber": null
+              },
+              "details": {
+                "event": "Stolen Base 2B",
+                "eventType": "stolen_base_2b",
+                "movementReason": "r_stolen_base_2b",
+                "runner": {
+                  "id": 645302,
+                  "fullName": "Victor Robles",
+                  "link": "/api/v1/people/645302"
+                },
+                "responsiblePitcher": null,
+                "isScoringEvent": false,
+                "rbi": false,
+                "earned": false,
+                "teamUnearned": false,
+                "playIndex": 2
+              },
+              "credits": []
+            },
+            {
+              "movement": {
+                "originBase": "1B",
+                "start": "2B",
+                "end": "3B",
+                "outBase": null,
+                "isOut": false,
+                "outNumber": null
+              },
+              "details": {
+                "event": "Error",
+                "eventType": "error",
+                "movementReason": "r_adv_play",
+                "runner": {
+                  "id": 645302,
+                  "fullName": "Victor Robles",
+                  "link": "/api/v1/people/645302"
+                },
+                "responsiblePitcher": null,
+                "isScoringEvent": false,
+                "rbi": false,
+                "earned": false,
+                "teamUnearned": false,
+                "playIndex": 2
+              },
+              "credits": [
+                {
+                  "player": {
+                    "id": 668832,
+                    "link": "/api/v1/people/668832"
+                  },
+                  "position": {
+                    "code": "2",
+                    "name": "Catcher",
+                    "type": "Catcher",
+                    "abbreviation": "C"
+                  },
+                  "credit": "f_throwing_error"
+                }
+              ]
+            }
+          ],
+          "playEvents": [
+            {
+              "details": {
+                "call": {
+                  "code": "F",
+                  "description": "Foul"
+                },
+                "description": "Foul",
+                "code": "F",
+                "ballColor": "rgba(170, 21, 11, 1.0)",
+                "trailColor": "rgba(188, 0, 33, 1.0)",
+                "isInPlay": false,
+                "isStrike": true,
+                "isBall": false,
+                "type": {
+                  "code": "FF",
+                  "description": "Four-Seam Fastball"
+                },
+                "isOut": false,
+                "hasReview": false
+              },
+              "count": {
+                "balls": 0,
+                "strikes": 1,
+                "outs": 0
+              },
+              "pitchData": {
+                "startSpeed": 91.5,
+                "endSpeed": 83.8,
+                "strikeZoneTop": 3.5,
+                "strikeZoneBottom": 1.6,
+                "coordinates": {
+                  "aY": 28.02837519322311,
+                  "aZ": -13.09954591358969,
+                  "pfxX": -7.062787318580512,
+                  "pfxZ": 10.606526507851223,
+                  "pX": -0.14821086324261917,
+                  "pZ": 2.952711196085978,
+                  "vX0": 7.1078081128981205,
+                  "vY0": -133.11057119745445,
+                  "vZ0": -4.606025536749868,
+                  "x": 122.65,
+                  "y": 159.06,
+                  "x0": -1.9328350539242827,
+                  "y0": 50.00184445725927,
+                  "z0": 5.650934163746271,
+                  "aX": -12.699955241520689
+                },
+                "breaks": {
+                  "breakAngle": 38.4,
+                  "breakLength": 3.6,
+                  "breakY": 24.0,
+                  "breakVertical": -14.2,
+                  "breakVerticalInduced": 18.5,
+                  "breakHorizontal": 11.3,
+                  "spinRate": 2432,
+                  "spinDirection": 214
+                },
+                "zone": 5,
+                "typeConfidence": 0.92,
+                "plateTime": 0.41118108831875455,
+                "extension": 6.071623978073654
+              },
+              "index": 0,
+              "playId": "a820a56a-d6ba-48e5-9dc8-0ee23c1dd88d",
+              "pitchNumber": 1,
+              "startTime": "2024-09-05T19:39:21.676Z",
+              "endTime": "2024-09-05T19:39:25.134Z",
+              "isPitch": true,
+              "type": "pitch"
+            },
+            {
+              "details": {
+                "call": {
+                  "code": "S",
+                  "description": "Swinging Strike"
+                },
+                "description": "Swinging Strike",
+                "code": "S",
+                "ballColor": "rgba(170, 21, 11, 1.0)",
+                "trailColor": "rgba(50, 50, 50, 1.0)",
+                "isInPlay": false,
+                "isStrike": true,
+                "isBall": false,
+                "type": {
+                  "code": "ST",
+                  "description": "Sweeper"
+                },
+                "isOut": false,
+                "hasReview": false,
+                "runnerGoing": true
+              },
+              "count": {
+                "balls": 0,
+                "strikes": 2,
+                "outs": 0
+              },
+              "pitchData": {
+                "startSpeed": 76.6,
+                "endSpeed": 70.7,
+                "strikeZoneTop": 3.5,
+                "strikeZoneBottom": 1.6,
+                "coordinates": {
+                  "aY": 20.20733120670545,
+                  "aZ": -24.97215310246823,
+                  "pfxX": 6.707422938215771,
+                  "pfxZ": 5.718135271210632,
+                  "pX": 0.8136569772857932,
+                  "pZ": 1.7124591982514412,
+                  "vX0": 4.396530401264073,
+                  "vY0": -111.5612104134554,
+                  "vZ0": -2.984471498791919,
+                  "x": 85.99,
+                  "y": 192.54,
+                  "x0": -2.054494044481215,
+                  "y0": 50.00254020828797,
+                  "z0": 5.643464215305022,
+                  "aX": 8.44808531704751
+                },
+                "breaks": {
+                  "breakAngle": 19.2,
+                  "breakLength": 8.4,
+                  "breakY": 24.0,
+                  "breakVertical": -36.7,
+                  "breakVerticalInduced": 9.8,
+                  "breakHorizontal": -13.3,
+                  "spinRate": 2661,
+                  "spinDirection": 76
+                },
+                "zone": 14,
+                "typeConfidence": 2.0,
+                "plateTime": 0.4910907998685765,
+                "extension": 5.705268784619091
+              },
+              "index": 1,
+              "playId": "e1021d99-cf13-4941-bc01-0e589e59d18c",
+              "pitchNumber": 2,
+              "startTime": "2024-09-05T19:39:40.618Z",
+              "endTime": "2024-09-05T19:39:53.098Z",
+              "isPitch": true,
+              "type": "pitch"
+            }
+          ],
+          "playEndTime": "2024-09-05T19:42:58.066Z",
+          "atBatIndex": 1
+        }
+      ],
+      "currentPlay": {
+        "result": {
+          "type": "atBat",
+          "event": "Strikeout",
+          "eventType": "strikeout",
+          "description": "JJ Bleday strikes out swinging.",
+          "rbi": 0,
+          "awayScore": 6,
+          "homeScore": 4,
+          "isOut": true
+        },
+        "about": {
+          "atBatIndex": 81,
+          "halfInning": "bottom",
+          "isTopInning": false,
+          "inning": 9,
+          "startTime": "2024-09-05T22:27:05.763Z",
+          "endTime": "2024-09-05T22:28:35.963Z",
+          "isComplete": true,
+          "isScoringPlay": false,
+          "hasReview": false,
+          "hasOut": true,
+          "captivatingIndex": 14
+        },
+        "count": {
+          "balls": 1,
+          "strikes": 3,
+          "outs": 3
+        },
+        "matchup": {
+          "batter": {
+            "id": 668709,
+            "fullName": "JJ Bleday",
+            "link": "/api/v1/people/668709"
+          },
+          "batSide": {
+            "code": "L",
+            "description": "Left"
+          },
+          "pitcher": {
+            "id": 662253,
+            "fullName": "Andr\u00e9s Mu\u00f1oz",
+            "link": "/api/v1/people/662253"
+          },
+          "pitchHand": {
+            "code": "R",
+            "description": "Right"
+          },
+          "batterHotColdZones": [],
+          "pitcherHotColdZones": [],
+          "splits": {
+            "batter": "vs_RHP",
+            "pitcher": "vs_LHB",
+            "menOnBase": "Empty"
+          }
+        },
+        "pitchIndex": [
+          0,
+          1,
+          2,
+          4,
+          5
+        ],
+        "actionIndex": [],
+        "runnerIndex": [
+          0
+        ],
+        "runners": [
+          {
+            "movement": {
+              "originBase": null,
+              "start": null,
+              "end": null,
+              "outBase": "1B",
+              "isOut": true,
+              "outNumber": 3
+            },
+            "details": {
+              "event": "Strikeout",
+              "eventType": "strikeout",
+              "movementReason": null,
+              "runner": {
+                "id": 668709,
+                "fullName": "JJ Bleday",
+                "link": "/api/v1/people/668709"
+              },
+              "responsiblePitcher": null,
+              "isScoringEvent": false,
+              "rbi": false,
+              "earned": false,
+              "teamUnearned": false,
+              "playIndex": 5
+            },
+            "credits": [
+              {
+                "player": {
+                  "id": 663728,
+                  "link": "/api/v1/people/663728"
+                },
+                "position": {
+                  "code": "2",
+                  "name": "Catcher",
+                  "type": "Catcher",
+                  "abbreviation": "C"
+                },
+                "credit": "f_putout"
+              }
+            ]
+          }
+        ],
+        "playEvents": [
+          {
+            "details": {
+              "call": {
+                "code": "C",
+                "description": "Called Strike"
+              },
+              "description": "Called Strike",
+              "code": "C",
+              "ballColor": "rgba(170, 21, 11, 1.0)",
+              "trailColor": "rgba(0, 0, 254, 1.0)",
+              "isInPlay": false,
+              "isStrike": true,
+              "isBall": false,
+              "type": {
+                "code": "SL",
+                "description": "Slider"
+              },
+              "isOut": false,
+              "hasReview": false
+            },
+            "count": {
+              "balls": 0,
+              "strikes": 1,
+              "outs": 2
+            },
+            "pitchData": {
+              "startSpeed": 87.3,
+              "endSpeed": 80.6,
+              "strikeZoneTop": 3.14731720720123,
+              "strikeZoneBottom": 1.54432852753138,
+              "coordinates": {
+                "aY": 24.71483260078136,
+                "aZ": -32.75310078769038,
+                "pfxX": 2.2550018279519843,
+                "pfxZ": -0.35457125773570297,
+                "pX": -0.4406809760071054,
+                "pZ": 2.3805947372039373,
+                "vX0": 2.8541794221980816,
+                "vY0": -127.14806516764996,
+                "vZ0": -0.7039028348214529,
+                "x": 133.8,
+                "y": 174.5,
+                "x0": -1.868275096591397,
+                "y0": 50.0004342899776,
+                "z0": 5.247394338696055,
+                "aX": 3.7117243807062814
+              },
+              "breaks": {
+                "breakAngle": 7.2,
+                "breakLength": 8.4,
+                "breakY": 24.0,
+                "breakVertical": -36.2,
+                "breakVerticalInduced": -0.6,
+                "breakHorizontal": -4.7,
+                "spinRate": 2334,
+                "spinDirection": 102
+              },
+              "zone": 4,
+              "typeConfidence": 0.9,
+              "plateTime": 0.42985958299564553,
+              "extension": 6.595458994838972
+            },
+            "index": 0,
+            "playId": "2d022a89-bdd7-40a6-924b-b1b67b369a91",
+            "pitchNumber": 1,
+            "startTime": "2024-09-05T22:27:21.280Z",
+            "endTime": "2024-09-05T22:27:25.416Z",
+            "isPitch": true,
+            "type": "pitch"
+          },
+          {
+            "details": {
+              "call": {
+                "code": "B",
+                "description": "Ball"
+              },
+              "description": "Ball",
+              "code": "B",
+              "ballColor": "rgba(39, 161, 39, 1.0)",
+              "trailColor": "rgba(188, 0, 33, 1.0)",
+              "isInPlay": false,
+              "isStrike": false,
+              "isBall": true,
+              "type": {
+                "code": "FF",
+                "description": "Four-Seam Fastball"
+              },
+              "isOut": false,
+              "hasReview": false
+            },
+            "count": {
+              "balls": 1,
+              "strikes": 1,
+              "outs": 2
+            },
+            "pitchData": {
+              "startSpeed": 98.1,
+              "endSpeed": 89.7,
+              "strikeZoneTop": 3.10256981419908,
+              "strikeZoneBottom": 1.58707530512321,
+              "coordinates": {
+                "aY": 32.511521714194956,
+                "aZ": -16.696137048082534,
+                "pfxX": -7.637433970172107,
+                "pfxZ": 7.47514341453855,
+                "pX": -1.6821868332164729,
+                "pZ": 4.025315110525278,
+                "vX0": 3.265288614640349,
+                "vY0": -142.90833680224222,
+                "vZ0": -0.47710989179990204,
+                "x": 181.12,
+                "y": 130.1,
+                "x0": -1.8463368467597017,
+                "y0": 50.00560813312381,
+                "z0": 5.241876324002459,
+                "aX": -15.821474268382476
+              },
+              "breaks": {
+                "breakAngle": 42.0,
+                "breakLength": 4.8,
+                "breakY": 24.0,
+                "breakVertical": -14.6,
+                "breakVerticalInduced": 13.7,
+                "breakHorizontal": 13.2,
+                "spinRate": 2351,
+                "spinDirection": 223
+              },
+              "zone": 11,
+              "typeConfidence": 0.9,
+              "plateTime": 0.3830738535671636,
+              "extension": 6.559908253829948
+            },
+            "index": 1,
+            "playId": "e2b0f608-77e8-4cf3-bd3d-d8dab37a8d96",
+            "pitchNumber": 2,
+            "startTime": "2024-09-05T22:27:35.505Z",
+            "endTime": "2024-09-05T22:27:39.170Z",
+            "isPitch": true,
+            "type": "pitch"
+          }
+        ],
+        "playEndTime": "2024-09-05T22:28:35.963Z",
+        "atBatIndex": 81
+      },
+      "scoringPlays": [
+        2,
+        18,
+        26
+      ],
+      "playsByInning": [
+        {
+          "startIndex": 0,
+          "endIndex": 8,
+          "top": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "bottom": [
+            6,
+            7,
+            8
+          ],
+          "hits": {
+            "away": [
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 136,
+                  "name": "Seattle Mariners",
+                  "link": "/api/v1/teams/136"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 683155,
+                  "fullName": "Joey Estes",
+                  "link": "/api/v1/people/683155"
+                },
+                "batter": {
+                  "id": 677594,
+                  "fullName": "Julio Rodr\u00edguez",
+                  "link": "/api/v1/people/677594"
+                },
+                "coordinates": {
+                  "x": 152.01,
+                  "y": 170.42
+                },
+                "type": "O",
+                "description": "Groundout"
+              },
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 136,
+                  "name": "Seattle Mariners",
+                  "link": "/api/v1/teams/136"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 683155,
+                  "fullName": "Joey Estes",
+                  "link": "/api/v1/people/683155"
+                },
+                "batter": {
+                  "id": 663728,
+                  "fullName": "Cal Raleigh",
+                  "link": "/api/v1/people/663728"
+                },
+                "coordinates": {
+                  "x": 239.37,
+                  "y": 83.66
+                },
+                "type": "H",
+                "description": "Home Run"
+              },
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 136,
+                  "name": "Seattle Mariners",
+                  "link": "/api/v1/teams/136"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 683155,
+                  "fullName": "Joey Estes",
+                  "link": "/api/v1/people/683155"
+                },
+                "batter": {
+                  "id": 670042,
+                  "fullName": "Luke Raley",
+                  "link": "/api/v1/people/670042"
+                },
+                "coordinates": {
+                  "x": 168.54,
+                  "y": 27.39
+                },
+                "type": "H",
+                "description": "Double"
+              },
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 136,
+                  "name": "Seattle Mariners",
+                  "link": "/api/v1/teams/136"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 683155,
+                  "fullName": "Joey Estes",
+                  "link": "/api/v1/people/683155"
+                },
+                "batter": {
+                  "id": 457759,
+                  "fullName": "Justin Turner",
+                  "link": "/api/v1/people/457759"
+                },
+                "coordinates": {
+                  "x": 144.21,
+                  "y": 92.57
+                },
+                "type": "O",
+                "description": "Flyout"
+              },
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 136,
+                  "name": "Seattle Mariners",
+                  "link": "/api/v1/teams/136"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 683155,
+                  "fullName": "Joey Estes",
+                  "link": "/api/v1/people/683155"
+                },
+                "batter": {
+                  "id": 593871,
+                  "fullName": "Jorge Polanco",
+                  "link": "/api/v1/people/593871"
+                },
+                "coordinates": {
+                  "x": 69.1,
+                  "y": 119.26
+                },
+                "type": "O",
+                "description": "Flyout"
+              }
+            ],
+            "home": [
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 133,
+                  "name": "Oakland Athletics",
+                  "link": "/api/v1/teams/133"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 693433,
+                  "fullName": "Bryan Woo",
+                  "link": "/api/v1/people/693433"
+                },
+                "batter": {
+                  "id": 671732,
+                  "fullName": "Lawrence Butler",
+                  "link": "/api/v1/people/671732"
+                },
+                "coordinates": {
+                  "x": 148.22,
+                  "y": 150.39
+                },
+                "type": "O",
+                "description": "Groundout"
+              },
+              {
+                "team": {
+                  "springLeague": {
+                    "id": 114,
+                    "name": "Cactus League",
+                    "link": "/api/v1/league/114",
+                    "abbreviation": "CL"
+                  },
+                  "allStarStatus": "N",
+                  "id": 133,
+                  "name": "Oakland Athletics",
+                  "link": "/api/v1/teams/133"
+                },
+                "inning": 1,
+                "pitcher": {
+                  "id": 693433,
+                  "fullName": "Bryan Woo",
+                  "link": "/api/v1/people/693433"
+                },
+                "batter": {
+                  "id": 668709,
+                  "fullName": "JJ Bleday",
+                  "link": "/api/v1/people/668709"
+                },
+                "coordinates": {
+                  "x": 148.73,
+                  "y": 45.48
+                },
+                "type": "O",
+                "description": "Flyout"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "linescore": {
+      "currentInning": 9,
+      "currentInningOrdinal": "9th",
+      "inningState": "Bottom",
+      "inningHalf": "Bottom",
+      "isTopInning": false,
+      "scheduledInnings": 9,
+      "innings": [
+        {
+          "num": 1,
+          "ordinalNum": "1st",
+          "home": {
+            "runs": 0,
+            "hits": 0,
+            "errors": 1,
+            "leftOnBase": 0
+          },
+          "away": {
+            "runs": 2,
+            "hits": 2,
+            "errors": 0,
+            "leftOnBase": 1
+          }
+        },
+        {
+          "num": 2,
+          "ordinalNum": "2nd",
+          "home": {
+            "runs": 0,
+            "hits": 2,
+            "errors": 0,
+            "leftOnBase": 2
+          },
+          "away": {
+            "runs": 0,
+            "hits": 1,
+            "errors": 0,
+            "leftOnBase": 1
+          }
+        }
+      ],
+      "teams": {
+        "home": {
+          "runs": 4,
+          "hits": 10,
+          "errors": 2,
+          "leftOnBase": 8
+        },
+        "away": {
+          "runs": 6,
+          "hits": 11,
+          "errors": 0,
+          "leftOnBase": 9
+        }
+      },
+      "defense": {
+        "pitcher": {
+          "id": 662253,
+          "fullName": "Andr\u00e9s Mu\u00f1oz",
+          "link": "/api/v1/people/662253"
+        },
+        "catcher": {
+          "id": 663728,
+          "fullName": "Cal Raleigh",
+          "link": "/api/v1/people/663728"
+        },
+        "first": {
+          "id": 670042,
+          "fullName": "Luke Raley",
+          "link": "/api/v1/people/670042"
+        },
+        "second": {
+          "id": 593871,
+          "fullName": "Jorge Polanco",
+          "link": "/api/v1/people/593871"
+        },
+        "third": {
+          "id": 668942,
+          "fullName": "Josh Rojas",
+          "link": "/api/v1/people/668942"
+        },
+        "shortstop": {
+          "id": 660844,
+          "fullName": "Leo Rivas",
+          "link": "/api/v1/people/660844"
+        },
+        "left": {
+          "id": 645302,
+          "fullName": "Victor Robles",
+          "link": "/api/v1/people/645302"
+        },
+        "center": {
+          "id": 677594,
+          "fullName": "Julio Rodr\u00edguez",
+          "link": "/api/v1/people/677594"
+        },
+        "right": {
+          "id": 571745,
+          "fullName": "Mitch Haniger",
+          "link": "/api/v1/people/571745"
+        },
+        "batter": {
+          "id": 571745,
+          "fullName": "Mitch Haniger",
+          "link": "/api/v1/people/571745"
+        },
+        "onDeck": {
+          "id": 668942,
+          "fullName": "Josh Rojas",
+          "link": "/api/v1/people/668942"
+        },
+        "inHole": {
+          "id": 660844,
+          "fullName": "Leo Rivas",
+          "link": "/api/v1/people/660844"
+        },
+        "battingOrder": 7,
+        "team": {
+          "id": 136,
+          "name": "Seattle Mariners",
+          "link": "/api/v1/teams/136"
+        }
+      },
+      "offense": {
+        "batter": {
+          "id": 668709,
+          "fullName": "JJ Bleday",
+          "link": "/api/v1/people/668709"
+        },
+        "onDeck": {
+          "id": 664913,
+          "fullName": "Seth Brown",
+          "link": "/api/v1/people/664913"
+        },
+        "inHole": {
+          "id": 680869,
+          "fullName": "Zack Gelof",
+          "link": "/api/v1/people/680869"
+        },
+        "pitcher": {
+          "id": 621053,
+          "fullName": "Tyler Ferguson",
+          "link": "/api/v1/people/621053"
+        },
+        "battingOrder": 3,
+        "team": {
+          "id": 133,
+          "name": "Oakland Athletics",
+          "link": "/api/v1/teams/133"
+        }
+      },
+      "balls": 1,
+      "strikes": 3,
+      "outs": 3
+    },
+    "boxscore": {
+      "teams": {
+        "home": {
+          "team": {
+            "id": 133,
+            "name": "Oakland Athletics",
+            "link": "/api/v1/teams/133"
+          },
+          "teamStats": {
+            "batting": {
+              "flyOuts": 6,
+              "groundOuts": 5,
+              "airOuts": 11,
+              "runs": 4,
+              "doubles": 0,
+              "triples": 0,
+              "homeRuns": 2,
+              "strikeOuts": 11,
+              "baseOnBalls": 2,
+              "intentionalWalks": 0,
+              "hits": 10,
+              "hitByPitch": 0,
+              "avg": ".234",
+              "atBats": 36,
+              "obp": ".304",
+              "slg": ".400",
+              "ops": ".704",
+              "caughtStealing": 0,
+              "stolenBases": 0,
+              "stolenBasePercentage": ".---",
+              "groundIntoDoublePlay": 0,
+              "groundIntoTriplePlay": 0,
+              "plateAppearances": 39,
+              "totalBases": 16,
+              "rbi": 4,
+              "leftOnBase": 15,
+              "sacBunts": 0,
+              "sacFlies": 1,
+              "catchersInterference": 0,
+              "pickoffs": 0,
+              "atBatsPerHomeRun": "18.00",
+              "popOuts": 2,
+              "lineOuts": 3
+            },
+            "pitching": {
+              "flyOuts": 8,
+              "groundOuts": 5,
+              "airOuts": 13,
+              "runs": 6,
+              "doubles": 3,
+              "triples": 0,
+              "homeRuns": 3,
+              "strikeOuts": 8,
+              "baseOnBalls": 3,
+              "intentionalWalks": 1,
+              "hits": 11,
+              "hitByPitch": 2,
+              "atBats": 36,
+              "obp": ".381",
+              "caughtStealing": 0,
+              "stolenBases": 2,
+              "stolenBasePercentage": "1.000",
+              "caughtStealingPercentage": ".000",
+              "numberOfPitches": 178,
+              "era": "4.37",
+              "inningsPitched": "9.0",
+              "saveOpportunities": 0,
+              "earnedRuns": 6,
+              "whip": "1.32",
+              "battersFaced": 42,
+              "outs": 27,
+              "completeGames": 0,
+              "shutouts": 0,
+              "pitchesThrown": 178,
+              "balls": 66,
+              "strikes": 112,
+              "strikePercentage": ".630",
+              "hitBatsmen": 2,
+              "balks": 0,
+              "wildPitches": 0,
+              "pickoffs": 0,
+              "groundOutsToAirouts": "0.38",
+              "rbi": 6,
+              "pitchesPerInning": "19.78",
+              "runsScoredPer9": "6.00",
+              "homeRunsPer9": "3.00",
+              "inheritedRunners": 0,
+              "inheritedRunnersScored": 0,
+              "catchersInterference": 0,
+              "sacBunts": 0,
+              "sacFlies": 1,
+              "passedBall": 0,
+              "popOuts": 1,
+              "lineOuts": 4
+            },
+            "fielding": {
+              "caughtStealing": 0,
+              "stolenBases": 2,
+              "stolenBasePercentage": "1.000",
+              "caughtStealingPercentage": ".---",
+              "assists": 5,
+              "putOuts": 27,
+              "errors": 2,
+              "chances": 34,
+              "passedBall": 0,
+              "pickoffs": 0
+            }
+          },
+          "players": {
+            "ID671732": {
+              "person": {
+                "id": 671732,
+                "fullName": "Lawrence Butler",
+                "link": "/api/v1/people/671732"
+              },
+              "jerseyNumber": "4",
+              "position": {
+                "code": "9",
+                "name": "Outfielder",
+                "type": "Outfielder",
+                "abbreviation": "RF"
+              },
+              "status": {
+                "code": "A",
+                "description": "Active"
+              },
+              "parentTeamId": 133,
+              "battingOrder": "100",
+              "stats": {
+                "batting": {
+                  "summary": "1-4 | BB, R",
+                  "gamesPlayed": 1,
+                  "flyOuts": 0,
+                  "groundOuts": 2,
+                  "airOuts": 1,
+                  "runs": 1,
+                  "doubles": 0,
+                  "triples": 0,
+                  "homeRuns": 0,
+                  "strikeOuts": 0,
+                  "baseOnBalls": 1,
+                  "intentionalWalks": 0,
+                  "hits": 1,
+                  "hitByPitch": 0,
+                  "atBats": 4,
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "groundIntoDoublePlay": 0,
+                  "groundIntoTriplePlay": 0,
+                  "plateAppearances": 5,
+                  "totalBases": 1,
+                  "rbi": 0,
+                  "leftOnBase": 1,
+                  "sacBunts": 0,
+                  "sacFlies": 0,
+                  "catchersInterference": 0,
+                  "pickoffs": 0,
+                  "atBatsPerHomeRun": "-.--",
+                  "popOuts": 1,
+                  "lineOuts": 0
+                },
+                "pitching": {},
+                "fielding": {
+                  "gamesStarted": 1,
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "caughtStealingPercentage": ".---",
+                  "assists": 0,
+                  "putOuts": 5,
+                  "errors": 0,
+                  "chances": 5,
+                  "fielding": ".000",
+                  "passedBall": 0,
+                  "pickoffs": 0
+                }
+              },
+              "seasonStats": {
+                "batting": {
+                  "gamesPlayed": 107,
+                  "flyOuts": 54,
+                  "groundOuts": 83,
+                  "airOuts": 85,
+                  "runs": 56,
+                  "doubles": 21,
+                  "triples": 2,
+                  "homeRuns": 21,
+                  "strikeOuts": 85,
+                  "baseOnBalls": 29,
+                  "intentionalWalks": 0,
+                  "hits": 90,
+                  "hitByPitch": 0,
+                  "avg": ".265",
+                  "atBats": 339,
+                  "obp": ".320",
+                  "slg": ".525",
+                  "ops": ".845",
+                  "caughtStealing": 0,
+                  "stolenBases": 13,
+                  "stolenBasePercentage": "1.000",
+                  "caughtStealingPercentage": ".000",
+                  "groundIntoDoublePlay": 7,
+                  "groundIntoTriplePlay": 0,
+                  "plateAppearances": 372,
+                  "totalBases": 178,
+                  "rbi": 54,
+                  "leftOnBase": 94,
+                  "sacBunts": 0,
+                  "sacFlies": 4,
+                  "babip": ".291",
+                  "groundOutsToAirouts": "0.98",
+                  "catchersInterference": 0,
+                  "pickoffs": 0,
+                  "atBatsPerHomeRun": "16.14",
+                  "popOuts": 11,
+                  "lineOuts": 20
+                },
+                "pitching": {
+                  "gamesPlayed": 0,
+                  "gamesStarted": 0,
+                  "flyOuts": 0,
+                  "groundOuts": 0,
+                  "airOuts": 0,
+                  "runs": 0,
+                  "doubles": 0,
+                  "triples": 0,
+                  "homeRuns": 0,
+                  "strikeOuts": 0,
+                  "baseOnBalls": 0,
+                  "intentionalWalks": 0,
+                  "hits": 0,
+                  "hitByPitch": 0,
+                  "atBats": 0,
+                  "obp": ".000",
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "caughtStealingPercentage": ".---",
+                  "numberOfPitches": 0,
+                  "era": "-.--",
+                  "inningsPitched": "0.0",
+                  "wins": 0,
+                  "losses": 0,
+                  "saves": 0,
+                  "saveOpportunities": 0,
+                  "holds": 0,
+                  "blownSaves": 0,
+                  "earnedRuns": 0,
+                  "whip": "-",
+                  "battersFaced": 0,
+                  "outs": 0,
+                  "gamesPitched": 0,
+                  "completeGames": 0,
+                  "shutouts": 0,
+                  "balls": 0,
+                  "strikes": 0,
+                  "strikePercentage": "-.--",
+                  "hitBatsmen": 0,
+                  "balks": 0,
+                  "wildPitches": 0,
+                  "pickoffs": 0,
+                  "groundOutsToAirouts": "-.--",
+                  "rbi": 0,
+                  "winPercentage": ".---",
+                  "pitchesPerInning": "-.--",
+                  "gamesFinished": 0,
+                  "strikeoutWalkRatio": "-.--",
+                  "strikeoutsPer9Inn": "-.--",
+                  "walksPer9Inn": "-.--",
+                  "hitsPer9Inn": "-.--",
+                  "runsScoredPer9": "-.--",
+                  "homeRunsPer9": "-.--",
+                  "inheritedRunners": 0,
+                  "inheritedRunnersScored": 0,
+                  "catchersInterference": 0,
+                  "sacBunts": 0,
+                  "sacFlies": 0,
+                  "passedBall": 0,
+                  "popOuts": 0,
+                  "lineOuts": 0
+                },
+                "fielding": {
+                  "gamesStarted": 1,
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "caughtStealingPercentage": ".---",
+                  "assists": 2,
+                  "putOuts": 212,
+                  "errors": 3,
+                  "chances": 217,
+                  "fielding": ".986",
+                  "passedBall": 0,
+                  "pickoffs": 0
+                }
+              },
+              "gameStatus": {
+                "isCurrentBatter": false,
+                "isCurrentPitcher": false,
+                "isOnBench": false,
+                "isSubstitute": false
+              },
+              "allPositions": [
+                {
+                  "code": "9",
+                  "name": "Outfielder",
+                  "type": "Outfielder",
+                  "abbreviation": "RF"
+                }
+              ]
+            }
+          },
+          "batters": [
+            671732,
+            667670
+          ],
+          "pitchers": [
+            683155,
+            519008
+          ],
+          "bench": [
+            669397,
+            669137
+          ],
+          "bullpen": [
+            669620,
+            674370
+          ],
+          "battingOrder": [
+            671732,
+            667670
+          ],
+          "info": [
+            {
+              "title": "BATTING",
+              "fieldList": [
+                {
+                  "label": "HR",
+                  "value": "Rooker 2 (35, 5th inning off Woo, 0 on, 1 out, 9th inning off Mu\u00f1oz, A, 1 on, 2 out)."
+                },
+                {
+                  "label": "TB",
+                  "value": "Bleday; Brown, S 2; Butler, L; Gelof; Gray, T; Rooker 8; Schuemann; Wilson, J."
+                },
+                {
+                  "label": "RBI",
+                  "value": "Brown, S (41); Rooker 3 (97)."
+                },
+                {
+                  "label": "2-out RBI",
+                  "value": "Rooker 2."
+                },
+                {
+                  "label": "Runners left in scoring position, 2 out",
+                  "value": "Gray, T; Gelof; Bleday."
+                },
+                {
+                  "label": "SF",
+                  "value": "Brown, S."
+                },
+                {
+                  "label": "Team RISP",
+                  "value": "1-for-6."
+                },
+                {
+                  "label": "Team LOB",
+                  "value": "8."
+                }
+              ]
+            },
+            {
+              "title": "FIELDING",
+              "fieldList": [
+                {
+                  "label": "E",
+                  "value": "McCann (4, throw); Schuemann (13, fielding)."
+                },
+                {
+                  "label": "DP",
+                  "value": "(Wilson, J-Gelof-Gray, T)."
+                }
+              ]
+            }
+          ],
+          "note": []
+        },
+        "away": {
+          "team": {
+            "id": 136,
+            "name": "Seattle Mariners",
+            "link": "/api/v1/teams/136"
+          },
+          "teamStats": {
+            "batting": {
+              "flyOuts": 8,
+              "groundOuts": 5,
+              "airOuts": 13,
+              "runs": 6,
+              "doubles": 3,
+              "triples": 0,
+              "homeRuns": 3,
+              "strikeOuts": 8,
+              "baseOnBalls": 3,
+              "intentionalWalks": 1,
+              "hits": 11,
+              "hitByPitch": 2,
+              "avg": ".218",
+              "atBats": 36,
+              "obp": ".305",
+              "slg": ".368",
+              "ops": ".673",
+              "caughtStealing": 0,
+              "stolenBases": 2,
+              "stolenBasePercentage": "1.000",
+              "groundIntoDoublePlay": 1,
+              "groundIntoTriplePlay": 0,
+              "plateAppearances": 42,
+              "totalBases": 23,
+              "rbi": 6,
+              "leftOnBase": 20,
+              "sacBunts": 0,
+              "sacFlies": 1,
+              "catchersInterference": 0,
+              "pickoffs": 0,
+              "atBatsPerHomeRun": "12.00",
+              "popOuts": 1,
+              "lineOuts": 4
+            },
+            "pitching": {
+              "flyOuts": 6,
+              "groundOuts": 5,
+              "airOuts": 11,
+              "runs": 4,
+              "doubles": 0,
+              "triples": 0,
+              "homeRuns": 2,
+              "strikeOuts": 11,
+              "baseOnBalls": 2,
+              "intentionalWalks": 0,
+              "hits": 10,
+              "hitByPitch": 0,
+              "atBats": 36,
+              "obp": ".308",
+              "caughtStealing": 0,
+              "stolenBases": 0,
+              "stolenBasePercentage": ".---",
+              "caughtStealingPercentage": ".---",
+              "numberOfPitches": 144,
+              "era": "3.53",
+              "inningsPitched": "9.0",
+              "saveOpportunities": 0,
+              "earnedRuns": 4,
+              "whip": "1.09",
+              "battersFaced": 39,
+              "outs": 27,
+              "completeGames": 0,
+              "shutouts": 0,
+              "pitchesThrown": 144,
+              "balls": 52,
+              "strikes": 92,
+              "strikePercentage": ".640",
+              "hitBatsmen": 0,
+              "balks": 0,
+              "wildPitches": 0,
+              "pickoffs": 0,
+              "groundOutsToAirouts": "0.45",
+              "rbi": 4,
+              "pitchesPerInning": "16.00",
+              "runsScoredPer9": "4.00",
+              "homeRunsPer9": "2.00",
+              "inheritedRunners": 0,
+              "inheritedRunnersScored": 0,
+              "catchersInterference": 0,
+              "sacBunts": 0,
+              "sacFlies": 1,
+              "passedBall": 0,
+              "popOuts": 2,
+              "lineOuts": 3
+            },
+            "fielding": {
+              "caughtStealing": 0,
+              "stolenBases": 0,
+              "stolenBasePercentage": ".---",
+              "caughtStealingPercentage": ".---",
+              "assists": 5,
+              "putOuts": 27,
+              "errors": 0,
+              "chances": 32,
+              "passedBall": 0,
+              "pickoffs": 0
+            }
+          },
+          "players": {
+            "ID645302": {
+              "person": {
+                "id": 645302,
+                "fullName": "Victor Robles",
+                "link": "/api/v1/people/645302"
+              },
+              "jerseyNumber": "10",
+              "position": {
+                "code": "7",
+                "name": "Outfielder",
+                "type": "Outfielder",
+                "abbreviation": "LF"
+              },
+              "status": {
+                "code": "A",
+                "description": "Active"
+              },
+              "parentTeamId": 136,
+              "battingOrder": "100",
+              "stats": {
+                "batting": {
+                  "summary": "2-3 | 2 HBP, 2 R, SB",
+                  "gamesPlayed": 1,
+                  "flyOuts": 1,
+                  "groundOuts": 0,
+                  "airOuts": 1,
+                  "runs": 2,
+                  "doubles": 0,
+                  "triples": 0,
+                  "homeRuns": 0,
+                  "strikeOuts": 0,
+                  "baseOnBalls": 0,
+                  "intentionalWalks": 0,
+                  "hits": 2,
+                  "hitByPitch": 2,
+                  "atBats": 3,
+                  "caughtStealing": 0,
+                  "stolenBases": 1,
+                  "stolenBasePercentage": "1.000",
+                  "groundIntoDoublePlay": 0,
+                  "groundIntoTriplePlay": 0,
+                  "plateAppearances": 5,
+                  "totalBases": 2,
+                  "rbi": 0,
+                  "leftOnBase": 1,
+                  "sacBunts": 0,
+                  "sacFlies": 0,
+                  "catchersInterference": 0,
+                  "pickoffs": 0,
+                  "atBatsPerHomeRun": "-.--",
+                  "popOuts": 0,
+                  "lineOuts": 0
+                },
+                "pitching": {},
+                "fielding": {
+                  "gamesStarted": 1,
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "caughtStealingPercentage": ".---",
+                  "assists": 0,
+                  "putOuts": 3,
+                  "errors": 0,
+                  "chances": 3,
+                  "fielding": ".000",
+                  "passedBall": 0,
+                  "pickoffs": 0
+                }
+              },
+              "seasonStats": {
+                "batting": {
+                  "gamesPlayed": 74,
+                  "flyOuts": 32,
+                  "groundOuts": 46,
+                  "airOuts": 58,
+                  "runs": 29,
+                  "doubles": 13,
+                  "triples": 0,
+                  "homeRuns": 4,
+                  "strikeOuts": 44,
+                  "baseOnBalls": 16,
+                  "intentionalWalks": 0,
+                  "hits": 57,
+                  "hitByPitch": 7,
+                  "avg": ".288",
+                  "atBats": 198,
+                  "obp": ".359",
+                  "slg": ".414",
+                  "ops": ".773",
+                  "caughtStealing": 1,
+                  "stolenBases": 23,
+                  "stolenBasePercentage": ".958",
+                  "caughtStealingPercentage": ".042",
+                  "groundIntoDoublePlay": 2,
+                  "groundIntoTriplePlay": 0,
+                  "plateAppearances": 228,
+                  "totalBases": 82,
+                  "rbi": 21,
+                  "leftOnBase": 52,
+                  "sacBunts": 5,
+                  "sacFlies": 2,
+                  "babip": ".349",
+                  "groundOutsToAirouts": "0.79",
+                  "catchersInterference": 0,
+                  "pickoffs": 0,
+                  "atBatsPerHomeRun": "49.50",
+                  "popOuts": 14,
+                  "lineOuts": 12
+                },
+                "pitching": {
+                  "gamesPlayed": 0,
+                  "gamesStarted": 0,
+                  "flyOuts": 0,
+                  "groundOuts": 0,
+                  "airOuts": 0,
+                  "runs": 0,
+                  "doubles": 0,
+                  "triples": 0,
+                  "homeRuns": 0,
+                  "strikeOuts": 0,
+                  "baseOnBalls": 0,
+                  "intentionalWalks": 0,
+                  "hits": 0,
+                  "hitByPitch": 0,
+                  "atBats": 0,
+                  "obp": ".000",
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "caughtStealingPercentage": ".---",
+                  "numberOfPitches": 0,
+                  "era": "-.--",
+                  "inningsPitched": "0.0",
+                  "wins": 0,
+                  "losses": 0,
+                  "saves": 0,
+                  "saveOpportunities": 0,
+                  "holds": 0,
+                  "blownSaves": 0,
+                  "earnedRuns": 0,
+                  "whip": "-",
+                  "battersFaced": 0,
+                  "outs": 0,
+                  "gamesPitched": 0,
+                  "completeGames": 0,
+                  "shutouts": 0,
+                  "balls": 0,
+                  "strikes": 0,
+                  "strikePercentage": "-.--",
+                  "hitBatsmen": 0,
+                  "balks": 0,
+                  "wildPitches": 0,
+                  "pickoffs": 0,
+                  "groundOutsToAirouts": "-.--",
+                  "rbi": 0,
+                  "winPercentage": ".---",
+                  "pitchesPerInning": "-.--",
+                  "gamesFinished": 0,
+                  "strikeoutWalkRatio": "-.--",
+                  "strikeoutsPer9Inn": "-.--",
+                  "walksPer9Inn": "-.--",
+                  "hitsPer9Inn": "-.--",
+                  "runsScoredPer9": "-.--",
+                  "homeRunsPer9": "-.--",
+                  "inheritedRunners": 0,
+                  "inheritedRunnersScored": 0,
+                  "catchersInterference": 0,
+                  "sacBunts": 0,
+                  "sacFlies": 0,
+                  "passedBall": 0,
+                  "popOuts": 0,
+                  "lineOuts": 0
+                },
+                "fielding": {
+                  "gamesStarted": 1,
+                  "caughtStealing": 0,
+                  "stolenBases": 0,
+                  "stolenBasePercentage": ".---",
+                  "caughtStealingPercentage": ".---",
+                  "assists": 4,
+                  "putOuts": 134,
+                  "errors": 3,
+                  "chances": 141,
+                  "fielding": ".979",
+                  "passedBall": 0,
+                  "pickoffs": 0
+                }
+              },
+              "gameStatus": {
+                "isCurrentBatter": false,
+                "isCurrentPitcher": false,
+                "isOnBench": false,
+                "isSubstitute": false
+              },
+              "allPositions": [
+                {
+                  "code": "7",
+                  "name": "Outfielder",
+                  "type": "Outfielder",
+                  "abbreviation": "LF"
+                }
+              ]
+            }
+          },
+          "batters": [
+            645302,
+            677594
+          ],
+          "pitchers": [
+            693433,
+            700187
+          ],
+          "bench": [
+            668227,
+            641487
+          ],
+          "bullpen": [
+            660825,
+            622491
+          ],
+          "battingOrder": [
+            645302,
+            677594
+          ],
+          "info": [
+            {
+              "title": "BATTING",
+              "fieldList": [
+                {
+                  "label": "2B",
+                  "value": "Raley, L 2 (15, Estes, McFarland); Rojas, J (19, Estes)."
+                },
+                {
+                  "label": "HR",
+                  "value": "Raleigh (29, 1st inning off Estes, 1 on, 1 out); Rodr\u00edguez, J (14, 3rd inning off Estes, 0 on, 0 out); Raley, L (18, 9th inning off Ferguson, T, 1 on, 1 out)."
+                },
+                {
+                  "label": "TB",
+                  "value": "Haniger; Polanco; Raleigh 5; Raley, L 8; Robles 2; Rodr\u00edguez, J 4; Rojas, J 2."
+                },
+                {
+                  "label": "RBI",
+                  "value": "Raleigh 3 (87); Raley, L 2 (46); Rodr\u00edguez, J (49)."
+                },
+                {
+                  "label": "Runners left in scoring position, 2 out",
+                  "value": "Rodr\u00edguez, J; Polanco 2; Robles."
+                },
+                {
+                  "label": "SF",
+                  "value": "Raleigh."
+                },
+                {
+                  "label": "GIDP",
+                  "value": "Polanco."
+                },
+                {
+                  "label": "Team RISP",
+                  "value": "1-for-10."
+                },
+                {
+                  "label": "Team LOB",
+                  "value": "9."
+                }
+              ]
+            },
+            {
+              "title": "BASERUNNING",
+              "fieldList": [
+                {
+                  "label": "SB",
+                  "value": "Robles (23, 2nd base off Estes/McCann); Raleigh (6, 2nd base off Alexander, S/McCann)."
+                }
+              ]
+            }
+          ],
+          "note": []
+        }
+      },
+      "officials": [
+        {
+          "official": {
+            "id": 429805,
+            "fullName": "Todd Tichenor",
+            "link": "/api/v1/people/429805"
+          },
+          "officialType": "Home Plate"
+        }
+      ],
+      "info": [
+        {
+          "label": "IBB",
+          "value": "Turner, J (by McFarland)."
+        }
+      ],
+      "pitchingNotes": [
+        "Estes pitched to 2 batters in the 5th inning."
+      ],
+      "topPerformers": [
+        {
+          "player": {
+            "person": {
+              "id": 667670,
+              "fullName": "Brent Rooker",
+              "link": "/api/v1/people/667670",
+              "boxscoreName": "Rooker"
+            },
+            "jerseyNumber": "25",
+            "position": {
+              "code": "10",
+              "name": "Designated Hitter",
+              "type": "Hitter",
+              "abbreviation": "DH"
+            },
+            "status": {
+              "code": "A",
+              "description": "Active"
+            },
+            "parentTeamId": 133,
+            "battingOrder": "200",
+            "stats": {
+              "batting": {
+                "summary": "2-5 | 2 HR, 3 K, 3 RBI",
+                "gamesPlayed": 1,
+                "flyOuts": 0,
+                "groundOuts": 0,
+                "airOuts": 0,
+                "runs": 2,
+                "doubles": 0,
+                "triples": 0,
+                "homeRuns": 2,
+                "strikeOuts": 3,
+                "baseOnBalls": 0,
+                "intentionalWalks": 0,
+                "hits": 2,
+                "hitByPitch": 0,
+                "atBats": 5,
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "groundIntoDoublePlay": 0,
+                "groundIntoTriplePlay": 0,
+                "plateAppearances": 5,
+                "totalBases": 8,
+                "rbi": 3,
+                "leftOnBase": 3,
+                "sacBunts": 0,
+                "sacFlies": 0,
+                "catchersInterference": 0,
+                "pickoffs": 0,
+                "atBatsPerHomeRun": "2.50",
+                "popOuts": 0,
+                "lineOuts": 0
+              },
+              "pitching": {},
+              "fielding": {
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "assists": 0,
+                "putOuts": 0,
+                "errors": 0,
+                "chances": 0,
+                "fielding": ".000",
+                "passedBall": 0,
+                "pickoffs": 0
+              }
+            },
+            "seasonStats": {
+              "batting": {
+                "gamesPlayed": 124,
+                "flyOuts": 63,
+                "groundOuts": 65,
+                "airOuts": 109,
+                "runs": 73,
+                "doubles": 24,
+                "triples": 2,
+                "homeRuns": 35,
+                "strikeOuts": 152,
+                "baseOnBalls": 52,
+                "intentionalWalks": 4,
+                "hits": 137,
+                "hitByPitch": 4,
+                "avg": ".298",
+                "atBats": 460,
+                "obp": ".372",
+                "slg": ".587",
+                "ops": ".959",
+                "caughtStealing": 2,
+                "stolenBases": 8,
+                "stolenBasePercentage": ".800",
+                "caughtStealingPercentage": ".200",
+                "groundIntoDoublePlay": 3,
+                "groundIntoTriplePlay": 0,
+                "plateAppearances": 519,
+                "totalBases": 270,
+                "rbi": 97,
+                "leftOnBase": 176,
+                "sacBunts": 0,
+                "sacFlies": 3,
+                "babip": ".370",
+                "groundOutsToAirouts": "0.60",
+                "catchersInterference": 0,
+                "pickoffs": 0,
+                "atBatsPerHomeRun": "13.14",
+                "popOuts": 27,
+                "lineOuts": 19
+              },
+              "pitching": {
+                "gamesPlayed": 0,
+                "gamesStarted": 0,
+                "flyOuts": 0,
+                "groundOuts": 0,
+                "airOuts": 0,
+                "runs": 0,
+                "doubles": 0,
+                "triples": 0,
+                "homeRuns": 0,
+                "strikeOuts": 0,
+                "baseOnBalls": 0,
+                "intentionalWalks": 0,
+                "hits": 0,
+                "hitByPitch": 0,
+                "atBats": 0,
+                "obp": ".000",
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "numberOfPitches": 0,
+                "era": "-.--",
+                "inningsPitched": "0.0",
+                "wins": 0,
+                "losses": 0,
+                "saves": 0,
+                "saveOpportunities": 0,
+                "holds": 0,
+                "blownSaves": 0,
+                "earnedRuns": 0,
+                "whip": "-",
+                "battersFaced": 0,
+                "outs": 0,
+                "gamesPitched": 0,
+                "completeGames": 0,
+                "shutouts": 0,
+                "balls": 0,
+                "strikes": 0,
+                "strikePercentage": "-.--",
+                "hitBatsmen": 0,
+                "balks": 0,
+                "wildPitches": 0,
+                "pickoffs": 0,
+                "groundOutsToAirouts": "-.--",
+                "rbi": 0,
+                "winPercentage": ".---",
+                "pitchesPerInning": "-.--",
+                "gamesFinished": 0,
+                "strikeoutWalkRatio": "-.--",
+                "strikeoutsPer9Inn": "-.--",
+                "walksPer9Inn": "-.--",
+                "hitsPer9Inn": "-.--",
+                "runsScoredPer9": "-.--",
+                "homeRunsPer9": "-.--",
+                "inheritedRunners": 0,
+                "inheritedRunnersScored": 0,
+                "catchersInterference": 0,
+                "sacBunts": 0,
+                "sacFlies": 0,
+                "passedBall": 0,
+                "popOuts": 0,
+                "lineOuts": 0
+              },
+              "fielding": {
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "assists": 0,
+                "putOuts": 16,
+                "errors": 0,
+                "chances": 16,
+                "fielding": "1.000",
+                "passedBall": 0,
+                "pickoffs": 0
+              }
+            },
+            "gameStatus": {
+              "isCurrentBatter": false,
+              "isCurrentPitcher": false,
+              "isOnBench": false,
+              "isSubstitute": false
+            },
+            "allPositions": [
+              {
+                "code": "10",
+                "name": "Designated Hitter",
+                "type": "Hitter",
+                "abbreviation": "DH"
+              }
+            ]
+          },
+          "type": "hitter",
+          "gameScore": 66,
+          "hittingGameScore": 66
+        },
+        {
+          "player": {
+            "person": {
+              "id": 670042,
+              "fullName": "Luke Raley",
+              "link": "/api/v1/people/670042",
+              "boxscoreName": "Raley, L"
+            },
+            "jerseyNumber": "20",
+            "position": {
+              "code": "3",
+              "name": "First Base",
+              "type": "Infielder",
+              "abbreviation": "1B"
+            },
+            "status": {
+              "code": "A",
+              "description": "Active"
+            },
+            "parentTeamId": 136,
+            "battingOrder": "400",
+            "stats": {
+              "batting": {
+                "summary": "3-5 | HR, 2 2B, K",
+                "gamesPlayed": 1,
+                "flyOuts": 0,
+                "groundOuts": 0,
+                "airOuts": 1,
+                "runs": 1,
+                "doubles": 2,
+                "triples": 0,
+                "homeRuns": 1,
+                "strikeOuts": 1,
+                "baseOnBalls": 0,
+                "intentionalWalks": 0,
+                "hits": 3,
+                "hitByPitch": 0,
+                "atBats": 5,
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "groundIntoDoublePlay": 0,
+                "groundIntoTriplePlay": 0,
+                "plateAppearances": 5,
+                "totalBases": 8,
+                "rbi": 2,
+                "leftOnBase": 1,
+                "sacBunts": 0,
+                "sacFlies": 0,
+                "catchersInterference": 0,
+                "pickoffs": 0,
+                "atBatsPerHomeRun": "5.00",
+                "popOuts": 1,
+                "lineOuts": 0
+              },
+              "pitching": {},
+              "fielding": {
+                "gamesStarted": 1,
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "assists": 0,
+                "putOuts": 5,
+                "errors": 0,
+                "chances": 5,
+                "fielding": ".000",
+                "passedBall": 0,
+                "pickoffs": 0
+              }
+            },
+            "seasonStats": {
+              "batting": {
+                "gamesPlayed": 118,
+                "flyOuts": 42,
+                "groundOuts": 73,
+                "airOuts": 75,
+                "runs": 49,
+                "doubles": 15,
+                "triples": 2,
+                "homeRuns": 18,
+                "strikeOuts": 117,
+                "baseOnBalls": 22,
+                "intentionalWalks": 0,
+                "hits": 82,
+                "hitByPitch": 16,
+                "avg": ".238",
+                "atBats": 344,
+                "obp": ".313",
+                "slg": ".451",
+                "ops": ".764",
+                "caughtStealing": 2,
+                "stolenBases": 9,
+                "stolenBasePercentage": ".818",
+                "caughtStealingPercentage": ".182",
+                "groundIntoDoublePlay": 2,
+                "groundIntoTriplePlay": 0,
+                "plateAppearances": 385,
+                "totalBases": 155,
+                "rbi": 46,
+                "leftOnBase": 138,
+                "sacBunts": 1,
+                "sacFlies": 2,
+                "babip": ".303",
+                "groundOutsToAirouts": "0.97",
+                "catchersInterference": 0,
+                "pickoffs": 0,
+                "atBatsPerHomeRun": "19.11",
+                "popOuts": 14,
+                "lineOuts": 19
+              },
+              "pitching": {
+                "gamesPlayed": 0,
+                "gamesStarted": 0,
+                "flyOuts": 0,
+                "groundOuts": 0,
+                "airOuts": 0,
+                "runs": 0,
+                "doubles": 0,
+                "triples": 0,
+                "homeRuns": 0,
+                "strikeOuts": 0,
+                "baseOnBalls": 0,
+                "intentionalWalks": 0,
+                "hits": 0,
+                "hitByPitch": 0,
+                "atBats": 0,
+                "obp": ".000",
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "numberOfPitches": 0,
+                "era": "-.--",
+                "inningsPitched": "0.0",
+                "wins": 0,
+                "losses": 0,
+                "saves": 0,
+                "saveOpportunities": 0,
+                "holds": 0,
+                "blownSaves": 0,
+                "earnedRuns": 0,
+                "whip": "-",
+                "battersFaced": 0,
+                "outs": 0,
+                "gamesPitched": 0,
+                "completeGames": 0,
+                "shutouts": 0,
+                "balls": 0,
+                "strikes": 0,
+                "strikePercentage": "-.--",
+                "hitBatsmen": 0,
+                "balks": 0,
+                "wildPitches": 0,
+                "pickoffs": 0,
+                "groundOutsToAirouts": "-.--",
+                "rbi": 0,
+                "winPercentage": ".---",
+                "pitchesPerInning": "-.--",
+                "gamesFinished": 0,
+                "strikeoutWalkRatio": "-.--",
+                "strikeoutsPer9Inn": "-.--",
+                "walksPer9Inn": "-.--",
+                "hitsPer9Inn": "-.--",
+                "runsScoredPer9": "-.--",
+                "homeRunsPer9": "-.--",
+                "inheritedRunners": 0,
+                "inheritedRunnersScored": 0,
+                "catchersInterference": 0,
+                "sacBunts": 0,
+                "sacFlies": 0,
+                "passedBall": 0,
+                "popOuts": 0,
+                "lineOuts": 0
+              },
+              "fielding": {
+                "gamesStarted": 1,
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "assists": 13,
+                "putOuts": 296,
+                "errors": 3,
+                "chances": 312,
+                "fielding": ".990",
+                "passedBall": 0,
+                "pickoffs": 0
+              }
+            },
+            "gameStatus": {
+              "isCurrentBatter": false,
+              "isCurrentPitcher": false,
+              "isOnBench": false,
+              "isSubstitute": false
+            },
+            "allPositions": [
+              {
+                "code": "3",
+                "name": "First Base",
+                "type": "Infielder",
+                "abbreviation": "1B"
+              }
+            ]
+          },
+          "type": "hitter",
+          "gameScore": 66,
+          "hittingGameScore": 66
+        },
+        {
+          "player": {
+            "person": {
+              "id": 645302,
+              "fullName": "Victor Robles",
+              "link": "/api/v1/people/645302",
+              "boxscoreName": "Robles"
+            },
+            "jerseyNumber": "10",
+            "position": {
+              "code": "7",
+              "name": "Outfielder",
+              "type": "Outfielder",
+              "abbreviation": "LF"
+            },
+            "status": {
+              "code": "A",
+              "description": "Active"
+            },
+            "parentTeamId": 136,
+            "battingOrder": "100",
+            "stats": {
+              "batting": {
+                "summary": "2-3 | 2 HBP, 2 R, SB",
+                "gamesPlayed": 1,
+                "flyOuts": 1,
+                "groundOuts": 0,
+                "airOuts": 1,
+                "runs": 2,
+                "doubles": 0,
+                "triples": 0,
+                "homeRuns": 0,
+                "strikeOuts": 0,
+                "baseOnBalls": 0,
+                "intentionalWalks": 0,
+                "hits": 2,
+                "hitByPitch": 2,
+                "atBats": 3,
+                "caughtStealing": 0,
+                "stolenBases": 1,
+                "stolenBasePercentage": "1.000",
+                "groundIntoDoublePlay": 0,
+                "groundIntoTriplePlay": 0,
+                "plateAppearances": 5,
+                "totalBases": 2,
+                "rbi": 0,
+                "leftOnBase": 1,
+                "sacBunts": 0,
+                "sacFlies": 0,
+                "catchersInterference": 0,
+                "pickoffs": 0,
+                "atBatsPerHomeRun": "-.--",
+                "popOuts": 0,
+                "lineOuts": 0
+              },
+              "pitching": {},
+              "fielding": {
+                "gamesStarted": 1,
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "assists": 0,
+                "putOuts": 3,
+                "errors": 0,
+                "chances": 3,
+                "fielding": ".000",
+                "passedBall": 0,
+                "pickoffs": 0
+              }
+            },
+            "seasonStats": {
+              "batting": {
+                "gamesPlayed": 74,
+                "flyOuts": 32,
+                "groundOuts": 46,
+                "airOuts": 58,
+                "runs": 29,
+                "doubles": 13,
+                "triples": 0,
+                "homeRuns": 4,
+                "strikeOuts": 44,
+                "baseOnBalls": 16,
+                "intentionalWalks": 0,
+                "hits": 57,
+                "hitByPitch": 7,
+                "avg": ".288",
+                "atBats": 198,
+                "obp": ".359",
+                "slg": ".414",
+                "ops": ".773",
+                "caughtStealing": 1,
+                "stolenBases": 23,
+                "stolenBasePercentage": ".958",
+                "caughtStealingPercentage": ".042",
+                "groundIntoDoublePlay": 2,
+                "groundIntoTriplePlay": 0,
+                "plateAppearances": 228,
+                "totalBases": 82,
+                "rbi": 21,
+                "leftOnBase": 52,
+                "sacBunts": 5,
+                "sacFlies": 2,
+                "babip": ".349",
+                "groundOutsToAirouts": "0.79",
+                "catchersInterference": 0,
+                "pickoffs": 0,
+                "atBatsPerHomeRun": "49.50",
+                "popOuts": 14,
+                "lineOuts": 12
+              },
+              "pitching": {
+                "gamesPlayed": 0,
+                "gamesStarted": 0,
+                "flyOuts": 0,
+                "groundOuts": 0,
+                "airOuts": 0,
+                "runs": 0,
+                "doubles": 0,
+                "triples": 0,
+                "homeRuns": 0,
+                "strikeOuts": 0,
+                "baseOnBalls": 0,
+                "intentionalWalks": 0,
+                "hits": 0,
+                "hitByPitch": 0,
+                "atBats": 0,
+                "obp": ".000",
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "numberOfPitches": 0,
+                "era": "-.--",
+                "inningsPitched": "0.0",
+                "wins": 0,
+                "losses": 0,
+                "saves": 0,
+                "saveOpportunities": 0,
+                "holds": 0,
+                "blownSaves": 0,
+                "earnedRuns": 0,
+                "whip": "-",
+                "battersFaced": 0,
+                "outs": 0,
+                "gamesPitched": 0,
+                "completeGames": 0,
+                "shutouts": 0,
+                "balls": 0,
+                "strikes": 0,
+                "strikePercentage": "-.--",
+                "hitBatsmen": 0,
+                "balks": 0,
+                "wildPitches": 0,
+                "pickoffs": 0,
+                "groundOutsToAirouts": "-.--",
+                "rbi": 0,
+                "winPercentage": ".---",
+                "pitchesPerInning": "-.--",
+                "gamesFinished": 0,
+                "strikeoutWalkRatio": "-.--",
+                "strikeoutsPer9Inn": "-.--",
+                "walksPer9Inn": "-.--",
+                "hitsPer9Inn": "-.--",
+                "runsScoredPer9": "-.--",
+                "homeRunsPer9": "-.--",
+                "inheritedRunners": 0,
+                "inheritedRunnersScored": 0,
+                "catchersInterference": 0,
+                "sacBunts": 0,
+                "sacFlies": 0,
+                "passedBall": 0,
+                "popOuts": 0,
+                "lineOuts": 0
+              },
+              "fielding": {
+                "gamesStarted": 1,
+                "caughtStealing": 0,
+                "stolenBases": 0,
+                "stolenBasePercentage": ".---",
+                "caughtStealingPercentage": ".---",
+                "assists": 4,
+                "putOuts": 134,
+                "errors": 3,
+                "chances": 141,
+                "fielding": ".979",
+                "passedBall": 0,
+                "pickoffs": 0
+              }
+            },
+            "gameStatus": {
+              "isCurrentBatter": false,
+              "isCurrentPitcher": false,
+              "isOnBench": false,
+              "isSubstitute": false
+            },
+            "allPositions": [
+              {
+                "code": "7",
+                "name": "Outfielder",
+                "type": "Outfielder",
+                "abbreviation": "LF"
+              }
+            ]
+          },
+          "type": "hitter",
+          "gameScore": 60,
+          "hittingGameScore": 60
+        }
+      ]
+    },
+    "decisions": {
+      "winner": {
+        "id": 693433,
+        "fullName": "Bryan Woo",
+        "link": "/api/v1/people/693433"
+      },
+      "loser": {
+        "id": 683155,
+        "fullName": "Joey Estes",
+        "link": "/api/v1/people/683155"
+      }
+    }
+  }
+}

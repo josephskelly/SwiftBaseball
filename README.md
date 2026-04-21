@@ -155,6 +155,17 @@ let pbp = try await SwiftBaseball
     .playByPlay(gamePk: 745612)
     .fetch()
 
+// Live game feed — composite real-time snapshot (v1.1 endpoint)
+let feed = try await SwiftBaseball.liveGameFeed(gamePk: 745612).fetch()
+print(feed.gameData.status.abstractGameState)          // .final / .live / .preview
+print(feed.gameData.teams.away.team.name,
+      feed.gameData.teams.away.score ?? 0,
+      "@",
+      feed.gameData.teams.home.team.name,
+      feed.gameData.teams.home.score ?? 0)
+// During a live game, poll using the server's recommended interval:
+//   try await Task.sleep(for: .seconds(feed.meta.wait))
+
 // Game highlights — key-play clips and condensed game
 let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
 for clip in content.highlights {
