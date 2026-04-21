@@ -2,8 +2,8 @@
 
 > A Swift-native library for MLB statistics — like [pybaseball](https://github.com/jldbc/pybaseball), but Swift.
 
-[![Swift 5.9+](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org)
-[![Platforms](https://img.shields.io/badge/Platforms-macOS%20|%20iOS%20|%20tvOS%20|%20watchOS%20|%20Linux-blue.svg)](https://swift.org)
+[![Swift 6.0+](https://img.shields.io/badge/Swift-6.0+-orange.svg)](https://swift.org)
+[![Platforms](https://img.shields.io/badge/Platforms-macOS%20|%20iOS%20|%20iPadOS%20|%20tvOS%20|%20watchOS%20|%20visionOS%20|%20Linux-blue.svg)](https://swift.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## Overview
@@ -17,7 +17,7 @@ No DataFrames, no untyped dictionaries. Just Swift structs, async/await, and aut
 - **Fluent query API** — chainable, type-safe, discoverable via autocomplete
 - **async/await** — built on Swift concurrency from the ground up
 - **Codable models** — every response is a typed Swift struct
-- **Cross-platform** — macOS, iOS, tvOS, watchOS, and Linux
+- **Cross-platform** — macOS, iOS, iPadOS, tvOS, watchOS, visionOS, and Linux
 - **Zero dependencies** — only Foundation and URLSession
 - **Actor-based caching** — optional response caching with configurable TTL
 - **Protocol-oriented** — mockable and testable by design
@@ -294,7 +294,7 @@ Then add it as a dependency to your target:
 
 | SwiftBaseball | Swift | Platforms |
 |---|---|---|
-| 0.1.x | 5.9+ | macOS 13+, iOS 16+, tvOS 16+, watchOS 9+, Linux |
+| 0.1.x | 6.0+ | macOS 14+, iOS 17+, iPadOS 17+, tvOS 17+, watchOS 10+, visionOS 1+, Linux |
 
 ## Modules
 

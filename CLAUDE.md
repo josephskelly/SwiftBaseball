@@ -5,13 +5,13 @@ Swift library for accessing MLB statistics via the MLB Stats API (statsapi.mlb.c
 Swift equivalent of Python's pybaseball. MIT licensed. Author: Joseph Kelly.
 
 ## Tech Stack
-- Swift 5.9+ (targeting Swift 6 strict concurrency compliance)
+- Swift 6.0+ with full Swift 6 language mode (strict concurrency)
 - Swift Package Manager — no CocoaPods/Carthage
 - Networking: URLSession with async/await (no third-party HTTP libraries)
 - JSON decoding: Foundation JSONDecoder with Codable models
 - Caching: custom actor-based cache (no third-party)
 - Testing: Swift Testing framework (`@Test`, `#expect`) — NOT XCTest
-- Platforms: macOS 13+, iOS 16+, tvOS 16+, watchOS 9+, Linux
+- Platforms: macOS 14+, iOS 17+, iPadOS 17+, tvOS 17+, watchOS 10+, visionOS 1+, Linux
 
 ## Project Structure
 ```
@@ -81,7 +81,7 @@ swift test --filter PlayerTests      # Run specific test suite
 - Add new types to the Topics section in the catalog
 
 ## Testing
-- Framework: Swift Testing (not XCTest) unless target is < iOS 16
+- Framework: Swift Testing (not XCTest)
 - All public methods require unit tests before a PR is mergeable
 - Test file naming: `{TypeName}Tests.swift` in `Tests/SwiftBaseballTests/`
 - Aim for edge cases: empty responses, malformed JSON, network errors, 

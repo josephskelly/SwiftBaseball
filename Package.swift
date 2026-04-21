@@ -7,7 +7,8 @@ let package = Package(
         .macOS(.v14),
         .iOS(.v17),
         .tvOS(.v17),
-        .watchOS(.v10)
+        .watchOS(.v10),
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "SwiftBaseball", targets: ["SwiftBaseball"]),
@@ -33,5 +34,6 @@ let package = Package(
             path: "Tests/SwiftBaseballTests",
             resources: [.copy("Fixtures")]
         )
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
