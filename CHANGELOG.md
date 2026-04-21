@@ -6,15 +6,28 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Swift 6 language mode**: `Package.swift` now advertises `swiftLanguageModes: [.v6]`, asserting full strict-concurrency compliance for every target
+- **Platform floor**: minimum supported platforms are now iOS 17 / iPadOS 17 / macOS 14 / tvOS 17 / watchOS 10 / visionOS 1 / Linux. Advertised platform claims in README, `CLAUDE.md`, and docs aligned to the manifest
+- **`SwiftBaseball` state holder**: `@unchecked Sendable` now backed by real `NSLock` serialization for reads and writes instead of unsynchronized access, making `configure(_:)` safe under concurrent callers while preserving its synchronous signature
+
+### Added
+
+- **visionOS support**: `.visionOS(.v1)` added to `Package.swift` platforms
+- **Platoon splits endpoint**: `SwiftBaseball.playerPlatoonStats(id:)` returns `PlayerPlatoonStats` with vs-LHP and vs-RHP batting stats via `stats=statSplits&sitCodes=vl,vr`
+- **Pitcher platoon splits endpoint**: `SwiftBaseball.pitcherPlatoonStats(id:)` returns `PitcherPlatoonStats` with vs-LHB and vs-RHB pitching stats (OPS against, WHIP, K, etc.)
+- **Pitching opponent rates**: `obp`, `slg`, `ops` on `PitchingStats` (on-base, slugging, OPS against)
+- **Configuration thread-safety tests**: `ConfigurationTests` exercises concurrent `configure(_:)` callers and the caching-client toggle path
+- **Public release plan**: `docs/PUBLIC_RELEASE_PLAN.md` — roadmap to full MLB Stats API + Baseball Savant coverage and `v1.0.0` GA
+
 ### Fixed
 
 - **Stats group routing**: `MLBStatGroup` now decodes `type`/`group` via `MLBDisplayName` instead of `MLBCodeDescription`, fixing pitching and fielding stats silently misrouting to batting against the live API (which omits the `code` field)
 
-### Added
+### Moved
 
-- **Platoon splits endpoint**: `SwiftBaseball.playerPlatoonStats(id:)` returns `PlayerPlatoonStats` with vs-LHP and vs-RHP batting stats via `stats=statSplits&sitCodes=vl,vr`
-- **Pitcher platoon splits endpoint**: `SwiftBaseball.pitcherPlatoonStats(id:)` returns `PitcherPlatoonStats` with vs-LHB and vs-RHB pitching stats (OPS against, WHIP, K, etc.)
-- **Pitching opponent rates**: `obp`, `slg`, `ops` on `PitchingStats` (on-base, slugging, OPS against)
+- `LIVE_GAME_FEED_PLAN.md` relocated from repo root to `docs/LIVE_GAME_FEED_PLAN.md`
 
 ## [0.1.0] — 2026-03-13
 
