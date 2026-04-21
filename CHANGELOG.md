@@ -20,6 +20,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Pitching opponent rates**: `obp`, `slg`, `ops` on `PitchingStats` (on-base, slugging, OPS against)
 - **Configuration thread-safety tests**: `ConfigurationTests` exercises concurrent `configure(_:)` callers and the caching-client toggle path
 - **Public release plan**: `docs/PUBLIC_RELEASE_PLAN.md` — roadmap to full MLB Stats API + Baseball Savant coverage and `v1.0.0` GA
+- **DocC → GitHub Pages workflow**: `.github/workflows/docs.yml` builds the `SwiftBaseball` target docs with `xcodebuild docbuild` and deploys to GitHub Pages on push to `main` and on release
+- **Lint & format CI**: `.github/workflows/lint.yml` runs `swiftlint lint --strict` and `swiftformat --lint Sources Tests`; matching `.swiftlint.yml` and `.swiftformat` configs checked in
+- **Code coverage**: macOS CI job now runs `swift test --enable-code-coverage`, exports lcov via `llvm-cov`, and uploads to Codecov; Swift CI and Codecov badges added to the README
+- **Nightly integration tests**: `.github/workflows/nightly-integration.yml` runs the `SWIFTBASEBALL_INTEGRATION=1` suite against live MLB Stats API + Baseball Savant at 07:00 UTC with `workflow_dispatch` for manual runs
+- **Governance docs**: `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), targeted issue forms (bug, endpoint request, stat-decoding bug), and a PR template mirroring the pre-PR checklist
+- **Swift Package Index prep**: `.spi.yml` declaring the DocC target and Swift 6.0 builder; SPI platform + Swift-version badges on the README; release and PackageList-submission instructions in `CONTRIBUTING.md`
 
 ### Fixed
 
