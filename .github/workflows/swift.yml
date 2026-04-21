@@ -16,8 +16,24 @@ jobs:
         run: swift build
       - name: Build (Release)
         run: swift build --configuration release
-      - name: Test
-        run: swift test
+      - name: Test (with coverage)
+        run: swift test --enable-code-coverage
+      - name: Convert coverage to lcov
+        run: |
+          PROFDATA="$(dirname "$(swift test --show-codecov-path)")/default.profdata"
+          BINARY="$(swift build --show-bin-path)/SwiftBaseballPackageTests.xctest/Contents/MacOS/SwiftBaseballPackageTests"
+          xcrun llvm-cov export \
+            "$BINARY" \
+            -instr-profile "$PROFDATA" \
+            -format=lcov \
+            -ignore-filename-regex='.build|Tests|.*\.generated\.swift' \
+            > coverage.lcov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.lcov
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   test-linux:
     name: Build & Test (Linux, Swift ${{ matrix.swift }})

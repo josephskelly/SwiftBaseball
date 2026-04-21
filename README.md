@@ -2,6 +2,8 @@
 
 > A Swift-native library for MLB statistics — like [pybaseball](https://github.com/jldbc/pybaseball), but Swift.
 
+[![Swift CI](https://github.com/josephskelly/SwiftBaseball/actions/workflows/swift.yml/badge.svg?branch=main)](https://github.com/josephskelly/SwiftBaseball/actions/workflows/swift.yml)
+[![codecov](https://codecov.io/gh/josephskelly/SwiftBaseball/branch/main/graph/badge.svg)](https://codecov.io/gh/josephskelly/SwiftBaseball)
 [![Swift 6.0+](https://img.shields.io/badge/Swift-6.0+-orange.svg)](https://swift.org)
 [![Platforms](https://img.shields.io/badge/Platforms-macOS%20|%20iOS%20|%20iPadOS%20|%20tvOS%20|%20watchOS%20|%20visionOS%20|%20Linux-blue.svg)](https://swift.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
