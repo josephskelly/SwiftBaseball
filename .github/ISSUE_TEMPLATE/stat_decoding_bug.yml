@@ -1,0 +1,82 @@
+name: Stat decoding bug
+description: Report a parsing or decoding defect in stat values
+title: "[Decoding] "
+labels: ["bug", "decoding"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when a stat decodes to the wrong value, fails to
+        decode, or produces an unexpected shape. For general bugs, use the
+        **Bug report** template instead.
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Data source
+      options:
+        - MLB Stats API
+        - Baseball Savant
+    validations:
+      required: true
+
+  - type: dropdown
+    id: group
+    attributes:
+      label: Stat group
+      options:
+        - batting
+        - pitching
+        - fielding
+        - sabermetrics
+        - statcast
+        - standings
+        - other
+    validations:
+      required: true
+
+  - type: input
+    id: season
+    attributes:
+      label: Season / date range
+      placeholder: "2024, or 2024-04-01..2024-04-30"
+
+  - type: input
+    id: ids
+    attributes:
+      label: Player / team IDs
+      description: MLB IDs involved, if relevant.
+      placeholder: "592450, 147"
+
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Fixture sample
+      description: Paste the JSON or CSV row(s) that trigger the bug.
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected decoded values
+      description: What should the parsed Swift model contain?
+      render: swift
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual decoded values
+      description: What does SwiftBaseball currently return? Include errors if decoding fails.
+      render: swift
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else — API hydrate params, query builder used, workaround you tried.

@@ -1,0 +1,74 @@
+name: Bug report
+description: Report a defect in SwiftBaseball behavior
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Before opening, please
+        confirm the issue reproduces against the latest `main`.
+
+  - type: input
+    id: version
+    attributes:
+      label: SwiftBaseball version
+      description: Tag, release, or commit SHA you are running against.
+      placeholder: "0.1.0 / 4fcba3c"
+    validations:
+      required: true
+
+  - type: input
+    id: toolchain
+    attributes:
+      label: Swift toolchain
+      description: Output of `swift --version`
+      placeholder: "Swift version 6.0.3 (swift-6.0.3-RELEASE)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - macOS
+        - iOS
+        - iPadOS
+        - tvOS
+        - watchOS
+        - visionOS
+        - Linux
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Minimal fluent query or code snippet that triggers the bug.
+      render: swift
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include error messages, stack traces, or decoded output.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else that might help — network conditions, caching config, whether integration tests reproduce it.

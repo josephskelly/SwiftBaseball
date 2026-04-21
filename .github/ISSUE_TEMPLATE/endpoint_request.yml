@@ -1,0 +1,56 @@
+name: Endpoint request
+description: Request coverage of a MLB Stats API or Baseball Savant endpoint
+title: "[Endpoint] "
+labels: ["endpoint", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        SwiftBaseball's scope is limited to the MLB Stats API and Baseball
+        Savant. Requests for Baseball Reference, FanGraphs, Retrosheet, or
+        other sources are out of scope. See `docs/PUBLIC_RELEASE_PLAN.md`
+        for the full scope definition.
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Data source
+      options:
+        - MLB Stats API
+        - Baseball Savant
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Endpoint URL
+      description: The full upstream URL, including query parameters.
+      placeholder: "https://statsapi.mlb.com/api/v1/game/745612/winProbability"
+    validations:
+      required: true
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Sample payload
+      description: Paste a small JSON or CSV sample from a real response.
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_api
+    attributes:
+      label: Proposed fluent API
+      description: How would you call this from Swift?
+      render: swift
+      placeholder: "SwiftBaseball.winProbability(gamePk: 745612).fetch()"
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: What are you building and why does this endpoint unblock it?
+    validations:
+      required: true
