@@ -1,0 +1,23 @@
+name: Nightly Integration
+
+on:
+  schedule:
+    # 07:00 UTC ≈ 03:00 ET, after MLB game results have settled for the night.
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+jobs:
+  integration:
+    name: Integration tests (live MLB Stats API + Baseball Savant)
+    runs-on: macos-14
+    # Upstream flakes or rate limits should not page anyone. The job reports
+    # failure in its own status, but we do not want it failing unrelated PRs.
+    continue-on-error: true
+    env:
+      SWIFTBASEBALL_INTEGRATION: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Run integration tests
+        run: swift test --filter IntegrationTests
