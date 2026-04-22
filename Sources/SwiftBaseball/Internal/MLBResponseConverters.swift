@@ -1298,4 +1298,30 @@ extension MLBResponseConverters {
             save: raw.save.map(playerReference)
         )
     }
+
+    // MARK: - Win Probability
+
+    static func winProbability(from response: [MLBWinProbabilityPlay]) -> [PlayWinProbability] {
+        response.map { raw in
+            PlayWinProbability(
+                atBatIndex: raw.atBatIndex ?? raw.about?.atBatIndex ?? 0,
+                homeTeamWinProbability: raw.homeTeamWinProbability ?? 0,
+                awayTeamWinProbability: raw.awayTeamWinProbability ?? 0,
+                homeTeamWinProbabilityAdded: raw.homeTeamWinProbabilityAdded ?? 0,
+                result: playResult(from: raw.result),
+                about: playAbout(from: raw.about),
+                matchup: playMatchup(from: raw.matchup)
+            )
+        }
+    }
+
+    // MARK: - Context Metrics
+
+    static func contextMetrics(from response: MLBContextMetricsResponse) -> GameContextMetrics {
+        GameContextMetrics(
+            gamePk: response.game.gamePk,
+            homeWinProbability: response.homeWinProbability ?? 0,
+            awayWinProbability: response.awayWinProbability ?? 0
+        )
+    }
 }

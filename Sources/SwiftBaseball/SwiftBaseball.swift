@@ -215,6 +215,39 @@ public enum SwiftBaseball {
         .liveGameFeed(gamePk: gamePk, client: client)
     }
 
+    /// Fetch per-at-bat win-probability snapshots for a game.
+    ///
+    /// Returns one ``PlayWinProbability`` per completed plate appearance,
+    /// each carrying the home and away team win-probability percentages
+    /// after the play plus the change attributable to the play
+    /// (``PlayWinProbability/homeTeamWinProbabilityAdded``, a.k.a. WPA under
+    /// the home-team convention).
+    ///
+    ///     let wp = try await SwiftBaseball.winProbability(gamePk: 745612).fetch()
+    ///     let topWPA = wp.max { abs($0.homeTeamWinProbabilityAdded) < abs($1.homeTeamWinProbabilityAdded) }
+    ///     print(topWPA?.result.event ?? "")         // biggest swing of the game
+    ///     print(topWPA?.homeTeamWinProbabilityAdded ?? 0)
+    ///
+    /// - Parameter gamePk: The MLB game primary key.
+    public static func winProbability(gamePk: Int) -> QueryBuilder<[PlayWinProbability]> {
+        .winProbability(gamePk: gamePk, client: client)
+    }
+
+    /// Fetch current-state context metrics for a game.
+    ///
+    /// Returns a single ``GameContextMetrics`` snapshot — home/away win
+    /// probabilities as of the most recent play. For completed games this
+    /// reflects the final state; for live games it reflects the in-flight
+    /// situation and updates as the game progresses.
+    ///
+    ///     let ctx = try await SwiftBaseball.contextMetrics(gamePk: 745612).fetch()
+    ///     print("Home WP: \(ctx.homeWinProbability)%")
+    ///
+    /// - Parameter gamePk: The MLB game primary key.
+    public static func contextMetrics(gamePk: Int) -> QueryBuilder<GameContextMetrics> {
+        .contextMetrics(gamePk: gamePk, client: client)
+    }
+
     /// Fetch highlight videos and condensed game clips for a completed game.
     ///
     ///     let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()

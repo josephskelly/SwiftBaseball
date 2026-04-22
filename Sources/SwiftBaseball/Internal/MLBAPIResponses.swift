@@ -847,3 +847,23 @@ struct MLBGameDecisions: Decodable {
     let loser: MLBEntityRef?
     let save: MLBEntityRef?
 }
+
+// MARK: - Win Probability
+
+struct MLBWinProbabilityPlay: Decodable {
+    let atBatIndex: Int?
+    let homeTeamWinProbability: Double?
+    let awayTeamWinProbability: Double?
+    let homeTeamWinProbabilityAdded: Double?
+    let result: MLBPlayResult?
+    let about: MLBPlayAbout?
+    let matchup: MLBPlayMatchup?
+}
+
+// MARK: - Context Metrics
+
+struct MLBContextMetricsResponse: Decodable {
+    let game: MLBGameReference
+    let homeWinProbability: Double?
+    let awayWinProbability: Double?
+}

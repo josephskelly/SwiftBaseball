@@ -27,6 +27,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - **Governance docs**: `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), targeted issue forms (bug, endpoint request, stat-decoding bug), and a PR template mirroring the pre-PR checklist
 - **Swift Package Index prep**: `.spi.yml` declaring the DocC target and Swift 6.0 builder; SPI platform + Swift-version badges on the README; release and PackageList-submission instructions in `CONTRIBUTING.md`
 - **Live game feed endpoint**: `SwiftBaseball.liveGameFeed(gamePk:)` returns a composite ``LiveGameFeed`` covering game metadata, all plays, current play, linescore, boxscore, and winning/losing/save decisions via the v1.1 endpoint `GET /api/v1.1/game/{gamePk}/feed/live`. Per-team current score is lifted from the linescore into ``LiveGameTeam/score`` for direct access
+- **Win probability endpoint**: `SwiftBaseball.winProbability(gamePk:)` returns one ``PlayWinProbability`` per completed at-bat, carrying home/away win-probability percentages and the per-play WPA (``PlayWinProbability/homeTeamWinProbabilityAdded``) via `GET /game/{gamePk}/winProbability`
+- **Context metrics endpoint**: `SwiftBaseball.contextMetrics(gamePk:)` returns a ``GameContextMetrics`` snapshot of current home/away win probability for a game via `GET /game/{gamePk}/contextMetrics`
 - **v1.1 API version support**: `Endpoint` now carries a `version` field (default `"v1"`) and transparently rewrites the trailing version segment of the base URL, so a single configured base URL can serve both v1 and v1.1 endpoints
 - **`LeagueRecord.ties`**: added to support the live feed payload; decodes as `0` when the upstream API omits it, preserving compatibility with existing schedule payloads
 

@@ -166,6 +166,16 @@ print(feed.gameData.teams.away.team.name,
 // During a live game, poll using the server's recommended interval:
 //   try await Task.sleep(for: .seconds(feed.meta.wait))
 
+// Per-at-bat win probability (home-team convention)
+let wp = try await SwiftBaseball.winProbability(gamePk: 745612).fetch()
+let biggestSwing = wp.max { abs($0.homeTeamWinProbabilityAdded) < abs($1.homeTeamWinProbabilityAdded) }
+print(biggestSwing?.result.event ?? "")                  // e.g. "Home Run"
+print(biggestSwing?.homeTeamWinProbabilityAdded ?? 0)    // WPA in percentage points
+
+// Current game context metrics snapshot (updates live)
+let ctx = try await SwiftBaseball.contextMetrics(gamePk: 745612).fetch()
+print("Home WP: \(ctx.homeWinProbability)%  Away WP: \(ctx.awayWinProbability)%")
+
 // Game highlights — key-play clips and condensed game
 let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
 for clip in content.highlights {
