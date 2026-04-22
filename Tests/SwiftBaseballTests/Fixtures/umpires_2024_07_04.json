@@ -1,0 +1,137 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 596809,
+        "fullName": "Ryan Additon",
+        "link": "/api/v1/people/596809"
+      },
+      "jerseyNumber": "67",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 486200,
+        "fullName": "David Arrieta",
+        "link": "/api/v1/people/486200"
+      },
+      "jerseyNumber": "99",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 623938,
+        "fullName": "Erich Bacchus",
+        "link": "/api/v1/people/623938"
+      },
+      "jerseyNumber": "12",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 545402,
+        "fullName": "John Bacon",
+        "link": "/api/v1/people/545402"
+      },
+      "jerseyNumber": "70",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 490319,
+        "fullName": "Jordan Baker",
+        "link": "/api/v1/people/490319"
+      },
+      "jerseyNumber": "71",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 665576,
+        "fullName": "Brock Ballou",
+        "link": "/api/v1/people/665576"
+      },
+      "jerseyNumber": "41",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 503493,
+        "fullName": "Sean Barber",
+        "link": "/api/v1/people/503493"
+      },
+      "jerseyNumber": "29",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 427013,
+        "fullName": "Lance Barksdale",
+        "link": "/api/v1/people/427013"
+      },
+      "jerseyNumber": "23",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483561,
+        "fullName": "Lance Barrett",
+        "link": "/api/v1/people/483561"
+      },
+      "jerseyNumber": "16",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 482608,
+        "fullName": "Scott Barry",
+        "link": "/api/v1/people/482608"
+      },
+      "jerseyNumber": "87",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 644760,
+        "fullName": "Adam Beck",
+        "link": "/api/v1/people/644760"
+      },
+      "jerseyNumber": "38",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    },
+    {
+      "person": {
+        "id": 483564,
+        "fullName": "Dan Bellino",
+        "link": "/api/v1/people/483564"
+      },
+      "jerseyNumber": "2",
+      "job": "Umpire",
+      "jobId": "UMPR",
+      "title": "Umpire"
+    }
+  ]
+}

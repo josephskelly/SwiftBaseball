@@ -187,6 +187,17 @@ for player in alumni {
     print("\(player.fullName) — last season with team: \(player.alumniLastSeason ?? "?")")
 }
 
+// Season attendance — one record per gameType (regular season, postseason, ...)
+let gate = try await SwiftBaseball.attendance(teamId: 147, season: 2024).fetch()
+let regular = gate.first { $0.gameType == .regularSeason }
+print(regular?.attendanceAverageHome ?? 0)       // 41897
+print(regular?.attendanceHigh ?? 0,
+      regular?.attendanceHighGamePk ?? 0)        // 48760 745716
+
+// Umpire pool on duty for a date (not a per-game crew)
+let umps = try await SwiftBaseball.umpires(date: "2024-07-04").fetch()
+let crewChiefs = umps.filter { $0.jobId != "UMPR" }
+
 // Game highlights — key-play clips and condensed game
 let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
 for clip in content.highlights {

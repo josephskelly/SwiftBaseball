@@ -94,6 +94,67 @@ struct MLBCoach: Decodable {
     let title: String?
 }
 
+// MARK: - Umpires
+
+struct MLBUmpiresResponse: Decodable {
+    let roster: [MLBUmpire]
+}
+
+struct MLBUmpire: Decodable {
+    let person: MLBEntityRef
+    let jerseyNumber: String?
+    let job: String?
+    let jobId: String?
+    let title: String?
+}
+
+// MARK: - Attendance
+
+struct MLBAttendanceResponse: Decodable {
+    let records: [MLBAttendanceRecord]
+}
+
+struct MLBAttendanceRecord: Decodable {
+    let team: MLBEntityRef?
+    let year: String?
+    let gameType: MLBCodeDescriptionId?
+
+    let openingsTotal: Int?
+    let openingsTotalHome: Int?
+    let openingsTotalAway: Int?
+    let openingsTotalLost: Int?
+
+    let gamesTotal: Int?
+    let gamesHomeTotal: Int?
+    let gamesAwayTotal: Int?
+
+    let attendanceTotal: Int?
+    let attendanceTotalHome: Int?
+    let attendanceTotalAway: Int?
+
+    let attendanceAverageYtd: Int?
+    let attendanceAverageHome: Int?
+    let attendanceAverageAway: Int?
+    let attendanceOpeningAverage: Int?
+
+    let attendanceHigh: Int?
+    let attendanceHighDate: String?
+    let attendanceHighGame: MLBAttendanceGameRef?
+
+    let attendanceLow: Int?
+    let attendanceLowDate: String?
+    let attendanceLowGame: MLBAttendanceGameRef?
+}
+
+struct MLBAttendanceGameRef: Decodable {
+    let gamePk: Int?
+}
+
+struct MLBCodeDescriptionId: Decodable {
+    let id: String?
+    let description: String?
+}
+
 // MARK: - Schedule
 
 struct MLBScheduleResponse: Decodable {

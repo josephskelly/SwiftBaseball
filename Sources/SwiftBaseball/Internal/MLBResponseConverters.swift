@@ -47,6 +47,57 @@ enum MLBResponseConverters {
         )
     }
 
+    static func umpire(from raw: MLBUmpire) -> Umpire {
+        Umpire(
+            person: playerReference(from: raw.person),
+            jerseyNumber: raw.jerseyNumber,
+            job: raw.job ?? "",
+            jobId: raw.jobId ?? "",
+            title: raw.title
+        )
+    }
+
+    // MARK: - Attendance
+
+    static func attendance(from response: MLBAttendanceResponse) -> [TeamAttendance] {
+        response.records.compactMap(attendance(from:))
+    }
+
+    private static func attendance(from raw: MLBAttendanceRecord) -> TeamAttendance? {
+        guard let teamRaw = raw.team, let year = raw.year else { return nil }
+        return TeamAttendance(
+            team: TeamReference(id: teamRaw.id, name: teamRaw.displayName),
+            year: year,
+            gameType: raw.gameType?.id.flatMap(GameType.init(rawValue:)),
+            openingsTotal: raw.openingsTotal,
+            openingsTotalHome: raw.openingsTotalHome,
+            openingsTotalAway: raw.openingsTotalAway,
+            openingsTotalLost: raw.openingsTotalLost,
+            gamesTotal: raw.gamesTotal,
+            gamesHomeTotal: raw.gamesHomeTotal,
+            gamesAwayTotal: raw.gamesAwayTotal,
+            attendanceTotal: raw.attendanceTotal,
+            attendanceTotalHome: raw.attendanceTotalHome,
+            attendanceTotalAway: raw.attendanceTotalAway,
+            attendanceAverageYtd: raw.attendanceAverageYtd,
+            attendanceAverageHome: raw.attendanceAverageHome,
+            attendanceAverageAway: raw.attendanceAverageAway,
+            attendanceOpeningAverage: raw.attendanceOpeningAverage,
+            attendanceHigh: raw.attendanceHigh,
+            attendanceHighDate: raw.attendanceHighDate.flatMap(parseAttendanceDate),
+            attendanceHighGamePk: raw.attendanceHighGame?.gamePk,
+            attendanceLow: raw.attendanceLow,
+            attendanceLowDate: raw.attendanceLowDate.flatMap(parseAttendanceDate),
+            attendanceLowGamePk: raw.attendanceLowGame?.gamePk
+        )
+    }
+
+    private static func parseAttendanceDate(_ string: String) -> Date? {
+        // Attendance dates arrive as "2024-07-24T00:00:00" (no timezone);
+        // take the date portion and parse as UTC.
+        parseDate(String(string.prefix(10)))
+    }
+
     // MARK: - Team
 
     static func team(from raw: MLBTeam) -> Team {

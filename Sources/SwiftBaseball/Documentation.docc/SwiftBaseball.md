@@ -37,6 +37,12 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 
 - ``Team``
 - ``TeamReference``
+- ``TeamStaff``
+- ``TeamAttendance``
+
+### Officials
+
+- ``Umpire``
 
 ### Games & Schedule
 

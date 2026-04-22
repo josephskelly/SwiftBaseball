@@ -146,6 +146,26 @@ public enum SwiftBaseball {
         .teamAlumni(teamId: teamId, season: season, client: client)
     }
 
+    /// Fetch season attendance totals for a team.
+    ///
+    /// Returns one ``TeamAttendance`` per (season, gameType) record — in
+    /// practice one entry for the regular season, and sometimes additional
+    /// entries if the team played postseason or spring games counted
+    /// separately by the upstream API. Figures are paid-gate attendance,
+    /// matching MLB's public numbers.
+    ///
+    ///     let records = try await SwiftBaseball.attendance(teamId: 147, season: 2024).fetch()
+    ///     let regular = records.first { $0.gameType == .regularSeason }
+    ///     print(regular?.attendanceAverageHome ?? 0)    // 41897
+    ///     print(regular?.attendanceHigh ?? 0)           // 48760
+    ///
+    /// - Parameters:
+    ///   - teamId: The MLB team identifier.
+    ///   - season: The season to report on.
+    public static func attendance(teamId: Int, season: Int) -> QueryBuilder<[TeamAttendance]> {
+        .attendance(teamId: teamId, season: season, client: client)
+    }
+
     /// Fetch all affiliate teams for an MLB organization.
     ///
     /// Returns the MLB club plus every affiliated minor league team. Each
@@ -312,6 +332,22 @@ public enum SwiftBaseball {
     ///         .fetch()
     public static func transactions() -> QueryBuilder<[Transaction]> {
         .transactions(client: client)
+    }
+
+    // MARK: - Umpires
+
+    /// Fetch the MLB umpire roster eligible to work on a given date.
+    ///
+    /// Returns the full pool of umpires on duty for that day — not a per-game
+    /// crew assignment. Most entries carry ``Umpire/jobId`` of `"UMPR"`; crew
+    /// chiefs and umpire-desk staff use distinct codes.
+    ///
+    ///     let ump = try await SwiftBaseball.umpires(date: "2024-07-04").fetch()
+    ///     let crewChiefs = ump.filter { $0.jobId != "UMPR" }
+    ///
+    /// - Parameter date: Calendar date in `YYYY-MM-DD` format.
+    public static func umpires(date: String) -> QueryBuilder<[Umpire]> {
+        .umpires(date: date, client: client)
     }
 
     // MARK: - Stats
