@@ -28,7 +28,8 @@ Task {
             exit(1)
         }
     } catch {
-        fputs("Error: \(error.localizedDescription)\n", stderr)
+        let message = "Error: \(error.localizedDescription)\n"
+        FileHandle.standardError.write(Data(message.utf8))
         exit(1)
     }
     exit(0)
