@@ -24,6 +24,7 @@ struct MLBPerson: Decodable {
     let pitchHand: MLBCodeDescription?
     let currentTeam: MLBEntityRef?
     let mlbDebutDate: String?
+    let alumniLastSeason: String?
 }
 
 struct MLBPositionObject: Decodable {
@@ -77,6 +78,20 @@ struct MLBRosterEntry: Decodable {
     let jerseyNumber: String?
     let position: MLBPositionObject?
     let status: MLBCodeDescription?
+}
+
+// MARK: - Team coaches
+
+struct MLBCoachesResponse: Decodable {
+    let roster: [MLBCoach]
+}
+
+struct MLBCoach: Decodable {
+    let person: MLBEntityRef
+    let jerseyNumber: String?
+    let job: String?
+    let jobId: String?
+    let title: String?
 }
 
 // MARK: - Schedule

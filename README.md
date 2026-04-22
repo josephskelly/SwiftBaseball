@@ -176,6 +176,17 @@ print(biggestSwing?.homeTeamWinProbabilityAdded ?? 0)    // WPA in percentage po
 let ctx = try await SwiftBaseball.contextMetrics(gamePk: 745612).fetch()
 print("Home WP: \(ctx.homeWinProbability)%  Away WP: \(ctx.awayWinProbability)%")
 
+// Team coaching staff — filter by stable jobId codes (MNGR, COAB, COAP, …)
+let staff = try await SwiftBaseball.teamCoaches(teamId: 147).fetch()
+let manager = staff.first { $0.jobId == "MNGR" }
+print(manager?.person.fullName ?? "")
+
+// Team alumni for a given season — Player values carry alumniLastSeason
+let alumni = try await SwiftBaseball.teamAlumni(teamId: 147, season: 2024).fetch()
+for player in alumni {
+    print("\(player.fullName) — last season with team: \(player.alumniLastSeason ?? "?")")
+}
+
 // Game highlights — key-play clips and condensed game
 let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
 for clip in content.highlights {

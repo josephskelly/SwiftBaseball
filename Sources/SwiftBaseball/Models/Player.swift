@@ -38,6 +38,11 @@ public struct Player: Codable, Sendable, Equatable, Identifiable {
     public let currentTeam: TeamReference?
     /// Date of MLB debut.
     public let mlbDebutDate: Date?
+    /// Last season this player appeared with a team, as a year string (e.g. `"2022"`).
+    ///
+    /// Populated only when the record comes from the team alumni endpoint
+    /// (``SwiftBaseball/teamAlumni(teamId:season:)``); `nil` for all other queries.
+    public let alumniLastSeason: String?
 }
 
 /// A roster entry linking a player to a team and role.

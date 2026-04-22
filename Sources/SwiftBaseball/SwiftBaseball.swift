@@ -112,6 +112,40 @@ public enum SwiftBaseball {
         .singleTeam(id: id, client: client)
     }
 
+    /// Fetch the coaching staff for a team.
+    ///
+    /// Returns the manager plus every listed field coach (bench, pitching,
+    /// hitting, base coaches, etc.) on the team's current coaching roster.
+    /// Filter by ``TeamStaff/jobId`` for stable role-based lookups —
+    /// e.g. `"MNGR"` for manager, `"COAB"` for bench coach.
+    ///
+    ///     let staff = try await SwiftBaseball.teamCoaches(teamId: 147).fetch()
+    ///     let manager = staff.first { $0.jobId == "MNGR" }
+    ///     print(manager?.person.fullName ?? "")
+    ///
+    /// - Parameter teamId: The MLB team identifier.
+    public static func teamCoaches(teamId: Int) -> QueryBuilder<[TeamStaff]> {
+        .teamCoaches(teamId: teamId, client: client)
+    }
+
+    /// Fetch team alumni for a given season.
+    ///
+    /// Returns every former player who appeared with the team at any point
+    /// in the team's history and played in the given `season` with any
+    /// organization. The returned ``Player`` values carry
+    /// ``Player/alumniLastSeason`` indicating the last season each player
+    /// appeared with *this* team.
+    ///
+    ///     let alumni = try await SwiftBaseball.teamAlumni(teamId: 147, season: 2024).fetch()
+    ///     let recentlyDeparted = alumni.filter { $0.alumniLastSeason == "2023" }
+    ///
+    /// - Parameters:
+    ///   - teamId: The MLB team identifier.
+    ///   - season: The season to filter by. Required by the upstream API.
+    public static func teamAlumni(teamId: Int, season: Int) -> QueryBuilder<[Player]> {
+        .teamAlumni(teamId: teamId, season: season, client: client)
+    }
+
     /// Fetch all affiliate teams for an MLB organization.
     ///
     /// Returns the MLB club plus every affiliated minor league team. Each

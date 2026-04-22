@@ -23,7 +23,8 @@ enum MLBResponseConverters {
             batSide: handSide(from: raw.batSide?.code),
             pitchHand: handSide(from: raw.pitchHand?.code),
             currentTeam: raw.currentTeam.map(teamReference),
-            mlbDebutDate: raw.mlbDebutDate.flatMap(parseDate)
+            mlbDebutDate: raw.mlbDebutDate.flatMap(parseDate),
+            alumniLastSeason: raw.alumniLastSeason
         )
     }
 
@@ -33,6 +34,16 @@ enum MLBResponseConverters {
             jerseyNumber: raw.jerseyNumber,
             position: position(from: raw.position),
             status: raw.status?.description
+        )
+    }
+
+    static func teamStaff(from raw: MLBCoach) -> TeamStaff {
+        TeamStaff(
+            person: playerReference(from: raw.person),
+            jerseyNumber: raw.jerseyNumber,
+            job: raw.job ?? "",
+            jobId: raw.jobId ?? "",
+            title: raw.title
         )
     }
 
