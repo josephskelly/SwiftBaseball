@@ -187,6 +187,12 @@ for player in alumni {
     print("\(player.fullName) — last season with team: \(player.alumniLastSeason ?? "?")")
 }
 
+// Game pace — compare team vs league average time-per-game (TimeInterval seconds)
+let teamPace = try await SwiftBaseball.gamePace(teamId: 147, season: 2024).fetch()
+let leaguePace = try await SwiftBaseball.leagueGamePace(season: 2024).fetch()
+let gap = (teamPace.timePerGame ?? 0) - (leaguePace.timePerGame ?? 0)
+print("Yankees play \(Int(gap / 60))m longer than the MLB average")
+
 // Team leaders — one category entry per stat group (hitting, pitching, catching, ...)
 let hr = try await SwiftBaseball
     .teamLeaders(teamId: 147, category: .homeRuns)

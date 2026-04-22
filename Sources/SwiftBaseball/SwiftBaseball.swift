@@ -791,4 +791,42 @@ public enum SwiftBaseball {
     public static func teamLeaders(teamId: Int, category: LeaderStatCategory) -> QueryBuilder<[TeamLeaderCategory]> {
         .teamLeaders(teamId: teamId, category: category, client: client)
     }
+
+    // MARK: - Game Pace
+
+    /// Fetch a team's pace-of-play metrics for a season.
+    ///
+    /// Returns time-per-game, time-per-pitch, plate-appearance counts, and
+    /// ancillary pace figures. Time values are ``TimeInterval`` (seconds),
+    /// parsed from the upstream API's `H:MM:SS` duration strings.
+    ///
+    ///     let pace = try await SwiftBaseball.gamePace(teamId: 147, season: 2024).fetch()
+    ///     print(pace.timePerGame ?? 0)   // 10173 (i.e. 2h 49m 33s)
+    ///     print(pace.pitchesPerGame ?? 0) // 307.67
+    ///
+    /// - Parameters:
+    ///   - teamId: The MLB team identifier.
+    ///   - season: The season to aggregate.
+    /// - Throws: ``SwiftBaseballError/notFound(_:)`` if no record exists for
+    ///   the requested team and season.
+    public static func gamePace(teamId: Int, season: Int) -> QueryBuilder<GamePace> {
+        .teamGamePace(teamId: teamId, season: season, client: client)
+    }
+
+    /// Fetch league-wide MLB pace-of-play metrics for a season.
+    ///
+    /// Covers every MLB game for the requested year, so per-game averages
+    /// here are the natural baseline for comparing a team's pace.
+    ///
+    ///     let league = try await SwiftBaseball.leagueGamePace(season: 2024).fetch()
+    ///     let team = try await SwiftBaseball.gamePace(teamId: 147, season: 2024).fetch()
+    ///     let gap = (team.timePerGame ?? 0) - (league.timePerGame ?? 0)
+    ///     print("Yankees play \(Int(gap / 60))m longer than the league average")
+    ///
+    /// - Parameter season: The season to aggregate.
+    /// - Throws: ``SwiftBaseballError/notFound(_:)`` if the upstream response
+    ///   is missing the expected sport record.
+    public static func leagueGamePace(season: Int) -> QueryBuilder<GamePace> {
+        .leagueGamePace(season: season, client: client)
+    }
 }

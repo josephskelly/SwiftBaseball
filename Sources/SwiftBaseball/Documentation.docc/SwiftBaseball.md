@@ -118,6 +118,7 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``LeaderEntry``
 - ``LeaderStatCategory``
 - ``TeamLeaderCategory``
+- ``GamePace``
 
 ### Enumerations
 

@@ -256,6 +256,76 @@ enum MLBResponseConverters {
         )
     }
 
+    // MARK: - Game pace
+
+    static func teamGamePace(from response: MLBGamePaceResponse) -> GamePace? {
+        response.teams?.first.map(gamePace(from:))
+    }
+
+    static func leagueGamePace(from response: MLBGamePaceResponse) -> GamePace? {
+        response.sports?.first.map(gamePace(from:))
+    }
+
+    private static func gamePace(from raw: MLBGamePaceEntry) -> GamePace {
+        let portal = raw.prPortalCalculatedFields
+        return GamePace(
+            season: raw.season ?? "",
+            team: raw.team.map { TeamReference(id: $0.id, name: $0.displayName) },
+            league: raw.league.map { LeagueReference(id: $0.id, name: $0.displayName) },
+            sportId: raw.sport?.id,
+            sportName: raw.sport?.name,
+            totalGames: raw.totalGames,
+            total9InnGames: raw.total9InnGames,
+            total7InnGames: raw.total7InnGames,
+            totalExtraInnGames: raw.totalExtraInnGames,
+            total9InnGamesScheduled: raw.total9InnGamesScheduled,
+            total9InnGamesCompletedEarly: raw.total9InnGamesCompletedEarly,
+            total9InnGamesWithoutExtraInn: raw.total9InnGamesWithoutExtraInn,
+            totalInningsPlayed: raw.totalInningsPlayed,
+            totalHits: raw.totalHits,
+            totalRuns: raw.totalRuns,
+            totalPlateAppearances: raw.totalPlateAppearances,
+            totalPitchers: raw.totalPitchers,
+            totalPitches: raw.totalPitches,
+            hitsPer9Inn: raw.hitsPer9Inn,
+            runsPer9Inn: raw.runsPer9Inn,
+            pitchesPer9Inn: raw.pitchesPer9Inn,
+            plateAppearancesPer9Inn: raw.plateAppearancesPer9Inn,
+            hitsPerGame: raw.hitsPerGame,
+            runsPerGame: raw.runsPerGame,
+            inningsPlayedPerGame: raw.inningsPlayedPerGame,
+            pitchesPerGame: raw.pitchesPerGame,
+            pitchersPerGame: raw.pitchersPerGame,
+            plateAppearancesPerGame: raw.plateAppearancesPerGame,
+            hitsPerRun: raw.hitsPerRun,
+            pitchesPerPitcher: raw.pitchesPerPitcher,
+            totalGameTime: raw.totalGameTime.flatMap(parseDurationSeconds),
+            timePerGame: raw.timePerGame.flatMap(parseDurationSeconds),
+            timePerPitch: raw.timePerPitch.flatMap(parseDurationSeconds),
+            timePerHit: raw.timePerHit.flatMap(parseDurationSeconds),
+            timePerRun: raw.timePerRun.flatMap(parseDurationSeconds),
+            timePerPlateAppearance: raw.timePerPlateAppearance.flatMap(parseDurationSeconds),
+            timePer9Inn: raw.timePer9Inn.flatMap(parseDurationSeconds),
+            timePer77PlateAppearances: raw.timePer77PlateAppearances.flatMap(parseDurationSeconds),
+            totalExtraInnTime: raw.totalExtraInnTime.flatMap(parseDurationSeconds),
+            timePer7InnGame: portal?.timePer7InnGame.flatMap(parseDurationSeconds),
+            timePer9InnGame: portal?.timePer9InnGame.flatMap(parseDurationSeconds),
+            timePerExtraInnGame: portal?.timePerExtraInnGame.flatMap(parseDurationSeconds)
+        )
+    }
+
+    /// Parses `H:MM:SS` duration strings into seconds. Hours may exceed 24
+    /// (these are durations, not clock times). Returns nil for malformed input.
+    private static func parseDurationSeconds(_ string: String) -> TimeInterval? {
+        let parts = string.split(separator: ":")
+        guard parts.count == 3,
+              let hours = Int(parts[0]),
+              let minutes = Int(parts[1]),
+              let seconds = Int(parts[2])
+        else { return nil }
+        return TimeInterval(hours * 3600 + minutes * 60 + seconds)
+    }
+
     private static func leaderStatGroup(from apiValue: String?) -> StatGroup? {
         switch apiValue?.lowercased() {
         case "hitting": .batting

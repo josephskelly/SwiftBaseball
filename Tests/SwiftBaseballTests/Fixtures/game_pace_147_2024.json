@@ -1,0 +1,68 @@
+{
+    "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "teams": [
+        {
+            "hitsPer9Inn": 16.12,
+            "runsPer9Inn": 9.35,
+            "pitchesPer9Inn": 312.24,
+            "plateAppearancesPer9Inn": 77.04,
+            "hitsPerGame": 15.89,
+            "runsPerGame": 9.21,
+            "inningsPlayedPerGame": 8.89,
+            "pitchesPerGame": 307.67,
+            "pitchersPerGame": 8.8,
+            "plateAppearancesPerGame": 75.91,
+            "totalGameTime": "228:54:00",
+            "totalInningsPlayed": 720.0,
+            "totalHits": 1287,
+            "totalRuns": 746,
+            "totalPlateAppearances": 6149,
+            "totalPitchers": 713,
+            "totalPitches": 24921,
+            "totalGames": 81,
+            "total7InnGames": 1,
+            "total9InnGames": 72,
+            "totalExtraInnGames": 8,
+            "timePerGame": "02:49:33",
+            "timePerPitch": "00:00:33",
+            "timePerHit": "00:10:40",
+            "timePerRun": "00:18:24",
+            "timePerPlateAppearance": "00:02:14",
+            "timePer9Inn": "02:52:04",
+            "timePer77PlateAppearances": "02:51:58",
+            "totalExtraInnTime": "26:07:00",
+            "timePer7InnGameWithoutExtraInn": "00:00:00",
+            "total9InnGamesCompletedEarly": 1,
+            "total9InnGamesWithoutExtraInn": 72,
+            "total9InnGamesScheduled": 81,
+            "hitsPerRun": 1.725,
+            "pitchesPerPitcher": 34.952,
+            "season": "2024",
+            "team": {
+                "id": 147,
+                "name": "NY Yankees",
+                "link": "/api/v1/teams/147"
+            },
+            "league": {
+                "id": 103,
+                "name": "American League",
+                "link": "/api/v1/league/103"
+            },
+            "sport": {
+                "id": 1,
+                "link": "/api/v1/sports/1",
+                "name": "Major League Baseball"
+            },
+            "prPortalCalculatedFields": {
+                "total7InnGames": 1,
+                "total9InnGames": 72,
+                "totalExtraInnGames": 8,
+                "timePer7InnGame": "02:39:59",
+                "timePer9InnGame": "02:46:45",
+                "timePerExtraInnGame": "03:15:52"
+            }
+        }
+    ],
+    "leagues": [],
+    "sports": []
+}

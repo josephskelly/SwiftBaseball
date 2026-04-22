@@ -278,6 +278,72 @@ struct MLBLeaderEntry: Decodable {
     let leagueRank: Int?
 }
 
+// MARK: - Game pace
+
+struct MLBGamePaceResponse: Decodable {
+    let teams: [MLBGamePaceEntry]?
+    let leagues: [MLBGamePaceEntry]?
+    let sports: [MLBGamePaceEntry]?
+}
+
+struct MLBGamePaceEntry: Decodable {
+    let season: String?
+    let team: MLBEntityRef?
+    let league: MLBEntityRef?
+    let sport: MLBGamePaceSportRef?
+
+    let totalGames: Int?
+    let total9InnGames: Int?
+    let total7InnGames: Int?
+    let totalExtraInnGames: Int?
+    let total9InnGamesScheduled: Int?
+    let total9InnGamesCompletedEarly: Int?
+    let total9InnGamesWithoutExtraInn: Int?
+
+    let totalInningsPlayed: Double?
+    let totalHits: Int?
+    let totalRuns: Int?
+    let totalPlateAppearances: Int?
+    let totalPitchers: Int?
+    let totalPitches: Int?
+
+    let hitsPer9Inn: Double?
+    let runsPer9Inn: Double?
+    let pitchesPer9Inn: Double?
+    let plateAppearancesPer9Inn: Double?
+    let hitsPerGame: Double?
+    let runsPerGame: Double?
+    let inningsPlayedPerGame: Double?
+    let pitchesPerGame: Double?
+    let pitchersPerGame: Double?
+    let plateAppearancesPerGame: Double?
+    let hitsPerRun: Double?
+    let pitchesPerPitcher: Double?
+
+    let totalGameTime: String?
+    let timePerGame: String?
+    let timePerPitch: String?
+    let timePerHit: String?
+    let timePerRun: String?
+    let timePerPlateAppearance: String?
+    let timePer9Inn: String?
+    let timePer77PlateAppearances: String?
+    let totalExtraInnTime: String?
+
+    let prPortalCalculatedFields: MLBGamePacePortalFields?
+}
+
+struct MLBGamePaceSportRef: Decodable {
+    let id: Int?
+    let name: String?
+}
+
+struct MLBGamePacePortalFields: Decodable {
+    let timePer7InnGame: String?
+    let timePer9InnGame: String?
+    let timePerExtraInnGame: String?
+}
+
 // MARK: - Team Leaders
 
 struct MLBTeamLeadersResponse: Decodable {

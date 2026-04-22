@@ -1,0 +1,58 @@
+{
+    "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+    "teams": [],
+    "leagues": [],
+    "sports": [
+        {
+            "hitsPer9Inn": 16.63,
+            "runsPer9Inn": 8.91,
+            "pitchesPer9Inn": 296.2,
+            "plateAppearancesPer9Inn": 76.17,
+            "hitsPerGame": 16.39,
+            "runsPerGame": 8.79,
+            "inningsPlayedPerGame": 8.9,
+            "pitchesPerGame": 292.1,
+            "pitchersPerGame": 8.52,
+            "plateAppearancesPerGame": 75.11,
+            "totalGameTime": "6426:37:00",
+            "totalInningsPlayed": 21626.5,
+            "totalHits": 39823,
+            "totalRuns": 21343,
+            "totalPlateAppearances": 182449,
+            "totalPitchers": 20695,
+            "totalPitches": 709511,
+            "totalGames": 2429,
+            "total7InnGames": 4,
+            "total9InnGames": 2209,
+            "totalExtraInnGames": 216,
+            "timePerGame": "02:38:44",
+            "timePerPitch": "00:00:32",
+            "timePerHit": "00:09:40",
+            "timePerRun": "00:18:04",
+            "timePerPlateAppearance": "00:02:06",
+            "timePer9Inn": "02:40:58",
+            "timePer77PlateAppearances": "02:42:44",
+            "totalExtraInnTime": "661:55:59",
+            "timePer7InnGameWithoutExtraInn": "00:00:00",
+            "total9InnGamesCompletedEarly": 4,
+            "total9InnGamesWithoutExtraInn": 2209,
+            "total9InnGamesScheduled": 2429,
+            "hitsPerRun": 1.866,
+            "pitchesPerPitcher": 34.284,
+            "season": "2024",
+            "sport": {
+                "id": 1,
+                "code": "mlb",
+                "link": "/api/v1/sports/1"
+            },
+            "prPortalCalculatedFields": {
+                "total7InnGames": 4,
+                "total9InnGames": 2209,
+                "totalExtraInnGames": 216,
+                "timePer7InnGame": "02:14:44",
+                "timePer9InnGame": "02:36:20",
+                "timePerExtraInnGame": "03:03:52"
+            }
+        }
+    ]
+}
