@@ -9,10 +9,14 @@ enum CSVParser {
     ///
     /// Strips a leading UTF-8 BOM (`U+FEFF`) if present — several Baseball Savant
     /// CSV exports prepend one, which would otherwise corrupt the first header key.
+    /// CRLF and lone CR line endings are normalized to LF so the parser behaves
+    /// identically on Darwin and swift-corelibs-foundation.
     static func parse(_ text: String) -> [[String: String]] {
         let stripped = text.hasPrefix("\u{FEFF}") ? String(text.dropFirst()) : text
-        let lines = stripped.components(separatedBy: "\n")
-            .map { $0.trimmingCharacters(in: .carriageReturns) }
+        let normalized = stripped
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+        let lines = normalized.components(separatedBy: "\n")
             .filter { !$0.isEmpty }
         guard let headerLine = lines.first else { return [] }
         let headers = parseRow(headerLine)
@@ -48,8 +52,4 @@ enum CSVParser {
         fields.append(current)
         return fields
     }
-}
-
-private extension CharacterSet {
-    static let carriageReturns = CharacterSet(charactersIn: "\r")
 }

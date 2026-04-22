@@ -37,8 +37,8 @@ jobs:
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  build-linux:
-    name: Build (Linux, Swift ${{ matrix.swift }})
+  test-linux:
+    name: Build & Test (Linux, Swift ${{ matrix.swift }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -51,7 +51,5 @@ jobs:
         run: swift build
       - name: Build (Release)
         run: swift build --configuration release
-      # NOTE: swift test is intentionally skipped on Linux — several
-      # Statcast CSV aggregator tests fail or crash on the Linux Swift
-      # runtime while passing on Darwin. Tracked separately; Linux
-      # compile coverage is still enforced above.
+      - name: Test
+        run: swift test

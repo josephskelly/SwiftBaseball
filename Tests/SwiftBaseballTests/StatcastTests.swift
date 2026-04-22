@@ -36,6 +36,19 @@ struct StatcastTests {
         #expect(rows[0]["city"] == "LA")
     }
 
+    @Test("CSVParser parses CRLF-terminated CSV identically to LF")
+    func csvParserCRLF() {
+        let crlf = "name,age,team\r\nOhtani,29,LAD\r\nJudge,32,NYY\r\n"
+        let rows = CSVParser.parse(crlf)
+
+        #expect(rows.count == 2)
+        #expect(rows[0]["name"] == "Ohtani")
+        #expect(rows[0]["age"] == "29")
+        #expect(rows[0]["team"] == "LAD")
+        #expect(rows[1]["name"] == "Judge")
+        #expect(rows[1]["team"] == "NYY")
+    }
+
     @Test("CSVParser handles empty fields")
     func csvParserEmptyFields() {
         let csv = """
