@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Statcast Tests")
 struct StatcastTests {
-
     // MARK: - CSV Parser
 
     @Test("CSVParser parses headers and rows correctly")
@@ -68,7 +67,7 @@ struct StatcastTests {
     @Test("Aggregate batted ball counts from fixture CSV")
     func aggregateBattedBallCounts() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -83,7 +82,7 @@ struct StatcastTests {
     @Test("Aggregate batted ball percentages from fixture")
     func aggregateBattedBallPercentages() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -97,7 +96,7 @@ struct StatcastTests {
     @Test("Aggregate exit velocity from fixture")
     func aggregateExitVelocity() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -111,18 +110,18 @@ struct StatcastTests {
     @Test("Aggregate launch angle from fixture")
     func aggregateLaunchAngle() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
-        let expectedLA = (-8.2 + 28.0 + (-15.0) + 18.5 + 65.0 + 32.0 + 12.0) / 7.0
+        let expectedLA = (-8.2 + 28.0 + -15.0 + 18.5 + 65.0 + 32.0 + 12.0) / 7.0
         #expect(abs((stats.avgLaunchAngle ?? 0) - expectedLA) < 0.01)
     }
 
     @Test("Aggregate hard hit rate from fixture")
     func aggregateHardHitRate() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -133,7 +132,7 @@ struct StatcastTests {
     @Test("Aggregate expected stats from fixture")
     func aggregateExpectedStats() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -144,14 +143,14 @@ struct StatcastTests {
         #expect(stats.xSLG != nil)
         // Fixture has 0 strikeouts, walks, HBP — full-PA xwOBA equals contact-only xwOBA
         let xwOBAs = [0.460, 0.980, 0.040, 0.850, 0.010, 0.350, 0.720]
-        let expectedXwOBA = xwOBAs.reduce(0, +) / 7.0  // totalPA = 7 BBEs + 0 K + 0 BB + 0 HBP
+        let expectedXwOBA = xwOBAs.reduce(0, +) / 7.0 // totalPA = 7 BBEs + 0 K + 0 BB + 0 HBP
         #expect(abs((stats.xwOBA ?? 0) - expectedXwOBA) < 0.001)
     }
 
     @Test("Aggregate PA event counts from fixture")
     func aggregatePAEventCounts() throws {
         let data = try Fixtures.load("statcast_batting_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -181,7 +180,7 @@ struct StatcastTests {
             // Walk (weight 0.690)
             ["pitch_type": "FF", "description": "ball", "events": "walk"],
             // Walk (weight 0.690)
-            ["pitch_type": "SL", "description": "ball", "events": "walk"],
+            ["pitch_type": "SL", "description": "ball", "events": "walk"]
         ]
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -217,7 +216,7 @@ struct StatcastTests {
     func noBattedBallType() {
         let rows: [[String: String]] = [
             ["pitch_type": "FF", "description": "called_strike"],
-            ["pitch_type": "SL", "description": "ball"],
+            ["pitch_type": "SL", "description": "ball"]
         ]
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -230,7 +229,7 @@ struct StatcastTests {
         let rows: [[String: String]] = [
             ["bb_type": "ground_ball", "launch_speed": "90.0", "launch_angle": "-10.0"],
             ["bb_type": "ground_ball", "launch_speed": "85.0", "launch_angle": "-5.0"],
-            ["bb_type": "ground_ball", "launch_speed": "88.0", "launch_angle": "-8.0"],
+            ["bb_type": "ground_ball", "launch_speed": "88.0", "launch_angle": "-8.0"]
         ]
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -250,7 +249,7 @@ struct StatcastTests {
             // Not a barrel: 90 mph, 28° — too slow
             ["bb_type": "fly_ball", "launch_speed": "90.0", "launch_angle": "28.0"],
             // Not a barrel: 100 mph, 5° — too low angle
-            ["bb_type": "ground_ball", "launch_speed": "100.0", "launch_angle": "5.0"],
+            ["bb_type": "ground_ball", "launch_speed": "100.0", "launch_angle": "5.0"]
         ]
         let stats = StatcastAggregator.aggregate(rows)
 
@@ -263,7 +262,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: batted ball counts from fixture")
     func pitcherBattedBallCounts() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -281,7 +280,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: total pitches from fixture")
     func pitcherTotalPitches() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -291,7 +290,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: fastball velocity from fixture")
     func pitcherFastballVelocity() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -306,7 +305,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: whiff rate from fixture")
     func pitcherWhiffRate() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -319,7 +318,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: CSW from fixture")
     func pitcherCSW() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -331,7 +330,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: pitch mix from fixture")
     func pitcherPitchMix() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -348,20 +347,20 @@ struct StatcastTests {
     @Test("Pitcher aggregation: pitch movement (pfx_x / pfx_z) per pitch type")
     func pitcherPitchMovement() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
         // pitch_name values sorted by count: 4-Seam(4), Sinker(3), then 4-way tie at 2
         let ff = try #require(stats.pitchMix.first { $0.name == "4-Seam Fastball" })
         // pfx_x: rows 5,7,8,14 → -0.29, -1.16, -0.04, 0.53 → avg = -0.24
-        #expect(abs((ff.avgHorizontalBreak ?? 0) - (-0.24)) < 0.01)
+        #expect(abs((ff.avgHorizontalBreak ?? 0) - -0.24) < 0.01)
         // pfx_z: 1.08, 0.64, 0.88, 1.44 → avg = 1.01
         #expect(abs((ff.avgInducedVerticalBreak ?? 0) - 1.01) < 0.01)
 
         let si = try #require(stats.pitchMix.first { $0.name == "Sinker" })
         // pfx_x: rows 6,10,13 → -1.6, -0.9, -1.16 → avg = -1.22
-        #expect(abs((si.avgHorizontalBreak ?? 0) - (-1.22)) < 0.01)
+        #expect(abs((si.avgHorizontalBreak ?? 0) - -1.22) < 0.01)
         // pfx_z: 0.28, 0.39, 0.31 → avg ≈ 0.327
         #expect(abs((si.avgInducedVerticalBreak ?? 0) - 0.327) < 0.01)
 
@@ -375,7 +374,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: per-pitch whiff rate")
     func pitcherPerPitchWhiffRate() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -399,7 +398,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: per-pitch CSW from fixture")
     func pitcherPerPitchCSW() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -423,7 +422,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: per-pitch xwOBA from fixture")
     func pitcherPerPitchXwOBA() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -455,7 +454,7 @@ struct StatcastTests {
             ["pitch_name": "4-Seam Fastball", "description": "ball",
              "release_speed": "95.0", "release_spin_rate": "2200", "pfx_x": "-0.5", "pfx_z": "1.0"],
             ["pitch_name": "4-Seam Fastball", "description": "ball",
-             "release_speed": "94.5", "release_spin_rate": "2180", "pfx_x": "-0.4", "pfx_z": "0.9"],
+             "release_speed": "94.5", "release_spin_rate": "2180", "pfx_x": "-0.4", "pfx_z": "0.9"]
         ]
         let stats = StatcastPitcherAggregator.aggregate(rows)
         let ff = stats.pitchMix.first { $0.name == "4-Seam Fastball" }
@@ -481,14 +480,14 @@ struct StatcastTests {
     @Test("Pitcher aggregation: spin rate from fixture")
     func pitcherSpinRate() throws {
         let data = try Fixtures.load("statcast_pitching_543037.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
         #expect(stats.avgSpinRate != nil)
         // All 15 rows have release_spin_rate
-        #expect(stats.avgSpinRate! > 1500)
-        #expect(stats.avgSpinRate! < 3000)
+        #expect(try #require(stats.avgSpinRate) > 1500)
+        #expect(try #require(stats.avgSpinRate) < 3000)
     }
 
     // MARK: - xERA / xFIP
@@ -496,7 +495,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: K / BB / HBP counts from xFIP fixture")
     func pitcherAggregatorCountsKBBHBP() throws {
         let data = try Fixtures.load("statcast_pitching_xfip.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -508,7 +507,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: innings pitched from xFIP fixture")
     func pitcherAggregatorInningsPitched() throws {
         let data = try Fixtures.load("statcast_pitching_xfip.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -519,7 +518,7 @@ struct StatcastTests {
     @Test("Pitcher aggregation: xFIP from xFIP fixture")
     func pitcherAggregatorXFIP() throws {
         let data = try Fixtures.load("statcast_pitching_xfip.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -534,14 +533,14 @@ struct StatcastTests {
     @Test("Pitcher aggregation: xERA from xFIP fixture")
     func pitcherAggregatorXERA() throws {
         let data = try Fixtures.load("statcast_pitching_xfip.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
         // xwOBA contact sum = 0.040+0.060+0.130+0.050+0.310+0.700 = 1.290
         // full-PA xwOBA = (1.290 + 0.690×2) / 13 = 2.670 / 13 ≈ 0.20538
         // xERA = 0.20538 × 13.0 ≈ 2.670
-        let expected = (1.290 + 0.690 * 2.0) / 13.0 * 13.0  // simplifies to 2.670
+        let expected = (1.290 + 0.690 * 2.0) / 13.0 * 13.0 // simplifies to 2.670
         let xERA = try #require(stats.xERA)
         #expect(abs(xERA - expected) < 0.01)
     }
@@ -552,7 +551,7 @@ struct StatcastTests {
         // Fewer than 1.0 IP → xFIP nil
         let rows: [[String: String]] = [
             ["pitch_type": "FF", "description": "ball", "events": ""],
-            ["pitch_type": "FF", "description": "ball", "events": ""],
+            ["pitch_type": "FF", "description": "ball", "events": ""]
         ]
         let stats = StatcastPitcherAggregator.aggregate(rows)
 
@@ -565,27 +564,27 @@ struct StatcastTests {
     @Test("StatcastQuery season sets date range for full year")
     func statcastQuerySeason() {
         let client = StatcastAPIClient()
-        let query = StatcastQuery(playerId: 660271, client: client).season(2024)
+        let query = StatcastQuery(playerId: 660_271, client: client).season(2024)
 
         // We can't directly inspect private fields, but we verify it builds without error
-        #expect(query.playerId == 660271)
+        #expect(query.playerId == 660_271)
     }
 
     @Test("StatcastQuery dateRange sets custom dates")
     func statcastQueryDateRange() {
         let client = StatcastAPIClient()
-        let query = StatcastQuery(playerId: 660271, client: client)
+        let query = StatcastQuery(playerId: 660_271, client: client)
             .dateRange(start: "2024-06-01", end: "2024-06-30")
 
-        #expect(query.playerId == 660271)
+        #expect(query.playerId == 660_271)
     }
 
     @Test("StatcastPitcherQuery builds with season")
     func pitcherQuerySeason() {
         let client = StatcastAPIClient()
-        let query = StatcastPitcherQuery(playerId: 543037, client: client).season(2024)
+        let query = StatcastPitcherQuery(playerId: 543_037, client: client).season(2024)
 
-        #expect(query.playerId == 543037)
+        #expect(query.playerId == 543_037)
     }
 
     // MARK: - Batch batting query
@@ -593,32 +592,32 @@ struct StatcastTests {
     @Test("StatcastBatchBattingQuery stores player IDs")
     func batchBattingQueryStoresPlayerIds() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchBattingQuery(playerIds: [660271, 592450], client: client)
-        #expect(query.playerIds == [660271, 592450])
+        let query = StatcastBatchBattingQuery(playerIds: [660_271, 592_450], client: client)
+        #expect(query.playerIds == [660_271, 592_450])
     }
 
     @Test("StatcastBatchBattingQuery dateRange modifier compiles")
     func batchBattingQueryDateRange() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchBattingQuery(playerIds: [660271], client: client)
+        let query = StatcastBatchBattingQuery(playerIds: [660_271], client: client)
             .dateRange(start: "2025-01-01", end: "2026-03-26")
-        #expect(query.playerIds == [660271])
+        #expect(query.playerIds == [660_271])
     }
 
     @Test("StatcastBatchBattingQuery season modifier compiles and preserves player IDs")
     func batchBattingQuerySeason() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchBattingQuery(playerIds: [660271, 592450], client: client)
+        let query = StatcastBatchBattingQuery(playerIds: [660_271, 592_450], client: client)
             .season(2024)
-        #expect(query.playerIds == [660271, 592450])
+        #expect(query.playerIds == [660_271, 592_450])
     }
 
     @Test("StatcastBatchBattingQuery batchSize modifier compiles")
     func batchBattingQueryBatchSize() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchBattingQuery(playerIds: [660271], client: client)
+        let query = StatcastBatchBattingQuery(playerIds: [660_271], client: client)
             .batchSize(4)
-        #expect(query.playerIds == [660271])
+        #expect(query.playerIds == [660_271])
     }
 
     @Test("Empty player list returns empty batch batting result")
@@ -632,7 +631,7 @@ struct StatcastTests {
     @Test("Batch batting: groups rows by batter ID and aggregates each player")
     func batchBattingGroupsAndAggregates() throws {
         let data = try Fixtures.load("statcast_batch_batting.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
 
         // Simulate what StatcastBatchBattingQuery.fetch() does for one chunk
@@ -643,8 +642,8 @@ struct StatcastTests {
         }
 
         #expect(results.count == 2)
-        let ohtani = try #require(results[660271])
-        let judge = try #require(results[592450])
+        let ohtani = try #require(results[660_271])
+        let judge = try #require(results[592_450])
 
         // Ohtani: 1 fly_ball + 1 ground_ball
         #expect(ohtani.battedBallEvents == 2)
@@ -665,8 +664,8 @@ struct StatcastTests {
 
     @Test("SwiftBaseball.statcastBatchBatting returns correct query type")
     func namespacedBatchBatting() {
-        let query = SwiftBaseball.statcastBatchBatting(playerIds: [660271, 592450])
-        #expect(query.playerIds == [660271, 592450])
+        let query = SwiftBaseball.statcastBatchBatting(playerIds: [660_271, 592_450])
+        #expect(query.playerIds == [660_271, 592_450])
     }
 
     // MARK: - Batch pitching query
@@ -674,16 +673,16 @@ struct StatcastTests {
     @Test("StatcastBatchPitchingQuery stores player IDs")
     func batchPitchingQueryStoresPlayerIds() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchPitchingQuery(playerIds: [808967, 687717], client: client)
-        #expect(query.playerIds == [808967, 687717])
+        let query = StatcastBatchPitchingQuery(playerIds: [808_967, 687_717], client: client)
+        #expect(query.playerIds == [808_967, 687_717])
     }
 
     @Test("StatcastBatchPitchingQuery season modifier compiles and preserves player IDs")
     func batchPitchingQuerySeason() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchPitchingQuery(playerIds: [808967, 687717], client: client)
+        let query = StatcastBatchPitchingQuery(playerIds: [808_967, 687_717], client: client)
             .season(2024)
-        #expect(query.playerIds == [808967, 687717])
+        #expect(query.playerIds == [808_967, 687_717])
     }
 
     @Test("Empty player list returns empty batch pitching result")
@@ -697,7 +696,7 @@ struct StatcastTests {
     @Test("Batch pitching: groups rows by pitcher ID and aggregates each pitcher")
     func batchPitchingGroupsAndAggregates() throws {
         let data = try Fixtures.load("statcast_batch_pitching.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
 
         // Simulate what StatcastBatchPitchingQuery.fetch() does for one chunk
@@ -708,8 +707,8 @@ struct StatcastTests {
         }
 
         #expect(results.count == 2)
-        let king = try #require(results[650633])
-        let castillo = try #require(results[622491])
+        let king = try #require(results[650_633])
+        let castillo = try #require(results[622_491])
 
         // King: popup + ground_ball + called_strike (3 pitches, 2 batted balls)
         #expect(king.battedBallEvents == 2)
@@ -732,8 +731,8 @@ struct StatcastTests {
 
     @Test("SwiftBaseball.statcastBatchPitching returns correct query type")
     func namespacedBatchPitching() {
-        let query = SwiftBaseball.statcastBatchPitching(playerIds: [808967, 650633])
-        #expect(query.playerIds == [808967, 650633])
+        let query = SwiftBaseball.statcastBatchPitching(playerIds: [808_967, 650_633])
+        #expect(query.playerIds == [808_967, 650_633])
     }
 
     // MARK: - Parallel fetch merge logic
@@ -748,8 +747,8 @@ struct StatcastTests {
 
     @Test("Batch merge: collision takes newer partial value")
     func batchMergeCollision() {
-        var accumulated: [Int: Int] = [1: 10]
-        let incoming: [Int: Int] = [1: 99]
+        var accumulated = [1: 10]
+        let incoming = [1: 99]
         accumulated.merge(incoming) { _, new in new }
         #expect(accumulated[1] == 99)
     }
@@ -759,7 +758,7 @@ struct StatcastTests {
     @Test("CareerSplitAggregator computes correct PA and xwOBA from vsL fixture")
     func careerSplitAggregateVsL() throws {
         let data = try Fixtures.load("statcast_career_splits_vsL_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let split = StatcastCareerSplitAggregator.aggregate(rows)
 
@@ -776,7 +775,7 @@ struct StatcastTests {
     @Test("CareerSplitAggregator computes correct PA and xwOBA from vsR fixture")
     func careerSplitAggregateVsR() throws {
         let data = try Fixtures.load("statcast_career_splits_vsR_660271.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let rows = CSVParser.parse(csv)
         let split = StatcastCareerSplitAggregator.aggregate(rows)
 
@@ -800,7 +799,7 @@ struct StatcastTests {
 
     @Test("CareerSplitAggregator sets isTruncated=true when row count equals 25,000")
     func careerSplitTruncationFlag() {
-        let rows = Array(repeating: [String: String](), count: 25_000)
+        let rows = Array(repeating: [String: String](), count: 25000)
         let split = StatcastCareerSplitAggregator.aggregate(rows)
         #expect(split.isTruncated == true)
     }
@@ -808,8 +807,8 @@ struct StatcastTests {
     @Test("StatcastCareerSplitBattingQuery stores playerId")
     func careerSplitQueryStoresPlayerId() {
         let client = StatcastAPIClient()
-        let query = StatcastCareerSplitBattingQuery(playerId: 660271, client: client)
-        #expect(query.playerId == 660271)
+        let query = StatcastCareerSplitBattingQuery(playerId: 660_271, client: client)
+        #expect(query.playerId == 660_271)
     }
 
     @Test("StatcastBatchCareerSplitBattingQuery defaultBatchSize is 4")
@@ -820,8 +819,8 @@ struct StatcastTests {
     @Test("StatcastBatchCareerSplitBattingQuery stores player IDs")
     func batchCareerSplitStoresPlayerIds() {
         let client = StatcastAPIClient()
-        let query = StatcastBatchCareerSplitBattingQuery(playerIds: [660271, 592450], client: client)
-        #expect(query.playerIds == [660271, 592450])
+        let query = StatcastBatchCareerSplitBattingQuery(playerIds: [660_271, 592_450], client: client)
+        #expect(query.playerIds == [660_271, 592_450])
     }
 
     @Test("Empty batch career splits returns empty dictionary")
@@ -836,8 +835,8 @@ struct StatcastTests {
     func batchCareerSplitGroupsAndAggregates() throws {
         let lData = try Fixtures.load("statcast_career_splits_vsL_660271.csv")
         let rData = try Fixtures.load("statcast_career_splits_vsR_660271.csv")
-        let lRows = CSVParser.parse(String(data: lData, encoding: .utf8)!)
-        let rRows = CSVParser.parse(String(data: rData, encoding: .utf8)!)
+        let lRows = try CSVParser.parse(#require(String(data: lData, encoding: .utf8)))
+        let rRows = try CSVParser.parse(#require(String(data: rData, encoding: .utf8)))
 
         // Simulate what StatcastBatchCareerSplitBattingQuery.fetch() does for one chunk
         let lByPlayer = Dictionary(grouping: lRows) { $0["batter"].flatMap(Int.init) ?? -1 }
@@ -852,7 +851,7 @@ struct StatcastTests {
             )
         }
 
-        let splits = try #require(partial[660271])
+        let splits = try #require(partial[660_271])
         #expect(splits.vsLHP.pa == 6)
         #expect(splits.vsRHP.pa == 8)
         #expect(splits.vsLHP.xwOBA != nil)
@@ -878,7 +877,7 @@ struct StatcastTests {
              "launch_angle": "-10.0", "estimated_woba_using_speedangle": "0.050",
              "estimated_ba_using_speedangle": "0.050",
              "estimated_slg_using_speedangle": "0.050",
-             "events": "field_out", "description": "hit_into_play"],
+             "events": "field_out", "description": "hit_into_play"]
         ]
 
         let filtered = allRows.filter { $0["game_type"] == "R" }
@@ -903,7 +902,7 @@ struct StatcastTests {
              "launch_angle": "-10.0", "estimated_woba_using_speedangle": "0.050",
              "estimated_ba_using_speedangle": "0.050",
              "estimated_slg_using_speedangle": "0.050",
-             "events": "field_out", "description": "hit_into_play"],
+             "events": "field_out", "description": "hit_into_play"]
         ]
 
         // No filter applied — pass all rows directly.
@@ -931,7 +930,7 @@ struct StatcastTests {
              "estimated_slg_using_speedangle": "0.040",
              "events": "field_out", "description": "hit_into_play",
              "pitch_type": "FF", "release_speed": "94.5",
-             "pfx_x": "5.1", "pfx_z": "9.8", "release_spin_rate": "2380"],
+             "pfx_x": "5.1", "pfx_z": "9.8", "release_spin_rate": "2380"]
         ]
 
         let filtered = allRows.filter { $0["game_type"] == "R" }
@@ -969,7 +968,7 @@ struct StatcastTests {
              "estimated_woba_using_speedangle": "0.100",
              "estimated_ba_using_speedangle": "0.100",
              "estimated_slg_using_speedangle": "0.100",
-             "events": "field_out", "description": "hit_into_play"],
+             "events": "field_out", "description": "hit_into_play"]
         ]
 
         // Simulate the batch fetch's per-player split + filter + aggregate.
@@ -977,13 +976,13 @@ struct StatcastTests {
         let byPlayer = Dictionary(grouping: filtered) { Int($0["batter"] ?? "0") ?? 0 }
         let results = byPlayer.mapValues { StatcastAggregator.aggregate($0) }
 
-        let player1 = results[660271]
+        let player1 = results[660_271]
         #expect(player1 != nil)
         #expect(player1?.battedBallEvents == 1)
         #expect(player1?.flyBalls == 1)
         #expect(player1?.groundBalls == 0)
 
-        let player2 = results[592450]
+        let player2 = results[592_450]
         #expect(player2 != nil)
         #expect(player2?.battedBallEvents == 1)
         #expect(player2?.groundBalls == 1)

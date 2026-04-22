@@ -1,6 +1,6 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 /// Integration tests that hit the real MLB Stats API.
 /// Only run when `SWIFTBASEBALL_INTEGRATION=1` environment variable is set.
@@ -10,17 +10,16 @@ import Foundation
 /// ```
 @Suite("MLB API Integration Tests", .enabled(if: ProcessInfo.processInfo.environment["SWIFTBASEBALL_INTEGRATION"] == "1"))
 struct MLBAPIIntegrationTests {
-
     let client: any APIClient = URLSessionAPIClient()
 
     // MARK: - Players
 
     @Test("Fetch player by ID (Ohtani)")
     func fetchPlayerById() async throws {
-        let builder = QueryBuilder<Player>.singlePlayer(id: 660271, client: client)
+        let builder = QueryBuilder<Player>.singlePlayer(id: 660_271, client: client)
         let player = try await builder.fetch()
 
-        #expect(player.id == 660271)
+        #expect(player.id == 660_271)
         #expect(player.fullName == "Shohei Ohtani")
         #expect(player.primaryPosition == .twoWayPlayer)
         #expect(player.currentTeam != nil)
@@ -28,10 +27,10 @@ struct MLBAPIIntegrationTests {
 
     @Test("Fetch player by ID (Judge)")
     func fetchJudgeById() async throws {
-        let builder = QueryBuilder<Player>.singlePlayer(id: 592450, client: client)
+        let builder = QueryBuilder<Player>.singlePlayer(id: 592_450, client: client)
         let player = try await builder.fetch()
 
-        #expect(player.id == 592450)
+        #expect(player.id == 592_450)
         #expect(player.fullName == "Aaron Judge")
         #expect(player.primaryPosition == .rightField)
         #expect(player.currentTeam?.id == 147)
@@ -43,7 +42,7 @@ struct MLBAPIIntegrationTests {
         let players = try await builder.fetch()
 
         #expect(!players.isEmpty)
-        let ohtani = players.first { $0.id == 660271 }
+        let ohtani = players.first { $0.id == 660_271 }
         #expect(ohtani != nil)
         #expect(ohtani?.fullName == "Shohei Ohtani")
     }
@@ -134,7 +133,7 @@ struct MLBAPIIntegrationTests {
 
     @Test("Fetch boxscore by game PK")
     func fetchBoxscore() async throws {
-        let builder = QueryBuilder<Boxscore>.boxscore(gamePk: 745612, client: client)
+        let builder = QueryBuilder<Boxscore>.boxscore(gamePk: 745_612, client: client)
         let boxscore = try await builder.fetch()
 
         #expect(boxscore.teams.away.team.id > 0)
@@ -153,7 +152,7 @@ struct MLBAPIIntegrationTests {
 
     @Test("Fetch linescore by game PK")
     func fetchLinescore() async throws {
-        let builder = QueryBuilder<Linescore>.linescore(gamePk: 745612, client: client)
+        let builder = QueryBuilder<Linescore>.linescore(gamePk: 745_612, client: client)
         let linescore = try await builder.fetch()
 
         #expect(linescore.currentInning == 9)
@@ -193,7 +192,7 @@ struct MLBAPIIntegrationTests {
 
     @Test("Fetch player batting stats")
     func fetchPlayerBattingStats() async throws {
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: client)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660_271, client: client)
             .season(2024)
             .group(.batting)
         let stats = try await builder.fetch()
@@ -201,7 +200,7 @@ struct MLBAPIIntegrationTests {
         #expect(!stats.isEmpty)
 
         let entry = try #require(stats.first)
-        #expect(entry.player.id == 660271)
+        #expect(entry.player.id == 660_271)
         #expect(entry.group == .batting)
         #expect(entry.batting != nil)
         #expect(entry.pitching == nil)
@@ -215,7 +214,7 @@ struct MLBAPIIntegrationTests {
     @Test("Fetch player pitching stats")
     func fetchPlayerPitchingStats() async throws {
         // Ohtani pitched in 2023
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: client)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660_271, client: client)
             .season(2023)
             .group(.pitching)
         let stats = try await builder.fetch()

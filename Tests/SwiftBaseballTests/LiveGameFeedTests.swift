@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("LiveGameFeed Tests")
 struct LiveGameFeedTests {
-
     private func loadFeed() throws -> LiveGameFeed {
         let data = try Fixtures.load("live_game_feed_745612.json")
         let response = try JSONDecoder.mlb.decode(MLBLiveGameFeedResponse.self, from: data)
@@ -16,7 +15,7 @@ struct LiveGameFeedTests {
     @Test("Game primary key decodes")
     func gamePkDecodes() throws {
         let feed = try loadFeed()
-        #expect(feed.gamePk == 745612)
+        #expect(feed.gamePk == 745_612)
     }
 
     @Test("Meta polling interval decodes")
@@ -46,7 +45,7 @@ struct LiveGameFeedTests {
     @Test("Game info decodes type, season, doubleHeader")
     func gameInfoDecodes() throws {
         let feed = try loadFeed()
-        #expect(feed.gameData.game.pk == 745612)
+        #expect(feed.gameData.game.pk == 745_612)
         #expect(feed.gameData.game.type == .regularSeason)
         #expect(feed.gameData.game.season == "2024")
         #expect(feed.gameData.game.doubleHeader == "N")
@@ -87,8 +86,8 @@ struct LiveGameFeedTests {
     @Test("Player dictionary strips ID prefix from keys")
     func playerDictionaryKeyStripping() throws {
         let feed = try loadFeed()
-        #expect(feed.gameData.players[671732] != nil)
-        let butler = try #require(feed.gameData.players[671732])
+        #expect(feed.gameData.players[671_732] != nil)
+        let butler = try #require(feed.gameData.players[671_732])
         #expect(butler.fullName == "Lawrence Butler")
         #expect(butler.primaryPosition == .rightField)
         #expect(butler.batSide == .left)
@@ -188,7 +187,7 @@ struct LiveGameFeedTests {
     @Test("Query builder uses v1.1 version path")
     func queryBuilderUsesV1_1Path() throws {
         let endpoint = Endpoint(path: "game/745612/feed/live", version: "v1.1")
-        let baseURL = URL(string: "https://statsapi.mlb.com/api/v1/")!
+        let baseURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/"))
         let built = try #require(endpoint.url(baseURL: baseURL))
         #expect(built.absoluteString.contains("/api/v1.1/"))
         #expect(built.absoluteString.contains("game/745612/feed/live"))
@@ -197,7 +196,7 @@ struct LiveGameFeedTests {
     @Test("Default v1 endpoints leave base URL untouched")
     func defaultVersionLeavesBaseURLUntouched() throws {
         let endpoint = Endpoint(path: "people/660271")
-        let baseURL = URL(string: "https://statsapi.mlb.com/api/v1/")!
+        let baseURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/"))
         let built = try #require(endpoint.url(baseURL: baseURL))
         #expect(built.absoluteString == "https://statsapi.mlb.com/api/v1/people/660271")
     }

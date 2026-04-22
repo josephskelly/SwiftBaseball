@@ -44,7 +44,9 @@ public struct StandingsRecord: Codable, Sendable, Equatable {
     public let runDifferential: Int?
 
     /// Total games played (wins + losses).
-    public var gamesPlayed: Int { wins + losses }
+    public var gamesPlayed: Int {
+        wins + losses
+    }
 }
 
 /// A team's current win or loss streak.

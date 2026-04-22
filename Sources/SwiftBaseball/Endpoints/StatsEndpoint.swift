@@ -53,7 +53,7 @@ extension QueryBuilder where T == PlayerPlatoonStats {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "vl,vr"),
+            URLQueryItem(name: "sitCodes", value: "vl,vr")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -67,7 +67,7 @@ extension QueryBuilder where T == [PlayerSeasonStats] {
     static func playerSabermetrics(id: Int, client: any APIClient) -> QueryBuilder<[PlayerSeasonStats]> {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "sabermetrics"),
-            URLQueryItem(name: "group", value: "hitting"),
+            URLQueryItem(name: "group", value: "hitting")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -82,7 +82,7 @@ extension QueryBuilder where T == PitcherPlatoonStats {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "vl,vr"),
+            URLQueryItem(name: "sitCodes", value: "vl,vr")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -100,7 +100,7 @@ extension QueryBuilder where T == PlayerCareerPlatoonStats {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "careerStatSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "vl,vr"),
+            URLQueryItem(name: "sitCodes", value: "vl,vr")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -117,7 +117,7 @@ extension QueryBuilder where T == PitcherCareerPlatoonStats {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "careerStatSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "vl,vr"),
+            URLQueryItem(name: "sitCodes", value: "vl,vr")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -138,7 +138,7 @@ extension QueryBuilder where T == [PlayerSeasonStats] {
             URLQueryItem(name: "stats", value: "sabermetrics"),
             URLQueryItem(name: "group", value: "hitting"),
             URLQueryItem(name: "teamId", value: String(teamId)),
-            URLQueryItem(name: "playerPool", value: "All"),
+            URLQueryItem(name: "playerPool", value: "All")
         ])
         let stub = PlayerReference(id: 0, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -154,7 +154,7 @@ extension QueryBuilder where T == [PlayerSeasonStats] {
             URLQueryItem(name: "stats", value: "season"),
             URLQueryItem(name: "group", value: group.apiValue),
             URLQueryItem(name: "teamId", value: String(teamId)),
-            URLQueryItem(name: "playerPool", value: "All"),
+            URLQueryItem(name: "playerPool", value: "All")
         ])
         let stub = PlayerReference(id: 0, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -171,7 +171,7 @@ extension QueryBuilder where T == PlayerHomeAwaySplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "h,a"),
+            URLQueryItem(name: "sitCodes", value: "h,a")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -186,7 +186,7 @@ extension QueryBuilder where T == PitcherHomeAwaySplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "h,a"),
+            URLQueryItem(name: "sitCodes", value: "h,a")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -203,7 +203,7 @@ extension QueryBuilder where T == PlayerDayNightSplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "d,n"),
+            URLQueryItem(name: "sitCodes", value: "d,n")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -218,7 +218,7 @@ extension QueryBuilder where T == PitcherDayNightSplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "d,n"),
+            URLQueryItem(name: "sitCodes", value: "d,n")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -233,7 +233,7 @@ extension QueryBuilder where T == PlayerMonthlySplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "m3,m4,m5,m6,m7,m8,m9,m10"),
+            URLQueryItem(name: "sitCodes", value: "m3,m4,m5,m6,m7,m8,m9,m10")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -248,7 +248,7 @@ extension QueryBuilder where T == PitcherMonthlySplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "m3,m4,m5,m6,m7,m8,m9,m10"),
+            URLQueryItem(name: "sitCodes", value: "m3,m4,m5,m6,m7,m8,m9,m10")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -263,7 +263,7 @@ extension QueryBuilder where T == PlayerRunnersOnSplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "ne,ro,ri,sf"),
+            URLQueryItem(name: "sitCodes", value: "ne,ro,ri,sf")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -278,7 +278,7 @@ extension QueryBuilder where T == PitcherRunnersOnSplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "ne,ro,ri,sf"),
+            URLQueryItem(name: "sitCodes", value: "ne,ro,ri,sf")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -293,7 +293,7 @@ extension QueryBuilder where T == PlayerLeverageSplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "hitting"),
-            URLQueryItem(name: "sitCodes", value: "le,lm,lh"),
+            URLQueryItem(name: "sitCodes", value: "le,lm,lh")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in
@@ -308,7 +308,7 @@ extension QueryBuilder where T == PitcherLeverageSplits {
         let endpoint = Endpoint(path: "people/\(id)/stats", queryItems: [
             URLQueryItem(name: "stats", value: "statSplits"),
             URLQueryItem(name: "group", value: "pitching"),
-            URLQueryItem(name: "sitCodes", value: "le,lm,lh"),
+            URLQueryItem(name: "sitCodes", value: "le,lm,lh")
         ])
         let ref = PlayerReference(id: id, fullName: "")
         return QueryBuilder(endpoint: endpoint, client: client) { data in

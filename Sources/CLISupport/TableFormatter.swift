@@ -2,9 +2,12 @@ import Foundation
 
 /// Renders tabular data as an ASCII table.
 public struct TableFormatter {
+    /// Column header labels rendered in the first row.
     public let headers: [String]
+    /// Row values aligned under ``headers``; extra cells are truncated.
     public let rows: [[String]]
 
+    /// Creates a formatter with fixed headers and row data.
     public init(headers: [String], rows: [[String]]) {
         self.headers = headers
         self.rows = rows

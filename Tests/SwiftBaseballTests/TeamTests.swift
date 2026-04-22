@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Team Tests")
 struct TeamTests {
-
     // MARK: - Decode teams
 
     @Test("Decode teams from real API fixture")
@@ -281,7 +280,7 @@ struct TeamTests {
         let entries = response.roster.map(MLBResponseConverters.rosterEntry)
 
         #expect(entries.count == 3)
-        let first = try #require(entries.first { $0.person.id == 656185 })
+        let first = try #require(entries.first { $0.person.id == 656_185 })
         #expect(first.person.fullName == "Greg Allen")
         #expect(first.position == .centerField)
         #expect(first.status == "Active")

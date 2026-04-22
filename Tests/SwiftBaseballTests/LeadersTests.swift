@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Leaders Tests")
 struct LeadersTests {
-
     @Test("Decode leaders from fixture")
     func decodeLeaders() throws {
         let data = try Fixtures.load("leaders_homeRuns_2024.json")
@@ -47,7 +46,7 @@ struct LeadersTests {
         let categories = MLBResponseConverters.leaderEntries(from: response)
         let leader = try #require(categories.first?.leaders.first)
 
-        #expect(leader.player.id == 660271)
+        #expect(leader.player.id == 660_271)
         #expect(leader.player.fullName == "Shohei Ohtani")
     }
 
@@ -120,7 +119,7 @@ struct LeadersTests {
         let categories = MLBResponseConverters.leaderEntries(from: response)
         let leader = try #require(categories.first?.leaders.first)
 
-        #expect(leader.player.id == 518516)
+        #expect(leader.player.id == 518_516)
         #expect(leader.player.fullName == "Chris Sale")
     }
 
@@ -158,9 +157,9 @@ struct LeadersTests {
 
     @Test("Empty leaders response")
     func emptyLeaders() throws {
-        let json = """
+        let json = Data("""
         { "leagueLeaders": [{ "leaderCategory": "homeRuns", "leaders": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBLeadersResponse.self, from: json)
         let categories = MLBResponseConverters.leaderEntries(from: response)
 

@@ -9,7 +9,7 @@ on:
 jobs:
   integration:
     name: Integration tests (live MLB Stats API + Baseball Savant)
-    runs-on: macos-14
+    runs-on: macos-15
     # Upstream flakes or rate limits should not page anyone. The job reports
     # failure in its own status, but we do not want it failing unrelated PRs.
     continue-on-error: true
@@ -17,6 +17,8 @@ jobs:
       SWIFTBASEBALL_INTEGRATION: "1"
     steps:
       - uses: actions/checkout@v4
+      - name: Select Xcode 16
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
       - name: Swift version
         run: swift --version
       - name: Run integration tests

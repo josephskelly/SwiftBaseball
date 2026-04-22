@@ -1,21 +1,27 @@
+import CLISupport
 import Foundation
 import SwiftBaseball
-import CLISupport
 
-struct StatsCommand {
+enum StatsCommand {
     /// `stats <batting|pitching> <playerID> [--season YEAR]`
     static func run(args: [String]) async throws {
-        guard args.count >= 2 else { printUsage(); return }
+        guard args.count >= 2 else { printUsage()
+            return
+        }
 
         let groupStr = args[0]
-        guard let playerId = Int(args[1]) else { printUsage(); return }
+        guard let playerId = Int(args[1]) else { printUsage()
+            return
+        }
 
         let group: StatGroup
         switch groupStr.lowercased() {
-        case "batting":  group = .batting
+        case "batting": group = .batting
         case "pitching": group = .pitching
         case "fielding": group = .fielding
-        default: print("Unknown stat group: \(groupStr)"); printUsage(); return
+        default: print("Unknown stat group: \(groupStr)")
+            printUsage()
+            return
         }
 
         var seasonYear: Int?
@@ -85,7 +91,10 @@ struct StatsCommand {
         ).print()
     }
 
-    private static func str(_ v: Int?) -> String { v.map(String.init) ?? "-" }
+    private static func str(_ v: Int?) -> String {
+        v.map(String.init) ?? "-"
+    }
+
     private static func fmt(_ v: Double?) -> String {
         v.map { String(format: "%.3f", $0) } ?? "-"
     }

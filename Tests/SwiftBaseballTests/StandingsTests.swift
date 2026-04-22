@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Standings Tests")
 struct StandingsTests {
-
     @Test("Decode standings from real API fixture")
     func decodeStandings() throws {
         let data = try Fixtures.load("standings_2024_al.json")

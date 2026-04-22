@@ -59,7 +59,7 @@ public struct SprintSpeedQuery: Sendable {
             URLQueryItem(name: "min_opp", value: String(_minAttempts)),
             URLQueryItem(name: "position", value: ""),
             URLQueryItem(name: "team", value: ""),
-            URLQueryItem(name: "csv", value: "true"),
+            URLQueryItem(name: "csv", value: "true")
         ]
         if let year = seasonYear {
             items.append(URLQueryItem(name: "year", value: String(year)))
@@ -130,7 +130,7 @@ public struct OAAQuery: Sendable {
             URLQueryItem(name: "range", value: "year"),
             URLQueryItem(name: "min", value: "q"),
             URLQueryItem(name: "pos", value: _position),
-            URLQueryItem(name: "csv", value: "true"),
+            URLQueryItem(name: "csv", value: "true")
         ]
     }
 }
@@ -262,7 +262,7 @@ public struct CatcherFramingQuery: Sendable {
             URLQueryItem(name: "type", value: "catcher"),
             URLQueryItem(name: "min", value: _minPitches),
             URLQueryItem(name: "year", value: String(year)),
-            URLQueryItem(name: "csv", value: "true"),
+            URLQueryItem(name: "csv", value: "true")
         ]
     }
 }
@@ -353,7 +353,7 @@ public struct PopTimeQuery: Sendable {
         [
             URLQueryItem(name: "min", value: String(_minAttempts)),
             URLQueryItem(name: "year", value: String(year)),
-            URLQueryItem(name: "csv", value: "true"),
+            URLQueryItem(name: "csv", value: "true")
         ]
     }
 }

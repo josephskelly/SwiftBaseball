@@ -1,12 +1,11 @@
-import Testing
+import CLISupport
 import Foundation
 @testable import SwiftBaseball
-import CLISupport
+import Testing
 
 /// Tests for CLI-facing SwiftBaseball types: argument-parseable enums and category mappings.
 @Suite("CLI Tests")
 struct CLITests {
-
     // MARK: - StatGroup raw values (used for CLI argument parsing)
 
     @Test("StatGroup raw values match CLI argument strings")
@@ -100,4 +99,3 @@ struct CLITests {
         #expect(TableFormatter(headers: [], rows: []).render().isEmpty)
     }
 }
-

@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("BatchStats Tests")
 struct BatchStatsTests {
-
     // MARK: - Single player batch
 
     @Test("Batch of one player returns its stats")
@@ -14,7 +13,7 @@ struct BatchStatsTests {
         mock.stub(path: "people/660271/stats", data: data)
 
         let query = BatchStatsQuery(
-            playerIds: [660271],
+            playerIds: [660_271],
             group: .batting,
             seasonYear: 2024,
             client: mock
@@ -23,7 +22,7 @@ struct BatchStatsTests {
 
         #expect(!results.isEmpty)
         let entry = try #require(results.first)
-        #expect(entry.player.id == 660271)
+        #expect(entry.player.id == 660_271)
         #expect(entry.group == .batting)
     }
 
@@ -38,7 +37,7 @@ struct BatchStatsTests {
         mock.stub(path: "people/592450/stats", data: judgeData)
 
         let query = BatchStatsQuery(
-            playerIds: [660271, 592450],
+            playerIds: [660_271, 592_450],
             group: .batting,
             seasonYear: 2024,
             client: mock
@@ -46,8 +45,8 @@ struct BatchStatsTests {
         let results = try await query.fetch()
 
         #expect(results.count == 2)
-        let ohtani = try #require(results.first { $0.player.id == 660271 })
-        let judge = try #require(results.first { $0.player.id == 592450 })
+        let ohtani = try #require(results.first { $0.player.id == 660_271 })
+        let judge = try #require(results.first { $0.player.id == 592_450 })
 
         #expect(ohtani.batting?.homeRuns == 54)
         #expect(judge.batting?.homeRuns == 58)
@@ -60,7 +59,7 @@ struct BatchStatsTests {
     @Test("season() modifier sets season year")
     func seasonModifier() {
         let mock = MockAPIClient()
-        let query = BatchStatsQuery(playerIds: [660271], group: .batting, client: mock)
+        let query = BatchStatsQuery(playerIds: [660_271], group: .batting, client: mock)
             .season(2023)
         #expect(query.seasonYear == 2023)
     }
@@ -85,7 +84,7 @@ struct BatchStatsTests {
         // No stub for player 999999 — MockAPIClient will throw configurationError
 
         let query = BatchStatsQuery(
-            playerIds: [660271, 999999],
+            playerIds: [660_271, 999_999],
             group: .batting,
             client: mock
         )
@@ -99,8 +98,8 @@ struct BatchStatsTests {
     @Test("SwiftBaseball.batchStats returns BatchStatsQuery")
     func namespacedBatchStats() {
         // Verifies the public API compiles and returns the right type
-        let query = SwiftBaseball.batchStats([660271, 592450], group: .batting)
-        #expect(query.playerIds == [660271, 592450])
+        let query = SwiftBaseball.batchStats([660_271, 592_450], group: .batting)
+        #expect(query.playerIds == [660_271, 592_450])
         #expect(query.group == .batting)
     }
 }

@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Endpoint Tests")
 struct EndpointTests {
-
     private let baseURL = URL(string: "https://statsapi.mlb.com/api/v1/")!
 
     // MARK: - URL construction

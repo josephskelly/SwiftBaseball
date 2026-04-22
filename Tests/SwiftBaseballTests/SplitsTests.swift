@@ -1,17 +1,16 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Splits Tests")
 struct SplitsTests {
-
     // MARK: - Batter home/away
 
     @Test("Decode batter home splits from fixture")
     func batterHomeSplits() throws {
         let data = try Fixtures.load("player_home_away_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerHomeAwaySplits(from: response, playerRef: ref)
 
         let home = try #require(splits.home)
@@ -25,7 +24,7 @@ struct SplitsTests {
     func batterAwaySplits() throws {
         let data = try Fixtures.load("player_home_away_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerHomeAwaySplits(from: response, playerRef: ref)
 
         let away = try #require(splits.away)
@@ -38,15 +37,15 @@ struct SplitsTests {
     @Test("Batter home/away: missing split side returns nil")
     func batterHomeAwaySplitMissingSide() throws {
         // Response with only a home split — away should be nil
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"hitting"},
         "splits":[{"season":"2024","stat":{"gamesPlayed":79,"homeRuns":29,"avg":".320",
         "atBats":316,"hits":101,"ops":"1.061","obp":".400","slg":".661"},
         "player":{"id":660271,"fullName":"Ohtani"},"team":{"id":119,"name":"LAD"},
         "split":{"code":"h","description":"Home"}}]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let splits = MLBResponseConverters.playerHomeAwaySplits(from: response, playerRef: ref)
 
         #expect(splits.home != nil)
@@ -59,7 +58,7 @@ struct SplitsTests {
         let data = try Fixtures.load("player_home_away_splits_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
         _ = try await QueryBuilder<PlayerHomeAwaySplits>
-            .playerHomeAwaySplits(id: 660271, client: mock)
+            .playerHomeAwaySplits(id: 660_271, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -71,7 +70,7 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.playerHomeAwaySplits is accessible")
     func namespacedHomeAway() {
-        _ = SwiftBaseball.playerHomeAwaySplits(id: 660271)
+        _ = SwiftBaseball.playerHomeAwaySplits(id: 660_271)
     }
 
     // MARK: - Batter day/night
@@ -80,7 +79,7 @@ struct SplitsTests {
     func batterDaySplits() throws {
         let data = try Fixtures.load("player_day_night_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerDayNightSplits(from: response, playerRef: ref)
 
         let day = try #require(splits.day)
@@ -93,7 +92,7 @@ struct SplitsTests {
     func batterNightSplits() throws {
         let data = try Fixtures.load("player_day_night_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerDayNightSplits(from: response, playerRef: ref)
 
         let night = try #require(splits.night)
@@ -108,7 +107,7 @@ struct SplitsTests {
         let data = try Fixtures.load("player_day_night_splits_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
         _ = try await QueryBuilder<PlayerDayNightSplits>
-            .playerDayNightSplits(id: 660271, client: mock)
+            .playerDayNightSplits(id: 660_271, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -118,7 +117,7 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.playerDayNightSplits is accessible")
     func namespacedDayNight() {
-        _ = SwiftBaseball.playerDayNightSplits(id: 660271)
+        _ = SwiftBaseball.playerDayNightSplits(id: 660_271)
     }
 
     // MARK: - Pitcher home/away
@@ -127,7 +126,7 @@ struct SplitsTests {
     func pitcherHomeSplits() throws {
         let data = try Fixtures.load("pitcher_home_away_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherHomeAwaySplits(from: response, playerRef: ref)
 
         let home = try #require(splits.home)
@@ -141,7 +140,7 @@ struct SplitsTests {
     func pitcherAwaySplits() throws {
         let data = try Fixtures.load("pitcher_home_away_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherHomeAwaySplits(from: response, playerRef: ref)
 
         let away = try #require(splits.away)
@@ -156,7 +155,7 @@ struct SplitsTests {
         let data = try Fixtures.load("pitcher_home_away_splits_543037.json")
         mock.stub(path: "people/543037/stats", data: data)
         _ = try await QueryBuilder<PitcherHomeAwaySplits>
-            .pitcherHomeAwaySplits(id: 543037, client: mock)
+            .pitcherHomeAwaySplits(id: 543_037, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -166,7 +165,7 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.pitcherHomeAwaySplits is accessible")
     func namespacedPitcherHomeAway() {
-        _ = SwiftBaseball.pitcherHomeAwaySplits(id: 543037)
+        _ = SwiftBaseball.pitcherHomeAwaySplits(id: 543_037)
     }
 
     // MARK: - Pitcher day/night
@@ -175,7 +174,7 @@ struct SplitsTests {
     func pitcherDaySplits() throws {
         let data = try Fixtures.load("pitcher_day_night_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherDayNightSplits(from: response, playerRef: ref)
 
         let day = try #require(splits.day)
@@ -188,7 +187,7 @@ struct SplitsTests {
     func pitcherNightSplits() throws {
         let data = try Fixtures.load("pitcher_day_night_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherDayNightSplits(from: response, playerRef: ref)
 
         let night = try #require(splits.night)
@@ -203,7 +202,7 @@ struct SplitsTests {
         let data = try Fixtures.load("pitcher_day_night_splits_543037.json")
         mock.stub(path: "people/543037/stats", data: data)
         _ = try await QueryBuilder<PitcherDayNightSplits>
-            .pitcherDayNightSplits(id: 543037, client: mock)
+            .pitcherDayNightSplits(id: 543_037, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -213,7 +212,7 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.pitcherDayNightSplits is accessible")
     func namespacedPitcherDayNight() {
-        _ = SwiftBaseball.pitcherDayNightSplits(id: 543037)
+        _ = SwiftBaseball.pitcherDayNightSplits(id: 543_037)
     }
 
     // MARK: - Batter monthly
@@ -222,7 +221,7 @@ struct SplitsTests {
     func batterAprilSplit() throws {
         let data = try Fixtures.load("player_monthly_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerMonthlySplits(from: response, playerRef: ref)
 
         let april = try #require(splits.april)
@@ -236,7 +235,7 @@ struct SplitsTests {
     func batterMarchSplit() throws {
         let data = try Fixtures.load("player_monthly_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerMonthlySplits(from: response, playerRef: ref)
 
         let march = try #require(splits.march)
@@ -248,7 +247,7 @@ struct SplitsTests {
     func batterOctoberSplit() throws {
         let data = try Fixtures.load("player_monthly_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerMonthlySplits(from: response, playerRef: ref)
 
         let october = try #require(splits.october)
@@ -262,7 +261,7 @@ struct SplitsTests {
         // Fixture has no October entry for pitcher — confirm nil
         let data = try Fixtures.load("pitcher_monthly_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherMonthlySplits(from: response, playerRef: ref)
 
         #expect(splits.october == nil)
@@ -275,7 +274,7 @@ struct SplitsTests {
         let data = try Fixtures.load("player_monthly_splits_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
         _ = try await QueryBuilder<PlayerMonthlySplits>
-            .playerMonthlySplits(id: 660271, client: mock)
+            .playerMonthlySplits(id: 660_271, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -290,7 +289,7 @@ struct SplitsTests {
         let data = try Fixtures.load("pitcher_monthly_splits_543037.json")
         mock.stub(path: "people/543037/stats", data: data)
         _ = try await QueryBuilder<PitcherMonthlySplits>
-            .pitcherMonthlySplits(id: 543037, client: mock)
+            .pitcherMonthlySplits(id: 543_037, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -300,12 +299,12 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.playerMonthlySplits is accessible")
     func namespacedPlayerMonthly() {
-        _ = SwiftBaseball.playerMonthlySplits(id: 660271)
+        _ = SwiftBaseball.playerMonthlySplits(id: 660_271)
     }
 
     @Test("SwiftBaseball.pitcherMonthlySplits is accessible")
     func namespacedPitcherMonthly() {
-        _ = SwiftBaseball.pitcherMonthlySplits(id: 543037)
+        _ = SwiftBaseball.pitcherMonthlySplits(id: 543_037)
     }
 
     // MARK: - Batter runners on base / RISP
@@ -314,7 +313,7 @@ struct SplitsTests {
     func batterBasesEmptySplit() throws {
         let data = try Fixtures.load("player_runners_on_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerRunnersOnSplits(from: response, playerRef: ref)
 
         let ne = try #require(splits.basesEmpty)
@@ -327,7 +326,7 @@ struct SplitsTests {
     func batterRISPSplit() throws {
         let data = try Fixtures.load("player_runners_on_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerRunnersOnSplits(from: response, playerRef: ref)
 
         let risp = try #require(splits.risp)
@@ -340,7 +339,7 @@ struct SplitsTests {
     func batterRISPTwoOutSplit() throws {
         let data = try Fixtures.load("player_runners_on_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerRunnersOnSplits(from: response, playerRef: ref)
 
         let twoOut = try #require(splits.rispTwoOut)
@@ -354,7 +353,7 @@ struct SplitsTests {
         let data = try Fixtures.load("player_runners_on_splits_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
         _ = try await QueryBuilder<PlayerRunnersOnSplits>
-            .playerRunnersOnSplits(id: 660271, client: mock)
+            .playerRunnersOnSplits(id: 660_271, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -368,7 +367,7 @@ struct SplitsTests {
         let data = try Fixtures.load("pitcher_runners_on_splits_543037.json")
         mock.stub(path: "people/543037/stats", data: data)
         _ = try await QueryBuilder<PitcherRunnersOnSplits>
-            .pitcherRunnersOnSplits(id: 543037, client: mock)
+            .pitcherRunnersOnSplits(id: 543_037, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -380,7 +379,7 @@ struct SplitsTests {
     func pitcherRISPSplit() throws {
         let data = try Fixtures.load("pitcher_runners_on_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherRunnersOnSplits(from: response, playerRef: ref)
 
         let risp = try #require(splits.risp)
@@ -391,12 +390,12 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.playerRunnersOnSplits is accessible")
     func namespacedPlayerRunnersOn() {
-        _ = SwiftBaseball.playerRunnersOnSplits(id: 660271)
+        _ = SwiftBaseball.playerRunnersOnSplits(id: 660_271)
     }
 
     @Test("SwiftBaseball.pitcherRunnersOnSplits is accessible")
     func namespacedPitcherRunnersOn() {
-        _ = SwiftBaseball.pitcherRunnersOnSplits(id: 543037)
+        _ = SwiftBaseball.pitcherRunnersOnSplits(id: 543_037)
     }
 
     // MARK: - Batter leverage
@@ -405,7 +404,7 @@ struct SplitsTests {
     func batterLowLeverageSplit() throws {
         let data = try Fixtures.load("player_leverage_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerLeverageSplits(from: response, playerRef: ref)
 
         let low = try #require(splits.low)
@@ -418,7 +417,7 @@ struct SplitsTests {
     func batterHighLeverageSplit() throws {
         let data = try Fixtures.load("player_leverage_splits_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let splits = MLBResponseConverters.playerLeverageSplits(from: response, playerRef: ref)
 
         let high = try #require(splits.high)
@@ -433,7 +432,7 @@ struct SplitsTests {
         let data = try Fixtures.load("player_leverage_splits_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
         _ = try await QueryBuilder<PlayerLeverageSplits>
-            .playerLeverageSplits(id: 660271, client: mock)
+            .playerLeverageSplits(id: 660_271, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -447,7 +446,7 @@ struct SplitsTests {
         let data = try Fixtures.load("pitcher_leverage_splits_543037.json")
         mock.stub(path: "people/543037/stats", data: data)
         _ = try await QueryBuilder<PitcherLeverageSplits>
-            .pitcherLeverageSplits(id: 543037, client: mock)
+            .pitcherLeverageSplits(id: 543_037, client: mock)
             .season(2024)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -459,7 +458,7 @@ struct SplitsTests {
     func pitcherHighLeverageSplit() throws {
         let data = try Fixtures.load("pitcher_leverage_splits_543037.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 543037, fullName: "Luis Castillo")
+        let ref = PlayerReference(id: 543_037, fullName: "Luis Castillo")
         let splits = MLBResponseConverters.pitcherLeverageSplits(from: response, playerRef: ref)
 
         let high = try #require(splits.high)
@@ -470,23 +469,23 @@ struct SplitsTests {
 
     @Test("SwiftBaseball.playerLeverageSplits is accessible")
     func namespacedPlayerLeverage() {
-        _ = SwiftBaseball.playerLeverageSplits(id: 660271)
+        _ = SwiftBaseball.playerLeverageSplits(id: 660_271)
     }
 
     @Test("SwiftBaseball.pitcherLeverageSplits is accessible")
     func namespacedPitcherLeverage() {
-        _ = SwiftBaseball.pitcherLeverageSplits(id: 543037)
+        _ = SwiftBaseball.pitcherLeverageSplits(id: 543_037)
     }
 
     // MARK: - Edge cases
 
     @Test("Empty monthly response returns all months nil")
     func emptyMonthlySplits() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"hitting"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let splits = MLBResponseConverters.playerMonthlySplits(from: response, playerRef: ref)
         #expect(splits.march == nil)
         #expect(splits.april == nil)
@@ -496,11 +495,11 @@ struct SplitsTests {
 
     @Test("Empty runners-on response returns all buckets nil")
     func emptyRunnersOnSplits() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"hitting"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let splits = MLBResponseConverters.playerRunnersOnSplits(from: response, playerRef: ref)
         #expect(splits.basesEmpty == nil)
         #expect(splits.runnersOn == nil)
@@ -510,11 +509,11 @@ struct SplitsTests {
 
     @Test("Empty leverage response returns all buckets nil")
     func emptyLeverageSplits() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"hitting"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let splits = MLBResponseConverters.playerLeverageSplits(from: response, playerRef: ref)
         #expect(splits.low == nil)
         #expect(splits.medium == nil)
@@ -523,11 +522,11 @@ struct SplitsTests {
 
     @Test("Empty home/away response returns both nil")
     func emptyHomeAwaySplits() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"hitting"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let splits = MLBResponseConverters.playerHomeAwaySplits(from: response, playerRef: ref)
         #expect(splits.home == nil)
         #expect(splits.away == nil)
@@ -535,11 +534,11 @@ struct SplitsTests {
 
     @Test("Empty day/night response returns both nil")
     func emptyDayNightSplits() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"hitting"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let splits = MLBResponseConverters.playerDayNightSplits(from: response, playerRef: ref)
         #expect(splits.day == nil)
         #expect(splits.night == nil)
@@ -547,11 +546,11 @@ struct SplitsTests {
 
     @Test("Empty pitcher home/away response returns both nil")
     func emptyPitcherHomeAway() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"pitching"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 543037, fullName: "")
+        let ref = PlayerReference(id: 543_037, fullName: "")
         let splits = MLBResponseConverters.pitcherHomeAwaySplits(from: response, playerRef: ref)
         #expect(splits.home == nil)
         #expect(splits.away == nil)
@@ -559,11 +558,11 @@ struct SplitsTests {
 
     @Test("Empty pitcher day/night response returns both nil")
     func emptyPitcherDayNight() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"statSplits"},"group":{"displayName":"pitching"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 543037, fullName: "")
+        let ref = PlayerReference(id: 543_037, fullName: "")
         let splits = MLBResponseConverters.pitcherDayNightSplits(from: response, playerRef: ref)
         #expect(splits.day == nil)
         #expect(splits.night == nil)

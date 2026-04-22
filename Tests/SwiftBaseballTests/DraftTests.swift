@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Draft Tests")
 struct DraftTests {
-
     // MARK: - Parser
 
     @Test("Parse draft fixture returns all picks")
@@ -32,7 +31,7 @@ struct DraftTests {
         #expect(first.round == "1")
         #expect(first.roundPickNumber == 1)
         #expect(first.person?.fullName == "Dylan Crews")
-        #expect(first.person?.id == 697912)
+        #expect(first.person?.id == 697_912)
         #expect(first.team?.name == "Washington Nationals")
         #expect(first.team?.id == 120)
         #expect(first.signingBonus == "$9,500,000")
@@ -181,7 +180,7 @@ struct DraftTests {
     }
 
     @Test("DraftPick conforms to Identifiable using pickNumber")
-    func draftPickIdentifiable() throws {
+    func draftPickIdentifiable() {
         let pick = DraftPick(
             id: 5,
             year: 2024,

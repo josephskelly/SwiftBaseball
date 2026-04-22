@@ -4,8 +4,8 @@ import Foundation
 
 /// Query type for game schedule endpoints.
 public enum ScheduleQuery: Sendable {
-    case date(String)               // "2024-07-04"
-    case dateRange(String, String)  // start, end
+    case date(String) // "2024-07-04"
+    case dateRange(String, String) // start, end
     case season(Int)
 }
 
@@ -31,18 +31,18 @@ extension ScheduleQuery {
     private var baseQueryItems: [URLQueryItem] {
         switch self {
         case .date(let date):
-            return [
+            [
                 URLQueryItem(name: "sportId", value: "1"),
                 URLQueryItem(name: "date", value: date)
             ]
-        case .dateRange(let start, let end):
-            return [
+        case let .dateRange(start, end):
+            [
                 URLQueryItem(name: "sportId", value: "1"),
                 URLQueryItem(name: "startDate", value: start),
                 URLQueryItem(name: "endDate", value: end)
             ]
         case .season(let year):
-            return [
+            [
                 URLQueryItem(name: "sportId", value: "1"),
                 URLQueryItem(name: "season", value: String(year))
             ]

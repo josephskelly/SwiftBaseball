@@ -692,7 +692,9 @@ struct MLBEntityRef: Decodable {
     let fullName: String?
     let link: String?
 
-    var displayName: String { name ?? fullName ?? "" }
+    var displayName: String {
+        name ?? fullName ?? ""
+    }
 }
 
 // MARK: - Live Game Feed

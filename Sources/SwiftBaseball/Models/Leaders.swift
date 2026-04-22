@@ -32,41 +32,41 @@ public struct LeaderCategory: Codable, Sendable, Equatable {
 ///
 /// Use with ``SwiftBaseball/leaders(_:)`` to query specific leaderboards.
 public enum LeaderStatCategory: String, Codable, Sendable, CaseIterable {
-    // Batting
+    /// Batting
     /// Home runs.
-    case homeRuns             = "homeRuns"
+    case homeRuns
     /// Batting average.
-    case battingAverage       = "battingAverage"
+    case battingAverage
     /// On-base plus slugging.
-    case onBasePlusSlugging   = "onBasePlusSlugging"
+    case onBasePlusSlugging
     /// Runs batted in.
-    case rbi                  = "rbi"
+    case rbi
     /// Base hits.
-    case hits                 = "hits"
+    case hits
     /// Stolen bases.
-    case stolenBases          = "stolenBases"
+    case stolenBases
     /// Runs scored.
-    case runs                 = "runs"
+    case runs
     /// Doubles.
-    case doubles              = "doubles"
+    case doubles
     /// Triples.
-    case triples              = "triples"
+    case triples
 
-    // Pitching
+    /// Pitching
     /// Earned run average.
-    case earnedRunAverage     = "earnedRunAverage"
+    case earnedRunAverage
     /// Pitcher wins.
-    case wins                 = "wins"
+    case wins
     /// Pitcher strikeouts.
-    case strikeouts           = "strikeouts"
+    case strikeouts
     /// Saves.
-    case saves                = "saves"
+    case saves
     /// Walks plus hits per inning pitched.
-    case whip                 = "whip"
+    case whip
     /// Innings pitched.
-    case inningsPitched       = "inningsPitched"
+    case inningsPitched
     /// Walks and hits per inning pitched (full name).
-    case walksAndHitsPerInningPitched = "walksAndHitsPerInningPitched"
+    case walksAndHitsPerInningPitched
     /// Strikeouts per 9 innings.
-    case strikeoutsPer9Inn    = "strikeoutsPer9Inn"
+    case strikeoutsPer9Inn
 }

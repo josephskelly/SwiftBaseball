@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Player Tests")
 struct PlayerTests {
-
     // MARK: - Decode single player (Ohtani)
 
     @Test("Decode Ohtani from fixture")
@@ -17,7 +16,7 @@ struct PlayerTests {
         let raw = try #require(response.people.first)
         let player = MLBResponseConverters.player(from: raw)
 
-        #expect(player.id == 660271)
+        #expect(player.id == 660_271)
         #expect(player.fullName == "Shohei Ohtani")
         #expect(player.firstName == "Shohei")
         #expect(player.lastName == "Ohtani")
@@ -42,7 +41,7 @@ struct PlayerTests {
         let raw = try #require(response.people.first)
         let player = MLBResponseConverters.player(from: raw)
 
-        #expect(player.id == 592450)
+        #expect(player.id == 592_450)
         #expect(player.fullName == "Aaron Judge")
         #expect(player.firstName == "Aaron")
         #expect(player.lastName == "Judge")
@@ -62,21 +61,21 @@ struct PlayerTests {
 
     @Test("Utility outfielder decodes to .outfield via abbreviation")
     func decodeUtilityOutfielder() throws {
-        let json = #"""
+        let json = Data(#"""
         {"people":[{"id":1,"fullName":"Test OF","primaryPosition":{"code":"O","name":"Outfielder","type":"Outfielder","abbreviation":"OF"}}]}
-        """#.data(using: .utf8)!
+        """#.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPeopleResponse.self, from: json)
-        let player = MLBResponseConverters.player(from: try #require(response.people.first))
+        let player = try MLBResponseConverters.player(from: #require(response.people.first))
         #expect(player.primaryPosition == .outfield)
     }
 
     @Test("Utility infielder decodes to .infield via abbreviation")
     func decodeUtilityInfielder() throws {
-        let json = #"""
+        let json = Data(#"""
         {"people":[{"id":2,"fullName":"Test IF","primaryPosition":{"code":"I","name":"Infielder","type":"Infielder","abbreviation":"IF"}}]}
-        """#.data(using: .utf8)!
+        """#.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPeopleResponse.self, from: json)
-        let player = MLBResponseConverters.player(from: try #require(response.people.first))
+        let player = try MLBResponseConverters.player(from: #require(response.people.first))
         #expect(player.primaryPosition == .infield)
     }
 
@@ -91,7 +90,7 @@ struct PlayerTests {
 
         let birthDate = try #require(player.birthDate)
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
         let components = calendar.dateComponents([.year, .month, .day], from: birthDate)
 
         #expect(components.year == 1994)
@@ -108,7 +107,7 @@ struct PlayerTests {
 
         let debutDate = try #require(player.mlbDebutDate)
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
         let components = calendar.dateComponents([.year, .month, .day], from: debutDate)
 
         #expect(components.year == 2018)
@@ -125,7 +124,7 @@ struct PlayerTests {
         let players = response.people.map(MLBResponseConverters.player)
 
         #expect(players.count >= 1)
-        let ohtani = try #require(players.first { $0.id == 660271 })
+        let ohtani = try #require(players.first { $0.id == 660_271 })
         #expect(ohtani.fullName == "Shohei Ohtani")
         #expect(ohtani.currentTeam?.id == 119)
     }
@@ -163,10 +162,10 @@ struct PlayerTests {
         let data = try Fixtures.load("player_660271.json")
         mock.stub(path: "people/660271", data: data)
 
-        let builder = QueryBuilder<Player>.singlePlayer(id: 660271, client: mock)
+        let builder = QueryBuilder<Player>.singlePlayer(id: 660_271, client: mock)
         let player = try await builder.fetch()
 
-        #expect(player.id == 660271)
+        #expect(player.id == 660_271)
         #expect(mock.lastEndpoint?.path == "people/660271")
 
         let hydrateItem = mock.lastEndpoint?.queryItems.first { $0.name == "hydrate" }
@@ -176,10 +175,10 @@ struct PlayerTests {
     @Test("playerNotFound error thrown when no people returned")
     func playerNotFoundError() async throws {
         let mock = MockAPIClient()
-        let emptyResponse = #"{"people": []}"#.data(using: .utf8)!
+        let emptyResponse = Data(#"{"people": []}"#.utf8)
         mock.stub(path: "people/999999", data: emptyResponse)
 
-        let builder = QueryBuilder<Player>.singlePlayer(id: 999999, client: mock)
+        let builder = QueryBuilder<Player>.singlePlayer(id: 999_999, client: mock)
 
         await #expect(throws: SwiftBaseballError.self) {
             _ = try await builder.fetch()
@@ -205,7 +204,7 @@ struct PlayerTests {
 
     @Test("Position falls back to unknown for unrecognized codes via JSON decoding")
     func positionFallsBackToUnknown() throws {
-        let json = #""ZZZZZ""#.data(using: .utf8)!
+        let json = Data(#""ZZZZZ""#.utf8)
         let decoded = try JSONDecoder().decode(Position.self, from: json)
         #expect(decoded == .unknown)
     }

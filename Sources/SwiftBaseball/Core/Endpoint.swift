@@ -1,6 +1,6 @@
 import Foundation
 
-struct Endpoint: Sendable {
+struct Endpoint {
     static let defaultVersion = "v1"
 
     let path: String

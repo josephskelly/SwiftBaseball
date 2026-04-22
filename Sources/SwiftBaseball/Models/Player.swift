@@ -45,7 +45,10 @@ public struct Player: Codable, Sendable, Equatable, Identifiable {
 /// Returned by ``SwiftBaseball/roster(teamId:)`` queries.
 public struct RosterEntry: Codable, Sendable, Equatable, Identifiable {
     /// Computed from the person's MLB ID.
-    public var id: Int { person.id }
+    public var id: Int {
+        person.id
+    }
+
     /// Reference to the rostered player.
     public let person: PlayerReference
     /// Jersey number as a string.

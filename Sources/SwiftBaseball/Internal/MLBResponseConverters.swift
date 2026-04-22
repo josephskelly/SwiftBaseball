@@ -3,7 +3,6 @@ import Foundation
 // Converts internal MLB API raw response types into public model types.
 
 enum MLBResponseConverters {
-
     // MARK: - Player
 
     static func player(from raw: MLBPerson) -> Player {
@@ -64,7 +63,7 @@ enum MLBResponseConverters {
     // MARK: - Schedule
 
     static func scheduleEntries(from response: MLBScheduleResponse) -> [ScheduleEntry] {
-        response.dates.flatMap { $0.games }.compactMap(scheduleEntry)
+        response.dates.flatMap(\.games).compactMap(scheduleEntry)
     }
 
     static func scheduleEntry(from raw: MLBGame) -> ScheduleEntry? {
@@ -124,13 +123,9 @@ enum MLBResponseConverters {
         guard let teamRef = raw.team else { return nil }
         let pct = Double(raw.winningPercentage) ?? 0.0
 
-        let lastTen: LastTen
-        if let splits = raw.records?.splitRecords,
-           let l10 = splits.first(where: { $0.type == "lastTen" }) {
-            lastTen = LastTen(wins: l10.wins, losses: l10.losses, pct: l10.pct)
-        } else {
-            lastTen = LastTen(wins: 0, losses: 0, pct: ".000")
-        }
+        let l10 = raw.records?.splitRecords?.first { $0.type == "lastTen" }
+        let lastTen = l10.map { LastTen(wins: $0.wins, losses: $0.losses, pct: $0.pct) }
+            ?? LastTen(wins: 0, losses: 0, pct: ".000")
 
         return StandingsRecord(
             team: teamReference(from: teamRef),
@@ -444,25 +439,25 @@ enum MLBResponseConverters {
         var gidp = 0, tb = 0, lob = 0
 
         for s in stats {
-            gp  += s.gamesPlayed ?? 0
-            pa  += s.plateAppearances ?? 0
-            ab  += s.atBats ?? 0
-            r   += s.runs ?? 0
-            h   += s.hits ?? 0
-            d   += s.doubles ?? 0
-            t   += s.triples ?? 0
-            hr  += s.homeRuns ?? 0
+            gp += s.gamesPlayed ?? 0
+            pa += s.plateAppearances ?? 0
+            ab += s.atBats ?? 0
+            r += s.runs ?? 0
+            h += s.hits ?? 0
+            d += s.doubles ?? 0
+            t += s.triples ?? 0
+            hr += s.homeRuns ?? 0
             rbi += s.rbi ?? 0
-            sb  += s.stolenBases ?? 0
-            cs  += s.caughtStealing ?? 0
-            bb  += s.baseOnBalls ?? 0
+            sb += s.stolenBases ?? 0
+            cs += s.caughtStealing ?? 0
+            bb += s.baseOnBalls ?? 0
             ibb += s.intentionalWalks ?? 0
-            so  += s.strikeOuts ?? 0
+            so += s.strikeOuts ?? 0
             hbp += s.hitByPitch ?? 0
-            sf  += s.sacFlies ?? 0
+            sf += s.sacFlies ?? 0
             sac += s.sacBunts ?? 0
             gidp += s.groundIntoDoublePlay ?? 0
-            tb  += s.totalBases ?? 0
+            tb += s.totalBases ?? 0
             lob += s.leftOnBase ?? 0
         }
 
@@ -502,32 +497,32 @@ enum MLBResponseConverters {
         var totalIP = 0.0
 
         for s in stats {
-            gp  += s.gamesPlayed ?? 0
-            gs  += s.gamesStarted ?? 0
-            w   += s.wins ?? 0
-            l   += s.losses ?? 0
-            sv  += s.saves ?? 0
+            gp += s.gamesPlayed ?? 0
+            gs += s.gamesStarted ?? 0
+            w += s.wins ?? 0
+            l += s.losses ?? 0
+            sv += s.saves ?? 0
             svo += s.saveOpportunities ?? 0
             hld += s.holds ?? 0
-            bs  += s.blownSaves ?? 0
-            cg  += s.completeGames ?? 0
+            bs += s.blownSaves ?? 0
+            cg += s.completeGames ?? 0
             sho += s.shutouts ?? 0
-            h   += s.hits ?? 0
-            d   += s.doubles ?? 0
-            t   += s.triples ?? 0
-            r   += s.runs ?? 0
-            er  += s.earnedRuns ?? 0
-            hr  += s.homeRuns ?? 0
-            ab  += s.atBats ?? 0
-            bb  += s.baseOnBalls ?? 0
+            h += s.hits ?? 0
+            d += s.doubles ?? 0
+            t += s.triples ?? 0
+            r += s.runs ?? 0
+            er += s.earnedRuns ?? 0
+            hr += s.homeRuns ?? 0
+            ab += s.atBats ?? 0
+            bb += s.baseOnBalls ?? 0
             ibb += s.intentionalWalks ?? 0
-            so  += s.strikeOuts ?? 0
+            so += s.strikeOuts ?? 0
             hbp += s.hitByPitch ?? 0
-            sf  += s.sacFlies ?? 0
-            wp  += s.wildPitches ?? 0
-            bk  += s.balks ?? 0
-            bf  += s.battersFaced ?? 0
-            np  += s.numberOfPitches ?? 0
+            sf += s.sacFlies ?? 0
+            wp += s.wildPitches ?? 0
+            bk += s.balks ?? 0
+            bf += s.battersFaced ?? 0
+            np += s.numberOfPitches ?? 0
             totalIP += s.inningsPitched ?? 0
         }
 
@@ -924,14 +919,22 @@ enum MLBResponseConverters {
         // unrecognized (e.g. "Completed Early (Rain)") or absent.
         switch abstractGameState {
         case "Final": return .final
-        case "Live":  return .inProgress
-        default:      return .scheduled
+        case "Live": return .inProgress
+        default: return .scheduled
         }
     }
 
-    private static func emptyBattingStats() -> BattingStats { .empty }
-    private static func emptyPitchingStats() -> PitchingStats { .empty }
-    private static func emptyFieldingStats() -> FieldingStats { .empty }
+    private static func emptyBattingStats() -> BattingStats {
+        .empty
+    }
+
+    private static func emptyPitchingStats() -> PitchingStats {
+        .empty
+    }
+
+    private static func emptyFieldingStats() -> FieldingStats {
+        .empty
+    }
 
     private static let dateOnlyFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -1149,8 +1152,7 @@ extension MLBResponseConverters {
                 let trimmed = key.hasPrefix("ID") ? String(key.dropFirst(2)) : key
                 guard let id = Int(trimmed) else { return nil }
                 return (id, livePlayer(from: value))
-            }
-        )
+            })
         return LiveGameData(
             game: liveGameInfo(from: raw.game),
             datetime: liveGameDatetime(from: raw.datetime),
@@ -1297,4 +1299,3 @@ extension MLBResponseConverters {
         )
     }
 }
-

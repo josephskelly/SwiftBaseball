@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Game Highlights Tests")
 struct GameHighlightsTests {
-
     // MARK: - Decoding
 
     @Test("Decode game highlights from fixture")
@@ -39,7 +38,7 @@ struct GameHighlightsTests {
         let date = try #require(highlight.date)
         // 2024-07-04T23:15:00Z → year 2024
         var cal = Calendar(identifier: .gregorian)
-        cal.timeZone = TimeZone(identifier: "UTC")!
+        cal.timeZone = try #require(TimeZone(identifier: "UTC"))
         #expect(cal.component(.year, from: date) == 2024)
         #expect(cal.component(.month, from: date) == 7)
         #expect(cal.component(.day, from: date) == 4)
@@ -103,7 +102,7 @@ struct GameHighlightsTests {
         let data = try Fixtures.load("game_highlights_745612.json")
         mock.stub(path: "game/745612/content", data: data)
 
-        let builder = QueryBuilder<GameHighlights>.gameHighlights(gamePk: 745612, client: mock)
+        let builder = QueryBuilder<GameHighlights>.gameHighlights(gamePk: 745_612, client: mock)
         _ = try await builder.fetch()
 
         let endpoint = try #require(mock.lastEndpoint)
@@ -127,14 +126,14 @@ struct GameHighlightsTests {
 
     @Test("Empty items arrays produce empty highlights")
     func emptyHighlights() throws {
-        let json = """
+        let json = Data("""
         {
           "highlights": {
             "gameCenter": { "items": [] },
             "scoreboard": { "items": [] }
           }
         }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBGameContentResponse.self, from: json)
         let highlights = MLBResponseConverters.gameHighlights(from: response)
 
@@ -144,7 +143,7 @@ struct GameHighlightsTests {
 
     @Test("Missing highlights section produces empty arrays")
     func missingHighlightsSection() throws {
-        let json = "{}".data(using: .utf8)!
+        let json = Data("{}".utf8)
         let response = try JSONDecoder.mlb.decode(MLBGameContentResponse.self, from: json)
         let highlights = MLBResponseConverters.gameHighlights(from: response)
 
@@ -154,7 +153,7 @@ struct GameHighlightsTests {
 
     @Test("Highlight with missing id is dropped")
     func highlightMissingIdDropped() throws {
-        let json = """
+        let json = Data("""
         {
           "highlights": {
             "gameCenter": {
@@ -165,7 +164,7 @@ struct GameHighlightsTests {
             "scoreboard": { "items": [] }
           }
         }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBGameContentResponse.self, from: json)
         let highlights = MLBResponseConverters.gameHighlights(from: response)
 

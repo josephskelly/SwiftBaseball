@@ -14,7 +14,7 @@ extension StandingsQuery {
     var endpoint: Endpoint {
         switch self {
         case .season(let year), .regularSeason(let year):
-            return Endpoint(path: "standings", queryItems: [
+            Endpoint(path: "standings", queryItems: [
                 URLQueryItem(name: "leagueId", value: "103,104"),
                 URLQueryItem(name: "season", value: String(year)),
                 URLQueryItem(name: "standingsTypes", value: "regularSeason"),

@@ -46,7 +46,7 @@ public struct BattingStats: Codable, Sendable, Equatable {
         let singles = h - d - t - hr
         let ubb = bb - ibb
         let num = 0.696 * Double(ubb) + 0.726 * Double(hbp) + 0.883 * Double(singles)
-                + 1.244 * Double(d) + 1.569 * Double(t) + 2.007 * Double(hr)
+            + 1.244 * Double(d) + 1.569 * Double(t) + 2.007 * Double(hr)
         let den = Double(ab + ubb + sf + hbp)
         guard den > 0 else { return nil }
         return num / den
@@ -70,33 +70,33 @@ public struct BattingStats: Codable, Sendable, Equatable {
 
     public init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        gamesPlayed         = try c.decodeIfPresent(Int.self, forKey: .gamesPlayed)
-        plateAppearances    = try c.decodeIfPresent(Int.self, forKey: .plateAppearances)
-        atBats              = try c.decodeIfPresent(Int.self, forKey: .atBats)
-        runs                = try c.decodeIfPresent(Int.self, forKey: .runs)
-        hits                = try c.decodeIfPresent(Int.self, forKey: .hits)
-        doubles             = try c.decodeIfPresent(Int.self, forKey: .doubles)
-        triples             = try c.decodeIfPresent(Int.self, forKey: .triples)
-        homeRuns            = try c.decodeIfPresent(Int.self, forKey: .homeRuns)
-        rbi                 = try c.decodeIfPresent(Int.self, forKey: .rbi)
-        stolenBases         = try c.decodeIfPresent(Int.self, forKey: .stolenBases)
-        caughtStealing      = try c.decodeIfPresent(Int.self, forKey: .caughtStealing)
-        baseOnBalls         = try c.decodeIfPresent(Int.self, forKey: .baseOnBalls)
-        intentionalWalks    = try c.decodeIfPresent(Int.self, forKey: .intentionalWalks)
-        strikeOuts          = try c.decodeIfPresent(Int.self, forKey: .strikeOuts)
-        hitByPitch          = try c.decodeIfPresent(Int.self, forKey: .hitByPitch)
-        sacFlies            = try c.decodeIfPresent(Int.self, forKey: .sacFlies)
-        sacBunts            = try c.decodeIfPresent(Int.self, forKey: .sacBunts)
-        groundIntoDoublePlay = try c.decodeIfPresent(Int.self, forKey: .groundIntoDoublePlay)
-        totalBases          = try c.decodeIfPresent(Int.self, forKey: .totalBases)
-        leftOnBase          = try c.decodeIfPresent(Int.self, forKey: .leftOnBase)
+        self.gamesPlayed = try c.decodeIfPresent(Int.self, forKey: .gamesPlayed)
+        self.plateAppearances = try c.decodeIfPresent(Int.self, forKey: .plateAppearances)
+        self.atBats = try c.decodeIfPresent(Int.self, forKey: .atBats)
+        self.runs = try c.decodeIfPresent(Int.self, forKey: .runs)
+        self.hits = try c.decodeIfPresent(Int.self, forKey: .hits)
+        self.doubles = try c.decodeIfPresent(Int.self, forKey: .doubles)
+        self.triples = try c.decodeIfPresent(Int.self, forKey: .triples)
+        self.homeRuns = try c.decodeIfPresent(Int.self, forKey: .homeRuns)
+        self.rbi = try c.decodeIfPresent(Int.self, forKey: .rbi)
+        self.stolenBases = try c.decodeIfPresent(Int.self, forKey: .stolenBases)
+        self.caughtStealing = try c.decodeIfPresent(Int.self, forKey: .caughtStealing)
+        self.baseOnBalls = try c.decodeIfPresent(Int.self, forKey: .baseOnBalls)
+        self.intentionalWalks = try c.decodeIfPresent(Int.self, forKey: .intentionalWalks)
+        self.strikeOuts = try c.decodeIfPresent(Int.self, forKey: .strikeOuts)
+        self.hitByPitch = try c.decodeIfPresent(Int.self, forKey: .hitByPitch)
+        self.sacFlies = try c.decodeIfPresent(Int.self, forKey: .sacFlies)
+        self.sacBunts = try c.decodeIfPresent(Int.self, forKey: .sacBunts)
+        self.groundIntoDoublePlay = try c.decodeIfPresent(Int.self, forKey: .groundIntoDoublePlay)
+        self.totalBases = try c.decodeIfPresent(Int.self, forKey: .totalBases)
+        self.leftOnBase = try c.decodeIfPresent(Int.self, forKey: .leftOnBase)
 
         // MLB API returns rate stats as strings like ".310" or "1.036"
-        avg   = try Self.decodeStatString(c, key: .avg)
-        obp   = try Self.decodeStatString(c, key: .obp)
-        slg   = try Self.decodeStatString(c, key: .slg)
-        ops   = try Self.decodeStatString(c, key: .ops)
-        babip = try Self.decodeStatString(c, key: .babip)
+        self.avg = try Self.decodeStatString(c, key: .avg)
+        self.obp = try Self.decodeStatString(c, key: .obp)
+        self.slg = try Self.decodeStatString(c, key: .slg)
+        self.ops = try Self.decodeStatString(c, key: .ops)
+        self.babip = try Self.decodeStatString(c, key: .babip)
     }
 
     private static func decodeStatString(
@@ -210,7 +210,7 @@ public struct PitchingStats: Codable, Sendable, Equatable {
         let singles = h - d - t - hr
         let ubb = bb - ibb
         let num = 0.696 * Double(ubb) + 0.726 * Double(hbp) + 0.883 * Double(singles)
-                + 1.244 * Double(d) + 1.569 * Double(t) + 2.007 * Double(hr)
+            + 1.244 * Double(d) + 1.569 * Double(t) + 2.007 * Double(hr)
         let den = Double(ab + ubb + sf + hbp)
         guard den > 0 else { return nil }
         return num / den
@@ -242,40 +242,40 @@ public struct PitchingStats: Codable, Sendable, Equatable {
 
     public init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        gamesPlayed       = try c.decodeIfPresent(Int.self, forKey: .gamesPlayed)
-        gamesStarted      = try c.decodeIfPresent(Int.self, forKey: .gamesStarted)
-        wins              = try c.decodeIfPresent(Int.self, forKey: .wins)
-        losses            = try c.decodeIfPresent(Int.self, forKey: .losses)
-        saves             = try c.decodeIfPresent(Int.self, forKey: .saves)
-        saveOpportunities = try c.decodeIfPresent(Int.self, forKey: .saveOpportunities)
-        holds             = try c.decodeIfPresent(Int.self, forKey: .holds)
-        blownSaves        = try c.decodeIfPresent(Int.self, forKey: .blownSaves)
-        completeGames     = try c.decodeIfPresent(Int.self, forKey: .completeGames)
-        shutouts          = try c.decodeIfPresent(Int.self, forKey: .shutouts)
-        hits              = try c.decodeIfPresent(Int.self, forKey: .hits)
-        doubles           = try c.decodeIfPresent(Int.self, forKey: .doubles)
-        triples           = try c.decodeIfPresent(Int.self, forKey: .triples)
-        runs              = try c.decodeIfPresent(Int.self, forKey: .runs)
-        earnedRuns        = try c.decodeIfPresent(Int.self, forKey: .earnedRuns)
-        homeRuns          = try c.decodeIfPresent(Int.self, forKey: .homeRuns)
-        atBats            = try c.decodeIfPresent(Int.self, forKey: .atBats)
-        baseOnBalls       = try c.decodeIfPresent(Int.self, forKey: .baseOnBalls)
-        intentionalWalks  = try c.decodeIfPresent(Int.self, forKey: .intentionalWalks)
-        strikeOuts        = try c.decodeIfPresent(Int.self, forKey: .strikeOuts)
-        hitByPitch        = try c.decodeIfPresent(Int.self, forKey: .hitByPitch)
-        sacFlies          = try c.decodeIfPresent(Int.self, forKey: .sacFlies)
-        wildPitches       = try c.decodeIfPresent(Int.self, forKey: .wildPitches)
-        balks             = try c.decodeIfPresent(Int.self, forKey: .balks)
-        battersFaced      = try c.decodeIfPresent(Int.self, forKey: .battersFaced)
-        numberOfPitches   = try c.decodeIfPresent(Int.self, forKey: .numberOfPitches)
+        self.gamesPlayed = try c.decodeIfPresent(Int.self, forKey: .gamesPlayed)
+        self.gamesStarted = try c.decodeIfPresent(Int.self, forKey: .gamesStarted)
+        self.wins = try c.decodeIfPresent(Int.self, forKey: .wins)
+        self.losses = try c.decodeIfPresent(Int.self, forKey: .losses)
+        self.saves = try c.decodeIfPresent(Int.self, forKey: .saves)
+        self.saveOpportunities = try c.decodeIfPresent(Int.self, forKey: .saveOpportunities)
+        self.holds = try c.decodeIfPresent(Int.self, forKey: .holds)
+        self.blownSaves = try c.decodeIfPresent(Int.self, forKey: .blownSaves)
+        self.completeGames = try c.decodeIfPresent(Int.self, forKey: .completeGames)
+        self.shutouts = try c.decodeIfPresent(Int.self, forKey: .shutouts)
+        self.hits = try c.decodeIfPresent(Int.self, forKey: .hits)
+        self.doubles = try c.decodeIfPresent(Int.self, forKey: .doubles)
+        self.triples = try c.decodeIfPresent(Int.self, forKey: .triples)
+        self.runs = try c.decodeIfPresent(Int.self, forKey: .runs)
+        self.earnedRuns = try c.decodeIfPresent(Int.self, forKey: .earnedRuns)
+        self.homeRuns = try c.decodeIfPresent(Int.self, forKey: .homeRuns)
+        self.atBats = try c.decodeIfPresent(Int.self, forKey: .atBats)
+        self.baseOnBalls = try c.decodeIfPresent(Int.self, forKey: .baseOnBalls)
+        self.intentionalWalks = try c.decodeIfPresent(Int.self, forKey: .intentionalWalks)
+        self.strikeOuts = try c.decodeIfPresent(Int.self, forKey: .strikeOuts)
+        self.hitByPitch = try c.decodeIfPresent(Int.self, forKey: .hitByPitch)
+        self.sacFlies = try c.decodeIfPresent(Int.self, forKey: .sacFlies)
+        self.wildPitches = try c.decodeIfPresent(Int.self, forKey: .wildPitches)
+        self.balks = try c.decodeIfPresent(Int.self, forKey: .balks)
+        self.battersFaced = try c.decodeIfPresent(Int.self, forKey: .battersFaced)
+        self.numberOfPitches = try c.decodeIfPresent(Int.self, forKey: .numberOfPitches)
 
-        era             = try Self.decodeStatString(c, key: .era)
-        whip            = try Self.decodeStatString(c, key: .whip)
-        avg             = try Self.decodeStatString(c, key: .avg)
-        obp             = try Self.decodeStatString(c, key: .obp)
-        slg             = try Self.decodeStatString(c, key: .slg)
-        ops             = try Self.decodeStatString(c, key: .ops)
-        inningsPitched  = try Self.decodeStatString(c, key: .inningsPitched)
+        self.era = try Self.decodeStatString(c, key: .era)
+        self.whip = try Self.decodeStatString(c, key: .whip)
+        self.avg = try Self.decodeStatString(c, key: .avg)
+        self.obp = try Self.decodeStatString(c, key: .obp)
+        self.slg = try Self.decodeStatString(c, key: .slg)
+        self.ops = try Self.decodeStatString(c, key: .ops)
+        self.inningsPitched = try Self.decodeStatString(c, key: .inningsPitched)
     }
 
     private static func decodeStatString(
@@ -372,23 +372,31 @@ public struct FieldingStats: Codable, Sendable, Equatable {
 
     public init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
-        gamesPlayed  = try c.decodeIfPresent(Int.self, forKey: .gamesPlayed)
-        gamesStarted = try c.decodeIfPresent(Int.self, forKey: .gamesStarted)
-        assists      = try c.decodeIfPresent(Int.self, forKey: .assists)
-        putOuts      = try c.decodeIfPresent(Int.self, forKey: .putOuts)
-        errors       = try c.decodeIfPresent(Int.self, forKey: .errors)
-        chances      = try c.decodeIfPresent(Int.self, forKey: .chances)
-        doublePlays  = try c.decodeIfPresent(Int.self, forKey: .doublePlays)
-        triplePlays  = try c.decodeIfPresent(Int.self, forKey: .triplePlays)
-        passedBalls  = try c.decodeIfPresent(Int.self, forKey: .passedBalls)
+        self.gamesPlayed = try c.decodeIfPresent(Int.self, forKey: .gamesPlayed)
+        self.gamesStarted = try c.decodeIfPresent(Int.self, forKey: .gamesStarted)
+        self.assists = try c.decodeIfPresent(Int.self, forKey: .assists)
+        self.putOuts = try c.decodeIfPresent(Int.self, forKey: .putOuts)
+        self.errors = try c.decodeIfPresent(Int.self, forKey: .errors)
+        self.chances = try c.decodeIfPresent(Int.self, forKey: .chances)
+        self.doublePlays = try c.decodeIfPresent(Int.self, forKey: .doublePlays)
+        self.triplePlays = try c.decodeIfPresent(Int.self, forKey: .triplePlays)
+        self.passedBalls = try c.decodeIfPresent(Int.self, forKey: .passedBalls)
 
-        if let d = try? c.decodeIfPresent(Double.self, forKey: .innings) { innings = d }
-        else if let s = try? c.decodeIfPresent(String.self, forKey: .innings) { innings = Double(s) }
-        else { innings = nil }
+        if let d = try? c.decodeIfPresent(Double.self, forKey: .innings) {
+            self.innings = d
+        } else if let s = try? c.decodeIfPresent(String.self, forKey: .innings) {
+            self.innings = Double(s)
+        } else {
+            self.innings = nil
+        }
 
-        if let d = try? c.decodeIfPresent(Double.self, forKey: .fielding) { fielding = d }
-        else if let s = try? c.decodeIfPresent(String.self, forKey: .fielding) { fielding = Double(s) }
-        else { fielding = nil }
+        if let d = try? c.decodeIfPresent(Double.self, forKey: .fielding) {
+            self.fielding = d
+        } else if let s = try? c.decodeIfPresent(String.self, forKey: .fielding) {
+            self.fielding = Double(s)
+        } else {
+            self.fielding = nil
+        }
     }
 
     /// An empty fielding stats instance with all properties set to `nil`.
@@ -464,31 +472,6 @@ public struct SabermetricStats: Codable, Sendable, Equatable {
         baseRunning: nil, positional: nil, wLeague: nil,
         replacement: nil, spd: nil, ubr: nil, wGdp: nil, wSb: nil
     )
-
-    init(
-        woba: Double?, wRaa: Double?, wRc: Double?, wRcPlus: Double?,
-        rar: Double?, war: Double?, batting: Double?, fielding: Double?,
-        baseRunning: Double?, positional: Double?, wLeague: Double?,
-        replacement: Double?, spd: Double?, ubr: Double?, wGdp: Double?,
-        wSb: Double?
-    ) {
-        self.woba = woba
-        self.wRaa = wRaa
-        self.wRc = wRc
-        self.wRcPlus = wRcPlus
-        self.rar = rar
-        self.war = war
-        self.batting = batting
-        self.fielding = fielding
-        self.baseRunning = baseRunning
-        self.positional = positional
-        self.wLeague = wLeague
-        self.replacement = replacement
-        self.spd = spd
-        self.ubr = ubr
-        self.wGdp = wGdp
-        self.wSb = wSb
-    }
 }
 
 // MARK: - Player season stats wrapper

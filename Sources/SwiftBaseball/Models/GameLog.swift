@@ -6,7 +6,9 @@ import Foundation
 /// (date, opponent, home/away) and the stat line for that game.
 public struct GameLogEntry: Codable, Sendable, Equatable, Identifiable {
     /// Unique identifier — the MLB game primary key.
-    public var id: Int { gamePk }
+    public var id: Int {
+        gamePk
+    }
 
     /// The player who played in this game.
     public let player: PlayerReference

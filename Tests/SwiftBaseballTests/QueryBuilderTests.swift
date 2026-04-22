@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("QueryBuilder Tests")
 struct QueryBuilderTests {
-
     // MARK: - Fluent modifier chain
 
     @Test("season() appends season query item")
@@ -14,7 +13,7 @@ struct QueryBuilderTests {
         mock.stub(path: "teams", data: data)
 
         let builder = QueryBuilder<[Team]>.teams(.all(season: 2024), client: mock)
-            .season(2025)  // Override season
+            .season(2025) // Override season
 
         _ = try await builder.fetch()
 
@@ -78,7 +77,7 @@ struct QueryBuilderTests {
     @Test("gameType() appends gameType query item")
     func gameTypeModifier() {
         let mock = MockAPIClient()
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: mock)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660_271, client: mock)
             .gameType(.springTraining)
 
         let items = builder.endpoint.queryItems
@@ -115,7 +114,7 @@ struct QueryBuilderTests {
     @Test("fetch() throws decodingError for malformed JSON")
     func fetchThrowsDecodingError() async throws {
         let mock = MockAPIClient()
-        let badJSON = "{ invalid }".data(using: .utf8)!
+        let badJSON = Data("{ invalid }".utf8)
         mock.stub(path: "teams", data: badJSON)
 
         let builder = QueryBuilder<[Team]>.teams(.all(season: 2024), client: mock)

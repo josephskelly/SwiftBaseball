@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("RateLimiter Tests")
 struct RateLimiterTests {
-
     // MARK: - Slot management
 
     @Test("Single permit acquired and released")
@@ -63,7 +62,7 @@ struct RateLimiterTests {
         let counter = Counter()
 
         await withTaskGroup(of: Void.self) { group in
-            for _ in 0..<taskCount {
+            for _ in 0 ..< taskCount {
                 group.addTask {
                     await limiter.acquire()
                     await counter.increment()
@@ -85,7 +84,7 @@ struct RateLimiterTests {
         let counter = Counter()
 
         await withTaskGroup(of: Void.self) { group in
-            for _ in 0..<taskCount {
+            for _ in 0 ..< taskCount {
                 group.addTask {
                     await limiter.acquire()
                     await counter.increment()
@@ -116,9 +115,8 @@ struct RateLimiterTests {
     }
 
     @Test("Configuration custom baseURL is respected")
-    func configurationCustomBaseURL() {
-        // swiftlint:disable:next force_unwrapping
-        let customURL = URL(string: "https://custom.api.example.com/v2/")!
+    func configurationCustomBaseURL() throws {
+        let customURL = try #require(URL(string: "https://custom.api.example.com/v2/"))
         let config = Configuration(baseURL: customURL)
         #expect(config.baseURL == customURL)
     }
@@ -233,7 +231,7 @@ private final class RetryCountingAPIClient: APIClient, @unchecked Sendable {
         defer { Task { await rateLimiter.release() } }
 
         var lastError: Error = SwiftBaseballError.unexpectedResponse
-        for attempt in 0...config.maxRetries {
+        for attempt in 0 ... config.maxRetries {
             if attempt > 0 && config.retryBaseDelay > 0 {
                 let delay = config.retryBaseDelay * pow(2.0, Double(attempt - 1))
                 try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
@@ -241,11 +239,11 @@ private final class RetryCountingAPIClient: APIClient, @unchecked Sendable {
             callCount += 1
             let currentCode = callCount <= failTimes ? statusCode : 200
             switch currentCode {
-            case 200...299:
+            case 200 ... 299:
                 return successData
             case 429:
                 lastError = SwiftBaseballError.rateLimited(retryAfter: nil)
-            case 400...499:
+            case 400 ... 499:
                 throw SwiftBaseballError.invalidResponse(statusCode: currentCode)
             default:
                 lastError = SwiftBaseballError.invalidResponse(statusCode: currentCode)
@@ -260,11 +258,15 @@ private final class RetryCountingAPIClient: APIClient, @unchecked Sendable {
 /// A thread-safe counter for stress tests.
 private actor Counter {
     var value: Int = 0
-    func increment() { value += 1 }
+    func increment() {
+        value += 1
+    }
 }
 
 /// A thread-safe boolean flag for concurrency tests.
 private actor Flag {
     var value: Bool = false
-    func set() { value = true }
+    func set() {
+        value = true
+    }
 }

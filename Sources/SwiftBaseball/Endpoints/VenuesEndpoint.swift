@@ -6,7 +6,7 @@ extension QueryBuilder where T == [Venue] {
     static func venues(client: any APIClient) -> QueryBuilder<[Venue]> {
         let endpoint = Endpoint(path: "venues", queryItems: [
             URLQueryItem(name: "hydrate", value: "fieldInfo,location"),
-            URLQueryItem(name: "activeStatus", value: "Both"),
+            URLQueryItem(name: "activeStatus", value: "Both")
         ])
         return QueryBuilder(endpoint: endpoint, client: client) { data in
             let response = try JSONDecoder.mlb.decode(MLBVenuesResponse.self, from: data)

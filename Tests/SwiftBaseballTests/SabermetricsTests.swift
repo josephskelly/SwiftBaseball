@@ -1,23 +1,22 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Sabermetrics Tests")
 struct SabermetricsTests {
-
     // MARK: - Fixture decoding
 
     @Test("Decode sabermetric stats from fixture")
     func decodeSabermetrics() throws {
         let data = try Fixtures.load("player_sabermetrics_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
         #expect(entry.season == "2024")
         #expect(entry.group == .batting)
-        #expect(entry.player.id == 660271)
+        #expect(entry.player.id == 660_271)
         #expect(entry.player.fullName == "Shohei Ohtani")
         #expect(entry.team?.id == 119)
         #expect(entry.team?.name == "Los Angeles Dodgers")
@@ -27,7 +26,7 @@ struct SabermetricsTests {
     func sabermetricValues() throws {
         let data = try Fixtures.load("player_sabermetrics_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: ref)
 
         let saber = try #require(stats.first?.sabermetrics)
@@ -40,7 +39,7 @@ struct SabermetricsTests {
         #expect(abs((saber.batting ?? 0) - 69.6496) < 0.01)
         #expect(saber.fielding == 0.0)
         #expect(abs((saber.baseRunning ?? 0) - 9.73535) < 0.001)
-        #expect(abs((saber.positional ?? 0) - (-17.1759)) < 0.01)
+        #expect(abs((saber.positional ?? 0) - -17.1759) < 0.01)
         #expect(abs((saber.wLeague ?? 0) - 2.33332) < 0.001)
         #expect(abs((saber.replacement ?? 0) - 22.1032) < 0.01)
         #expect(abs((saber.spd ?? 0) - 8.10565) < 0.001)
@@ -53,7 +52,7 @@ struct SabermetricsTests {
     func sabermetricGroupRouting() throws {
         let data = try Fixtures.load("player_sabermetrics_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -67,9 +66,9 @@ struct SabermetricsTests {
 
     @Test("Empty splits returns empty array")
     func emptySplits() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"sabermetrics"}, "group": {"displayName":"hitting"}, "splits": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: ref)
@@ -79,9 +78,9 @@ struct SabermetricsTests {
 
     @Test("Empty stats response returns empty array")
     func emptyStatsResponse() throws {
-        let json = """
+        let json = Data("""
         { "stats": [] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: ref)
@@ -91,14 +90,14 @@ struct SabermetricsTests {
 
     @Test("Partial sabermetric payload decodes with nils")
     func partialPayload() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"sabermetrics"}, "group": {"displayName":"hitting"}, "splits": [{
             "season": "2024",
             "stat": { "war": 5.5, "woba": 0.380 },
             "player": {"id": 123, "fullName": "Test Player"},
             "team": {"id": 100, "name": "Test Team"}
         }] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBSabermetricResponse.self, from: json)
         let ref = PlayerReference(id: 123, fullName: "Test Player")
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: ref)
@@ -130,7 +129,7 @@ struct SabermetricsTests {
         let data = try Fixtures.load("player_sabermetrics_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerSabermetrics(id: 660271, client: mock)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerSabermetrics(id: 660_271, client: mock)
         _ = try await builder.fetch()
 
         let endpoint = try #require(mock.lastEndpoint)
@@ -145,7 +144,7 @@ struct SabermetricsTests {
         let data = try Fixtures.load("player_sabermetrics_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerSabermetrics(id: 660271, client: mock)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerSabermetrics(id: 660_271, client: mock)
             .season(2024)
         _ = try await builder.fetch()
 
@@ -159,7 +158,7 @@ struct SabermetricsTests {
     func seasonStatsNilSabermetrics() throws {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)

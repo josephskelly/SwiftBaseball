@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // MARK: - Protocol
 
@@ -45,7 +48,7 @@ final class URLSessionAPIClient: APIClient {
         defer { Task { await rateLimiter.release() } }
 
         var lastError: Error = SwiftBaseballError.unexpectedResponse
-        for attempt in 0...maxRetries {
+        for attempt in 0 ... maxRetries {
             if attempt > 0 {
                 let delay = retryBaseDelay * pow(2.0, Double(attempt - 1))
                 try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
@@ -62,7 +65,7 @@ final class URLSessionAPIClient: APIClient {
                     throw SwiftBaseballError.unexpectedResponse
                 }
                 switch http.statusCode {
-                case 200...299:
+                case 200 ... 299:
                     return data
                 case 429:
                     let retryAfter = http.value(forHTTPHeaderField: "Retry-After")
@@ -71,7 +74,7 @@ final class URLSessionAPIClient: APIClient {
                     if let delay = retryAfter, attempt < maxRetries {
                         try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     }
-                case 400...499:
+                case 400 ... 499:
                     // Non-retryable client errors
                     throw SwiftBaseballError.invalidResponse(statusCode: http.statusCode)
                 default:

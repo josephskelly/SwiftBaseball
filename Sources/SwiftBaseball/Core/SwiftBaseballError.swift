@@ -29,7 +29,7 @@ extension SwiftBaseballError: LocalizedError {
             return "Network error: \(error.localizedDescription)"
         case .decodingError(let error):
             return "Decoding error: \(error.localizedDescription)"
-        case .invalidDateRange(let start, let end):
+        case let .invalidDateRange(start, end):
             return "Invalid date range: \(start) to \(end)"
         case .playerNotFound(let name):
             return "Player not found: \(name)"

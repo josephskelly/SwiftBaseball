@@ -1,23 +1,22 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Stats Tests")
 struct StatsTests {
-
     // MARK: - Batting stats
 
     @Test("Decode batting stats from fixture")
     func decodeBattingStats() throws {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
         #expect(entry.season == "2024")
         #expect(entry.group == .batting)
-        #expect(entry.player.id == 660271)
+        #expect(entry.player.id == 660_271)
         #expect(entry.player.fullName == "Shohei Ohtani")
         #expect(entry.team?.id == 119)
         #expect(entry.team?.name == "Los Angeles Dodgers")
@@ -49,7 +48,7 @@ struct StatsTests {
     func battingRateStats() throws {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let batting = try #require(stats.first?.batting)
@@ -65,7 +64,7 @@ struct StatsTests {
     func battingGroupRouting() throws {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -80,7 +79,7 @@ struct StatsTests {
     func decodePitchingStats() throws {
         let data = try Fixtures.load("player_stats_pitching_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -116,7 +115,7 @@ struct StatsTests {
     func pitchingRateStats() throws {
         let data = try Fixtures.load("player_stats_pitching_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let pitching = try #require(stats.first?.pitching)
@@ -133,7 +132,7 @@ struct StatsTests {
     func pitchingHomeRunsMapping() throws {
         let data = try Fixtures.load("player_stats_pitching_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let pitching = try #require(stats.first?.pitching)
@@ -144,7 +143,7 @@ struct StatsTests {
     func pitchingGroupRouting() throws {
         let data = try Fixtures.load("player_stats_pitching_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -159,7 +158,7 @@ struct StatsTests {
     func decodeFieldingStats() throws {
         let data = try Fixtures.load("player_stats_fielding_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -183,7 +182,7 @@ struct StatsTests {
     func fieldingRateStats() throws {
         let data = try Fixtures.load("player_stats_fielding_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let fielding = try #require(stats.first?.fielding)
@@ -195,7 +194,7 @@ struct StatsTests {
     func fieldingGroupRouting() throws {
         let data = try Fixtures.load("player_stats_fielding_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -208,9 +207,9 @@ struct StatsTests {
 
     @Test("Empty splits returns empty array")
     func emptySplits() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"season"}, "group": {"displayName":"hitting"}, "splits": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
@@ -220,9 +219,9 @@ struct StatsTests {
 
     @Test("Empty stats response returns empty array")
     func emptyStatsResponse() throws {
-        let json = """
+        let json = Data("""
         { "stats": [] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
@@ -232,7 +231,7 @@ struct StatsTests {
 
     @Test("Zero stat line (0 PA, .000 AVG)")
     func zeroStatLine() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"season"}, "group": {"displayName":"hitting"}, "splits": [{
             "season": "2024",
             "stat": {
@@ -247,7 +246,7 @@ struct StatsTests {
             "player": {"id": 999, "fullName": "Test Player"},
             "team": {"id": 100, "name": "Test Team"}
         }] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 999, fullName: "Test Player")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
@@ -264,13 +263,13 @@ struct StatsTests {
     func decodeProjectedBattingStats() throws {
         let data = try Fixtures.load("player_stats_projected_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
         #expect(entry.season == "2024")
         #expect(entry.group == .batting)
-        #expect(entry.player.id == 660271)
+        #expect(entry.player.id == 660_271)
 
         let batting = try #require(entry.batting)
         #expect(batting.gamesPlayed == 155)
@@ -286,7 +285,7 @@ struct StatsTests {
         let data = try Fixtures.load("player_stats_projected_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
         _ = try await QueryBuilder<[PlayerSeasonStats]>
-            .playerProjectedStats(id: 660271, client: mock)
+            .playerProjectedStats(id: 660_271, client: mock)
             .group(.batting)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -296,16 +295,16 @@ struct StatsTests {
 
     @Test("SwiftBaseball.playerProjectedStats is accessible")
     func namespacedPlayerProjected() {
-        _ = SwiftBaseball.playerProjectedStats(id: 660271)
+        _ = SwiftBaseball.playerProjectedStats(id: 660_271)
     }
 
     @Test("Projected stats empty response returns empty array")
     func projectedStatsEmptyResponse() throws {
-        let json = """
+        let json = Data("""
         { "stats": [] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
-        let ref = PlayerReference(id: 660271, fullName: "")
+        let ref = PlayerReference(id: 660_271, fullName: "")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
         #expect(stats.isEmpty)
     }
@@ -318,7 +317,7 @@ struct StatsTests {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: mock)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660_271, client: mock)
         _ = try await builder.fetch()
 
         let endpoint = try #require(mock.lastEndpoint)
@@ -332,7 +331,7 @@ struct StatsTests {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660271, client: mock)
+        let builder = QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 660_271, client: mock)
             .season(2024)
             .group(.batting)
         _ = try await builder.fetch()
@@ -377,7 +376,7 @@ struct StatsTests {
     func decodePlatoonSplits() throws {
         let data = try Fixtures.load("player_stats_platoon_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let platoon = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
 
         let vsLeft = try #require(platoon.vsLeft)
@@ -395,9 +394,9 @@ struct StatsTests {
 
     @Test("Empty platoon splits returns both nil")
     func emptyPlatoonSplits() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"hitting"}, "splits": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let platoon = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
@@ -408,7 +407,7 @@ struct StatsTests {
 
     @Test("Platoon splits with only vs-left present")
     func platoonSplitsOnlyVsLeft() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"hitting"}, "splits": [{
             "season": "2024",
             "stat": {
@@ -422,7 +421,7 @@ struct StatsTests {
             },
             "split": {"code": "vl", "description": "vs Left"}
         }] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let platoon = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
@@ -438,7 +437,7 @@ struct StatsTests {
         let data = try Fixtures.load("player_stats_platoon_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<PlayerPlatoonStats>.playerPlatoonStats(id: 660271, client: mock)
+        let builder = QueryBuilder<PlayerPlatoonStats>.playerPlatoonStats(id: 660_271, client: mock)
             .season(2024)
         _ = try await builder.fetch()
 
@@ -455,7 +454,7 @@ struct StatsTests {
     func decodePitcherPlatoonSplits() throws {
         let data = try Fixtures.load("pitcher_stats_platoon_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
 
         let vsLeft = try #require(platoon.vsLeft)
@@ -477,9 +476,9 @@ struct StatsTests {
 
     @Test("Empty pitcher platoon splits returns both nil")
     func emptyPitcherPlatoonSplits() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"pitching"}, "splits": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
@@ -490,7 +489,7 @@ struct StatsTests {
 
     @Test("Pitcher platoon splits with only vs-left present")
     func pitcherPlatoonSplitsOnlyVsLeft() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"pitching"}, "splits": [{
             "season": "2023",
             "stat": {
@@ -503,7 +502,7 @@ struct StatsTests {
             },
             "split": {"code": "vl", "description": "vs Left"}
         }] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let platoon = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
@@ -519,7 +518,7 @@ struct StatsTests {
         let data = try Fixtures.load("pitcher_stats_platoon_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<PitcherPlatoonStats>.pitcherPlatoonStats(id: 660271, client: mock)
+        let builder = QueryBuilder<PitcherPlatoonStats>.pitcherPlatoonStats(id: 660_271, client: mock)
             .season(2023)
         _ = try await builder.fetch()
 
@@ -535,7 +534,7 @@ struct StatsTests {
     @Test("Batter platoon deduplicates repeated splits from comma-separated gameType")
     func batterPlatoonDedup() throws {
         // Simulate the API returning 8× duplicated splits (as observed with gameType=R,S,E,F,D,L,W,A)
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"hitting"}, "splits": [
             {"split":{"code":"vl","description":"vs Left"},"gameType":"R","stat":{"gamesPlayed":100,"plateAppearances":200,"atBats":180,"hits":50,"doubles":10,"triples":1,"homeRuns":8,"rbi":30,"stolenBases":5,"caughtStealing":1,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":40,"hitByPitch":2,"sacFlies":1,"sacBunts":0,"groundIntoDoublePlay":3,"totalBases":90,"leftOnBase":60,"avg":".278","obp":".338","slg":".500","ops":".838","babip":".310"}},
             {"split":{"code":"vl","description":"vs Left"},"gameType":"S","stat":{"gamesPlayed":5,"plateAppearances":10,"atBats":9,"hits":3,"doubles":1,"triples":0,"homeRuns":1,"rbi":2,"stolenBases":0,"caughtStealing":0,"baseOnBalls":1,"intentionalWalks":0,"strikeOuts":2,"hitByPitch":0,"sacFlies":0,"sacBunts":0,"groundIntoDoublePlay":0,"totalBases":7,"leftOnBase":3,"avg":".333","obp":".400","slg":".778","ops":"1.178","babip":".286"}},
@@ -544,7 +543,7 @@ struct StatsTests {
             {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":120,"plateAppearances":400,"atBats":350,"hits":100,"doubles":20,"triples":3,"homeRuns":30,"rbi":70,"stolenBases":15,"caughtStealing":2,"baseOnBalls":40,"intentionalWalks":5,"strikeOuts":80,"hitByPitch":3,"sacFlies":2,"sacBunts":0,"groundIntoDoublePlay":5,"totalBases":220,"leftOnBase":100,"avg":".286","obp":".362","slg":".629","ops":".990","babip":".300"}},
             {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":120,"plateAppearances":400,"atBats":350,"hits":100,"doubles":20,"triples":3,"homeRuns":30,"rbi":70,"stolenBases":15,"caughtStealing":2,"baseOnBalls":40,"intentionalWalks":5,"strikeOuts":80,"hitByPitch":3,"sacFlies":2,"sacBunts":0,"groundIntoDoublePlay":5,"totalBases":220,"leftOnBase":100,"avg":".286","obp":".362","slg":".629","ops":".990","babip":".300"}}
         ]}]}
-        """.data(using: .utf8)!
+        """.utf8)
 
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "Test")
@@ -552,14 +551,14 @@ struct StatsTests {
 
         // vL should aggregate R + S (not count duplicates)
         let vl = try #require(platoon.vsLeft)
-        #expect(vl.plateAppearances == 210)  // 200 + 10
-        #expect(vl.atBats == 189)  // 180 + 9
-        #expect(vl.hits == 53)  // 50 + 3
-        #expect(vl.homeRuns == 9)  // 8 + 1
-        #expect(vl.totalBases == 97)  // 90 + 7
+        #expect(vl.plateAppearances == 210) // 200 + 10
+        #expect(vl.atBats == 189) // 180 + 9
+        #expect(vl.hits == 53) // 50 + 3
+        #expect(vl.homeRuns == 9) // 8 + 1
+        #expect(vl.totalBases == 97) // 90 + 7
 
         // OPS recomputed from aggregated counts
-        let obpDenom = 189 + 16 + 2 + 1  // AB + BB + HBP + SF
+        let obpDenom = 189 + 16 + 2 + 1 // AB + BB + HBP + SF
         let expectedOBP = Double(53 + 16 + 2) / Double(obpDenom)
         let expectedSLG = Double(97) / Double(189)
         let expectedOPS = expectedOBP + expectedSLG
@@ -569,12 +568,12 @@ struct StatsTests {
         let vr = try #require(platoon.vsRight)
         #expect(vr.plateAppearances == 400)
         #expect(vr.atBats == 350)
-        #expect(vr.ops == 0.990)  // Single entry, returned as-is
+        #expect(vr.ops == 0.990) // Single entry, returned as-is
     }
 
     @Test("Pitcher platoon deduplicates and aggregates across game types")
     func pitcherPlatoonDedup() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"statSplits"}, "group": {"displayName":"pitching"}, "splits": [
             {"split":{"code":"vl","description":"vs Left"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":5,"losses":3,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":60,"runs":25,"earnedRuns":22,"homeRuns":8,"baseOnBalls":20,"intentionalWalks":0,"strikeOuts":70,"hitByPitch":3,"wildPitches":2,"balks":0,"battersFaced":250,"era":"3.50","whip":"1.20","avg":".264","obp":".332","slg":".440","ops":".772","inningsPitched":"56.2"}},
             {"split":{"code":"vl","description":"vs Left"},"gameType":"S","stat":{"gamesPlayed":3,"gamesStarted":3,"wins":1,"losses":0,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":5,"runs":2,"earnedRuns":2,"homeRuns":1,"baseOnBalls":2,"intentionalWalks":0,"strikeOuts":8,"hitByPitch":0,"wildPitches":0,"balks":0,"battersFaced":25,"era":"3.00","whip":"1.05","avg":".217","obp":".280","slg":".391","ops":".671","inningsPitched":"6.0"}},
@@ -582,7 +581,7 @@ struct StatsTests {
             {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":4,"losses":2,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":50,"runs":20,"earnedRuns":18,"homeRuns":6,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":85,"hitByPitch":2,"wildPitches":1,"balks":0,"battersFaced":270,"era":"2.80","whip":"1.00","avg":".197","obp":".249","slg":".350","ops":".599","inningsPitched":"57.2"}},
             {"split":{"code":"vr","description":"vs Right"},"gameType":"R","stat":{"gamesPlayed":20,"gamesStarted":20,"wins":4,"losses":2,"saves":0,"saveOpportunities":0,"holds":0,"blownSaves":0,"completeGames":0,"shutouts":0,"hits":50,"runs":20,"earnedRuns":18,"homeRuns":6,"baseOnBalls":15,"intentionalWalks":0,"strikeOuts":85,"hitByPitch":2,"wildPitches":1,"balks":0,"battersFaced":270,"era":"2.80","whip":"1.00","avg":".197","obp":".249","slg":".350","ops":".599","inningsPitched":"57.2"}}
         ]}]}
-        """.data(using: .utf8)!
+        """.utf8)
 
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "Test")
@@ -590,9 +589,9 @@ struct StatsTests {
 
         // vL should aggregate R + S
         let vl = try #require(platoon.vsLeft)
-        #expect(vl.battersFaced == 275)  // 250 + 25
-        #expect(vl.strikeOuts == 78)  // 70 + 8
-        #expect(vl.hits == 65)  // 60 + 5
+        #expect(vl.battersFaced == 275) // 250 + 25
+        #expect(vl.strikeOuts == 78) // 70 + 8
+        #expect(vl.hits == 65) // 60 + 5
 
         // OPS is BF-weighted: (0.772 * 250 + 0.671 * 25) / 275
         let expectedOPS = (0.772 * 250.0 + 0.671 * 25.0) / 275.0
@@ -610,7 +609,7 @@ struct StatsTests {
     func decodeCareerBatterPlatoonSplits() throws {
         let data = try Fixtures.load("player_career_stats_platoon_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let p = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
         let career = PlayerCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
 
@@ -639,7 +638,7 @@ struct StatsTests {
         let data = try Fixtures.load("player_career_stats_platoon_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<PlayerCareerPlatoonStats>.playerCareerPlatoonStats(id: 660271, client: mock)
+        let builder = QueryBuilder<PlayerCareerPlatoonStats>.playerCareerPlatoonStats(id: 660_271, client: mock)
         _ = try await builder.fetch()
 
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -651,9 +650,9 @@ struct StatsTests {
 
     @Test("Empty career batter platoon splits returns both nil")
     func emptyCareerBatterPlatoonSplits() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"careerStatSplits"}, "group": {"displayName":"hitting"}, "splits": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let p = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
@@ -669,7 +668,7 @@ struct StatsTests {
     func decodeCareerPitcherPlatoonSplits() throws {
         let data = try Fixtures.load("pitcher_career_stats_platoon_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
         let career = PitcherCareerPlatoonStats(vsLeft: p.vsLeft, vsRight: p.vsRight)
 
@@ -699,7 +698,7 @@ struct StatsTests {
         let data = try Fixtures.load("pitcher_career_stats_platoon_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
 
-        let builder = QueryBuilder<PitcherCareerPlatoonStats>.pitcherCareerPlatoonStats(id: 660271, client: mock)
+        let builder = QueryBuilder<PitcherCareerPlatoonStats>.pitcherCareerPlatoonStats(id: 660_271, client: mock)
         _ = try await builder.fetch()
 
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -711,9 +710,9 @@ struct StatsTests {
 
     @Test("Empty career pitcher platoon splits returns both nil")
     func emptyCareerPitcherPlatoonSplits() throws {
-        let json = """
+        let json = Data("""
         { "stats": [{ "type": {"displayName":"careerStatSplits"}, "group": {"displayName":"pitching"}, "splits": [] }] }
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: json)
         let ref = PlayerReference(id: 1, fullName: "")
         let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
@@ -729,12 +728,12 @@ struct StatsTests {
     func decodeCareerStats() throws {
         let data = try Fixtures.load("player_career_stats_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         #expect(stats.count == 1)
         let entry = try #require(stats.first)
-        #expect(entry.player.id == 660271)
+        #expect(entry.player.id == 660_271)
         #expect(entry.group == .batting)
         // Career splits have no season value in the API response
         #expect(entry.season == "")
@@ -752,7 +751,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         let data = try Fixtures.load("player_career_stats_batting_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 660271, client: mock).fetch()
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 660_271, client: mock).fetch()
         let endpoint = try #require(mock.lastEndpoint)
         #expect(endpoint.path == "people/660271/stats")
         #expect(endpoint.queryItems.contains { $0.name == "stats" && $0.value == "career" })
@@ -763,7 +762,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         let data = try Fixtures.load("player_career_stats_batting_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 660271, client: mock)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 660_271, client: mock)
             .group(.batting)
             .gameType(.regularSeason)
             .fetch()
@@ -779,7 +778,7 @@ struct StatsTests {
     func decodeYearByYearStats() throws {
         let data = try Fixtures.load("player_year_by_year_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         #expect(stats.count == 3)
@@ -793,19 +792,19 @@ struct StatsTests {
     func yearByYearTeamRefs() throws {
         let data = try Fixtures.load("player_year_by_year_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
-        #expect(stats[0].team?.id == 108)   // Angels
-        #expect(stats[1].team?.id == 108)   // Angels
-        #expect(stats[2].team?.id == 119)   // Dodgers
+        #expect(stats[0].team?.id == 108) // Angels
+        #expect(stats[1].team?.id == 108) // Angels
+        #expect(stats[2].team?.id == 119) // Dodgers
     }
 
     @Test("Year-by-year batting values match fixture for each season")
     func yearByYearBattingValues() throws {
         let data = try Fixtures.load("player_year_by_year_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let s2018 = try #require(stats[0].batting)
@@ -826,7 +825,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         let data = try Fixtures.load("player_year_by_year_batting_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 660271, client: mock).fetch()
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 660_271, client: mock).fetch()
         let endpoint = try #require(mock.lastEndpoint)
         #expect(endpoint.path == "people/660271/stats")
         #expect(endpoint.queryItems.contains { $0.name == "stats" && $0.value == "yearByYear" })
@@ -837,7 +836,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         let data = try Fixtures.load("player_year_by_year_batting_660271.json")
         mock.stub(path: "people/660271/stats", data: data)
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 660271, client: mock)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 660_271, client: mock)
             .group(.pitching)
             .fetch()
         let items = mock.lastEndpoint?.queryItems ?? []
@@ -850,7 +849,7 @@ struct StatsTests {
         // Existing fixture has no gameType on splits — should still parse fine
         let data = try Fixtures.load("player_stats_platoon_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let platoon = MLBResponseConverters.playerPlatoonStats(from: response, playerRef: ref)
 
         // Single vl and vr entries with nil gameType — no aggregation needed
@@ -869,7 +868,7 @@ struct StatsTests {
     func minorLeagueBattingStatsSportAndLeague() throws {
         let data = try Fixtures.load("player_stats_batting_mib_656185.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 656185, fullName: "Greg Allen")
+        let ref = PlayerReference(id: 656_185, fullName: "Greg Allen")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         #expect(stats.count == 1)
@@ -886,7 +885,7 @@ struct StatsTests {
     func minorLeagueBattingStatValues() throws {
         let data = try Fixtures.load("player_stats_batting_mib_656185.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 656185, fullName: "Greg Allen")
+        let ref = PlayerReference(id: 656_185, fullName: "Greg Allen")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let batting = try #require(stats.first?.batting)
@@ -901,7 +900,7 @@ struct StatsTests {
     func minorLeaguePitchingStatsSportAndLeague() throws {
         let data = try Fixtures.load("player_stats_pitching_mib_687607.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 687607, fullName: "Edgar Barclay")
+        let ref = PlayerReference(id: 687_607, fullName: "Edgar Barclay")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         #expect(stats.count == 1)
@@ -915,7 +914,7 @@ struct StatsTests {
     func minorLeaguePitchingStatValues() throws {
         let data = try Fixtures.load("player_stats_pitching_mib_687607.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 687607, fullName: "Edgar Barclay")
+        let ref = PlayerReference(id: 687_607, fullName: "Edgar Barclay")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let pitching = try #require(stats.first?.pitching)
@@ -931,7 +930,7 @@ struct StatsTests {
     func mlbStatsHaveNilSportAndLeague() throws {
         let data = try Fixtures.load("player_stats_batting_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: ref)
 
         let entry = try #require(stats.first)
@@ -945,7 +944,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         mock.stub(path: "people/656185/stats", data: data)
 
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 656185, client: mock)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerStats(id: 656_185, client: mock)
             .season(2024)
             .group(.batting)
             .sport(.tripleA)
@@ -963,7 +962,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         mock.stub(path: "people/656185/stats", data: data)
 
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 656185, client: mock)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerYearByYear(id: 656_185, client: mock)
             .group(.batting)
             .sport(.tripleA)
             .fetch()
@@ -979,7 +978,7 @@ struct StatsTests {
         let mock = MockAPIClient()
         mock.stub(path: "people/656185/stats", data: data)
 
-        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 656185, client: mock)
+        _ = try await QueryBuilder<[PlayerSeasonStats]>.playerCareerStats(id: 656_185, client: mock)
             .group(.batting)
             .sport(.doubleA)
             .fetch()
@@ -1009,7 +1008,7 @@ struct StatsTests {
         let stats = MLBResponseConverters.playerSabermetrics(from: response, playerRef: stub)
 
         #expect(stats.count == 3)
-        let judge = try #require(stats.first { $0.player.id == 592450 })
+        let judge = try #require(stats.first { $0.player.id == 592_450 })
         #expect(judge.player.fullName == "Aaron Judge")
         #expect(judge.season == "2025")
         let saber = try #require(judge.sabermetrics)
@@ -1054,7 +1053,7 @@ struct StatsTests {
         let stats = MLBResponseConverters.playerSeasonStats(from: response, playerRef: stub)
 
         #expect(stats.count == 3)
-        let judge = try #require(stats.first { $0.player.id == 592450 })
+        let judge = try #require(stats.first { $0.player.id == 592_450 })
         #expect(judge.player.fullName == "Aaron Judge")
         #expect(judge.season == "2025")
         let batting = try #require(judge.batting)
@@ -1172,7 +1171,7 @@ struct StatsTests {
     func wobaAgainstFromFixture() throws {
         let data = try Fixtures.load("pitcher_career_stats_platoon_660271.json")
         let response = try JSONDecoder.mlb.decode(MLBPlayerStatsResponse.self, from: data)
-        let ref = PlayerReference(id: 660271, fullName: "Shohei Ohtani")
+        let ref = PlayerReference(id: 660_271, fullName: "Shohei Ohtani")
         let p = MLBResponseConverters.pitcherPlatoonStats(from: response, playerRef: ref)
         let vsLeft = try #require(p.vsLeft)
         let result = try #require(vsLeft.wobaAgainst)

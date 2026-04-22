@@ -132,9 +132,9 @@ public enum AbstractGameState: String, Codable, Sendable, Hashable, CaseIterable
     /// The game has not started — lineups may still be posting.
     case preview = "Preview"
     /// The game is currently in progress.
-    case live    = "Live"
+    case live = "Live"
     /// The game has completed.
-    case final   = "Final"
+    case final = "Final"
     /// Unrecognized state returned by the API.
     case unknown = "Unknown"
 

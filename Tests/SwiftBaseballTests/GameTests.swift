@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Game Tests")
 struct GameTests {
-
     // MARK: - Boxscore
 
     @Test("Decode boxscore from fixture")
@@ -51,7 +50,7 @@ struct GameTests {
         #expect(!awayPlayers.isEmpty)
 
         let robles = try #require(awayPlayers["ID645302"])
-        #expect(robles.person.id == 645302)
+        #expect(robles.person.id == 645_302)
         #expect(robles.person.fullName == "Victor Robles")
         #expect(robles.position == .leftField)
         #expect(robles.jerseyNumber == "10")
@@ -67,7 +66,7 @@ struct GameTests {
         #expect(!officials.isEmpty)
 
         let firstOfficial = try #require(officials.first)
-        #expect(firstOfficial.official.id == 429805)
+        #expect(firstOfficial.official.id == 429_805)
         #expect(firstOfficial.official.fullName == "Todd Tichenor")
         #expect(firstOfficial.officialType == "Home Plate")
     }
@@ -78,7 +77,7 @@ struct GameTests {
         let data = try Fixtures.load("game_boxscore_745612.json")
         mock.stub(path: "game/745612/boxscore", data: data)
 
-        let builder = QueryBuilder<Boxscore>.boxscore(gamePk: 745612, client: mock)
+        let builder = QueryBuilder<Boxscore>.boxscore(gamePk: 745_612, client: mock)
         let boxscore = try await builder.fetch()
 
         #expect(mock.lastEndpoint?.path == "game/745612/boxscore")
@@ -135,7 +134,7 @@ struct GameTests {
 
         let defense = try #require(linescore.defense)
         let pitcher = try #require(defense.pitcher)
-        #expect(pitcher.id == 662253)
+        #expect(pitcher.id == 662_253)
         #expect(pitcher.fullName == "Andrés Muñoz")
     }
 
@@ -145,7 +144,7 @@ struct GameTests {
         let data = try Fixtures.load("game_linescore_745612.json")
         mock.stub(path: "game/745612/linescore", data: data)
 
-        let builder = QueryBuilder<Linescore>.linescore(gamePk: 745612, client: mock)
+        let builder = QueryBuilder<Linescore>.linescore(gamePk: 745_612, client: mock)
         let linescore = try await builder.fetch()
 
         #expect(mock.lastEndpoint?.path == "game/745612/linescore")

@@ -15,16 +15,6 @@ public struct QueryBuilder<T: Sendable>: Sendable {
     let client: any APIClient
     let transform: @Sendable (Data) throws -> T
 
-    init(
-        endpoint: Endpoint,
-        client: any APIClient,
-        transform: @escaping @Sendable (Data) throws -> T
-    ) {
-        self.endpoint = endpoint
-        self.client = client
-        self.transform = transform
-    }
-
     // MARK: - Terminal
 
     /// Executes the query and returns the decoded result.
@@ -73,7 +63,7 @@ public struct QueryBuilder<T: Sendable>: Sendable {
     public func dateRange(start: String, end: String) -> QueryBuilder<T> {
         modifying {
             $0.adding(name: "startDate", value: start)
-             .adding(name: "endDate", value: end)
+                .adding(name: "endDate", value: end)
         }
     }
 

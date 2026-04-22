@@ -54,7 +54,7 @@ enum Fixtures {
             throw FixtureError.notFound(filename)
         }
         let fileURL = bundleURL.appendingPathComponent("Fixtures")
-                               .appendingPathComponent(filename)
+            .appendingPathComponent(filename)
         return try Data(contentsOf: fileURL)
     }
 

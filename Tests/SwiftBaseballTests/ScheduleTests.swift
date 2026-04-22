@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Schedule Tests")
 struct ScheduleTests {
-
     @Test("Decode schedule from fixture")
     func decodeSchedule() throws {
         let data = try Fixtures.load("schedule_2024_07_04.json")
@@ -14,7 +13,7 @@ struct ScheduleTests {
         #expect(entries.count == 1)
 
         let game = try #require(entries.first)
-        #expect(game.id == 745612)
+        #expect(game.id == 745_612)
         #expect(game.status == .final)
         #expect(game.gameType == .regularSeason)
         #expect(game.season == "2024")
@@ -44,7 +43,7 @@ struct ScheduleTests {
 
         let game = try #require(entries.first)
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
         let components = calendar.dateComponents([.year, .month, .day], from: game.gameDate)
 
         #expect(components.year == 2024)
@@ -83,7 +82,7 @@ struct ScheduleTests {
 
     @Test("Unknown gameType code falls back to .unknown not .regularSeason")
     func unknownGameTypeFallback() throws {
-        let json = """
+        let json = Data("""
         {"dates":[{"date":"2024-07-04","games":[{
             "gamePk": 123,
             "gameDate": "2024-07-04T17:10:00Z",
@@ -96,7 +95,7 @@ struct ScheduleTests {
             },
             "venue": {"id": 1, "name": "Some Park"}
         }]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -106,7 +105,7 @@ struct ScheduleTests {
 
     @Test("Missing gameType falls back to .unknown")
     func missingGameTypeFallback() throws {
-        let json = """
+        let json = Data("""
         {"dates":[{"date":"2024-07-04","games":[{
             "gamePk": 124,
             "gameDate": "2024-07-04T17:10:00Z",
@@ -117,7 +116,7 @@ struct ScheduleTests {
                 "home": {"team": {"id": 2, "name": "Team B"}}
             }
         }]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -134,7 +133,7 @@ struct ScheduleTests {
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
         let game = try #require(entries.first)
-        #expect(game.id == 745001)
+        #expect(game.id == 745_001)
         #expect(game.status == .postponed)
         #expect(game.gameType == .regularSeason)
         #expect(game.venue?.name == "Fenway Park")
@@ -175,7 +174,7 @@ struct ScheduleTests {
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
         let game = try #require(entries.first)
-        #expect(game.id == 746100)
+        #expect(game.id == 746_100)
         // detailedState "Completed Early (Rain)" is unrecognized; abstractGameState
         // "Final" should cause the converter to return .final.
         #expect(game.status == .final)
@@ -198,7 +197,7 @@ struct ScheduleTests {
 
     @Test("nil detailedState with abstractGameState Final decodes as .final")
     func nilDetailedStateAbstractFinal() throws {
-        let json = """
+        let json = Data("""
         {"dates":[{"date":"2024-06-12","games":[{
             "gamePk": 746200,
             "gameDate": "2024-06-12T23:10:00Z",
@@ -210,7 +209,7 @@ struct ScheduleTests {
                 "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": true, "score": 4}
             }
         }]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -220,7 +219,7 @@ struct ScheduleTests {
 
     @Test("Unrecognized detailedState with abstractGameState Live decodes as .inProgress")
     func unrecognizedDetailedStateLive() throws {
-        let json = """
+        let json = Data("""
         {"dates":[{"date":"2024-06-12","games":[{
             "gamePk": 746201,
             "gameDate": "2024-06-12T23:10:00Z",
@@ -232,7 +231,7 @@ struct ScheduleTests {
                 "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": false}
             }
         }]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -244,7 +243,7 @@ struct ScheduleTests {
 
     @Test("Empty dates array returns empty schedule")
     func emptyDatesReturnsEmpty() throws {
-        let json = #"{"dates":[]}"#.data(using: .utf8)!
+        let json = Data(#"{"dates":[]}"#.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -253,7 +252,7 @@ struct ScheduleTests {
 
     @Test("Date with no games returns empty schedule")
     func dateWithNoGames() throws {
-        let json = #"{"dates":[{"date":"2024-07-04","games":[]}]}"#.data(using: .utf8)!
+        let json = Data(#"{"dates":[{"date":"2024-07-04","games":[]}]}"#.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -262,7 +261,7 @@ struct ScheduleTests {
 
     @Test("Game with missing venue gets placeholder venue")
     func missingVenueGetsPlaceholder() throws {
-        let json = """
+        let json = Data("""
         {"dates":[{"date":"2024-07-04","games":[{
             "gamePk": 999,
             "gameDate": "2024-07-04T17:10:00Z",
@@ -274,7 +273,7 @@ struct ScheduleTests {
                 "home": {"team": {"id": 2, "name": "Team B"}, "isWinner": true, "score": 3}
             }
         }]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBScheduleResponse.self, from: json)
         let entries = MLBResponseConverters.scheduleEntries(from: response)
 
@@ -293,11 +292,11 @@ struct ScheduleTests {
         let game = try #require(entries.first)
 
         let awayPitcher = try #require(game.teams.away.probablePitcher)
-        #expect(awayPitcher.id == 605483)
+        #expect(awayPitcher.id == 605_483)
         #expect(awayPitcher.fullName == "Zack Wheeler")
 
         let homePitcher = try #require(game.teams.home.probablePitcher)
-        #expect(homePitcher.id == 656945)
+        #expect(homePitcher.id == 656_945)
         #expect(homePitcher.fullName == "Kodai Senga")
     }
 

@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Transaction Tests")
 struct TransactionTests {
-
     @Test("Decode transactions from fixture")
     func decodeFromFixture() throws {
         let data = try Fixtures.load("transactions_2024_07.json")
@@ -14,7 +13,7 @@ struct TransactionTests {
         #expect(transactions.count == 4)
 
         let first = try #require(transactions.first)
-        #expect(first.id == 745001)
+        #expect(first.id == 745_001)
         #expect(first.typeCode == "SGN")
         #expect(first.typeDesc == "Signing")
         #expect(first.description?.contains("Aaron Judge") == true)
@@ -27,7 +26,7 @@ struct TransactionTests {
         let transactions = MLBResponseConverters.transactions(from: response)
 
         let first = try #require(transactions.first)
-        #expect(first.person?.id == 592450)
+        #expect(first.person?.id == 592_450)
         #expect(first.person?.fullName == "Aaron Judge")
     }
 
@@ -38,7 +37,7 @@ struct TransactionTests {
         let transactions = MLBResponseConverters.transactions(from: response)
 
         // Trade: Jazz Chisholm from Marlins to Yankees
-        let trade = try #require(transactions.first(where: { $0.id == 745002 }))
+        let trade = try #require(transactions.first { $0.id == 745_002 })
         #expect(trade.fromTeam?.id == 146)
         #expect(trade.fromTeam?.name == "Miami Marlins")
         #expect(trade.toTeam?.id == 147)
@@ -54,7 +53,7 @@ struct TransactionTests {
         let first = try #require(transactions.first)
         let date = try #require(first.date)
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         #expect(components.year == 2024)
         #expect(components.month == 7)
@@ -82,9 +81,9 @@ struct TransactionTests {
 
     @Test("Empty transactions produce empty array")
     func emptyTransactions() throws {
-        let json = """
+        let json = Data("""
         {"transactions":[]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBTransactionsResponse.self, from: json)
         let transactions = MLBResponseConverters.transactions(from: response)
 
@@ -93,7 +92,7 @@ struct TransactionTests {
 
     @Test("Query builder path and modifiers")
     func queryBuilder() throws {
-        let baseURL = URL(string: "https://statsapi.mlb.com/api/v1/")!
+        let baseURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/"))
         let mock = MockAPIClient()
         let builder = QueryBuilder<[Transaction]>.transactions(client: mock)
             .dateRange(start: "2024-07-01", end: "2024-07-31")

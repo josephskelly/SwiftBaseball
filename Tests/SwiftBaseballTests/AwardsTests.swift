@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Awards Tests")
 struct AwardsTests {
-
     // MARK: - Recipients parsing
 
     @Test("Parse recipients fixture returns correct count")
@@ -30,7 +29,7 @@ struct AwardsTests {
         #expect(recipient.awardId == "ALMVP")
         #expect(recipient.awardName == "AL MVP")
         #expect(recipient.season == "2024")
-        #expect(recipient.player?.id == 592450)
+        #expect(recipient.player?.id == 592_450)
         #expect(recipient.player?.fullName == "Aaron Judge")
         #expect(recipient.teamId == 147)
     }
@@ -45,7 +44,7 @@ struct AwardsTests {
 
         let date = try #require(recipients.first?.date)
         let calendar = Calendar(identifier: .gregorian)
-        let components = calendar.dateComponents(in: TimeZone(identifier: "UTC")!, from: date)
+        let components = try calendar.dateComponents(in: #require(TimeZone(identifier: "UTC")), from: date)
         #expect(components.year == 2024)
         #expect(components.month == 11)
         #expect(components.day == 21)

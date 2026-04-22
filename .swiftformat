@@ -31,18 +31,16 @@
 --wrapreturntype preserve
 
 # Enabled rules
---enable isEmpty
 --enable redundantSelf
 --enable redundantReturn
 --enable redundantRawValues
 --enable redundantType
 --enable redundantParens
---enable sortedImports
+--enable sortImports
 --enable duplicateImports
 --enable trailingCommas
 --enable strongifiedSelf
 --enable unusedArguments
---enable wrapMultilineStatementBraces
 
 # Disabled rules — preserve existing idioms
 --disable andOperator

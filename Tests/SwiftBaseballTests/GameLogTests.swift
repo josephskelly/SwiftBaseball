@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Game Log Tests")
 struct GameLogTests {
-
     // MARK: - Fixture decoding
 
     @Test("Decode game log entries from fixture")
@@ -16,7 +15,7 @@ struct GameLogTests {
         #expect(entries.count == 3)
 
         let first = try #require(entries.first)
-        #expect(first.player.id == 660271)
+        #expect(first.player.id == 660_271)
         #expect(first.player.fullName == "Shohei Ohtani")
         #expect(first.season == "2024")
         #expect(first.team.id == 119)
@@ -26,7 +25,7 @@ struct GameLogTests {
         #expect(first.isHome == false)
         #expect(first.isWin == true)
         #expect(first.gameType == .regularSeason)
-        #expect(first.gamePk == 745444)
+        #expect(first.gamePk == 745_444)
     }
 
     @Test("Batting stats populated from game log fixture")
@@ -59,7 +58,7 @@ struct GameLogTests {
 
         let first = try #require(entries.first)
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!
+        calendar.timeZone = try #require(TimeZone(identifier: "UTC"))
         let components = calendar.dateComponents([.year, .month, .day], from: first.date)
         #expect(components.year == 2024)
         #expect(components.month == 3)
@@ -73,14 +72,14 @@ struct GameLogTests {
         let entries = MLBResponseConverters.gameLogEntries(from: response)
 
         let gamePks = entries.map(\.gamePk)
-        #expect(gamePks == [745444, 746175, 746165])
+        #expect(gamePks == [745_444, 746_175, 746_165])
     }
 
     @Test("Empty splits produce empty array")
     func emptySplits() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"gameLog"},"group":{"displayName":"hitting"},"splits":[]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBGameLogResponse.self, from: json)
         let entries = MLBResponseConverters.gameLogEntries(from: response)
 
@@ -94,7 +93,7 @@ struct GameLogTests {
     @Test("Query builder path is correct")
     func queryBuilderPath() throws {
         let mock = MockAPIClient()
-        let builder = QueryBuilder<[GameLogEntry]>.gameLog(playerId: 660271, client: mock)
+        let builder = QueryBuilder<[GameLogEntry]>.gameLog(playerId: 660_271, client: mock)
 
         #expect(builder.endpoint.path == "people/660271/stats")
         let url = try #require(builder.endpoint.url(baseURL: baseURL))
@@ -104,7 +103,7 @@ struct GameLogTests {
     @Test("Query builder with season and group modifiers")
     func queryBuilderModifiers() throws {
         let mock = MockAPIClient()
-        let builder = QueryBuilder<[GameLogEntry]>.gameLog(playerId: 660271, client: mock)
+        let builder = QueryBuilder<[GameLogEntry]>.gameLog(playerId: 660_271, client: mock)
             .season(2024)
             .group(.batting)
 
@@ -117,7 +116,7 @@ struct GameLogTests {
 
     @Test("Pitching group routes to pitching stats")
     func pitchingGroupRouting() throws {
-        let json = """
+        let json = Data("""
         {"stats":[{"type":{"displayName":"gameLog"},"group":{"displayName":"pitching"},"splits":[
             {"season":"2024","stat":{"gamesPlayed":1,"wins":1,"losses":0,"era":"2.50","inningsPitched":"6.0",
              "strikeOuts":8,"baseOnBalls":2,"hits":4,"runs":2,"earnedRuns":2,"homeRunsAllowed":1},
@@ -127,7 +126,7 @@ struct GameLogTests {
              "date":"2024-03-20","gameType":"R","isHome":true,"isWin":true,
              "game":{"gamePk":745444}}
         ]}]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBGameLogResponse.self, from: json)
         let entries = MLBResponseConverters.gameLogEntries(from: response)
 

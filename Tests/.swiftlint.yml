@@ -1,0 +1,9 @@
+# Test-specific overrides — test fixtures use force-unwrap for setup,
+# large inline JSON strings for fixtures, and other patterns that are
+# idiomatic in tests but discouraged in production code.
+
+disabled_rules:
+  - force_unwrapping
+  - line_length
+  - static_over_final_class
+  - empty_string

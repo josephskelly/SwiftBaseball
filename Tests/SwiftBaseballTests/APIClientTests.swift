@@ -1,5 +1,8 @@
-import Testing
 import Foundation
+import Testing
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 @testable import SwiftBaseball
 
 // MARK: - URLProtocol stubs
@@ -7,8 +10,13 @@ import Foundation
 private final class MockURLProtocol: URLProtocol {
     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 
-    override class func canInit(with request: URLRequest) -> Bool { true }
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override class func canInit(with request: URLRequest) -> Bool {
+        true
+    }
+
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        request
+    }
 
     override func startLoading() {
         guard let handler = MockURLProtocol.requestHandler else {
@@ -48,14 +56,13 @@ private func makeHTTPResponse(url: URL, status: Int, headers: [String: String] =
 
 @Suite("APIClient Tests", .serialized)
 struct APIClientTests {
-
     // MARK: - 429 Retry-After header parsing
 
     @Test("429 response throws rateLimited error")
     func rateLimitedThrows() async throws {
-        let testURL = URL(string: "https://statsapi.mlb.com/api/v1/teams")!
-        MockURLProtocol.requestHandler = { request in
-            return (makeHTTPResponse(url: testURL, status: 429), Data())
+        let testURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/teams"))
+        MockURLProtocol.requestHandler = { _ in
+            (makeHTTPResponse(url: testURL, status: 429), Data())
         }
 
         let client = makeClient(maxRetries: 0)
@@ -68,9 +75,9 @@ struct APIClientTests {
 
     @Test("429 with Retry-After header includes delay in error")
     func retryAfterHeaderParsed() async throws {
-        let testURL = URL(string: "https://statsapi.mlb.com/api/v1/teams")!
+        let testURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/teams"))
         MockURLProtocol.requestHandler = { _ in
-            return (makeHTTPResponse(url: testURL, status: 429, headers: ["Retry-After": "30"]), Data())
+            (makeHTTPResponse(url: testURL, status: 429, headers: ["Retry-After": "30"]), Data())
         }
 
         let client = makeClient(maxRetries: 0)
@@ -88,9 +95,9 @@ struct APIClientTests {
 
     @Test("429 without Retry-After header has nil retryAfter")
     func retryAfterNilWhenHeaderAbsent() async throws {
-        let testURL = URL(string: "https://statsapi.mlb.com/api/v1/teams")!
+        let testURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/teams"))
         MockURLProtocol.requestHandler = { _ in
-            return (makeHTTPResponse(url: testURL, status: 429), Data())
+            (makeHTTPResponse(url: testURL, status: 429), Data())
         }
 
         let client = makeClient(maxRetries: 0)
@@ -110,7 +117,7 @@ struct APIClientTests {
 
     @Test("404 throws invalidResponse immediately")
     func notFoundThrowsImmediately() async throws {
-        let testURL = URL(string: "https://statsapi.mlb.com/api/v1/people/0")!
+        let testURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/people/0"))
         var callCount = 0
         MockURLProtocol.requestHandler = { _ in
             callCount += 1
@@ -125,7 +132,7 @@ struct APIClientTests {
             Issue.record("Expected error")
         } catch SwiftBaseballError.invalidResponse(let code) {
             #expect(code == 404)
-            #expect(callCount == 1)  // Not retried
+            #expect(callCount == 1) // Not retried
         } catch {
             Issue.record("Unexpected error: \(error)")
         }
@@ -135,10 +142,10 @@ struct APIClientTests {
 
     @Test("200 response returns data")
     func successReturnsData() async throws {
-        let testURL = URL(string: "https://statsapi.mlb.com/api/v1/teams")!
+        let testURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/teams"))
         let expected = Data("{}".utf8)
         MockURLProtocol.requestHandler = { _ in
-            return (makeHTTPResponse(url: testURL, status: 200), expected)
+            (makeHTTPResponse(url: testURL, status: 200), expected)
         }
 
         let client = makeClient()

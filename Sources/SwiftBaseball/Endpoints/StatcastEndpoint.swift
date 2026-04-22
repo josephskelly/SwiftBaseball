@@ -69,7 +69,7 @@ public struct StatcastQuery: Sendable {
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
             URLQueryItem(name: "batters_lookup[]", value: String(playerId)),
-            URLQueryItem(name: "player_type", value: "batter"),
+            URLQueryItem(name: "player_type", value: "batter")
         ]
 
         if let start = startDate, let end = endDate {
@@ -155,7 +155,7 @@ public struct StatcastPitcherQuery: Sendable {
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
             URLQueryItem(name: "pitchers_lookup[]", value: String(playerId)),
-            URLQueryItem(name: "player_type", value: "pitcher"),
+            URLQueryItem(name: "player_type", value: "pitcher")
         ]
 
         if let start = startDate, let end = endDate {
@@ -187,11 +187,6 @@ public struct StatcastCareerSplitBattingQuery: Sendable {
     let playerId: Int
     let client: StatcastAPIClient
 
-    init(playerId: Int, client: StatcastAPIClient) {
-        self.playerId = playerId
-        self.client = client
-    }
-
     /// Executes the query and returns career Statcast splits vs LHP and RHP.
     ///
     /// Two HTTP requests are fired concurrently — one for `p_throws=L` and one for
@@ -215,7 +210,7 @@ public struct StatcastCareerSplitBattingQuery: Sendable {
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
             URLQueryItem(name: "player_type", value: "batter"),
-            URLQueryItem(name: "p_throws", value: pThrows),
+            URLQueryItem(name: "p_throws", value: pThrows)
         ]
     }
 }
@@ -305,7 +300,7 @@ public struct StatcastBatchBattingQuery: Sendable {
         return try await withThrowingTaskGroup(of: [Int: StatcastBatting].self) { group in
             for chunk in chunks {
                 group.addTask {
-                    let csv = try await self.client.fetchCSV(queryItems: self.buildQueryItems(for: chunk))
+                    let csv = try await client.fetchCSV(queryItems: buildQueryItems(for: chunk))
                     var rows = CSVParser.parse(csv)
                     if let gt = gtFilter {
                         rows = rows.filter { $0["game_type"] == gt }
@@ -331,7 +326,7 @@ public struct StatcastBatchBattingQuery: Sendable {
         items += [
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
-            URLQueryItem(name: "player_type", value: "batter"),
+            URLQueryItem(name: "player_type", value: "batter")
         ]
         if let start = startDate, let end = endDate {
             items.append(URLQueryItem(name: "game_date_gt", value: start))
@@ -428,7 +423,7 @@ public struct StatcastBatchPitchingQuery: Sendable {
         return try await withThrowingTaskGroup(of: [Int: StatcastPitching].self) { group in
             for chunk in chunks {
                 group.addTask {
-                    let csv = try await self.client.fetchCSV(queryItems: self.buildQueryItems(for: chunk))
+                    let csv = try await client.fetchCSV(queryItems: buildQueryItems(for: chunk))
                     var rows = CSVParser.parse(csv)
                     if let gt = gtFilter {
                         rows = rows.filter { $0["game_type"] == gt }
@@ -454,7 +449,7 @@ public struct StatcastBatchPitchingQuery: Sendable {
         items += [
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
-            URLQueryItem(name: "player_type", value: "pitcher"),
+            URLQueryItem(name: "player_type", value: "pitcher")
         ]
         if let start = startDate, let end = endDate {
             items.append(URLQueryItem(name: "game_date_gt", value: start))
@@ -524,10 +519,12 @@ public struct StatcastBatchCareerSplitBattingQuery: Sendable {
         return try await withThrowingTaskGroup(of: [Int: StatcastCareerSplits].self) { group in
             for chunk in chunks {
                 group.addTask {
-                    async let lCSV = self.client.fetchCSV(
-                        queryItems: self.buildQueryItems(for: chunk, pThrows: "L"))
-                    async let rCSV = self.client.fetchCSV(
-                        queryItems: self.buildQueryItems(for: chunk, pThrows: "R"))
+                    async let lCSV = client.fetchCSV(
+                        queryItems: buildQueryItems(for: chunk, pThrows: "L")
+                    )
+                    async let rCSV = client.fetchCSV(
+                        queryItems: buildQueryItems(for: chunk, pThrows: "R")
+                    )
                     let (lText, rText) = try await (lCSV, rCSV)
                     let lByPlayer = Dictionary(grouping: CSVParser.parse(lText)) {
                         $0["batter"].flatMap(Int.init) ?? -1
@@ -560,7 +557,7 @@ public struct StatcastBatchCareerSplitBattingQuery: Sendable {
             URLQueryItem(name: "all", value: "true"),
             URLQueryItem(name: "type", value: "details"),
             URLQueryItem(name: "player_type", value: "batter"),
-            URLQueryItem(name: "p_throws", value: pThrows),
+            URLQueryItem(name: "p_throws", value: pThrows)
         ]
         // No date range — career = all Statcast era data.
         return items
@@ -583,7 +580,6 @@ private extension Array {
 
 /// Aggregates pitch-level Statcast rows into ``StatcastBatting``.
 enum StatcastAggregator {
-
     /// wOBA linear weight assigned to a walk.
     private static let walkWOBA: Double = 0.690
     /// wOBA linear weight assigned to a hit-by-pitch.
@@ -592,15 +588,16 @@ enum StatcastAggregator {
     /// PA-terminating `events` values that record exactly one out.
     private static let singleOutEvents: Set<String> = [
         "field_out", "force_out", "sac_fly", "sac_bunt",
-        "fielder_choice_out", "catcher_interf",
+        "fielder_choice_out", "catcher_interf"
     ]
 
     /// PA-terminating `events` values that record two outs.
     private static let doublePlayEvents: Set<String> = [
         "double_play", "grounded_into_double_play",
-        "sac_fly_double_play", "sac_bunt_double_play", "strikeout_double_play",
+        "sac_fly_double_play", "sac_bunt_double_play", "strikeout_double_play"
     ]
 
+    // swiftlint:disable large_tuple
     /// Counts PA-outcome events (K, BB, HBP, outs) from the `events` CSV field.
     ///
     /// The `events` field is non-empty only on the final pitch of a plate appearance.
@@ -613,9 +610,11 @@ enum StatcastAggregator {
             guard let ev = row["events"], !ev.isEmpty else { continue }
             switch ev {
             case "strikeout":
-                k += 1; outs += 1
+                k += 1
+                outs += 1
             case "strikeout_double_play":
-                k += 1; outs += 2
+                k += 1
+                outs += 2
             case "walk":
                 bb += 1
             case "hit_by_pitch":
@@ -633,15 +632,17 @@ enum StatcastAggregator {
         return (k, bb, hbp, outs)
     }
 
+    // swiftlint:enable large_tuple
+
     static func aggregate(_ rows: [[String: String]]) -> StatcastBatting {
         // Filter to rows with a batted ball type (in-play events only).
         let battedBalls = rows.filter { $0["bb_type"] != nil }
 
         let total = battedBalls.count
-        let groundBalls = battedBalls.filter { $0["bb_type"] == "ground_ball" }.count
-        let flyBalls = battedBalls.filter { $0["bb_type"] == "fly_ball" }.count
-        let lineDrives = battedBalls.filter { $0["bb_type"] == "line_drive" }.count
-        let popups = battedBalls.filter { $0["bb_type"] == "popup" }.count
+        let groundBalls = battedBalls.count { $0["bb_type"] == "ground_ball" }
+        let flyBalls = battedBalls.count { $0["bb_type"] == "fly_ball" }
+        let lineDrives = battedBalls.count { $0["bb_type"] == "line_drive" }
+        let popups = battedBalls.count { $0["bb_type"] == "popup" }
 
         let gbPct = total > 0 ? Double(groundBalls) / Double(total) : nil
         let fbPct = total > 0 ? Double(flyBalls) / Double(total) : nil
@@ -661,18 +662,18 @@ enum StatcastAggregator {
         // Simplified MLB definition: EV >= 98 AND 26 <= LA <= 50 AND LA >= (50 - EV - 48) * 1.2.
         // Using the simpler threshold: barrel if EV >= 98 and LA in [26, 30] at minimum,
         // expanding by 2° per mph over 98, up to LA 50.
-        let barrels = battedBalls.filter { row in
+        let barrels = battedBalls.count { row in
             guard let ev = row["launch_speed"].flatMap(Double.init),
                   let la = row["launch_angle"].flatMap(Double.init),
                   ev >= 98.0 else { return false }
             let minAngle = 26.0 - (ev - 98.0) * 1.0
             let maxAngle = min(50.0, 30.0 + (ev - 98.0) * 2.0)
             return la >= max(minAngle, 8.0) && la <= maxAngle
-        }.count
+        }
         let barrelRate = total > 0 ? Double(barrels) / Double(total) : nil
 
         // Hard hit: exit velocity >= 95 mph
-        let hardHit = exitVelos.filter { $0 >= 95.0 }.count
+        let hardHit = exitVelos.count { $0 >= 95.0 }
         let hardHitRate = total > 0 ? Double(hardHit) / Double(total) : nil
 
         // xBA/xSLG: mean of per-BBE estimated values (matches Savant leaderboard methodology).
@@ -690,7 +691,7 @@ enum StatcastAggregator {
         let totalPA = total + paEvents.k + paEvents.bb + paEvents.hbp
         let xwOBA: Double? = totalPA > 0
             ? (xwOBAContactSum + walkWOBA * Double(paEvents.bb) + hbpWOBA * Double(paEvents.hbp))
-              / Double(totalPA)
+            / Double(totalPA)
             : nil
 
         return StatcastBatting(
@@ -718,6 +719,7 @@ enum StatcastAggregator {
         )
     }
 
+    // swiftlint:disable large_tuple
     /// Computes barrel/hard-hit/expected stats from batted ball rows.
     ///
     /// Shared by both ``StatcastAggregator`` and ``StatcastPitcherAggregator``.
@@ -731,10 +733,10 @@ enum StatcastAggregator {
         xBA: Double?, xSLG: Double?, xwOBA: Double?
     ) {
         let total = battedBalls.count
-        let gb = battedBalls.filter { $0["bb_type"] == "ground_ball" }.count
-        let fb = battedBalls.filter { $0["bb_type"] == "fly_ball" }.count
-        let ld = battedBalls.filter { $0["bb_type"] == "line_drive" }.count
-        let pu = battedBalls.filter { $0["bb_type"] == "popup" }.count
+        let gb = battedBalls.count { $0["bb_type"] == "ground_ball" }
+        let fb = battedBalls.count { $0["bb_type"] == "fly_ball" }
+        let ld = battedBalls.count { $0["bb_type"] == "line_drive" }
+        let pu = battedBalls.count { $0["bb_type"] == "popup" }
 
         let gbPct = total > 0 ? Double(gb) / Double(total) : nil
         let fbPct = total > 0 ? Double(fb) / Double(total) : nil
@@ -748,17 +750,17 @@ enum StatcastAggregator {
         let las = battedBalls.compactMap { $0["launch_angle"].flatMap(Double.init) }
         let avgLA = las.isEmpty ? nil : las.reduce(0, +) / Double(las.count)
 
-        let barrels = battedBalls.filter { row in
+        let barrels = battedBalls.count { row in
             guard let ev = row["launch_speed"].flatMap(Double.init),
                   let la = row["launch_angle"].flatMap(Double.init),
                   ev >= 98.0 else { return false }
             let minA = 26.0 - (ev - 98.0) * 1.0
             let maxA = min(50.0, 30.0 + (ev - 98.0) * 2.0)
             return la >= max(minA, 8.0) && la <= maxA
-        }.count
+        }
         let barrelRate = total > 0 ? Double(barrels) / Double(total) : nil
 
-        let hardHit = evs.filter { $0 >= 95.0 }.count
+        let hardHit = evs.count { $0 >= 95.0 }
         let hardHitRate = total > 0 ? Double(hardHit) / Double(total) : nil
 
         let xBAs = battedBalls.compactMap { $0["estimated_ba_using_speedangle"].flatMap(Double.init) }
@@ -771,6 +773,7 @@ enum StatcastAggregator {
         return (gb, fb, ld, pu, gbPct, fbPct, ldPct, puPct,
                 avgEV, maxEV, avgLA, barrelRate, hardHitRate, xBA, xSLG, xwOBA)
     }
+    // swiftlint:enable large_tuple
 }
 
 // MARK: - Career Split Aggregator
@@ -781,7 +784,6 @@ enum StatcastAggregator {
 /// applies the same full-PA xwOBA blend (contact + walk/HBP weights) used by
 /// ``StatcastAggregator/aggregate(_:)``.
 enum StatcastCareerSplitAggregator {
-
     /// wOBA linear weight assigned to a walk.
     private static let walkWOBA: Double = 0.690
     /// wOBA linear weight assigned to a hit-by-pitch.
@@ -792,7 +794,7 @@ enum StatcastCareerSplitAggregator {
     /// - Parameter rows: Pitch-level rows from a Savant CSV already filtered to one `p_throws` value.
     /// - Returns: ``CareerSplitStats`` with full-PA xwOBA, total PA, and truncation flag.
     static func aggregate(_ rows: [[String: String]]) -> CareerSplitStats {
-        let isTruncated = rows.count == 25_000
+        let isTruncated = rows.count == 25000
         if isTruncated {
             print("[SwiftBaseball] Warning: Savant returned 25,000 rows — career split data may be truncated.")
         }
@@ -804,7 +806,7 @@ enum StatcastCareerSplitAggregator {
             .reduce(0.0, +)
         let xwOBA: Double? = totalPA > 0
             ? (contactSum + walkWOBA * Double(paEvents.bb) + hbpWOBA * Double(paEvents.hbp))
-              / Double(totalPA)
+            / Double(totalPA)
             : nil
         return CareerSplitStats(xwOBA: xwOBA, pa: totalPA, isTruncated: isTruncated)
     }
@@ -814,21 +816,20 @@ enum StatcastCareerSplitAggregator {
 
 /// Aggregates pitch-level Statcast rows into ``StatcastPitching``.
 enum StatcastPitcherAggregator {
-
     /// Descriptions that count as swinging strikes (whiffs).
     private static let whiffDescriptions: Set<String> = [
-        "swinging_strike", "swinging_strike_blocked", "foul_tip", "missed_bunt",
+        "swinging_strike", "swinging_strike_blocked", "foul_tip", "missed_bunt"
     ]
 
     /// Descriptions that count as swings (denominator for whiff rate).
     private static let swingDescriptions: Set<String> = [
         "swinging_strike", "swinging_strike_blocked", "foul_tip", "missed_bunt",
-        "foul", "foul_bunt", "hit_into_play", "bunt_foul_tip",
+        "foul", "foul_bunt", "hit_into_play", "bunt_foul_tip"
     ]
 
     /// Descriptions that count as called strikes + whiffs (CSW numerator).
     private static let cswDescriptions: Set<String> = [
-        "called_strike", "swinging_strike", "swinging_strike_blocked",
+        "called_strike", "swinging_strike", "swinging_strike_blocked"
     ]
 
     /// Fastball pitch type codes for velocity aggregation.
@@ -867,21 +868,21 @@ enum StatcastPitcherAggregator {
         let avgSpin = spins.isEmpty ? nil : spins.reduce(0, +) / Double(spins.count)
 
         // Whiff rate = swinging strikes / total swings
-        let swings = rows.filter { row in
+        let swings = rows.count { row in
             guard let desc = row["description"] else { return false }
             return swingDescriptions.contains(desc)
-        }.count
-        let whiffs = rows.filter { row in
+        }
+        let whiffs = rows.count { row in
             guard let desc = row["description"] else { return false }
             return whiffDescriptions.contains(desc)
-        }.count
+        }
         let whiffRate = swings > 0 ? Double(whiffs) / Double(swings) : nil
 
         // CSW = (called strikes + whiffs) / total pitches
-        let cswCount = rows.filter { row in
+        let cswCount = rows.count { row in
             guard let desc = row["description"] else { return false }
             return cswDescriptions.contains(desc)
-        }.count
+        }
         let csw = totalPitches > 0 ? Double(cswCount) / Double(totalPitches) : nil
 
         // PA event counts (K, BB, HBP, outs) for xERA and xFIP
@@ -896,12 +897,14 @@ enum StatcastPitcherAggregator {
         let totalPA = battedBalls.count + paEvents.k + paEvents.bb + paEvents.hbp
         let fullPAxwOBA = totalPA > 0
             ? (xwOBAContactSum + walkWOBA * Double(paEvents.bb) + hbpWOBA * Double(paEvents.hbp))
-              / Double(totalPA)
+            / Double(totalPA)
             : nil
         // xERA ≈ fullPAxwOBA × 13.0  (linear calibration: avg xwOBA ~0.320 → ~4.16 ERA)
-        let xERA: Double? = (totalPA >= 3 && fullPAxwOBA != nil)
-            ? max(0.0, fullPAxwOBA! * 13.0)
-            : nil
+        let xERA: Double? = if totalPA >= 3, let fullPAxwOBA {
+            max(0.0, fullPAxwOBA * 13.0)
+        } else {
+            nil
+        }
 
         // xFIP = ((13 × xHR + 3 × (BB + HBP) − 2 × K) / IP) + fipConstant
         let xFIP: Double?
@@ -914,30 +917,30 @@ enum StatcastPitcherAggregator {
         }
 
         // Pitch mix
-        var pitchGroups: [String: [Dictionary<String, String>]] = [:]
+        var pitchGroups: [String: [[String: String]]] = [:]
         for row in rows {
             let name = row["pitch_name"] ?? "Unknown"
             guard !name.isEmpty else { continue }
             pitchGroups[name, default: []].append(row)
         }
-        let mix = pitchGroups.map { (name, pitches) -> PitchMixEntry in
+        let mix = pitchGroups.map { name, pitches -> PitchMixEntry in
             let velos = pitches.compactMap { $0["release_speed"].flatMap(Double.init) }
             let spinRates = pitches.compactMap { $0["release_spin_rate"].flatMap(Double.init) }
             let hBreaks = pitches.compactMap { $0["pfx_x"].flatMap(Double.init) }
             let vBreaks = pitches.compactMap { $0["pfx_z"].flatMap(Double.init) }
 
-            let pitchSwings = pitches.filter { row in
+            let pitchSwings = pitches.count { row in
                 guard let desc = row["description"] else { return false }
                 return swingDescriptions.contains(desc)
-            }.count
-            let pitchWhiffs = pitches.filter { row in
+            }
+            let pitchWhiffs = pitches.count { row in
                 guard let desc = row["description"] else { return false }
                 return whiffDescriptions.contains(desc)
-            }.count
-            let pitchCSWCount = pitches.filter { row in
+            }
+            let pitchCSWCount = pitches.count { row in
                 guard let desc = row["description"] else { return false }
                 return cswDescriptions.contains(desc)
-            }.count
+            }
             let pitchCSW: Double? = pitches.isEmpty ? nil : Double(pitchCSWCount) / Double(pitches.count)
             let pitchXwOBAValues = pitches.compactMap { row -> Double? in
                 guard row["bb_type"] != nil else { return nil }

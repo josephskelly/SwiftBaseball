@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Venue Tests")
 struct VenueTests {
-
     // MARK: - Single venue
 
     @Test("Single venue parsed correctly")
@@ -44,7 +43,7 @@ struct VenueTests {
 
         let coords = try #require(venue.coordinates)
         #expect(abs(coords.latitude - 40.82919482) < 0.00001)
-        #expect(abs(coords.longitude - (-73.9264977)) < 0.00001)
+        #expect(abs(coords.longitude - -73.9264977) < 0.00001)
     }
 
     @Test("Venue field dimensions parsed correctly")

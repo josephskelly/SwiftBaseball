@@ -8,7 +8,6 @@ import Foundation
 /// let games   = try await SwiftBaseball.schedule(.date("2024-07-04")).fetch()
 /// ```
 public enum SwiftBaseball {
-
     // MARK: - Configuration
 
     /// Thread-safe holder for the library's shared state. All reads and writes
@@ -20,7 +19,7 @@ public enum SwiftBaseball {
     private final class State: @unchecked Sendable {
         private let lock = NSLock()
         private var _client: any APIClient = URLSessionAPIClient()
-        private var _statcastClient: StatcastAPIClient = StatcastAPIClient()
+        private var _statcastClient: StatcastAPIClient = .init()
         private var _configuration: Configuration = .default
 
         var client: any APIClient {
@@ -59,6 +58,7 @@ public enum SwiftBaseball {
             _statcastClient = newStatcast
         }
     }
+
     private static let _state = State()
 
     /// Replaces the library's shared configuration.
@@ -69,8 +69,13 @@ public enum SwiftBaseball {
         _state.apply(configuration)
     }
 
-    private static var client: any APIClient { _state.client }
-    private static var statcastClient: StatcastAPIClient { _state.statcastClient }
+    private static var client: any APIClient {
+        _state.client
+    }
+
+    private static var statcastClient: StatcastAPIClient {
+        _state.statcastClient
+    }
 
     // MARK: - Players
 

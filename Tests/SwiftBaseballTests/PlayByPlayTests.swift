@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Play-by-Play Tests")
 struct PlayByPlayTests {
-
     @Test("Decode play-by-play from fixture")
     func decodeFromFixture() throws {
         let data = try Fixtures.load("play_by_play_745612.json")
@@ -50,10 +49,10 @@ struct PlayByPlayTests {
         let pbp = MLBResponseConverters.playByPlay(from: response)
 
         let second = pbp.allPlays[1]
-        #expect(second.matchup.batter.id == 660271)
+        #expect(second.matchup.batter.id == 660_271)
         #expect(second.matchup.batter.fullName == "Shohei Ohtani")
         #expect(second.matchup.batSide == .left)
-        #expect(second.matchup.pitcher.id == 543037)
+        #expect(second.matchup.pitcher.id == 543_037)
         #expect(second.matchup.pitcher.fullName == "Gerrit Cole")
         #expect(second.matchup.pitchHand == .right)
     }
@@ -86,14 +85,14 @@ struct PlayByPlayTests {
         #expect(bettsRunner.movement?.start == "1B")
         #expect(bettsRunner.movement?.end == "score")
         #expect(bettsRunner.movement?.isOut == false)
-        #expect(bettsRunner.details?.runner?.id == 605141)
+        #expect(bettsRunner.details?.runner?.id == 605_141)
     }
 
     @Test("Empty plays produce PlayByPlay with empty array")
     func emptyPlays() throws {
-        let json = """
+        let json = Data("""
         {"allPlays":[],"scoringPlays":[]}
-        """.data(using: .utf8)!
+        """.utf8)
         let response = try JSONDecoder.mlb.decode(MLBPlayByPlayResponse.self, from: json)
         let pbp = MLBResponseConverters.playByPlay(from: response)
 
@@ -103,9 +102,9 @@ struct PlayByPlayTests {
 
     @Test("Query builder path is correct")
     func queryBuilderPath() throws {
-        let baseURL = URL(string: "https://statsapi.mlb.com/api/v1/")!
+        let baseURL = try #require(URL(string: "https://statsapi.mlb.com/api/v1/"))
         let mock = MockAPIClient()
-        let builder = QueryBuilder<PlayByPlay>.playByPlay(gamePk: 745612, client: mock)
+        let builder = QueryBuilder<PlayByPlay>.playByPlay(gamePk: 745_612, client: mock)
 
         #expect(builder.endpoint.path == "game/745612/playByPlay")
         let url = try #require(builder.endpoint.url(baseURL: baseURL))

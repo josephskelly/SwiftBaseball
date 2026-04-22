@@ -1,16 +1,15 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Statcast Leaderboard Tests")
 struct StatcastLeaderboardTests {
-
     // MARK: - Sprint Speed Parser
 
     @Test("Parse sprint speed leaderboard from fixture")
     func parseSprintSpeedLeaderboard() throws {
         let data = try Fixtures.load("sprint_speed_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = SprintSpeedParser.parse(csv, season: 2024)
 
         #expect(entries.count == 5)
@@ -21,12 +20,12 @@ struct StatcastLeaderboardTests {
     @Test("Sprint speed: fastest player parsed correctly")
     func sprintSpeedTopEntry() throws {
         let data = try Fixtures.load("sprint_speed_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = SprintSpeedParser.parse(csv, season: 2024)
 
         let top = try #require(entries.first)
-        #expect(top.playerId == 682829)
-        #expect(top.playerName == "De La Cruz, Elly")  // parsed from "last_name, first_name" column
+        #expect(top.playerId == 682_829)
+        #expect(top.playerName == "De La Cruz, Elly") // parsed from "last_name, first_name" column
         #expect(top.team == "CIN")
         #expect(abs(top.sprintSpeed - 30.5) < 0.01)
         #expect(top.sprintAttempts == 312)
@@ -37,11 +36,11 @@ struct StatcastLeaderboardTests {
     @Test("Sprint speed: all numeric fields parse correctly")
     func sprintSpeedNumericFields() throws {
         let data = try Fixtures.load("sprint_speed_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = SprintSpeedParser.parse(csv, season: 2024)
 
         // Verify second entry (Witt Jr.)
-        let witt = try #require(entries.first { $0.playerId == 677951 })
+        let witt = try #require(entries.first { $0.playerId == 677_951 })
         #expect(abs(witt.sprintSpeed - 30.1) < 0.01)
         #expect(witt.sprintAttempts == 289)
         #expect(witt.percentile == 99)
@@ -49,7 +48,7 @@ struct StatcastLeaderboardTests {
     }
 
     @Test("Sprint speed: row with missing optional fields uses nil")
-    func sprintSpeedMissingOptionals() throws {
+    func sprintSpeedMissingOptionals() {
         let csv = """
         "last_name, first_name",player_id,team,sprint_speed,competitive_runs
         "De La Cruz, Elly",682829,CIN,30.5,312
@@ -61,7 +60,7 @@ struct StatcastLeaderboardTests {
     }
 
     @Test("Sprint speed: row missing required fields is skipped")
-    func sprintSpeedSkipsMalformedRow() throws {
+    func sprintSpeedSkipsMalformedRow() {
         let csv = """
         "last_name, first_name",player_id,team,sprint_speed,competitive_runs
         "De La Cruz, Elly",682829,CIN,30.5,312
@@ -103,7 +102,7 @@ struct StatcastLeaderboardTests {
     @Test("Parse OAA leaderboard from fixture")
     func parseOAALeaderboard() throws {
         let data = try Fixtures.load("oaa_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = OAAParser.parse(csv, season: 2024)
 
         #expect(entries.count == 5)
@@ -113,11 +112,11 @@ struct StatcastLeaderboardTests {
     @Test("OAA: top fielder parsed correctly")
     func oaaTopEntry() throws {
         let data = try Fixtures.load("oaa_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = OAAParser.parse(csv, season: 2024)
 
         let top = try #require(entries.first)
-        #expect(top.playerId == 571448)
+        #expect(top.playerId == 571_448)
         #expect(top.playerName == "Arenado, Nolan")
         #expect(top.team == "STL")
         #expect(abs(top.oaa - 12.4) < 0.01)
@@ -129,11 +128,11 @@ struct StatcastLeaderboardTests {
     @Test("OAA: negative OAA value parses correctly")
     func oaaNegativeValue() throws {
         let data = try Fixtures.load("oaa_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = OAAParser.parse(csv, season: 2024)
 
-        let ohtani = try #require(entries.first { $0.playerId == 660271 })
-        #expect(abs(ohtani.oaa - (-1.4)) < 0.01)
+        let ohtani = try #require(entries.first { $0.playerId == 660_271 })
+        #expect(abs(ohtani.oaa - -1.4) < 0.01)
         #expect(ohtani.percentile == 42)
         #expect(ohtani.position == "LF")
     }
@@ -141,7 +140,7 @@ struct StatcastLeaderboardTests {
     @Test("OAA: all entries have player IDs and OAA values")
     func oaaAllEntriesValid() throws {
         let data = try Fixtures.load("oaa_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = OAAParser.parse(csv, season: 2024)
 
         #expect(entries.allSatisfy { $0.playerId > 0 })
@@ -200,7 +199,7 @@ struct StatcastLeaderboardTests {
     @Test("Parse catcher framing leaderboard from fixture")
     func parseCatcherFramingLeaderboard() throws {
         let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         #expect(entries.count == 5)
@@ -210,11 +209,11 @@ struct StatcastLeaderboardTests {
     @Test("Catcher framing: first entry parsed correctly")
     func catcherFramingTopEntry() throws {
         let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         let top = try #require(entries.first)
-        #expect(top.playerId == 672275)
+        #expect(top.playerId == 672_275)
         #expect(top.playerName == "Bailey, Patrick")
         #expect(abs(top.framingRunsAdded - 25.06) < 0.01)
         #expect(abs(top.calledStrikeRate - 0.4764) < 0.001)
@@ -224,11 +223,11 @@ struct StatcastLeaderboardTests {
     @Test("Catcher framing: negative framing runs parses correctly")
     func catcherFramingNegativeValue() throws {
         let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = CatcherFramingParser.parse(csv, season: 2024)
 
-        let realmuto = try #require(entries.first { $0.playerId == 592663 })
-        #expect(abs(realmuto.framingRunsAdded - (-8.37)) < 0.01)
+        let realmuto = try #require(entries.first { $0.playerId == 592_663 })
+        #expect(abs(realmuto.framingRunsAdded - -8.37) < 0.01)
         #expect(realmuto.playerName == "Realmuto, J.T.")
         #expect(realmuto.pitchesSeen == 9714)
     }
@@ -236,7 +235,7 @@ struct StatcastLeaderboardTests {
     @Test("Catcher framing: all entries have valid player IDs and names")
     func catcherFramingAllEntriesValid() throws {
         let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = CatcherFramingParser.parse(csv, season: 2024)
 
         #expect(entries.allSatisfy { $0.playerId > 0 })
@@ -246,7 +245,7 @@ struct StatcastLeaderboardTests {
     @Test("Catcher framing: season is injected by parser")
     func catcherFramingSeasonInjected() throws {
         let data = try Fixtures.load("catcher_framing_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = CatcherFramingParser.parse(csv, season: 2023)
 
         #expect(entries.allSatisfy { $0.season == 2023 })
@@ -258,7 +257,7 @@ struct StatcastLeaderboardTests {
         let csv = "\u{FEFF}id,name,pitches,rv_tot,pct_tot,rv_11,pct_11,rv_12,pct_12,rv_13,pct_13,rv_14,pct_14,rv_16,pct_16,rv_17,pct_17,rv_18,pct_18,rv_19,pct_19\n672275,\"Bailey, Patrick\",8913,25.06,0.4764,2,0.229,5,0.529,3,0.268,6,0.612,3,0.596,2,0.366,2,0.505,2,0.237\n"
         let entries = CatcherFramingParser.parse(csv, season: 2024)
         #expect(entries.count == 1)
-        #expect(entries[0].playerId == 672275)
+        #expect(entries[0].playerId == 672_275)
     }
 
     @Test("Catcher framing: row missing required field is skipped")
@@ -306,7 +305,7 @@ struct StatcastLeaderboardTests {
     @Test("Parse pop time leaderboard from fixture")
     func parsePopTimeLeaderboard() throws {
         let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = PopTimeParser.parse(csv, season: 2024)
 
         #expect(entries.count == 5)
@@ -316,11 +315,11 @@ struct StatcastLeaderboardTests {
     @Test("Pop time: first entry parsed correctly")
     func popTimeTopEntry() throws {
         let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = PopTimeParser.parse(csv, season: 2024)
 
         let top = try #require(entries.first)
-        #expect(top.playerId == 672275)
+        #expect(top.playerId == 672_275)
         #expect(top.playerName == "Bailey, Patrick")
         #expect(abs(top.popTimeTo2B - 1.85) < 0.001)
         #expect(top.throwsTo2B == 58)
@@ -331,10 +330,10 @@ struct StatcastLeaderboardTests {
     @Test("Pop time: CS and SB splits parsed correctly")
     func popTimeSplits() throws {
         let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = PopTimeParser.parse(csv, season: 2024)
 
-        let bailey = try #require(entries.first { $0.playerId == 672275 })
+        let bailey = try #require(entries.first { $0.playerId == 672_275 })
         #expect(abs((bailey.popTimeTo2BOnCS ?? 0) - 1.83) < 0.001)
         #expect(abs((bailey.popTimeTo2BOnSB ?? 0) - 1.86) < 0.001)
     }
@@ -342,10 +341,10 @@ struct StatcastLeaderboardTests {
     @Test("Pop time: 3B fields parsed when present")
     func popTime3BFields() throws {
         let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = PopTimeParser.parse(csv, season: 2024)
 
-        let realmuto = try #require(entries.first { $0.playerId == 592663 })
+        let realmuto = try #require(entries.first { $0.playerId == 592_663 })
         #expect(realmuto.throwsTo3B == 4)
         #expect(abs((realmuto.popTimeTo3B ?? 0) - 1.42) < 0.001)
     }
@@ -353,10 +352,10 @@ struct StatcastLeaderboardTests {
     @Test("Pop time: 3B fields nil when no 3B attempts")
     func popTimeNo3BAttempts() throws {
         let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = PopTimeParser.parse(csv, season: 2024)
 
-        let haase = try #require(entries.first { $0.playerId == 606992 })
+        let haase = try #require(entries.first { $0.playerId == 606_992 })
         #expect(haase.throwsTo3B == 0)
         #expect(haase.popTimeTo3B == nil)
     }
@@ -364,7 +363,7 @@ struct StatcastLeaderboardTests {
     @Test("Pop time: season injected by parser")
     func popTimeSeasonInjected() throws {
         let data = try Fixtures.load("pop_time_leaderboard_2024.csv")
-        let csv = String(data: data, encoding: .utf8)!
+        let csv = try #require(String(data: data, encoding: .utf8))
         let entries = PopTimeParser.parse(csv, season: 2023)
 
         #expect(entries.allSatisfy { $0.season == 2023 })

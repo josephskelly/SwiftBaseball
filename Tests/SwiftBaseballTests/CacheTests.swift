@@ -1,14 +1,13 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Cache Tests")
 struct CacheTests {
-
     @Test("Cache stores and retrieves data")
     func cacheStoresAndRetrieves() async {
         let cache = CacheManager(defaultTTL: 60)
-        let data = "hello".data(using: .utf8)!
+        let data = Data("hello".utf8)
 
         await cache.set(key: "test", data: data)
         let retrieved = await cache.get(key: "test")
@@ -25,8 +24,8 @@ struct CacheTests {
 
     @Test("Cache evicts expired entries")
     func cacheEvictsExpired() async throws {
-        let cache = CacheManager(defaultTTL: 0.05)  // 50ms TTL
-        let data = "expires_soon".data(using: .utf8)!
+        let cache = CacheManager(defaultTTL: 0.05) // 50ms TTL
+        let data = Data("expires_soon".utf8)
 
         await cache.set(key: "short-lived", data: data)
 
@@ -45,7 +44,7 @@ struct CacheTests {
     func cacheCount() async {
         let cache = CacheManager()
 
-        #expect(await cache.count == 0)
+        #expect(await cache.isEmpty)
 
         await cache.set(key: "a", data: Data())
         await cache.set(key: "b", data: Data())
@@ -60,15 +59,15 @@ struct CacheTests {
 
         await cache.purgeAll()
 
-        #expect(await cache.count == 0)
+        #expect(await cache.isEmpty)
         #expect(await cache.get(key: "a") == nil)
     }
 
     @Test("invalidate removes specific key")
     func cacheInvalidateKey() async {
         let cache = CacheManager()
-        let dataA = "a".data(using: .utf8)!
-        let dataB = "b".data(using: .utf8)!
+        let dataA = Data("a".utf8)
+        let dataB = Data("b".utf8)
 
         await cache.set(key: "a", data: dataA)
         await cache.set(key: "b", data: dataB)

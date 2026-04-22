@@ -1,10 +1,9 @@
-import Testing
 import Foundation
 @testable import SwiftBaseball
+import Testing
 
 @Suite("Enum Tests")
 struct EnumTests {
-
     // MARK: - Position
 
     @Test("All Position cases round-trip through rawValue", arguments: Position.allCases)
@@ -19,9 +18,9 @@ struct EnumTests {
 
     @Test("Position.unknown is the fallback for unrecognized codes")
     func positionUnknownFallback() {
-        #expect(Position(rawValue: "ZZZ") == nil)  // rawValue init returns nil
+        #expect(Position(rawValue: "ZZZ") == nil) // rawValue init returns nil
         // The lenient JSON decoder maps unrecognized to .unknown
-        let json = #""ZZZZZ""#.data(using: .utf8)!
+        let json = Data(#""ZZZZZ""#.utf8)
         let decoded = try? JSONDecoder().decode(Position.self, from: json)
         #expect(decoded == .unknown)
     }
@@ -35,7 +34,7 @@ struct EnumTests {
 
     @Test("HandSide.unknown is the fallback for unrecognized codes")
     func handSideUnknownFallback() {
-        let json = #""X""#.data(using: .utf8)!
+        let json = Data(#""X""#.utf8)
         let decoded = try? JSONDecoder().decode(HandSide.self, from: json)
         #expect(decoded == .unknown)
     }
@@ -49,7 +48,7 @@ struct EnumTests {
 
     @Test("GameType.exhibition decodes from 'E'")
     func gameTypeExhibition() {
-        let json = #""E""#.data(using: .utf8)!
+        let json = Data(#""E""#.utf8)
         let decoded = try? JSONDecoder().decode(GameType.self, from: json)
         #expect(decoded == .exhibition)
     }
@@ -61,7 +60,7 @@ struct EnumTests {
 
     @Test("GameType.unknown is the fallback for unrecognized codes")
     func gameTypeUnknownFallback() {
-        let json = #""X""#.data(using: .utf8)!
+        let json = Data(#""X""#.utf8)
         let decoded = try? JSONDecoder().decode(GameType.self, from: json)
         #expect(decoded == .unknown)
     }
@@ -75,7 +74,7 @@ struct EnumTests {
 
     @Test("GameStatus.scheduled is the fallback for unrecognized codes")
     func gameStatusUnknownFallback() {
-        let json = #""NotAStatus""#.data(using: .utf8)!
+        let json = Data(#""NotAStatus""#.utf8)
         let decoded = try? JSONDecoder().decode(GameStatus.self, from: json)
         #expect(decoded == .scheduled)
     }
@@ -83,12 +82,12 @@ struct EnumTests {
     @Test("GameStatus new cases round-trip through rawValue")
     func gameStatusNewCasesRoundTrip() {
         let cases: [(GameStatus, String)] = [
-            (.preGame,        "Pre-Game"),
+            (.preGame, "Pre-Game"),
             (.completedEarly, "Completed Early"),
-            (.gameOver,       "Game Over"),
-            (.rainDelay,      "Rain Delay"),
-            (.delayed,        "Delayed"),
-            (.delayedStart,   "Delayed Start"),
+            (.gameOver, "Game Over"),
+            (.rainDelay, "Rain Delay"),
+            (.delayed, "Delayed"),
+            (.delayedStart, "Delayed Start")
         ]
         for (status, raw) in cases {
             #expect(GameStatus(rawValue: raw) == status)

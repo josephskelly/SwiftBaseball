@@ -10,6 +10,4 @@ extension QueryBuilder where T == [DraftPick] {
             return MLBResponseConverters.draftPicks(from: response, year: year)
         }
     }
-
-
 }

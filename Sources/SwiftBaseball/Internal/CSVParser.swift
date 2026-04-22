@@ -5,7 +5,6 @@ import Foundation
 /// Handles quoted fields, embedded commas, and empty values.
 /// Does not handle newlines within quoted fields (not needed for Statcast data).
 enum CSVParser {
-
     /// Parses CSV text into an array of dictionaries keyed by header name.
     ///
     /// Strips a leading UTF-8 BOM (`U+FEFF`) if present — several Baseball Savant

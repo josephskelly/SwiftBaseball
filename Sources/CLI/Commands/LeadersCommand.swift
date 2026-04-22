@@ -1,16 +1,20 @@
+import CLISupport
 import Foundation
 import SwiftBaseball
-import CLISupport
 
-struct LeadersCommand {
+enum LeadersCommand {
     /// `leaders <stat> [--season YEAR] [--limit N]`
     static func run(args: [String]) async throws {
-        guard let statName = args.first else { printUsage(); return }
+        guard let statName = args.first else { printUsage()
+            return
+        }
 
         guard let category = LeaderStatCategory(rawValue: statName) else {
             print("Unknown stat category: \(statName)")
             print("Batting:  homeRuns, battingAverage, onBasePlusSlugging, rbi, hits, runs, doubles, triples, stolenBases")
-            print("Pitching: earnedRunAverage, wins, strikeouts, saves, whip, inningsPitched, walksAndHitsPerInningPitched, strikeoutsPer9Inn")
+            print(
+                "Pitching: earnedRunAverage, wins, strikeouts, saves, whip, inningsPitched, walksAndHitsPerInningPitched, strikeoutsPer9Inn"
+            )
             return
         }
 

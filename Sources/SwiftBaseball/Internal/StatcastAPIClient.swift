@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// HTTP client for Baseball Savant / Statcast CSV endpoints.
 ///
@@ -9,6 +12,7 @@ final class StatcastAPIClient: Sendable {
     private let baseURL: URL
     private let rateLimiter: RateLimiter
 
+    // swiftlint:disable:next force_unwrapping
     static let savantBaseURL = URL(string: "https://baseballsavant.mlb.com")!
 
     init(configuration: Configuration = .default) {
@@ -47,10 +51,14 @@ final class StatcastAPIClient: Sendable {
     /// Used by leaderboard endpoints (e.g. `leaderboard/sprint-speed`) that share
     /// the same rate limiter and error-handling as the main Statcast search.
     func fetchSavantCSV(path: String, queryItems: [URLQueryItem]) async throws -> String {
-        var components = URLComponents(
+        guard var components = URLComponents(
             url: baseURL.appendingPathComponent(path),
             resolvingAgainstBaseURL: false
-        )!
+        ) else {
+            throw SwiftBaseballError.configurationError(
+                "Could not construct Statcast URL"
+            )
+        }
         components.queryItems = queryItems
 
         guard let url = components.url else {
@@ -72,7 +80,7 @@ final class StatcastAPIClient: Sendable {
         guard let http = response as? HTTPURLResponse else {
             throw SwiftBaseballError.unexpectedResponse
         }
-        guard (200...299).contains(http.statusCode) else {
+        guard (200 ... 299).contains(http.statusCode) else {
             if http.statusCode == 429 {
                 let retryAfter = http.value(forHTTPHeaderField: "Retry-After")
                     .flatMap(TimeInterval.init)

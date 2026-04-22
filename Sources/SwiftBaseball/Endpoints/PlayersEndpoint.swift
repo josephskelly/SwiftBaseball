@@ -13,7 +13,7 @@ extension PlayerQuery {
     var endpoint: Endpoint {
         switch self {
         case .search(let name):
-            return Endpoint(path: "people/search", queryItems: [
+            Endpoint(path: "people/search", queryItems: [
                 URLQueryItem(name: "names", value: name),
                 URLQueryItem(name: "hydrate", value: "currentTeam")
             ])

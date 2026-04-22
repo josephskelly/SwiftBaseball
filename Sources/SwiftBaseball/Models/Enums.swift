@@ -7,57 +7,57 @@ import Foundation
 /// Positions are identified by their scorecard number (1–10) or special codes.
 public enum Position: String, Codable, Sendable, Hashable, CaseIterable {
     /// Pitcher (1).
-    case pitcher          = "1"
+    case pitcher = "1"
     /// Catcher (2).
-    case catcher          = "2"
+    case catcher = "2"
     /// First base (3).
-    case firstBase        = "3"
+    case firstBase = "3"
     /// Second base (4).
-    case secondBase       = "4"
+    case secondBase = "4"
     /// Third base (5).
-    case thirdBase        = "5"
+    case thirdBase = "5"
     /// Shortstop (6).
-    case shortstop        = "6"
+    case shortstop = "6"
     /// Left field (7).
-    case leftField        = "7"
+    case leftField = "7"
     /// Center field (8).
-    case centerField      = "8"
+    case centerField = "8"
     /// Right field (9).
-    case rightField       = "9"
+    case rightField = "9"
     /// Designated hitter (10).
     case designatedHitter = "10"
     /// Generic outfield.
-    case outfield         = "OF"
+    case outfield = "OF"
     /// Generic infield.
-    case infield          = "IF"
+    case infield = "IF"
     /// Pinch hitter.
-    case pinchHitter      = "PH"
+    case pinchHitter = "PH"
     /// Pinch runner.
-    case pinchRunner      = "PR"
+    case pinchRunner = "PR"
     /// Two-way player.
-    case twoWayPlayer     = "Y"
+    case twoWayPlayer = "Y"
     /// Unrecognized or missing position.
-    case unknown          = "U"
+    case unknown = "U"
 
     /// Human-readable display name.
     public var displayName: String {
         switch self {
-        case .pitcher:          return "Pitcher"
-        case .catcher:          return "Catcher"
-        case .firstBase:        return "First Base"
-        case .secondBase:       return "Second Base"
-        case .thirdBase:        return "Third Base"
-        case .shortstop:        return "Shortstop"
-        case .leftField:        return "Left Field"
-        case .centerField:      return "Center Field"
-        case .rightField:       return "Right Field"
-        case .designatedHitter: return "Designated Hitter"
-        case .outfield:         return "Outfield"
-        case .infield:          return "Infield"
-        case .pinchHitter:      return "Pinch Hitter"
-        case .pinchRunner:      return "Pinch Runner"
-        case .twoWayPlayer:     return "Two-Way Player"
-        case .unknown:          return "Unknown"
+        case .pitcher: "Pitcher"
+        case .catcher: "Catcher"
+        case .firstBase: "First Base"
+        case .secondBase: "Second Base"
+        case .thirdBase: "Third Base"
+        case .shortstop: "Shortstop"
+        case .leftField: "Left Field"
+        case .centerField: "Center Field"
+        case .rightField: "Right Field"
+        case .designatedHitter: "Designated Hitter"
+        case .outfield: "Outfield"
+        case .infield: "Infield"
+        case .pinchHitter: "Pinch Hitter"
+        case .pinchRunner: "Pinch Runner"
+        case .twoWayPlayer: "Two-Way Player"
+        case .unknown: "Unknown"
         }
     }
 
@@ -74,11 +74,11 @@ public enum Position: String, Codable, Sendable, Hashable, CaseIterable {
 /// Batting or throwing hand side.
 public enum HandSide: String, Codable, Sendable, Hashable, CaseIterable {
     /// Left-handed.
-    case left    = "L"
+    case left = "L"
     /// Right-handed.
-    case right   = "R"
+    case right = "R"
     /// Switch hitter or ambidextrous.
-    case both    = "S"
+    case both = "S"
     /// Unknown or unspecified.
     case unknown = "U"
 
@@ -101,8 +101,8 @@ public enum League: String, Codable, Sendable, Hashable, CaseIterable {
     /// MLB Stats API numeric league ID.
     var leagueId: Int {
         switch self {
-        case .american: return 103
-        case .national: return 104
+        case .american: 103
+        case .national: 104
         }
     }
 
@@ -129,35 +129,35 @@ public enum League: String, Codable, Sendable, Hashable, CaseIterable {
 /// MLB division identifier, using the API's numeric IDs as raw values.
 public enum Division: Int, Codable, Sendable, Hashable, CaseIterable {
     /// American League East.
-    case alEast    = 201
+    case alEast = 201
     /// American League Central.
     case alCentral = 202
     /// American League West.
-    case alWest    = 200
+    case alWest = 200
     /// National League East.
-    case nlEast    = 204
+    case nlEast = 204
     /// National League Central.
     case nlCentral = 205
     /// National League West.
-    case nlWest    = 203
+    case nlWest = 203
 
     /// The league this division belongs to.
     public var league: League {
         switch self {
-        case .alEast, .alCentral, .alWest: return .american
-        case .nlEast, .nlCentral, .nlWest: return .national
+        case .alEast, .alCentral, .alWest: .american
+        case .nlEast, .nlCentral, .nlWest: .national
         }
     }
 
     /// Human-readable display name (e.g. "AL East").
     public var displayName: String {
         switch self {
-        case .alEast:    return "AL East"
-        case .alCentral: return "AL Central"
-        case .alWest:    return "AL West"
-        case .nlEast:    return "NL East"
-        case .nlCentral: return "NL Central"
-        case .nlWest:    return "NL West"
+        case .alEast: "AL East"
+        case .alCentral: "AL Central"
+        case .alWest: "AL West"
+        case .nlEast: "NL East"
+        case .nlCentral: "NL Central"
+        case .nlWest: "NL West"
         }
     }
 }
@@ -167,36 +167,36 @@ public enum Division: Int, Codable, Sendable, Hashable, CaseIterable {
 /// Type of MLB game.
 public enum GameType: String, Codable, Sendable, Hashable, CaseIterable {
     /// Spring training.
-    case springTraining      = "S"
+    case springTraining = "S"
     /// Regular season.
-    case regularSeason       = "R"
+    case regularSeason = "R"
     /// Wild card round.
-    case wildCard            = "F"
+    case wildCard = "F"
     /// Division series (ALDS/NLDS).
-    case divisionSeries      = "D"
+    case divisionSeries = "D"
     /// League championship series (ALCS/NLCS).
-    case leagueChampionship  = "L"
+    case leagueChampionship = "L"
     /// World Series.
-    case worldSeries         = "W"
+    case worldSeries = "W"
     /// All-Star Game.
-    case allStar             = "A"
+    case allStar = "A"
     /// Exhibition game (e.g. MLB team vs minor-league affiliate).
-    case exhibition          = "E"
+    case exhibition = "E"
     /// Unrecognized game type returned by the API.
-    case unknown             = "U"
+    case unknown = "U"
 
     /// Human-readable label for display in UI (e.g. "Spring Training").
     public var displayName: String {
         switch self {
-        case .springTraining:     return "Spring Training"
-        case .regularSeason:      return "Regular Season"
-        case .wildCard:           return "Wild Card"
-        case .divisionSeries:     return "Division Series"
-        case .leagueChampionship: return "League Championship"
-        case .worldSeries:        return "World Series"
-        case .allStar:            return "All-Star Game"
-        case .exhibition:         return "Exhibition"
-        case .unknown:            return "Unknown"
+        case .springTraining: "Spring Training"
+        case .regularSeason: "Regular Season"
+        case .wildCard: "Wild Card"
+        case .divisionSeries: "Division Series"
+        case .leagueChampionship: "League Championship"
+        case .worldSeries: "World Series"
+        case .allStar: "All-Star Game"
+        case .exhibition: "Exhibition"
+        case .unknown: "Unknown"
         }
     }
 
@@ -243,9 +243,9 @@ public enum StatGroup: String, Codable, Sendable, Hashable, CaseIterable {
     /// MLB Stats API `group` parameter value.
     var apiValue: String {
         switch self {
-        case .batting:  return "hitting"
-        case .pitching: return "pitching"
-        case .fielding: return "fielding"
+        case .batting: "hitting"
+        case .pitching: "pitching"
+        case .fielding: "fielding"
         }
     }
 }
@@ -280,30 +280,30 @@ public enum StatType: String, Codable, Sendable, Hashable, CaseIterable {
 ///         .fetch()
 public enum Sport: Int, Codable, Sendable, Hashable, CaseIterable {
     /// Major League Baseball (default for all queries).
-    case mlb            = 1
+    case mlb = 1
     /// Triple-A (AAA) — highest minor league level.
-    case tripleA        = 11
+    case tripleA = 11
     /// Double-A (AA).
-    case doubleA        = 12
+    case doubleA = 12
     /// High-A.
-    case highA          = 13
+    case highA = 13
     /// Single-A.
-    case singleA        = 14
+    case singleA = 14
     /// Rookie level.
-    case rookie         = 16
+    case rookie = 16
     /// Complex League (ACL / FCL).
-    case complexLeague  = 17
+    case complexLeague = 17
 
     /// Human-readable display name.
     public var displayName: String {
         switch self {
-        case .mlb:           return "MLB"
-        case .tripleA:       return "Triple-A"
-        case .doubleA:       return "Double-A"
-        case .highA:         return "High-A"
-        case .singleA:       return "Single-A"
-        case .rookie:        return "Rookie"
-        case .complexLeague: return "Complex League"
+        case .mlb: "MLB"
+        case .tripleA: "Triple-A"
+        case .doubleA: "Double-A"
+        case .highA: "High-A"
+        case .singleA: "Single-A"
+        case .rookie: "Rookie"
+        case .complexLeague: "Complex League"
         }
     }
 }
@@ -313,31 +313,31 @@ public enum Sport: Int, Codable, Sendable, Hashable, CaseIterable {
 /// Current status of a game.
 public enum GameStatus: String, Codable, Sendable, Hashable, CaseIterable {
     /// Game is scheduled but has not started.
-    case scheduled   = "Scheduled"
+    case scheduled = "Scheduled"
     /// Lineups have been posted; game has not yet started.
-    case preGame     = "Pre-Game"
+    case preGame = "Pre-Game"
     /// Teams are warming up.
-    case warmup      = "Warmup"
+    case warmup = "Warmup"
     /// Game is currently being played.
-    case inProgress  = "In Progress"
+    case inProgress = "In Progress"
     /// Game has completed.
-    case final       = "Final"
+    case final = "Final"
     /// Game has been postponed.
-    case postponed   = "Postponed"
+    case postponed = "Postponed"
     /// Game has been cancelled.
-    case cancelled   = "Cancelled"
+    case cancelled = "Cancelled"
     /// Game has been suspended.
-    case suspended      = "Suspended"
+    case suspended = "Suspended"
     /// Game was completed early (e.g. weather-shortened).
     case completedEarly = "Completed Early"
     /// Game is over; alternative MLB term for a final state.
-    case gameOver       = "Game Over"
+    case gameOver = "Game Over"
     /// Game is delayed due to rain or another condition during play.
-    case rainDelay      = "Rain Delay"
+    case rainDelay = "Rain Delay"
     /// Game is delayed (generic mid-game delay).
-    case delayed        = "Delayed"
+    case delayed = "Delayed"
     /// Game has a delayed start before first pitch.
-    case delayedStart   = "Delayed Start"
+    case delayedStart = "Delayed Start"
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()

@@ -1,8 +1,8 @@
+import CLISupport
 import Foundation
 import SwiftBaseball
-import CLISupport
 
-struct StandingsCommand {
+enum StandingsCommand {
     /// `standings [--season YEAR] [--league AL|NL]`
     static func run(args: [String]) async throws {
         var seasonYear: Int?
@@ -20,7 +20,8 @@ struct StandingsCommand {
                     switch args[i].uppercased() {
                     case "AL": leagueFilter = .american
                     case "NL": leagueFilter = .national
-                    default: print("Unknown league: \(args[i])"); return
+                    default: print("Unknown league: \(args[i])")
+                        return
                     }
                 }
             default:

@@ -53,7 +53,14 @@ public actor CacheManager {
     }
 
     /// The number of entries currently in the cache (including expired).
-    public var count: Int { store.count }
+    public var count: Int {
+        store.count
+    }
+
+    /// `true` when the cache holds no entries.
+    public var isEmpty: Bool {
+        store.isEmpty
+    }
 }
 
 // MARK: - Caching APIClient wrapper

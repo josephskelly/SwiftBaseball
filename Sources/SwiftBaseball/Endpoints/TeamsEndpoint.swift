@@ -14,12 +14,12 @@ extension TeamQuery {
     var endpoint: Endpoint {
         switch self {
         case .all(let season):
-            return Endpoint(path: "teams", queryItems: [
+            Endpoint(path: "teams", queryItems: [
                 URLQueryItem(name: "sportId", value: "1"),
                 URLQueryItem(name: "season", value: String(season))
             ])
-        case .roster(let teamId, let season):
-            return Endpoint(path: "teams/\(teamId)/roster", queryItems: [
+        case let .roster(teamId, season):
+            Endpoint(path: "teams/\(teamId)/roster", queryItems: [
                 URLQueryItem(name: "season", value: String(season))
             ])
         }
