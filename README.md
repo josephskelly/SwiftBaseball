@@ -187,6 +187,15 @@ for player in alumni {
     print("\(player.fullName) — last season with team: \(player.alumniLastSeason ?? "?")")
 }
 
+// Team leaders — one category entry per stat group (hitting, pitching, catching, ...)
+let hr = try await SwiftBaseball
+    .teamLeaders(teamId: 147, category: .homeRuns)
+    .season(2024)
+    .fetch()
+let batters = hr.first { $0.statGroup == .batting }
+print(batters?.leaders.first?.player.fullName ?? "")   // "Aaron Judge"
+print(batters?.leaders.first?.value ?? "")              // "58"
+
 // Season attendance — one record per gameType (regular season, postseason, ...)
 let gate = try await SwiftBaseball.attendance(teamId: 147, season: 2024).fetch()
 let regular = gate.first { $0.gameType == .regularSeason }

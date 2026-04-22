@@ -239,6 +239,32 @@ enum MLBResponseConverters {
         )
     }
 
+    static func teamLeaders(from response: MLBTeamLeadersResponse) -> [TeamLeaderCategory] {
+        response.teamLeaders.compactMap(teamLeaderCategory(from:))
+    }
+
+    private static func teamLeaderCategory(from raw: MLBTeamLeaderCategory) -> TeamLeaderCategory? {
+        guard let teamRaw = raw.team else { return nil }
+        return TeamLeaderCategory(
+            leaderCategory: raw.leaderCategory ?? "",
+            statGroup: leaderStatGroup(from: raw.statGroup),
+            season: raw.season ?? "",
+            gameType: raw.gameType?.id.flatMap(GameType.init(rawValue:)),
+            team: TeamReference(id: teamRaw.id, name: teamRaw.displayName),
+            totalSplits: raw.totalSplits,
+            leaders: raw.leaders.compactMap(leaderEntry)
+        )
+    }
+
+    private static func leaderStatGroup(from apiValue: String?) -> StatGroup? {
+        switch apiValue?.lowercased() {
+        case "hitting": .batting
+        case "pitching": .pitching
+        case "fielding": .fielding
+        default: nil
+        }
+    }
+
     // MARK: - Player stats
 
     static func playerSeasonStats(

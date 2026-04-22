@@ -278,6 +278,22 @@ struct MLBLeaderEntry: Decodable {
     let leagueRank: Int?
 }
 
+// MARK: - Team Leaders
+
+struct MLBTeamLeadersResponse: Decodable {
+    let teamLeaders: [MLBTeamLeaderCategory]
+}
+
+struct MLBTeamLeaderCategory: Decodable {
+    let leaderCategory: String?
+    let statGroup: String?
+    let season: String?
+    let gameType: MLBCodeDescriptionId?
+    let team: MLBEntityRef?
+    let totalSplits: Int?
+    let leaders: [MLBLeaderEntry]
+}
+
 // MARK: - Boxscore
 
 struct MLBBoxscoreResponse: Decodable {

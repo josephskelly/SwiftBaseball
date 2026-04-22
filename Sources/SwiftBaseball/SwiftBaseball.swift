@@ -769,4 +769,26 @@ public enum SwiftBaseball {
     public static func leaders(_ category: LeaderStatCategory) -> QueryBuilder<[LeaderCategory]> {
         .leaders(category, client: client)
     }
+
+    /// Fetch a team's leaders for a single stat category.
+    ///
+    /// Returns one ``TeamLeaderCategory`` per (category, stat group) pair.
+    /// For stats that exist in both hitting and pitching (home runs,
+    /// strikeouts, etc.) the response includes two entries — inspect
+    /// ``TeamLeaderCategory/statGroup`` to tell them apart. Chain
+    /// `.season(_:)` to restrict to a single year.
+    ///
+    ///     let hr = try await SwiftBaseball
+    ///         .teamLeaders(teamId: 147, category: .homeRuns)
+    ///         .season(2024)
+    ///         .fetch()
+    ///     let batters = hr.first { $0.statGroup == .batting }
+    ///     print(batters?.leaders.first?.player.fullName ?? "")   // "Aaron Judge"
+    ///
+    /// - Parameters:
+    ///   - teamId: The MLB team identifier.
+    ///   - category: The leader stat category.
+    public static func teamLeaders(teamId: Int, category: LeaderStatCategory) -> QueryBuilder<[TeamLeaderCategory]> {
+        .teamLeaders(teamId: teamId, category: category, client: client)
+    }
 }
