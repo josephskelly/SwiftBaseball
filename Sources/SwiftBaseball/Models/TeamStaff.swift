@@ -1,10 +1,13 @@
 import Foundation
 
-/// A coach, manager, or other on-field staff member on a team.
+/// A staff member on a team — coach, manager, trainer, medical, operations, or support.
 ///
-/// Returned by ``SwiftBaseball/teamCoaches(teamId:)``. Includes the manager
-/// plus every pitching coach, hitting coach, bench coach, base coach, and
-/// other field staff listed on the team's coaching roster.
+/// Returned by both ``SwiftBaseball/teamCoaches(teamId:)`` (on-field staff:
+/// manager, bench/hitting/pitching/base coaches) and
+/// ``SwiftBaseball/teamPersonnel(teamId:)`` (off-field staff: trainers,
+/// physicians, strength & conditioning, equipment, clubhouse, security,
+/// travel). Both endpoints share the same shape; the role is encoded in
+/// ``jobId`` (stable) and ``job`` / ``title`` (human-readable).
 public struct TeamStaff: Codable, Sendable, Equatable, Identifiable {
     /// Computed from the person's MLB ID.
     public var id: Int {

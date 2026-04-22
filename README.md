@@ -176,6 +176,13 @@ print(biggestSwing?.homeTeamWinProbabilityAdded ?? 0)    // WPA in percentage po
 let ctx = try await SwiftBaseball.contextMetrics(gamePk: 745612).fetch()
 print("Home WP: \(ctx.homeWinProbability)%  Away WP: \(ctx.awayWinProbability)%")
 
+// Team personnel — trainers, physicians, equipment, clubhouse, travel, security
+let personnel = try await SwiftBaseball.teamPersonnel(teamId: 147).fetch()
+let trainers = personnel.filter { $0.jobId == "HATR" || $0.jobId == "AATR" }
+for p in trainers {
+    print(p.title ?? p.job, "-", p.person.fullName)
+}
+
 // Team coaching staff — filter by stable jobId codes (MNGR, COAB, COAP, …)
 let staff = try await SwiftBaseball.teamCoaches(teamId: 147).fetch()
 let manager = staff.first { $0.jobId == "MNGR" }

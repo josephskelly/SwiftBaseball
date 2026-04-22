@@ -128,6 +128,28 @@ public enum SwiftBaseball {
         .teamCoaches(teamId: teamId, client: client)
     }
 
+    /// Fetch the off-field personnel roster for a team.
+    ///
+    /// Returns support staff not listed on the coaching roster — athletic
+    /// trainers, team physicians, strength and conditioning coaches,
+    /// dietitians, massage therapists, equipment and clubhouse managers,
+    /// team travel, team security, and media relations. Use
+    /// ``TeamStaff/jobId`` for stable role-based lookups — e.g. `"HATR"`
+    /// (head athletic trainer), `"DRPH"` (director of player health),
+    /// `"EQUP"` (equipment manager).
+    ///
+    ///     let personnel = try await SwiftBaseball.teamPersonnel(teamId: 147).fetch()
+    ///     let trainers = personnel.filter { $0.jobId == "HATR" || $0.jobId == "AATR" }
+    ///     for p in trainers {
+    ///         print(p.title ?? p.job, "-", p.person.fullName)
+    ///     }
+    ///
+    /// - SeeAlso: ``teamCoaches(teamId:)`` for on-field staff.
+    /// - Parameter teamId: The MLB team identifier.
+    public static func teamPersonnel(teamId: Int) -> QueryBuilder<[TeamStaff]> {
+        .teamPersonnel(teamId: teamId, client: client)
+    }
+
     /// Fetch team alumni for a given season.
     ///
     /// Returns every former player who appeared with the team at any point

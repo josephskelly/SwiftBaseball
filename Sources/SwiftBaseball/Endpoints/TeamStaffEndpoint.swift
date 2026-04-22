@@ -10,6 +10,14 @@ extension QueryBuilder where T == [TeamStaff] {
             return response.roster.map(MLBResponseConverters.teamStaff)
         }
     }
+
+    static func teamPersonnel(teamId: Int, client: any APIClient) -> QueryBuilder<[TeamStaff]> {
+        let endpoint = Endpoint(path: "teams/\(teamId)/personnel")
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBCoachesResponse.self, from: data)
+            return response.roster.map(MLBResponseConverters.teamStaff)
+        }
+    }
 }
 
 extension QueryBuilder where T == [Player] {
