@@ -774,6 +774,60 @@ public enum SwiftBaseball {
         .allAwards(client: client)
     }
 
+    // MARK: - Catalogs (sports / leagues / divisions)
+
+    /// Fetch the MLB Stats API sport catalog.
+    ///
+    /// Returns every sport the API tracks — Major League Baseball (`id: 1`),
+    /// every minor league level, foreign professional leagues (KBO, NPB),
+    /// international/Olympic competition, and the Negro Leagues historical
+    /// catalog. Use the returned identifiers with ``leagues(sportId:)``,
+    /// ``divisions(sportId:)``, or the ``Sport`` enum for query chains.
+    ///
+    ///     let sports = try await SwiftBaseball.sports().fetch()
+    ///     let mlb = sports.first { $0.id == 1 }
+    ///     print(mlb?.abbreviation ?? "")   // "MLB"
+    ///
+    /// - SeeAlso: ``SportCatalog``, ``Sport``, ``leagues(sportId:)``,
+    ///   ``divisions(sportId:)``
+    public static func sports() -> QueryBuilder<[SportCatalog]> {
+        .sports(client: client)
+    }
+
+    /// Fetch the league catalog, optionally scoped to a single sport.
+    ///
+    /// With no argument, returns every league the API tracks across every
+    /// sport. Pass `sportId` to scope to one sport — e.g. `1` for MLB
+    /// leagues (AL/NL), `11` for Triple-A leagues, etc.
+    ///
+    ///     let mlbLeagues = try await SwiftBaseball.leagues(sportId: 1).fetch()
+    ///     let al = mlbLeagues.first { $0.id == 103 }
+    ///     print(al?.seasonDates?.regularSeasonStart ?? Date())
+    ///
+    /// - Parameter sportId: Optional sport identifier to filter by.
+    ///   Use IDs from ``sports()`` or the ``Sport`` enum's `rawValue`.
+    /// - SeeAlso: ``LeagueCatalog``, ``League``, ``sports()``
+    public static func leagues(sportId: Int? = nil) -> QueryBuilder<[LeagueCatalog]> {
+        .leagues(sportId: sportId, client: client)
+    }
+
+    /// Fetch the division catalog, optionally scoped to a single sport.
+    ///
+    /// With no argument, returns every division the API tracks across every
+    /// sport. Pass `sportId` to scope to one sport — e.g. `1` for MLB's six
+    /// divisions, `11` for Triple-A divisions, etc.
+    ///
+    ///     let mlbDivisions = try await SwiftBaseball.divisions(sportId: 1).fetch()
+    ///     let alEast = mlbDivisions.first { $0.id == 201 }
+    ///     print(alEast?.abbreviation ?? "")
+    ///
+    /// - Parameter sportId: Optional sport identifier to filter by.
+    ///   Use IDs from ``sports()`` or the ``Sport`` enum's `rawValue`.
+    /// - SeeAlso: ``DivisionCatalog``, ``Division``, ``sports()``
+    public static func divisions(sportId: Int? = nil) -> QueryBuilder<[DivisionCatalog]> {
+        .divisions(sportId: sportId, client: client)
+    }
+
     // MARK: - Standings
 
     /// Fetch division standings.

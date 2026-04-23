@@ -220,6 +220,13 @@ print(regular?.attendanceHigh ?? 0,
 let umps = try await SwiftBaseball.umpires(date: "2024-07-04").fetch()
 let crewChiefs = umps.filter { $0.jobId != "UMPR" }
 
+// Catalogs — sports, leagues, divisions (lookup tables with IDs and metadata)
+let sports = try await SwiftBaseball.sports().fetch()
+let mlbLeagues = try await SwiftBaseball.leagues(sportId: 1).fetch()
+let al = mlbLeagues.first { $0.id == 103 }
+print(al?.seasonDates?.regularSeasonStart ?? Date())   // 2026-03-25
+let divisions = try await SwiftBaseball.divisions(sportId: 1).fetch()
+
 // Game highlights — key-play clips and condensed game
 let content = try await SwiftBaseball.gameHighlights(gamePk: 745612).fetch()
 for clip in content.highlights {

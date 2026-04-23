@@ -360,6 +360,88 @@ struct MLBTeamLeaderCategory: Decodable {
     let leaders: [MLBLeaderEntry]
 }
 
+// MARK: - Catalogs (sports / leagues / divisions)
+
+struct MLBSportsResponse: Decodable {
+    let sports: [MLBSport]
+}
+
+struct MLBSport: Decodable {
+    let id: Int
+    let code: String?
+    let name: String
+    let abbreviation: String?
+    let sortOrder: Int?
+    let activeStatus: Bool?
+}
+
+struct MLBLeaguesResponse: Decodable {
+    let leagues: [MLBLeague]
+}
+
+struct MLBLeague: Decodable {
+    let id: Int
+    let name: String
+    let nameShort: String?
+    let abbreviation: String?
+    let season: String?
+    let orgCode: String?
+    let active: Bool?
+    let sport: MLBLeagueSportRef?
+    let hasWildCard: Bool?
+    let hasSplitSeason: Bool?
+    let hasPlayoffPoints: Bool?
+    let numGames: Int?
+    let numTeams: Int?
+    let numWildcardTeams: Int?
+    let conferencesInUse: Bool?
+    let divisionsInUse: Bool?
+    let seasonState: String?
+    let sortOrder: Int?
+    let seasonDateInfo: MLBLeagueSeasonDates?
+}
+
+struct MLBLeagueSportRef: Decodable {
+    let id: Int?
+}
+
+struct MLBLeagueSeasonDates: Decodable {
+    let seasonId: String?
+    let preSeasonStartDate: String?
+    let preSeasonEndDate: String?
+    let seasonStartDate: String?
+    let seasonEndDate: String?
+    let springStartDate: String?
+    let springEndDate: String?
+    let regularSeasonStartDate: String?
+    let regularSeasonEndDate: String?
+    let lastDate1stHalf: String?
+    let allStarDate: String?
+    let firstDate2ndHalf: String?
+    let postSeasonStartDate: String?
+    let postSeasonEndDate: String?
+    let offseasonStartDate: String?
+    let offSeasonEndDate: String?
+}
+
+struct MLBDivisionsResponse: Decodable {
+    let divisions: [MLBDivision]
+}
+
+struct MLBDivision: Decodable {
+    let id: Int
+    let name: String
+    let nameShort: String?
+    let abbreviation: String?
+    let season: String?
+    let league: MLBLeagueSportRef?
+    let sport: MLBLeagueSportRef?
+    let hasWildcard: Bool?
+    let numPlayoffTeams: Int?
+    let sortOrder: Int?
+    let active: Bool?
+}
+
 // MARK: - Boxscore
 
 struct MLBBoxscoreResponse: Decodable {

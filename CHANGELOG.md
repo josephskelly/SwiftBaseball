@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Sports / leagues / divisions catalogs**: three new lookup endpoints — `SwiftBaseball.sports()` returns `[SportCatalog]` via `GET /sports` (MLB, minor league levels, KBO/NPB, Olympic competition, Negro Leagues); `SwiftBaseball.leagues(sportId:)` returns `[LeagueCatalog]` via `GET /leagues` with full `seasonDates` (spring/regular/postseason/All-Star dates parsed to `Date`); `SwiftBaseball.divisions(sportId:)` returns `[DivisionCatalog]` via `GET /divisions`. Types intentionally suffixed to avoid collision with the existing ``Sport``/``League``/``Division`` query enums
 - **visionOS support**: `.visionOS(.v1)` added to `Package.swift` platforms
 - **Platoon splits endpoint**: `SwiftBaseball.playerPlatoonStats(id:)` returns `PlayerPlatoonStats` with vs-LHP and vs-RHP batting stats via `stats=statSplits&sitCodes=vl,vr`
 - **Pitcher platoon splits endpoint**: `SwiftBaseball.pitcherPlatoonStats(id:)` returns `PitcherPlatoonStats` with vs-LHB and vs-RHB pitching stats (OPS against, WHIP, K, etc.)

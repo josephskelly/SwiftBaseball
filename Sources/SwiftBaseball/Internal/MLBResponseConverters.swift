@@ -216,6 +216,92 @@ enum MLBResponseConverters {
         )
     }
 
+    // MARK: - Catalogs (sports / leagues / divisions)
+
+    static func sports(from response: MLBSportsResponse) -> [SportCatalog] {
+        response.sports.map(sport(from:))
+    }
+
+    private static func sport(from raw: MLBSport) -> SportCatalog {
+        SportCatalog(
+            id: raw.id,
+            code: raw.code,
+            name: raw.name,
+            abbreviation: raw.abbreviation,
+            sortOrder: raw.sortOrder,
+            active: raw.activeStatus ?? false
+        )
+    }
+
+    static func leagues(from response: MLBLeaguesResponse) -> [LeagueCatalog] {
+        response.leagues.map(league(from:))
+    }
+
+    private static func league(from raw: MLBLeague) -> LeagueCatalog {
+        LeagueCatalog(
+            id: raw.id,
+            name: raw.name,
+            nameShort: raw.nameShort,
+            abbreviation: raw.abbreviation,
+            season: raw.season,
+            orgCode: raw.orgCode,
+            active: raw.active ?? false,
+            sportId: raw.sport?.id,
+            hasWildCard: raw.hasWildCard,
+            hasSplitSeason: raw.hasSplitSeason,
+            hasPlayoffPoints: raw.hasPlayoffPoints,
+            numGames: raw.numGames,
+            numTeams: raw.numTeams,
+            numWildcardTeams: raw.numWildcardTeams,
+            conferencesInUse: raw.conferencesInUse,
+            divisionsInUse: raw.divisionsInUse,
+            seasonState: raw.seasonState,
+            sortOrder: raw.sortOrder,
+            seasonDates: raw.seasonDateInfo.map(leagueSeasonDates(from:))
+        )
+    }
+
+    private static func leagueSeasonDates(from raw: MLBLeagueSeasonDates) -> LeagueSeasonDates {
+        LeagueSeasonDates(
+            seasonId: raw.seasonId,
+            preSeasonStart: raw.preSeasonStartDate.flatMap(parseDate),
+            preSeasonEnd: raw.preSeasonEndDate.flatMap(parseDate),
+            seasonStart: raw.seasonStartDate.flatMap(parseDate),
+            seasonEnd: raw.seasonEndDate.flatMap(parseDate),
+            springStart: raw.springStartDate.flatMap(parseDate),
+            springEnd: raw.springEndDate.flatMap(parseDate),
+            regularSeasonStart: raw.regularSeasonStartDate.flatMap(parseDate),
+            regularSeasonEnd: raw.regularSeasonEndDate.flatMap(parseDate),
+            lastDate1stHalf: raw.lastDate1stHalf.flatMap(parseDate),
+            allStarDate: raw.allStarDate.flatMap(parseDate),
+            firstDate2ndHalf: raw.firstDate2ndHalf.flatMap(parseDate),
+            postSeasonStart: raw.postSeasonStartDate.flatMap(parseDate),
+            postSeasonEnd: raw.postSeasonEndDate.flatMap(parseDate),
+            offseasonStart: raw.offseasonStartDate.flatMap(parseDate),
+            offseasonEnd: raw.offSeasonEndDate.flatMap(parseDate)
+        )
+    }
+
+    static func divisions(from response: MLBDivisionsResponse) -> [DivisionCatalog] {
+        response.divisions.map(division(from:))
+    }
+
+    private static func division(from raw: MLBDivision) -> DivisionCatalog {
+        DivisionCatalog(
+            id: raw.id,
+            name: raw.name,
+            nameShort: raw.nameShort,
+            abbreviation: raw.abbreviation,
+            season: raw.season,
+            leagueId: raw.league?.id,
+            sportId: raw.sport?.id,
+            hasWildcard: raw.hasWildcard,
+            numPlayoffTeams: raw.numPlayoffTeams,
+            sortOrder: raw.sortOrder,
+            active: raw.active ?? false
+        )
+    }
+
     // MARK: - Leaders
 
     static func leaderEntries(from response: MLBLeadersResponse) -> [LeaderCategory] {
