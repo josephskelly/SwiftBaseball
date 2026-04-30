@@ -395,3 +395,544 @@ enum PopTimeParser {
         }
     }
 }
+
+// MARK: - Expected Stats — Batter
+
+/// Query builder for the Baseball Savant batter expected-statistics leaderboard.
+///
+/// Returns qualified hitters for a given season with actual and expected slash-line
+/// metrics (BA / SLG / wOBA) plus the diff between them.
+///
+/// ```swift
+/// let xstats = try await SwiftBaseball
+///     .expectedStatsBatter()
+///     .season(2024)
+///     .fetch()
+/// print(xstats.first?.expectedWOBA)
+/// ```
+public struct ExpectedStatsBatterQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> ExpectedStatsBatterQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns batter expected-stats entries.
+    ///
+    /// - Returns: An array of ``ExpectedStatsBatterEntry`` for all qualified batters.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [ExpectedStatsBatterEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/expected_statistics",
+            queryItems: [
+                URLQueryItem(name: "type", value: "batter"),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return ExpectedStatsBatterParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant batter expected-stats CSV into ``ExpectedStatsBatterEntry`` values.
+enum ExpectedStatsBatterParser {
+    static func parse(_ csv: String, season: Int) -> [ExpectedStatsBatterEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> ExpectedStatsBatterEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let paStr = row["pa"], let pa = Int(paStr),
+                let bipStr = row["bip"], let bip = Int(bipStr),
+                let baStr = row["ba"], let ba = Double(baStr),
+                let xbaStr = row["est_ba"], let xba = Double(xbaStr),
+                let baDiffStr = row["est_ba_minus_ba_diff"], let baDiff = Double(baDiffStr),
+                let slgStr = row["slg"], let slg = Double(slgStr),
+                let xslgStr = row["est_slg"], let xslg = Double(xslgStr),
+                let slgDiffStr = row["est_slg_minus_slg_diff"], let slgDiff = Double(slgDiffStr),
+                let wobaStr = row["woba"], let woba = Double(wobaStr),
+                let xwobaStr = row["est_woba"], let xwoba = Double(xwobaStr),
+                let wobaDiffStr = row["est_woba_minus_woba_diff"], let wobaDiff = Double(wobaDiffStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+
+            return ExpectedStatsBatterEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                plateAppearances: pa,
+                battedBalls: bip,
+                battingAverage: ba,
+                expectedBattingAverage: xba,
+                expectedBABIPDiff: baDiff,
+                slugging: slg,
+                expectedSlugging: xslg,
+                expectedSluggingDiff: slgDiff,
+                wOBA: woba,
+                expectedWOBA: xwoba,
+                expectedWOBADiff: wobaDiff
+            )
+        }
+    }
+}
+
+// MARK: - Expected Stats — Pitcher
+
+/// Query builder for the Baseball Savant pitcher expected-statistics leaderboard.
+///
+/// Returns qualified pitchers for a given season with actual and expected slash-line
+/// against, plus actual ERA vs xERA.
+///
+/// ```swift
+/// let xstats = try await SwiftBaseball
+///     .expectedStatsPitcher()
+///     .season(2024)
+///     .fetch()
+/// print(xstats.first?.expectedERA)
+/// ```
+public struct ExpectedStatsPitcherQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> ExpectedStatsPitcherQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns pitcher expected-stats entries.
+    ///
+    /// - Returns: An array of ``ExpectedStatsPitcherEntry`` for all qualified pitchers.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [ExpectedStatsPitcherEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/expected_statistics",
+            queryItems: [
+                URLQueryItem(name: "type", value: "pitcher"),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return ExpectedStatsPitcherParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant pitcher expected-stats CSV into ``ExpectedStatsPitcherEntry`` values.
+enum ExpectedStatsPitcherParser {
+    static func parse(_ csv: String, season: Int) -> [ExpectedStatsPitcherEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> ExpectedStatsPitcherEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let paStr = row["pa"], let pa = Int(paStr),
+                let bipStr = row["bip"], let bip = Int(bipStr),
+                let baStr = row["ba"], let ba = Double(baStr),
+                let xbaStr = row["est_ba"], let xba = Double(xbaStr),
+                let baDiffStr = row["est_ba_minus_ba_diff"], let baDiff = Double(baDiffStr),
+                let slgStr = row["slg"], let slg = Double(slgStr),
+                let xslgStr = row["est_slg"], let xslg = Double(xslgStr),
+                let slgDiffStr = row["est_slg_minus_slg_diff"], let slgDiff = Double(slgDiffStr),
+                let wobaStr = row["woba"], let woba = Double(wobaStr),
+                let xwobaStr = row["est_woba"], let xwoba = Double(xwobaStr),
+                let wobaDiffStr = row["est_woba_minus_woba_diff"], let wobaDiff = Double(wobaDiffStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+            let era = row["era"].flatMap(Double.init)
+            let xera = row["xera"].flatMap(Double.init)
+            let eraDiff = row["era_minus_xera_diff"].flatMap(Double.init)
+
+            return ExpectedStatsPitcherEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                plateAppearances: pa,
+                battedBalls: bip,
+                battingAverage: ba,
+                expectedBattingAverage: xba,
+                expectedBABIPDiff: baDiff,
+                slugging: slg,
+                expectedSlugging: xslg,
+                expectedSluggingDiff: slgDiff,
+                wOBA: woba,
+                expectedWOBA: xwoba,
+                expectedWOBADiff: wobaDiff,
+                era: era,
+                expectedERA: xera,
+                expectedERADiff: eraDiff
+            )
+        }
+    }
+}
+
+// MARK: - Percentile Ranks — Batter
+
+/// Query builder for the Baseball Savant batter percentile-rankings leaderboard.
+///
+/// Returns 1–99 percentile ranks for each tracked metric, scored against the
+/// qualifying batter pool for the season. Empty cells in the source CSV
+/// (e.g. a corner outfielder with no qualifying competitive sprints) become `nil`.
+public struct PercentileRanksBatterQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PercentileRanksBatterQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns batter percentile-rank entries.
+    ///
+    /// - Returns: An array of ``PercentileRanksBatterEntry``.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PercentileRanksBatterEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/percentile-rankings",
+            queryItems: [
+                URLQueryItem(name: "type", value: "batter"),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PercentileRanksBatterParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant batter percentile-rankings CSV into ``PercentileRanksBatterEntry`` values.
+enum PercentileRanksBatterParser {
+    static func parse(_ csv: String, season: Int) -> [PercentileRanksBatterEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PercentileRanksBatterEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let name = row["player_name"] ?? row["last_name, first_name"], !name.isEmpty
+            else { return nil }
+
+            return PercentileRanksBatterEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                xwOBAPercentile: row["xwoba"].flatMap(Int.init),
+                xBAPercentile: row["xba"].flatMap(Int.init),
+                xSLGPercentile: row["xslg"].flatMap(Int.init),
+                xISOPercentile: row["xiso"].flatMap(Int.init),
+                xOBPPercentile: row["xobp"].flatMap(Int.init),
+                barrelsPercentile: row["brl"].flatMap(Int.init),
+                barrelRatePercentile: row["brl_percent"].flatMap(Int.init),
+                exitVelocityPercentile: row["exit_velocity"].flatMap(Int.init),
+                maxExitVelocityPercentile: row["max_ev"].flatMap(Int.init),
+                hardHitPercentile: row["hard_hit_percent"].flatMap(Int.init),
+                strikeoutPercentile: row["k_percent"].flatMap(Int.init),
+                walkPercentile: row["bb_percent"].flatMap(Int.init),
+                whiffPercentile: row["whiff_percent"].flatMap(Int.init),
+                chasePercentile: row["chase_percent"].flatMap(Int.init),
+                armStrengthPercentile: row["arm_strength"].flatMap(Int.init),
+                sprintSpeedPercentile: row["sprint_speed"].flatMap(Int.init),
+                oaaPercentile: row["oaa"].flatMap(Int.init),
+                batSpeedPercentile: row["bat_speed"].flatMap(Int.init),
+                squaredUpRatePercentile: row["squared_up_rate"].flatMap(Int.init),
+                swingLengthPercentile: row["swing_length"].flatMap(Int.init)
+            )
+        }
+    }
+}
+
+// MARK: - Percentile Ranks — Pitcher
+
+/// Query builder for the Baseball Savant pitcher percentile-rankings leaderboard.
+public struct PercentileRanksPitcherQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PercentileRanksPitcherQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns pitcher percentile-rank entries.
+    ///
+    /// - Returns: An array of ``PercentileRanksPitcherEntry``.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PercentileRanksPitcherEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/percentile-rankings",
+            queryItems: [
+                URLQueryItem(name: "type", value: "pitcher"),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PercentileRanksPitcherParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant pitcher percentile-rankings CSV into ``PercentileRanksPitcherEntry`` values.
+enum PercentileRanksPitcherParser {
+    static func parse(_ csv: String, season: Int) -> [PercentileRanksPitcherEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PercentileRanksPitcherEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let name = row["player_name"] ?? row["last_name, first_name"], !name.isEmpty
+            else { return nil }
+
+            return PercentileRanksPitcherEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                xwOBAPercentile: row["xwoba"].flatMap(Int.init),
+                xBAPercentile: row["xba"].flatMap(Int.init),
+                xSLGPercentile: row["xslg"].flatMap(Int.init),
+                xISOPercentile: row["xiso"].flatMap(Int.init),
+                xOBPPercentile: row["xobp"].flatMap(Int.init),
+                barrelsPercentile: row["brl"].flatMap(Int.init),
+                barrelRatePercentile: row["brl_percent"].flatMap(Int.init),
+                exitVelocityPercentile: row["exit_velocity"].flatMap(Int.init),
+                maxExitVelocityPercentile: row["max_ev"].flatMap(Int.init),
+                hardHitPercentile: row["hard_hit_percent"].flatMap(Int.init),
+                strikeoutPercentile: row["k_percent"].flatMap(Int.init),
+                walkPercentile: row["bb_percent"].flatMap(Int.init),
+                whiffPercentile: row["whiff_percent"].flatMap(Int.init),
+                chasePercentile: row["chase_percent"].flatMap(Int.init),
+                armStrengthPercentile: row["arm_strength"].flatMap(Int.init),
+                xERAPercentile: row["xera"].flatMap(Int.init),
+                fastballVelocityPercentile: row["fb_velocity"].flatMap(Int.init),
+                fastballSpinPercentile: row["fb_spin"].flatMap(Int.init),
+                curveSpinPercentile: row["curve_spin"].flatMap(Int.init)
+            )
+        }
+    }
+}
+
+// MARK: - Exit Velocity & Barrels — Batter
+
+/// Query builder for the Baseball Savant batter exit-velocity & barrels leaderboard.
+///
+/// Returns the contact-quality summary for qualified hitters: average and max EV,
+/// hard-hit rate, sweet-spot rate, barrels, and barrel rates.
+public struct ExitVeloBarrelsBatterQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> ExitVeloBarrelsBatterQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns batter exit-velo / barrel entries.
+    public func fetch() async throws -> [ExitVeloBarrelsBatterEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/statcast",
+            queryItems: [
+                URLQueryItem(name: "type", value: "batter"),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return ExitVeloBarrelsBatterParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant batter exit-velo CSV into ``ExitVeloBarrelsBatterEntry`` values.
+enum ExitVeloBarrelsBatterParser {
+    static func parse(_ csv: String, season: Int) -> [ExitVeloBarrelsBatterEntry] {
+        ExitVeloBarrelsParser.parseBatter(csv, season: season)
+    }
+}
+
+// MARK: - Exit Velocity & Barrels — Pitcher
+
+/// Query builder for the Baseball Savant pitcher exit-velocity & barrels leaderboard.
+public struct ExitVeloBarrelsPitcherQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> ExitVeloBarrelsPitcherQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns pitcher exit-velo / barrel entries.
+    public func fetch() async throws -> [ExitVeloBarrelsPitcherEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/statcast",
+            queryItems: [
+                URLQueryItem(name: "type", value: "pitcher"),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return ExitVeloBarrelsPitcherParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant pitcher exit-velo CSV into ``ExitVeloBarrelsPitcherEntry`` values.
+enum ExitVeloBarrelsPitcherParser {
+    static func parse(_ csv: String, season: Int) -> [ExitVeloBarrelsPitcherEntry] {
+        ExitVeloBarrelsParser.parsePitcher(csv, season: season)
+    }
+}
+
+// MARK: - Exit Velocity & Barrels — shared parser
+
+/// Shared row-parsing logic for the batter and pitcher exit-velo leaderboards
+/// (both share an identical CSV column layout).
+private enum ExitVeloBarrelsParser {
+    static func parseBatter(_ csv: String, season: Int) -> [ExitVeloBarrelsBatterEntry] {
+        parseRows(csv).compactMap { core in
+            guard let core else { return nil }
+            return ExitVeloBarrelsBatterEntry(
+                playerId: core.playerId,
+                playerName: core.playerName,
+                season: season,
+                attempts: core.attempts,
+                avgLaunchAngle: core.avgLaunchAngle,
+                sweetSpotRate: core.sweetSpotRate,
+                maxExitVelocity: core.maxExitVelocity,
+                avgExitVelocity: core.avgExitVelocity,
+                ev50: core.ev50,
+                avgExitVelocityFBLD: core.avgExitVelocityFBLD,
+                avgExitVelocityGB: core.avgExitVelocityGB,
+                maxDistance: core.maxDistance,
+                avgDistance: core.avgDistance,
+                avgHomeRunDistance: core.avgHomeRunDistance,
+                ev95Plus: core.ev95Plus,
+                hardHitRate: core.hardHitRate,
+                barrels: core.barrels,
+                barrelRate: core.barrelRate,
+                barrelsPerPA: core.barrelsPerPA
+            )
+        }
+    }
+
+    static func parsePitcher(_ csv: String, season: Int) -> [ExitVeloBarrelsPitcherEntry] {
+        parseRows(csv).compactMap { core in
+            guard let core else { return nil }
+            return ExitVeloBarrelsPitcherEntry(
+                playerId: core.playerId,
+                playerName: core.playerName,
+                season: season,
+                attempts: core.attempts,
+                avgLaunchAngle: core.avgLaunchAngle,
+                sweetSpotRate: core.sweetSpotRate,
+                maxExitVelocity: core.maxExitVelocity,
+                avgExitVelocity: core.avgExitVelocity,
+                ev50: core.ev50,
+                avgExitVelocityFBLD: core.avgExitVelocityFBLD,
+                avgExitVelocityGB: core.avgExitVelocityGB,
+                maxDistance: core.maxDistance,
+                avgDistance: core.avgDistance,
+                avgHomeRunDistance: core.avgHomeRunDistance,
+                ev95Plus: core.ev95Plus,
+                hardHitRate: core.hardHitRate,
+                barrels: core.barrels,
+                barrelRate: core.barrelRate,
+                barrelsPerPA: core.barrelsPerPA
+            )
+        }
+    }
+
+    private struct Core {
+        let playerId: Int
+        let playerName: String
+        let attempts: Int
+        let avgLaunchAngle: Double
+        let sweetSpotRate: Double
+        let maxExitVelocity: Double
+        let avgExitVelocity: Double
+        let ev50: Double
+        let avgExitVelocityFBLD: Double
+        let avgExitVelocityGB: Double
+        let maxDistance: Int
+        let avgDistance: Int
+        let avgHomeRunDistance: Int?
+        let ev95Plus: Int
+        let hardHitRate: Double
+        let barrels: Int
+        let barrelRate: Double
+        let barrelsPerPA: Double
+    }
+
+    private static func parseRows(_ csv: String) -> [Core?] {
+        let rows = CSVParser.parse(csv)
+        return rows.map { row -> Core? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let attemptsStr = row["attempts"], let attempts = Int(attemptsStr),
+                let angleStr = row["avg_hit_angle"], let avgLaunchAngle = Double(angleStr),
+                let ssStr = row["anglesweetspotpercent"], let sweetSpotRate = Double(ssStr),
+                let maxEvStr = row["max_hit_speed"], let maxExitVelocity = Double(maxEvStr),
+                let avgEvStr = row["avg_hit_speed"], let avgExitVelocity = Double(avgEvStr),
+                let ev50Str = row["ev50"], let ev50 = Double(ev50Str),
+                let fbldStr = row["fbld"], let avgExitVelocityFBLD = Double(fbldStr),
+                let gbStr = row["gb"], let avgExitVelocityGB = Double(gbStr),
+                let maxDistStr = row["max_distance"], let maxDistance = Int(maxDistStr),
+                let avgDistStr = row["avg_distance"], let avgDistance = Int(avgDistStr),
+                let ev95Str = row["ev95plus"], let ev95Plus = Int(ev95Str),
+                let hardHitStr = row["ev95percent"], let hardHitRate = Double(hardHitStr),
+                let barrelsStr = row["barrels"], let barrels = Int(barrelsStr),
+                let brlPctStr = row["brl_percent"], let barrelRate = Double(brlPctStr),
+                let brlPaStr = row["brl_pa"], let barrelsPerPA = Double(brlPaStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+            let avgHrDist = row["avg_hr_distance"].flatMap(Int.init)
+
+            return Core(
+                playerId: playerId,
+                playerName: name,
+                attempts: attempts,
+                avgLaunchAngle: avgLaunchAngle,
+                sweetSpotRate: sweetSpotRate,
+                maxExitVelocity: maxExitVelocity,
+                avgExitVelocity: avgExitVelocity,
+                ev50: ev50,
+                avgExitVelocityFBLD: avgExitVelocityFBLD,
+                avgExitVelocityGB: avgExitVelocityGB,
+                maxDistance: maxDistance,
+                avgDistance: avgDistance,
+                avgHomeRunDistance: avgHrDist,
+                ev95Plus: ev95Plus,
+                hardHitRate: hardHitRate,
+                barrels: barrels,
+                barrelRate: barrelRate,
+                barrelsPerPA: barrelsPerPA
+            )
+        }
+    }
+}

@@ -105,6 +105,19 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``StatcastBatting``
 - ``StatcastQuery``
 
+### Statcast Leaderboards
+
+- ``SprintSpeedEntry``
+- ``OutsAboveAverageEntry``
+- ``CatcherFramingEntry``
+- ``PopTimeEntry``
+- ``ExpectedStatsBatterEntry``
+- ``ExpectedStatsPitcherEntry``
+- ``PercentileRanksBatterEntry``
+- ``PercentileRanksPitcherEntry``
+- ``ExitVeloBarrelsBatterEntry``
+- ``ExitVeloBarrelsPitcherEntry``
+
 ### Standings
 
 - ``DivisionStandings``

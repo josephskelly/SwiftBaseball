@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Statcast expected-stats leaderboards**: `SwiftBaseball.expectedStatsBatter()` returns `[ExpectedStatsBatterEntry]` and `SwiftBaseball.expectedStatsPitcher()` returns `[ExpectedStatsPitcherEntry]` from Baseball Savant's `leaderboard/expected_statistics`. Each entry pairs actual BA / SLG / wOBA with their Statcast-derived expected counterparts (xBA / xSLG / xwOBA) plus actual-vs-expected diffs; pitcher entries additionally carry actual ERA, xERA, and the ERA / xERA diff
+- **Statcast percentile-rankings leaderboards**: `SwiftBaseball.percentileRanksBatter()` returns `[PercentileRanksBatterEntry]` and `SwiftBaseball.percentileRanksPitcher()` returns `[PercentileRanksPitcherEntry]` from Savant's `leaderboard/percentile-rankings`. Each value is a 1–99 rank within the qualifying batter / pitcher pool. Batter entries cover xwOBA / xBA / xSLG / xISO / xOBP, exit velocity, hard-hit, K%, BB%, whiff, chase, arm strength, sprint speed, OAA, and (2024+) bat speed / squared-up rate / swing length. Pitcher entries replace running and bat-tracking ranks with xERA, fastball velocity / spin, and curveball spin
+- **Statcast exit-velo & barrels leaderboards**: `SwiftBaseball.exitVeloBarrelsBatter()` returns `[ExitVeloBarrelsBatterEntry]` and `SwiftBaseball.exitVeloBarrelsPitcher()` returns `[ExitVeloBarrelsPitcherEntry]` from Savant's `leaderboard/statcast` board. Surfaces full contact-quality summary: average / max EV, EV50, sweet-spot rate, FB-LD vs GB EV split, max / average / HR distance, hard-hit count and rate, barrels, barrel rate per BBE, and barrels per PA. Percent fields are reported on a 0–100 scale matching the Savant CSV
+
 ## [0.3.0] — 2026-04-30
 
 ### Changed

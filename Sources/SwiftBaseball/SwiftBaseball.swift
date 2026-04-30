@@ -708,6 +708,74 @@ public enum SwiftBaseball {
         PopTimeQuery(client: statcastClient)
     }
 
+    /// Build a query for the Baseball Savant batter expected-statistics leaderboard.
+    ///
+    /// Returns each qualified hitter's actual vs expected slash line (BA / SLG / wOBA)
+    /// for the requested season. Positive `expected*Diff` fields indicate a hitter
+    /// outperforming their batted-ball profile.
+    ///
+    ///     let xstats = try await SwiftBaseball.expectedStatsBatter().season(2024).fetch()
+    ///     print(xstats.first?.expectedWOBA)  // qualified leader's xwOBA
+    public static func expectedStatsBatter() -> ExpectedStatsBatterQuery {
+        ExpectedStatsBatterQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant pitcher expected-statistics leaderboard.
+    ///
+    /// Mirrors ``expectedStatsBatter()`` but reports stats _allowed_, plus actual ERA
+    /// vs xERA. Negative `expected*Diff` values indicate a pitcher suppressing
+    /// outcomes below what their contact profile would predict.
+    ///
+    ///     let xstats = try await SwiftBaseball.expectedStatsPitcher().season(2024).fetch()
+    ///     print(xstats.first?.expectedERA)
+    public static func expectedStatsPitcher() -> ExpectedStatsPitcherQuery {
+        ExpectedStatsPitcherQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant batter percentile-rankings leaderboard.
+    ///
+    /// Returns each player's 1–99 percentile rank for every tracked metric (xwOBA,
+    /// xBA, exit velocity, hard-hit rate, sprint speed, OAA, bat speed, etc.) within
+    /// the qualifying batter pool. Empty cells become `nil`.
+    ///
+    ///     let pct = try await SwiftBaseball.percentileRanksBatter().season(2024).fetch()
+    ///     print(pct.first?.exitVelocityPercentile)
+    public static func percentileRanksBatter() -> PercentileRanksBatterQuery {
+        PercentileRanksBatterQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant pitcher percentile-rankings leaderboard.
+    ///
+    /// Returns 1–99 percentile ranks for each tracked pitcher metric (xwOBA-against,
+    /// xERA, fastball velocity / spin, curve spin, K%, BB%, chase, whiff, etc.).
+    ///
+    ///     let pct = try await SwiftBaseball.percentileRanksPitcher().season(2024).fetch()
+    ///     print(pct.first?.fastballVelocityPercentile)
+    public static func percentileRanksPitcher() -> PercentileRanksPitcherQuery {
+        PercentileRanksPitcherQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant batter exit-velocity & barrels leaderboard.
+    ///
+    /// Returns the contact-quality summary for qualified hitters: average and max EV,
+    /// hard-hit rate (95+ mph), sweet-spot rate, barrels, and barrel rates per BBE / PA.
+    ///
+    ///     let ev = try await SwiftBaseball.exitVeloBarrelsBatter().season(2024).fetch()
+    ///     print(ev.first?.avgExitVelocity)
+    public static func exitVeloBarrelsBatter() -> ExitVeloBarrelsBatterQuery {
+        ExitVeloBarrelsBatterQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant pitcher exit-velocity & barrels leaderboard.
+    ///
+    /// Mirrors ``exitVeloBarrelsBatter()`` but reports the contact a pitcher allows.
+    ///
+    ///     let ev = try await SwiftBaseball.exitVeloBarrelsPitcher().season(2024).fetch()
+    ///     print(ev.first?.barrelRate)  // barrel% allowed by the qualifying leader
+    public static func exitVeloBarrelsPitcher() -> ExitVeloBarrelsPitcherQuery {
+        ExitVeloBarrelsPitcherQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

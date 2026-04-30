@@ -317,6 +317,24 @@ let popTimes = try await SwiftBaseball
     .season(2024)
     .fetch()
 print(popTimes.first?.popTimeTo2B, popTimes.first?.exchangeTime)
+
+// Expected stats — actual vs Statcast-derived BA / SLG / wOBA
+let xstatsBatter = try await SwiftBaseball.expectedStatsBatter().season(2024).fetch()
+print(xstatsBatter.first?.expectedWOBA)
+let xstatsPitcher = try await SwiftBaseball.expectedStatsPitcher().season(2024).fetch()
+print(xstatsPitcher.first?.expectedERA)
+
+// Percentile ranks (1–99) within the qualifying batter / pitcher pool
+let percBatter = try await SwiftBaseball.percentileRanksBatter().season(2024).fetch()
+print(percBatter.first?.exitVelocityPercentile)
+let percPitcher = try await SwiftBaseball.percentileRanksPitcher().season(2024).fetch()
+print(percPitcher.first?.fastballVelocityPercentile)
+
+// Exit-velo & barrels — full contact-quality summary (avg/max EV, barrels, hard-hit %)
+let evBatter = try await SwiftBaseball.exitVeloBarrelsBatter().season(2024).fetch()
+print(evBatter.first?.avgExitVelocity, evBatter.first?.barrelRate)
+let evPitcher = try await SwiftBaseball.exitVeloBarrelsPitcher().season(2024).fetch()
+print(evPitcher.first?.barrels)
 ```
 
 ## Data Sources
@@ -324,7 +342,7 @@ print(popTimes.first?.popTimeTo2B, popTimes.first?.exchangeTime)
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions, awards |
-| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing & pop time; expected-stats / percentile-rankings / exit-velo & barrels leaderboards (batter + pitcher) |
 | Baseball Reference | Planned | None (scraped) | Historical season stats |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 
