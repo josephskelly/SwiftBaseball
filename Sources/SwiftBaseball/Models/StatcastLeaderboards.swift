@@ -408,3 +408,171 @@ public struct ExitVeloBarrelsPitcherEntry: Sendable, Equatable, Codable {
     /// Barrels allowed per plate appearance (0–100).
     public let barrelsPerPA: Double
 }
+
+// MARK: - Pitch Arsenal
+
+/// Which arsenal metric a ``PitchArsenalEntry`` reports.
+///
+/// The Baseball Savant pitch-arsenals board exposes two views in CSV form —
+/// one per metric. Use this enum to select which view to fetch via
+/// ``PitchArsenalQuery/metric(_:)``.
+///
+/// - Note: The upstream board includes a usage view in HTML, but the CSV export
+///   for `type=n` / `type=usage` returns empty cells. Per-pitch usage and pitch
+///   counts are available via ``PitchArsenalStatsEntry/pitchUsage`` and
+///   ``PitchArsenalStatsEntry/pitches`` on the `pitch-arsenal-stats` board
+///   instead.
+public enum PitchArsenalMetric: String, Sendable, Equatable, Codable {
+    /// Average release velocity in miles per hour (`<pitch>_avg_speed` columns).
+    case velocity
+    /// Average spin rate in revolutions per minute (`<pitch>_avg_spin` columns).
+    case spin
+}
+
+/// A single pitcher × pitch-type entry from the Baseball Savant pitch-arsenals leaderboard.
+///
+/// The upstream CSV is wide — one row per pitcher with one column per pitch type
+/// (`ff_avg_speed`, `si_avg_speed`, …). ``PitchArsenalQuery`` flattens that wide
+/// shape into one ``PitchArsenalEntry`` per (pitcher, pitch type) so all three
+/// arsenal views (velocity / spin / usage) share the same row layout.
+///
+/// Pitch-type codes follow the Statcast convention:
+/// `FF` (4-seam), `SI` (sinker), `FC` (cutter), `SL` (slider), `CH` (changeup),
+/// `CU` (curveball), `FS` (splitter), `KN` (knuckleball), `ST` (sweeper),
+/// `SV` (slurve).
+public struct PitchArsenalEntry: Sendable, Equatable, Codable {
+    /// MLB player ID of the pitcher.
+    public let pitcherId: Int
+    /// Pitcher's full name as returned by the leaderboard (`Last, First`).
+    public let pitcherName: String
+    /// Season year (passed through from the query — not present in the CSV).
+    public let season: Int
+    /// Statcast pitch-type code (e.g. `"FF"`, `"SL"`).
+    public let pitchType: String
+    /// Which arsenal metric the ``value`` represents.
+    public let metric: PitchArsenalMetric
+    /// The metric value: mph for ``PitchArsenalMetric/velocity``, rpm for
+    /// ``PitchArsenalMetric/spin``, raw pitch count for ``PitchArsenalMetric/usage``.
+    public let value: Double
+}
+
+// MARK: - Pitch Arsenal Stats
+
+/// A single pitcher × pitch-type performance entry from the Baseball Savant
+/// `pitch-arsenal-stats` leaderboard.
+///
+/// One row per pitcher per pitch type, surfacing how each individual pitch
+/// performed: usage share, run value, swing-and-miss, and quality-of-contact
+/// outcomes (BA / SLG / wOBA actual and expected, hard-hit rate).
+///
+/// Percent fields (``pitchUsage``, ``whiffRate``, ``strikeoutRate``,
+/// ``putAwayRate``, ``hardHitRate``) are reported on the Savant CSV's
+/// 0–100 scale.
+public struct PitchArsenalStatsEntry: Sendable, Equatable, Codable {
+    /// MLB player ID of the pitcher.
+    public let playerId: Int
+    /// Pitcher's full name as returned by the leaderboard (`Last, First`).
+    public let playerName: String
+    /// Season year (passed through from the query — not present in the CSV).
+    public let season: Int
+    /// Team abbreviation (e.g. `"MIL"`).
+    public let team: String
+    /// Statcast pitch-type code (e.g. `"FF"`, `"SL"`).
+    public let pitchType: String
+    /// Human-readable pitch name (e.g. `"4-Seam Fastball"`).
+    public let pitchName: String
+    /// Run value per 100 pitches of this type. Negative is good for the pitcher.
+    public let runValuePer100: Double
+    /// Total run value of all pitches of this type. Negative is good for the pitcher.
+    public let runValue: Int
+    /// Number of pitches of this type thrown.
+    public let pitches: Int
+    /// Share of total pitches that were of this type (0–100).
+    public let pitchUsage: Double
+    /// Plate appearances ending on this pitch type.
+    public let plateAppearances: Int
+    /// Batting average against this pitch type.
+    public let battingAverage: Double
+    /// Slugging percentage against this pitch type.
+    public let slugging: Double
+    /// Weighted on-base average against this pitch type.
+    public let wOBA: Double
+    /// Whiff rate (swings and misses ÷ swings) against this pitch type (0–100).
+    public let whiffRate: Double
+    /// Strikeout rate when this pitch is in the at-bat (0–100).
+    public let strikeoutRate: Double
+    /// Put-away rate — share of two-strike pitches of this type that ended the AB in a K (0–100).
+    public let putAwayRate: Double
+    /// Expected batting average against this pitch type.
+    public let expectedBattingAverage: Double
+    /// Expected slugging against this pitch type.
+    public let expectedSlugging: Double
+    /// Expected wOBA against this pitch type.
+    public let expectedWOBA: Double
+    /// Hard-hit rate (95+ mph) against this pitch type (0–100).
+    public let hardHitRate: Double
+}
+
+// MARK: - Pitch Movement
+
+/// A single pitcher × pitch-type movement entry from the Baseball Savant
+/// `pitch-movement` leaderboard.
+///
+/// One row per pitcher per pitch type, describing how the pitch moves relative
+/// to league average for that pitch type — vertical drop (gravity-included and
+/// induced-only), horizontal break, and percentile ranks of the differentials
+/// against the league at the same release point and velocity.
+///
+/// "Z" axis is vertical (positive = upward / less drop than gravity); "X" axis
+/// is horizontal (sign convention follows Savant: positive = toward the
+/// pitcher's arm side).
+public struct PitchMovementEntry: Sendable, Equatable, Codable {
+    /// MLB player ID of the pitcher.
+    public let pitcherId: Int
+    /// Pitcher's full name as returned by the leaderboard (`Last, First`).
+    public let pitcherName: String
+    /// Season year.
+    public let season: Int
+    /// Team display name (e.g. `"Nationals"`).
+    public let team: String
+    /// Team abbreviation (e.g. `"WSH"`).
+    public let teamAbbreviation: String
+    /// Pitching hand (`"L"` or `"R"`).
+    public let pitchHand: String
+    /// Statcast pitch-type code (e.g. `"FF"`).
+    public let pitchType: String
+    /// Human-readable pitch name (e.g. `"4-Seam Fastball"`).
+    public let pitchTypeName: String
+    /// Average release velocity, mph.
+    public let avgSpeed: Double
+    /// Number of pitches of this type thrown by the pitcher.
+    public let pitchesThrown: Int
+    /// Total pitches thrown by the pitcher across all types in the sample.
+    public let totalPitches: Int
+    /// Average pitches of this type thrown per game.
+    public let pitchesPerGame: Double
+    /// Share of the pitcher's total arsenal made up by this pitch (0–1 fraction).
+    public let pitchUsage: Double
+    /// Pitcher's vertical drop in inches (gravity-included).
+    public let pitcherBreakZ: Double
+    /// League-average vertical drop in inches at this pitch type and velocity (gravity-included).
+    public let leagueBreakZ: Double
+    /// `pitcherBreakZ − leagueBreakZ`, in inches.
+    public let diffZ: Double
+    /// Approximate "rise" relative to league as an integer percent (Savant's `rise` column).
+    public let rise: Int
+    /// Pitcher's induced vertical break in inches (gravity stripped out).
+    public let pitcherBreakZInduced: Double
+    /// Pitcher's horizontal break in inches (positive = arm-side).
+    public let pitcherBreakX: Double
+    /// League-average horizontal break in inches at this pitch type and velocity.
+    public let leagueBreakX: Double
+    /// `pitcherBreakX − leagueBreakX`, in inches.
+    public let diffX: Double
+    /// Approximate horizontal "tail" relative to league as an integer percent (Savant's `tail` column).
+    public let tail: Int
+    /// Percentile rank of the vertical-break differential vs league (0–1 fraction).
+    public let percentRankDiffZ: Double
+    /// Percentile rank of the horizontal-break differential vs league (0–1 fraction).
+    public let percentRankDiffX: Double
+}

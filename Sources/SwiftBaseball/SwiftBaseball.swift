@@ -776,6 +776,43 @@ public enum SwiftBaseball {
         ExitVeloBarrelsPitcherQuery(client: statcastClient)
     }
 
+    /// Build a query for the Baseball Savant `pitch-arsenals` leaderboard.
+    ///
+    /// Returns one entry per (pitcher × pitch type) with a single metric
+    /// (velocity, spin rate, or pitch count). Chain ``PitchArsenalQuery/metric(_:)``
+    /// to choose which view; the default is ``PitchArsenalMetric/velocity``.
+    ///
+    ///     let velos = try await SwiftBaseball.pitchArsenal().season(2024).metric(.velocity).fetch()
+    ///     print(velos.first?.value)  // top average fastball mph
+    public static func pitchArsenal() -> PitchArsenalQuery {
+        PitchArsenalQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `pitch-arsenal-stats` leaderboard.
+    ///
+    /// Returns per-pitch outcomes for every pitcher × pitch-type combination meeting
+    /// the minimum-PA threshold: run value, swings & misses, BA / SLG / wOBA actual
+    /// vs expected, and hard-hit rate. Use
+    /// ``PitchArsenalStatsQuery/minPlateAppearances(_:)`` to relax the default 25-PA cutoff.
+    ///
+    ///     let stats = try await SwiftBaseball.pitchArsenalStats().season(2024).fetch()
+    ///     print(stats.first?.runValuePer100)
+    public static func pitchArsenalStats() -> PitchArsenalStatsQuery {
+        PitchArsenalStatsQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `pitch-movement` leaderboard.
+    ///
+    /// Returns one row per (pitcher × pitch type) with raw vertical and horizontal
+    /// break (gravity-included and induced) plus differentials versus league average
+    /// for the same pitch type and velocity, and percentile ranks of those diffs.
+    ///
+    ///     let movement = try await SwiftBaseball.pitchMovement().season(2024).fetch()
+    ///     print(movement.first?.diffZ)  // most rise above league
+    public static func pitchMovement() -> PitchMovementQuery {
+        PitchMovementQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

@@ -936,3 +936,332 @@ private enum ExitVeloBarrelsParser {
         }
     }
 }
+
+// MARK: - Pitch Arsenal
+
+/// Query builder for the Baseball Savant `pitch-arsenals` leaderboard.
+///
+/// The upstream board exposes three different views of every pitcher's repertoire
+/// — average velocity, average spin rate, and raw pitch counts — each in its own
+/// CSV. Use ``metric(_:)`` to pick which view to fetch (default
+/// ``PitchArsenalMetric/velocity``); the response is flattened to one
+/// ``PitchArsenalEntry`` per (pitcher, pitch type) so all three views share
+/// the same row layout.
+///
+/// ```swift
+/// let velos = try await SwiftBaseball
+///     .pitchArsenal()
+///     .season(2024)
+///     .metric(.velocity)
+///     .fetch()
+/// print(velos.first?.value)  // top fastball mph
+/// ```
+public struct PitchArsenalQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+    private var _metric: PitchArsenalMetric
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+        self._metric = .velocity
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PitchArsenalQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Selects which arsenal metric to fetch (default: ``PitchArsenalMetric/velocity``).
+    public func metric(_ metric: PitchArsenalMetric) -> PitchArsenalQuery {
+        var copy = self
+        copy._metric = metric
+        return copy
+    }
+
+    /// Executes the query and returns one entry per (pitcher, pitch type).
+    ///
+    /// - Returns: An array of ``PitchArsenalEntry`` values flattened from the wide CSV.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PitchArsenalEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let savantType: String
+        switch _metric {
+        case .velocity: savantType = "avg_speed"
+        case .spin: savantType = "avg_spin"
+        }
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/pitch-arsenals",
+            queryItems: [
+                URLQueryItem(name: "type", value: savantType),
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PitchArsenalParser.parse(csv, season: year, metric: _metric)
+    }
+}
+
+/// Parses Baseball Savant pitch-arsenals CSV (wide format) into long-format
+/// ``PitchArsenalEntry`` values, one per (pitcher × pitch type) cell.
+enum PitchArsenalParser {
+    /// Statcast pitch-type codes that appear as wide columns in the pitch-arsenals CSV.
+    static let pitchTypes = ["FF", "SI", "FC", "SL", "CH", "CU", "FS", "KN", "ST", "SV"]
+
+    static func parse(_ csv: String, season: Int, metric: PitchArsenalMetric) -> [PitchArsenalEntry] {
+        let suffix: String
+        switch metric {
+        case .velocity: suffix = "_avg_speed"
+        case .spin: suffix = "_avg_spin"
+        }
+        let rows = CSVParser.parse(csv)
+        var entries: [PitchArsenalEntry] = []
+        for row in rows {
+            guard let idStr = row["pitcher"], let pitcherId = Int(idStr) else { continue }
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+            for pitchType in pitchTypes {
+                let columnKey = pitchType.lowercased() + suffix
+                guard
+                    let raw = row[columnKey],
+                    !raw.isEmpty,
+                    let value = Double(raw)
+                else { continue }
+                entries.append(PitchArsenalEntry(
+                    pitcherId: pitcherId,
+                    pitcherName: name,
+                    season: season,
+                    pitchType: pitchType,
+                    metric: metric,
+                    value: value
+                ))
+            }
+        }
+        return entries
+    }
+}
+
+// MARK: - Pitch Arsenal Stats
+
+/// Query builder for the Baseball Savant `pitch-arsenal-stats` leaderboard.
+///
+/// Returns one row per pitcher × pitch type with run value, swing-and-miss, and
+/// quality-of-contact outcomes. Use ``minPlateAppearances(_:)`` to relax the
+/// default threshold of 25 PA per pitch type.
+///
+/// ```swift
+/// let stats = try await SwiftBaseball
+///     .pitchArsenalStats()
+///     .season(2024)
+///     .fetch()
+/// print(stats.first?.runValuePer100)
+/// ```
+public struct PitchArsenalStatsQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+    private var _minPA: Int
+
+    static let defaultMinPA = 25
+
+    init(client: StatcastAPIClient, minPA: Int = defaultMinPA) {
+        self.client = client
+        self._minPA = minPA
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PitchArsenalStatsQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Sets the minimum plate appearances per pitch type required for inclusion
+    /// (default: ``defaultMinPA``).
+    public func minPlateAppearances(_ count: Int) -> PitchArsenalStatsQuery {
+        var copy = self
+        copy._minPA = count
+        return copy
+    }
+
+    /// Executes the query and returns per-pitch outcome entries.
+    ///
+    /// - Returns: An array of ``PitchArsenalStatsEntry`` rows.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PitchArsenalStatsEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/pitch-arsenal-stats",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min_pa", value: String(_minPA)),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PitchArsenalStatsParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant pitch-arsenal-stats CSV into ``PitchArsenalStatsEntry`` values.
+enum PitchArsenalStatsParser {
+    static func parse(_ csv: String, season: Int) -> [PitchArsenalStatsEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PitchArsenalStatsEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let team = row["team_name_alt"],
+                let pitchType = row["pitch_type"],
+                let pitchName = row["pitch_name"],
+                let rvStr = row["run_value_per_100"], let rv100 = Double(rvStr),
+                let rvTotalStr = row["run_value"], let rvTotal = Int(rvTotalStr),
+                let pitchesStr = row["pitches"], let pitches = Int(pitchesStr),
+                let usageStr = row["pitch_usage"], let usage = Double(usageStr),
+                let paStr = row["pa"], let pa = Int(paStr),
+                let baStr = row["ba"], let ba = Double(baStr),
+                let slgStr = row["slg"], let slg = Double(slgStr),
+                let wobaStr = row["woba"], let woba = Double(wobaStr),
+                let whiffStr = row["whiff_percent"], let whiff = Double(whiffStr),
+                let kStr = row["k_percent"], let kRate = Double(kStr),
+                let putAwayStr = row["put_away"], let putAway = Double(putAwayStr),
+                let xbaStr = row["est_ba"], let xba = Double(xbaStr),
+                let xslgStr = row["est_slg"], let xslg = Double(xslgStr),
+                let xwobaStr = row["est_woba"], let xwoba = Double(xwobaStr),
+                let hhStr = row["hard_hit_percent"], let hh = Double(hhStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+
+            return PitchArsenalStatsEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                team: team,
+                pitchType: pitchType,
+                pitchName: pitchName,
+                runValuePer100: rv100,
+                runValue: rvTotal,
+                pitches: pitches,
+                pitchUsage: usage,
+                plateAppearances: pa,
+                battingAverage: ba,
+                slugging: slg,
+                wOBA: woba,
+                whiffRate: whiff,
+                strikeoutRate: kRate,
+                putAwayRate: putAway,
+                expectedBattingAverage: xba,
+                expectedSlugging: xslg,
+                expectedWOBA: xwoba,
+                hardHitRate: hh
+            )
+        }
+    }
+}
+
+// MARK: - Pitch Movement
+
+/// Query builder for the Baseball Savant `pitch-movement` leaderboard.
+///
+/// Returns one row per pitcher × pitch type with vertical and horizontal movement
+/// expressed both as raw inches and as differentials versus the league average for
+/// the same pitch type and velocity (with percentile ranks of those differentials).
+///
+/// ```swift
+/// let movement = try await SwiftBaseball
+///     .pitchMovement()
+///     .season(2024)
+///     .fetch()
+/// print(movement.first?.diffZ)  // most rise vs league
+/// ```
+public struct PitchMovementQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) { self.client = client }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PitchMovementQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns pitch-movement entries.
+    ///
+    /// - Returns: An array of ``PitchMovementEntry`` rows.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PitchMovementEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/pitch-movement",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PitchMovementParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant pitch-movement CSV into ``PitchMovementEntry`` values.
+enum PitchMovementParser {
+    static func parse(_ csv: String, season: Int) -> [PitchMovementEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PitchMovementEntry? in
+            guard
+                let idStr = row["pitcher_id"], let pitcherId = Int(idStr),
+                let team = row["team_name"],
+                let teamAbbrev = row["team_name_abbrev"],
+                let hand = row["pitch_hand"],
+                let avgSpeedStr = row["avg_speed"], let avgSpeed = Double(avgSpeedStr),
+                let thrownStr = row["pitches_thrown"], let thrown = Int(thrownStr),
+                let totalStr = row["total_pitches"], let total = Int(totalStr),
+                let perGameStr = row["pitches_per_game"], let perGame = Double(perGameStr),
+                let usageStr = row["pitch_per"], let usage = Double(usageStr),
+                let pitchType = row["pitch_type"],
+                let pitchTypeName = row["pitch_type_name"],
+                let breakZStr = row["pitcher_break_z"], let breakZ = Double(breakZStr),
+                let leagueBreakZStr = row["league_break_z"], let leagueBreakZ = Double(leagueBreakZStr),
+                let diffZStr = row["diff_z"], let diffZ = Double(diffZStr),
+                let riseStr = row["rise"], let rise = Int(riseStr),
+                let inducedZStr = row["pitcher_break_z_induced"], let inducedZ = Double(inducedZStr),
+                let breakXStr = row["pitcher_break_x"], let breakX = Double(breakXStr),
+                let leagueBreakXStr = row["league_break_x"], let leagueBreakX = Double(leagueBreakXStr),
+                let diffXStr = row["diff_x"], let diffX = Double(diffXStr),
+                let tailStr = row["tail"], let tail = Int(tailStr),
+                let prDzStr = row["percent_rank_diff_z"], let prDz = Double(prDzStr),
+                let prDxStr = row["percent_rank_diff_x"], let prDx = Double(prDxStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+            let yr = row["year"].flatMap(Int.init) ?? season
+
+            return PitchMovementEntry(
+                pitcherId: pitcherId,
+                pitcherName: name,
+                season: yr,
+                team: team,
+                teamAbbreviation: teamAbbrev,
+                pitchHand: hand,
+                pitchType: pitchType,
+                pitchTypeName: pitchTypeName,
+                avgSpeed: avgSpeed,
+                pitchesThrown: thrown,
+                totalPitches: total,
+                pitchesPerGame: perGame,
+                pitchUsage: usage,
+                pitcherBreakZ: breakZ,
+                leagueBreakZ: leagueBreakZ,
+                diffZ: diffZ,
+                rise: rise,
+                pitcherBreakZInduced: inducedZ,
+                pitcherBreakX: breakX,
+                leagueBreakX: leagueBreakX,
+                diffX: diffX,
+                tail: tail,
+                percentRankDiffZ: prDz,
+                percentRankDiffX: prDx
+            )
+        }
+    }
+}

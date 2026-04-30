@@ -335,6 +335,20 @@ let evBatter = try await SwiftBaseball.exitVeloBarrelsBatter().season(2024).fetc
 print(evBatter.first?.avgExitVelocity, evBatter.first?.barrelRate)
 let evPitcher = try await SwiftBaseball.exitVeloBarrelsPitcher().season(2024).fetch()
 print(evPitcher.first?.barrels)
+
+// Pitch arsenal — average velocity / spin per pitch type, flattened from the wide CSV
+let velos = try await SwiftBaseball.pitchArsenal().season(2024).metric(.velocity).fetch()
+print(velos.first?.pitcherName, velos.first?.pitchType, velos.first?.value)  // mph
+let spins = try await SwiftBaseball.pitchArsenal().season(2024).metric(.spin).fetch()
+print(spins.first?.value)  // rpm
+
+// Per-pitch outcomes — run value, whiff %, BA/SLG/wOBA actual vs expected, hard-hit %
+let arsenalStats = try await SwiftBaseball.pitchArsenalStats().season(2024).fetch()
+print(arsenalStats.first?.runValuePer100, arsenalStats.first?.whiffRate)
+
+// Pitch movement — vertical / horizontal break and per-pitch differentials vs league
+let movement = try await SwiftBaseball.pitchMovement().season(2024).fetch()
+print(movement.first?.diffZ, movement.first?.percentRankDiffZ)
 ```
 
 ## Data Sources
