@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-04-30
+
 ### Changed
 
 - **Swift 6 language mode**: `Package.swift` now advertises `swiftLanguageModes: [.v6]`, asserting full strict-concurrency compliance for every target
