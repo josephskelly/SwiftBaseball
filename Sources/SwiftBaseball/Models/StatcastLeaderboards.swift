@@ -576,3 +576,162 @@ public struct PitchMovementEntry: Sendable, Equatable, Codable {
     /// Percentile rank of the horizontal-break differential vs league (0–1 fraction).
     public let percentRankDiffX: Double
 }
+
+// MARK: - Active Spin
+
+/// A single pitcher × pitch-type entry from the Baseball Savant `active-spin` leaderboard.
+///
+/// "Active spin" is the share of a pitch's total spin that contributes to its movement
+/// (Magnus effect), as opposed to gyro spin which doesn't move the ball. Values are
+/// reported as percentages on the **0–100 scale** as Savant publishes them — e.g.
+/// `98.7` means 98.7%, not 0.987.
+///
+/// The upstream CSV is wide — one row per pitcher with one column per pitch type
+/// (`active_spin_fourseam`, `active_spin_sinker`, …). ``ActiveSpinQuery`` flattens
+/// that wide shape into one ``ActiveSpinEntry`` per (pitcher, pitch type), skipping
+/// pitch types the pitcher doesn't throw.
+///
+/// Pitch types are mapped to Statcast codes:
+/// `FF` (4-seam), `SI` (sinker), `FC` (cutter), `CH` (changeup), `FS` (splitter),
+/// `CU` (curveball), `SL` (slider), `ST` (sweeper), `SV` (slurve).
+public struct ActiveSpinEntry: Sendable, Equatable, Codable {
+    /// MLB player ID of the pitcher.
+    public let pitcherId: Int
+    /// Pitcher's full name as returned by the leaderboard (`Last, First`).
+    public let pitcherName: String
+    /// Pitching hand (`"L"` or `"R"`).
+    public let pitchHand: String
+    /// Season year (passed through from the query — not present in the CSV).
+    public let season: Int
+    /// Statcast pitch-type code (e.g. `"FF"`, `"SL"`).
+    public let pitchType: String
+    /// Active spin percentage on the 0–100 scale (Savant wire format).
+    public let activeSpinPercent: Double
+}
+
+// MARK: - Running Splits
+
+/// A single base-running splits entry from the Baseball Savant `running_splits` leaderboard.
+///
+/// Reports cumulative seconds elapsed at every five-foot mark from the moment of contact
+/// (`secondsTo0ft`, the contact instant, is always `0.00`) through 90 feet (the home-to-first
+/// distance). Useful for reconstructing acceleration profiles — early splits surface
+/// reaction time and explosiveness, later splits surface top-end speed.
+///
+/// The upstream board separates splits by handedness of the swing — switch-hitters appear
+/// twice (once with ``batSide`` = `"L"`, once with `"R"`).
+public struct RunningSplitsEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (`Last, First`).
+    public let playerName: String
+    /// Team abbreviation (e.g. `"WSH"`).
+    public let team: String
+    /// Primary fielding position (e.g. `"SS"`, `"CF"`).
+    public let position: String
+    /// Player age, in years.
+    public let age: Int
+    /// Side of the plate the player swung from for this row (`"L"`, `"R"`, or `"S"`).
+    public let batSide: String
+    /// Season year (passed through from the query — not present in the CSV).
+    public let season: Int
+    /// Cumulative seconds at 0 ft (always `0.00`).
+    public let secondsTo0ft: Double
+    /// Cumulative seconds at 5 ft from contact.
+    public let secondsTo5ft: Double?
+    /// Cumulative seconds at 10 ft from contact.
+    public let secondsTo10ft: Double?
+    /// Cumulative seconds at 15 ft from contact.
+    public let secondsTo15ft: Double?
+    /// Cumulative seconds at 20 ft from contact.
+    public let secondsTo20ft: Double?
+    /// Cumulative seconds at 25 ft from contact.
+    public let secondsTo25ft: Double?
+    /// Cumulative seconds at 30 ft from contact.
+    public let secondsTo30ft: Double?
+    /// Cumulative seconds at 35 ft from contact.
+    public let secondsTo35ft: Double?
+    /// Cumulative seconds at 40 ft from contact.
+    public let secondsTo40ft: Double?
+    /// Cumulative seconds at 45 ft from contact.
+    public let secondsTo45ft: Double?
+    /// Cumulative seconds at 50 ft from contact.
+    public let secondsTo50ft: Double?
+    /// Cumulative seconds at 55 ft from contact.
+    public let secondsTo55ft: Double?
+    /// Cumulative seconds at 60 ft from contact.
+    public let secondsTo60ft: Double?
+    /// Cumulative seconds at 65 ft from contact.
+    public let secondsTo65ft: Double?
+    /// Cumulative seconds at 70 ft from contact.
+    public let secondsTo70ft: Double?
+    /// Cumulative seconds at 75 ft from contact.
+    public let secondsTo75ft: Double?
+    /// Cumulative seconds at 80 ft from contact.
+    public let secondsTo80ft: Double?
+    /// Cumulative seconds at 85 ft from contact.
+    public let secondsTo85ft: Double?
+    /// Cumulative seconds at 90 ft (home to first distance) from contact.
+    public let secondsTo90ft: Double?
+}
+
+// MARK: - Bat Tracking
+
+/// A single batter's bat-tracking entry from the Baseball Savant `bat-tracking` leaderboard.
+///
+/// Reports swing-level mechanics first lit up by Statcast in 2024: average bat speed,
+/// swing length, fast-swing rate, squared-up rate, blast rate, and run value derived
+/// from those swing characteristics.
+///
+/// - Important: Rate fields on this board are reported on the **0–1 fraction scale**
+///   (e.g. `0.8519` means 85.19%), not the 0–100 scale used by other Savant
+///   leaderboards (``ExitVeloBarrelsBatterEntry/hardHitRate``,
+///   ``PitchArsenalStatsEntry/whiffRate``, etc.). This matches the Savant CSV
+///   wire format verbatim.
+///
+/// - Important: This board is **2024 and later**. Earlier seasons return empty data.
+public struct BatTrackingEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (`Last, First`).
+    public let playerName: String
+    /// Season year (passed through from the query — not present in the CSV).
+    public let season: Int
+    /// Number of competitive swings (no checked / late swings) used in the calculation.
+    public let competitiveSwings: Int
+    /// Share of total swings that were competitive (0–1 fraction).
+    public let competitiveSwingRate: Double
+    /// Number of competitive swings that produced contact.
+    public let contact: Int
+    /// Average bat speed at point of contact (or closest equivalent), in mph.
+    public let avgBatSpeed: Double
+    /// Hard-swing rate — share of competitive swings at ≥75 mph bat speed (0–1 fraction).
+    public let hardSwingRate: Double
+    /// Squared-up rate per contact — share of contact events that exited at ≥80% of
+    /// the maximum possible exit velocity for the swing's bat speed (0–1 fraction).
+    public let squaredUpPerContact: Double
+    /// Squared-up rate per swing — share of competitive swings that produced
+    /// a squared-up contact (0–1 fraction).
+    public let squaredUpPerSwing: Double
+    /// Blast rate per contact — share of contact events meeting both the squared-up
+    /// criterion and a fast-swing criterion (0–1 fraction).
+    public let blastPerContact: Double
+    /// Blast rate per swing — share of competitive swings that produced a blast
+    /// contact (0–1 fraction).
+    public let blastPerSwing: Double
+    /// Average swing length in feet, measured from the start of swing to point of contact.
+    public let avgSwingLength: Double
+    /// "Sword" swings — pitches where the batter is geometrically beaten by the pitch
+    /// (extreme combination of swing decision and pitch movement).
+    public let swords: Int
+    /// Run value of the player's swing decisions and outcomes attributed to bat tracking.
+    public let batterRunValue: Double
+    /// Total whiffs (swing-and-miss) on competitive swings.
+    public let whiffs: Int
+    /// Whiff rate per competitive swing (0–1 fraction).
+    public let whiffPerSwing: Double
+    /// Total batted-ball events.
+    public let battedBallEvents: Int
+    /// Batted-ball events per competitive swing (0–1 fraction).
+    public let battedBallEventPerSwing: Double
+}

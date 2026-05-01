@@ -864,6 +864,42 @@ public enum SwiftBaseball {
         PitchMovementQuery(client: statcastClient)
     }
 
+    /// Build a query for the Baseball Savant `active-spin` leaderboard.
+    ///
+    /// Returns one entry per (pitcher × pitch type) with the active-spin percentage
+    /// — the share of total spin contributing to movement (vs gyro spin). Values are
+    /// reported on the **0–100 scale**.
+    ///
+    ///     let entries = try await SwiftBaseball.activeSpin().season(2024).fetch()
+    ///     print(entries.first?.activeSpinPercent)
+    public static func activeSpin() -> ActiveSpinQuery {
+        ActiveSpinQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `running_splits` leaderboard.
+    ///
+    /// Returns one entry per (player × bat side) with cumulative seconds at every
+    /// 5-foot mark from 0 to 90 ft (home-to-first). Useful for reconstructing
+    /// acceleration profiles and surfacing both reaction time and top-end speed.
+    ///
+    ///     let splits = try await SwiftBaseball.runningSplits().season(2024).fetch()
+    ///     print(splits.first?.secondsTo90ft)
+    public static func runningSplits() -> RunningSplitsQuery {
+        RunningSplitsQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `bat-tracking` leaderboard (2024+).
+    ///
+    /// Returns one entry per batter with bat speed, swing length, fast-swing rate,
+    /// squared-up rate, blast rate, and run value. Rate fields are reported on the
+    /// **0–1 fraction scale**, unlike most other Savant boards.
+    ///
+    ///     let tracking = try await SwiftBaseball.batTracking().season(2024).fetch()
+    ///     print(tracking.first?.avgBatSpeed)
+    public static func batTracking() -> BatTrackingQuery {
+        BatTrackingQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

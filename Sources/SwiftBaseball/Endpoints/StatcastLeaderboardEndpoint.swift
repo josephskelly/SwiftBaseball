@@ -414,7 +414,9 @@ public struct ExpectedStatsBatterQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> ExpectedStatsBatterQuery {
@@ -502,7 +504,9 @@ public struct ExpectedStatsPitcherQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> ExpectedStatsPitcherQuery {
@@ -589,7 +593,9 @@ public struct PercentileRanksBatterQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> PercentileRanksBatterQuery {
@@ -662,7 +668,9 @@ public struct PercentileRanksPitcherQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> PercentileRanksPitcherQuery {
@@ -737,7 +745,9 @@ public struct ExitVeloBarrelsBatterQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> ExitVeloBarrelsBatterQuery {
@@ -776,7 +786,9 @@ public struct ExitVeloBarrelsPitcherQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> ExitVeloBarrelsPitcherQuery {
@@ -986,10 +998,9 @@ public struct PitchArsenalQuery: Sendable {
     /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
     public func fetch() async throws -> [PitchArsenalEntry] {
         let year = seasonYear ?? Calendar.current.component(.year, from: Date())
-        let savantType: String
-        switch _metric {
-        case .velocity: savantType = "avg_speed"
-        case .spin: savantType = "avg_spin"
+        let savantType = switch _metric {
+        case .velocity: "avg_speed"
+        case .spin: "avg_spin"
         }
         let csv = try await client.fetchSavantCSV(
             path: "leaderboard/pitch-arsenals",
@@ -1011,10 +1022,9 @@ enum PitchArsenalParser {
     static let pitchTypes = ["FF", "SI", "FC", "SL", "CH", "CU", "FS", "KN", "ST", "SV"]
 
     static func parse(_ csv: String, season: Int, metric: PitchArsenalMetric) -> [PitchArsenalEntry] {
-        let suffix: String
-        switch metric {
-        case .velocity: suffix = "_avg_speed"
-        case .spin: suffix = "_avg_spin"
+        let suffix = switch metric {
+        case .velocity: "_avg_speed"
+        case .spin: "_avg_spin"
         }
         let rows = CSVParser.parse(csv)
         var entries: [PitchArsenalEntry] = []
@@ -1177,7 +1187,9 @@ public struct PitchMovementQuery: Sendable {
     let client: StatcastAPIClient
     private var seasonYear: Int?
 
-    init(client: StatcastAPIClient) { self.client = client }
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
 
     /// Filters to a specific season year.
     public func season(_ year: Int) -> PitchMovementQuery {
@@ -1200,6 +1212,304 @@ public struct PitchMovementQuery: Sendable {
             ]
         )
         return PitchMovementParser.parse(csv, season: year)
+    }
+}
+
+// MARK: - Active Spin
+
+/// Query builder for the Baseball Savant `active-spin` leaderboard.
+///
+/// "Active spin" is the share of a pitch's spin that contributes to its movement
+/// (as opposed to gyro spin, which doesn't move the ball). The upstream CSV is
+/// wide — one column per pitch type. This query flattens to one entry per
+/// (pitcher × pitch type) the pitcher actually throws.
+///
+/// ```swift
+/// let entries = try await SwiftBaseball
+///     .activeSpin()
+///     .season(2024)
+///     .fetch()
+/// print(entries.first?.activeSpinPercent)  // 0–100 scale
+/// ```
+public struct ActiveSpinQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> ActiveSpinQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per (pitcher × pitch type).
+    ///
+    /// - Returns: An array of ``ActiveSpinEntry`` values flattened from the wide CSV.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [ActiveSpinEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/active-spin",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return ActiveSpinParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant active-spin CSV (wide format) into long-format
+/// ``ActiveSpinEntry`` values, one per (pitcher × pitch type) cell.
+enum ActiveSpinParser {
+    /// Mapping from the Savant active-spin column suffix to the Statcast pitch-type code.
+    static let pitchTypeMap: [(suffix: String, code: String)] = [
+        ("fourseam", "FF"),
+        ("sinker", "SI"),
+        ("cutter", "FC"),
+        ("changeup", "CH"),
+        ("splitter", "FS"),
+        ("curve", "CU"),
+        ("slider", "SL"),
+        ("sweeper", "ST"),
+        ("slurve", "SV")
+    ]
+
+    static func parse(_ csv: String, season: Int) -> [ActiveSpinEntry] {
+        let rows = CSVParser.parse(csv)
+        var entries: [ActiveSpinEntry] = []
+        for row in rows {
+            guard
+                let idStr = row["entity_id"], let pitcherId = Int(idStr),
+                let name = row["entity_name"], !name.isEmpty,
+                let hand = row["pitch_hand"]
+            else { continue }
+            for (suffix, code) in pitchTypeMap {
+                let key = "active_spin_" + suffix
+                guard
+                    let raw = row[key], !raw.isEmpty,
+                    let value = Double(raw)
+                else { continue }
+                entries.append(ActiveSpinEntry(
+                    pitcherId: pitcherId,
+                    pitcherName: name,
+                    pitchHand: hand,
+                    season: season,
+                    pitchType: code,
+                    activeSpinPercent: value
+                ))
+            }
+        }
+        return entries
+    }
+}
+
+// MARK: - Running Splits
+
+/// Query builder for the Baseball Savant `running_splits` leaderboard.
+///
+/// Returns cumulative split times at every 5-foot mark from 0 to 90 ft (home to first
+/// distance) on competitive runs. Switch-hitters appear once per side of the plate.
+///
+/// ```swift
+/// let splits = try await SwiftBaseball
+///     .runningSplits()
+///     .season(2024)
+///     .fetch()
+/// print(splits.first?.secondsTo90ft)  // home-to-first time
+/// ```
+public struct RunningSplitsQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> RunningSplitsQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per (player × bat side).
+    ///
+    /// - Returns: An array of ``RunningSplitsEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [RunningSplitsEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/running_splits",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "1"),
+                URLQueryItem(name: "splits_type", value: "raw"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return RunningSplitsParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant running-splits CSV into ``RunningSplitsEntry`` values.
+enum RunningSplitsParser {
+    static func parse(_ csv: String, season: Int) -> [RunningSplitsEntry] {
+        let rows = CSVParser.parse(csv, preserveEmpty: true)
+        return rows.compactMap { row -> RunningSplitsEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let team = row["name_abbrev"],
+                let position = row["position_name"],
+                let ageStr = row["age"], let age = Int(ageStr),
+                let batSide = row["bat_side"],
+                let zeroStr = row["seconds_since_hit_000"], let zero = Double(zeroStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? ""
+
+            func split(_ feet: Int) -> Double? {
+                let key = String(format: "seconds_since_hit_%03d", feet)
+                guard let raw = row[key], !raw.isEmpty else { return nil }
+                return Double(raw)
+            }
+
+            return RunningSplitsEntry(
+                playerId: playerId,
+                playerName: name,
+                team: team,
+                position: position,
+                age: age,
+                batSide: batSide,
+                season: season,
+                secondsTo0ft: zero,
+                secondsTo5ft: split(5),
+                secondsTo10ft: split(10),
+                secondsTo15ft: split(15),
+                secondsTo20ft: split(20),
+                secondsTo25ft: split(25),
+                secondsTo30ft: split(30),
+                secondsTo35ft: split(35),
+                secondsTo40ft: split(40),
+                secondsTo45ft: split(45),
+                secondsTo50ft: split(50),
+                secondsTo55ft: split(55),
+                secondsTo60ft: split(60),
+                secondsTo65ft: split(65),
+                secondsTo70ft: split(70),
+                secondsTo75ft: split(75),
+                secondsTo80ft: split(80),
+                secondsTo85ft: split(85),
+                secondsTo90ft: split(90)
+            )
+        }
+    }
+}
+
+// MARK: - Bat Tracking
+
+/// Query builder for the Baseball Savant `bat-tracking` leaderboard (2024+).
+///
+/// Returns per-batter swing mechanics: bat speed, swing length, fast-swing rate,
+/// squared-up rate, blast rate, and run value.
+///
+/// - Important: This board is **2024 and later only**. Older seasons return empty data.
+/// - Important: Rate fields are reported on the **0–1 fraction scale** (e.g. `0.85`
+///   means 85%), unlike most other Savant leaderboards.
+///
+/// ```swift
+/// let tracking = try await SwiftBaseball
+///     .batTracking()
+///     .season(2024)
+///     .fetch()
+/// print(tracking.first?.avgBatSpeed)
+/// ```
+public struct BatTrackingQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> BatTrackingQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns bat-tracking entries.
+    ///
+    /// - Returns: An array of ``BatTrackingEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [BatTrackingEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/bat-tracking",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "attackZone", value: "all"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return BatTrackingParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant bat-tracking CSV into ``BatTrackingEntry`` values.
+enum BatTrackingParser {
+    static func parse(_ csv: String, season: Int) -> [BatTrackingEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> BatTrackingEntry? in
+            guard
+                let idStr = row["id"], let playerId = Int(idStr),
+                let name = row["name"], !name.isEmpty,
+                let swingsStr = row["swings_competitive"], let swings = Int(swingsStr),
+                let pctSwingsStr = row["percent_swings_competitive"], let pctSwings = Double(pctSwingsStr),
+                let contactStr = row["contact"], let contact = Int(contactStr),
+                let bsStr = row["avg_bat_speed"], let batSpeed = Double(bsStr),
+                let hardStr = row["hard_swing_rate"], let hard = Double(hardStr),
+                let suContactStr = row["squared_up_per_bat_contact"], let suContact = Double(suContactStr),
+                let suSwingStr = row["squared_up_per_swing"], let suSwing = Double(suSwingStr),
+                let blastContactStr = row["blast_per_bat_contact"], let blastContact = Double(blastContactStr),
+                let blastSwingStr = row["blast_per_swing"], let blastSwing = Double(blastSwingStr),
+                let lengthStr = row["swing_length"], let length = Double(lengthStr),
+                let swordsStr = row["swords"], let swords = Int(swordsStr),
+                let rvStr = row["batter_run_value"], let rv = Double(rvStr),
+                let whiffsStr = row["whiffs"], let whiffs = Int(whiffsStr),
+                let whiffPerStr = row["whiff_per_swing"], let whiffPer = Double(whiffPerStr),
+                let bbeStr = row["batted_ball_events"], let bbe = Int(bbeStr),
+                let bbePerStr = row["batted_ball_event_per_swing"], let bbePer = Double(bbePerStr)
+            else { return nil }
+
+            return BatTrackingEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                competitiveSwings: swings,
+                competitiveSwingRate: pctSwings,
+                contact: contact,
+                avgBatSpeed: batSpeed,
+                hardSwingRate: hard,
+                squaredUpPerContact: suContact,
+                squaredUpPerSwing: suSwing,
+                blastPerContact: blastContact,
+                blastPerSwing: blastSwing,
+                avgSwingLength: length,
+                swords: swords,
+                batterRunValue: rv,
+                whiffs: whiffs,
+                whiffPerSwing: whiffPer,
+                battedBallEvents: bbe,
+                battedBallEventPerSwing: bbePer
+            )
+        }
     }
 }
 

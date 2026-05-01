@@ -126,6 +126,9 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``PitchArsenalMetric``
 - ``PitchArsenalStatsEntry``
 - ``PitchMovementEntry``
+- ``ActiveSpinEntry``
+- ``RunningSplitsEntry``
+- ``BatTrackingEntry``
 
 ### Standings
 
