@@ -349,6 +349,19 @@ print(arsenalStats.first?.runValuePer100, arsenalStats.first?.whiffRate)
 // Pitch movement — vertical / horizontal break and per-pitch differentials vs league
 let movement = try await SwiftBaseball.pitchMovement().season(2024).fetch()
 print(movement.first?.diffZ, movement.first?.percentRankDiffZ)
+
+// Raw pitch-level access — every documented Savant column, plus a `raw` escape hatch
+let game = try await SwiftBaseball.statcastGame(gamePk: 746309).fetch()
+print(game.first?.pitchType, game.first?.releaseSpeed, game.first?.launchSpeed)
+
+let day = try await SwiftBaseball.statcastRaw(start: "2024-05-21", end: "2024-05-21").fetch()
+print(day.count)  // every pitch league-wide for that day
+
+let aaron = try await SwiftBaseball
+    .statcastBatterRaw(playerId: 592450)
+    .season(2024)
+    .fetch()
+print(aaron.first?.batSpeed, aaron.first?.swingLength)
 ```
 
 ## Data Sources
@@ -356,7 +369,7 @@ print(movement.first?.diffZ, movement.first?.percentRankDiffZ)
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions, awards |
-| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing & pop time; expected-stats / percentile-rankings / exit-velo & barrels leaderboards (batter + pitcher) |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing & pop time; expected-stats / percentile-rankings / exit-velo & barrels leaderboards (batter + pitcher); raw pitch-level rows by date range, batter, pitcher, or `game_pk` (typed `StatcastPitch` + `raw: [String: String]` escape hatch) |
 | Baseball Reference | Planned | None (scraped) | Historical season stats |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 

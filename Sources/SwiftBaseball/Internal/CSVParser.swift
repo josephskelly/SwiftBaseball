@@ -12,6 +12,16 @@ enum CSVParser {
     /// CRLF and lone CR line endings are normalized to LF so the parser behaves
     /// identically on Darwin and swift-corelibs-foundation.
     static func parse(_ text: String) -> [[String: String]] {
+        parse(text, preserveEmpty: false)
+    }
+
+    /// Parses CSV text, optionally retaining empty cells as `""` entries in each row dictionary.
+    ///
+    /// Default behavior (`preserveEmpty: false`) drops empty cells so callers can use
+    /// `if let value = row[key]` as the empty-cell check. Pass `preserveEmpty: true` when
+    /// the consumer needs to inspect every column that existed in the source CSV — e.g.
+    /// the raw Statcast pitch model's `raw` escape hatch.
+    static func parse(_ text: String, preserveEmpty: Bool) -> [[String: String]] {
         let stripped = text.hasPrefix("\u{FEFF}") ? String(text.dropFirst()) : text
         let normalized = stripped
             .replacingOccurrences(of: "\r\n", with: "\n")
@@ -25,7 +35,7 @@ enum CSVParser {
             var row: [String: String] = [:]
             for (index, header) in headers.enumerated() {
                 let value = index < values.count ? values[index] : ""
-                if !value.isEmpty {
+                if preserveEmpty || !value.isEmpty {
                     row[header] = value
                 }
             }

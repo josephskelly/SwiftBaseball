@@ -42,7 +42,7 @@ struct PitchArsenalVelocityTests {
         // Webb does NOT throw a SL, CU, FS, KN, or SV.
         let webb = entries.filter { $0.pitcherId == 657_277 }
         let webbTypes = Set(webb.map(\.pitchType))
-        #expect(webbTypes.intersection(["SL", "CU", "FS", "KN", "SV"]).isEmpty)
+        #expect(webbTypes.isDisjoint(with: ["SL", "CU", "FS", "KN", "SV"]))
     }
 
     @Test("Endpoint URL targets /leaderboard/pitch-arsenals with type=avg_speed")

@@ -661,6 +661,57 @@ public enum SwiftBaseball {
         StatcastBatchCareerSplitBattingQuery(playerIds: ids, client: statcastClient)
     }
 
+    // MARK: - Raw Statcast
+
+    /// Fetch raw Baseball Savant pitch-level data across a date range, with no aggregation.
+    ///
+    /// Returns one ``StatcastPitch`` per pitch in the window. The range is split
+    /// into 7-day chunks internally so each request stays under the Savant
+    /// 25 000-row cap; chunks are dispatched concurrently.
+    ///
+    ///     let pitches = try await SwiftBaseball
+    ///         .statcastRaw(start: "2024-05-21", end: "2024-05-21")
+    ///         .fetch()
+    ///     print(pitches.count)
+    ///
+    /// - Parameters:
+    ///   - start: Inclusive start date in `"YYYY-MM-DD"` form.
+    ///   - end: Inclusive end date in `"YYYY-MM-DD"` form.
+    public static func statcastRaw(start: String, end: String) -> StatcastRawQuery {
+        StatcastRawQuery(client: statcastClient, start: start, end: end)
+    }
+
+    /// Fetch raw Baseball Savant pitch-level data filtered to a single batter.
+    ///
+    /// Returns one ``StatcastPitch`` per pitch the batter saw in the requested window.
+    ///
+    ///     let pitches = try await SwiftBaseball
+    ///         .statcastBatterRaw(playerId: 660271)
+    ///         .season(2024)
+    ///         .fetch()
+    public static func statcastBatterRaw(playerId: Int) -> StatcastBatterRawQuery {
+        StatcastBatterRawQuery(client: statcastClient, playerId: playerId)
+    }
+
+    /// Fetch raw Baseball Savant pitch-level data filtered to a single pitcher.
+    ///
+    /// Returns one ``StatcastPitch`` per pitch the pitcher threw in the requested window.
+    ///
+    ///     let pitches = try await SwiftBaseball
+    ///         .statcastPitcherRaw(playerId: 543037)
+    ///         .season(2024)
+    ///         .fetch()
+    public static func statcastPitcherRaw(playerId: Int) -> StatcastPitcherRawQuery {
+        StatcastPitcherRawQuery(client: statcastClient, playerId: playerId)
+    }
+
+    /// Fetch every pitch from a single game by `game_pk`.
+    ///
+    ///     let pitches = try await SwiftBaseball.statcastGame(gamePk: 746309).fetch()
+    public static func statcastGame(gamePk: Int) -> StatcastGameRawQuery {
+        StatcastGameRawQuery(client: statcastClient, gamePk: gamePk)
+    }
+
     // MARK: - Baseball Savant Leaderboards
 
     /// Fetch the Baseball Savant sprint-speed leaderboard.

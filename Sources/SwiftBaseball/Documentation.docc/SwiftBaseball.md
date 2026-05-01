@@ -104,6 +104,11 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 
 - ``StatcastBatting``
 - ``StatcastQuery``
+- ``StatcastPitch``
+- ``StatcastRawQuery``
+- ``StatcastBatterRawQuery``
+- ``StatcastPitcherRawQuery``
+- ``StatcastGameRawQuery``
 
 ### Statcast Leaderboards
 
