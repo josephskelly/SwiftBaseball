@@ -968,6 +968,19 @@ public enum SwiftBaseball {
         SwingTakeQuery(client: statcastClient)
     }
 
+    /// Build a query for the Baseball Savant `spin-direction-pitches` (pitch tilt) leaderboard.
+    ///
+    /// Returns one entry per (pitcher × pitch type) with both the Hawk-Eye measured
+    /// spin axis and the movement-inferred spin axis, expressed as both degrees and
+    /// clock-face labels (e.g. `"12:45"`). The gap between the two reveals how much
+    /// of a pitch's spin is gyro (non-Magnus).
+    ///
+    ///     let tilt = try await SwiftBaseball.pitchTilt().season(2024).fetch()
+    ///     print(tilt.first?.hawkeyeMeasuredClockLabel, tilt.first?.activeSpinPercent)
+    public static func pitchTilt() -> PitchTiltQuery {
+        PitchTiltQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

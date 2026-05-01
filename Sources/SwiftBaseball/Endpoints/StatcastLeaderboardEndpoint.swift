@@ -2040,3 +2040,105 @@ enum PitchMovementParser {
         }
     }
 }
+
+// MARK: - Pitch Tilt (Spin Direction)
+
+/// Query builder for the Baseball Savant `spin-direction-pitches` (pitch tilt) leaderboard.
+///
+/// Returns one entry per (pitcher × pitch type), reporting both the Hawk-Eye measured
+/// spin axis and the spin axis inferred from observed movement. The gap between the
+/// two reveals how much of a pitch's spin is gyro (non-Magnus) — large gaps typically
+/// mean a slider or other gyro-heavy offering.
+///
+/// ```swift
+/// let tilt = try await SwiftBaseball
+///     .pitchTilt()
+///     .season(2024)
+///     .fetch()
+/// // Verlander's four-seamer:
+/// // tilt.first?.hawkeyeMeasuredClockLabel == "12:45"
+/// // tilt.first?.activeSpinPercent ≈ 96
+/// ```
+public struct PitchTiltQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PitchTiltQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per (pitcher × pitch type).
+    ///
+    /// - Returns: An array of ``PitchTiltEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PitchTiltEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/spin-direction-pitches",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PitchTiltParser.parse(csv, fallbackSeason: year)
+    }
+}
+
+/// Parses Baseball Savant pitch-tilt CSV into ``PitchTiltEntry`` values.
+enum PitchTiltParser {
+    static func parse(_ csv: String, fallbackSeason: Int) -> [PitchTiltEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PitchTiltEntry? in
+            guard
+                let idStr = row["player_id"], let pitcherId = Int(idStr),
+                let hand = row["pitch_hand"],
+                let pitchType = row["api_pitch_type"],
+                let pitchTypeName = row["api_pitch_name"],
+                let pitchesStr = row["n_pitches"], let pitches = Int(pitchesStr),
+                let speedStr = row["release_speed"], let speed = Double(speedStr),
+                let spinStr = row["spin_rate"], let spin = Double(spinStr),
+                let movementStr = row["movement_inches"], let movement = Double(movementStr),
+                let activeFractionStr = row["active_spin"], let activeFraction = Double(activeFractionStr),
+                let activePercentStr = row["active_spin_formatted"], let activePercent = Double(activePercentStr),
+                let measuredStr = row["hawkeye_measured"], let measured = Double(measuredStr),
+                let inferredStr = row["movement_inferred"], let inferred = Double(inferredStr),
+                let diffStr = row["diff_measured_inferred"], let diff = Double(diffStr),
+                let measuredLabel = row["hawkeye_measured_clock_label"],
+                let inferredLabel = row["movement_inferred_clock_label"],
+                let diffLabel = row["diff_clock_label"]
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? row["player_name"] ?? ""
+            let yr = row["year"].flatMap(Int.init) ?? fallbackSeason
+
+            return PitchTiltEntry(
+                pitcherId: pitcherId,
+                pitcherName: name,
+                season: yr,
+                pitchHand: hand,
+                pitchType: pitchType,
+                pitchTypeName: pitchTypeName,
+                pitches: pitches,
+                releaseSpeed: speed,
+                spinRate: spin,
+                movementInches: movement,
+                activeSpinFraction: activeFraction,
+                activeSpinPercent: activePercent,
+                hawkeyeMeasuredDegrees: measured,
+                movementInferredDegrees: inferred,
+                diffDegrees: diff,
+                hawkeyeMeasuredClockLabel: measuredLabel,
+                movementInferredClockLabel: inferredLabel,
+                diffClockLabel: diffLabel
+            )
+        }
+    }
+}

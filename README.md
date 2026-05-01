@@ -382,6 +382,10 @@ print(brv.first?.runnerRunsTotal, brv.first?.runnerRunsExtraBase, brv.first?.run
 let swing = try await SwiftBaseball.swingTake().season(2024).fetch()
 print(swing.first?.runsAll, swing.first?.runsHeart, swing.first?.runsChase)
 
+// Pitch tilt — Hawk-Eye measured vs movement-inferred spin axis, by pitch type
+let tilt = try await SwiftBaseball.pitchTilt().season(2024).fetch()
+print(tilt.first?.hawkeyeMeasuredClockLabel, tilt.first?.movementInferredClockLabel, tilt.first?.activeSpinPercent)
+
 // Raw pitch-level access — every documented Savant column, plus a `raw` escape hatch
 let game = try await SwiftBaseball.statcastGame(gamePk: 746309).fetch()
 print(game.first?.pitchType, game.first?.releaseSpeed, game.first?.launchSpeed)

@@ -975,3 +975,61 @@ public struct SwingTakeEntry: Sendable, Equatable, Codable {
     /// Run value on waste-zone pitches (far outside the strike zone).
     public let runsWaste: Double
 }
+
+// MARK: - Pitch Tilt (Spin Direction)
+
+/// A single pitcher's spin-direction (a.k.a. pitch tilt) entry from the Baseball Savant
+/// `spin-direction-pitches` leaderboard, one row per (pitcher × pitch type).
+///
+/// Pitch tilt expresses the axis a pitch spins around as a clock-face position — e.g.
+/// `"12:00"` is pure backspin (a riding fastball), `"6:00"` is pure topspin (a 12-6
+/// curveball), `"3:00"` is pure side-spin from a right-hander, and `"9:00"` is pure
+/// side-spin from a left-hander. Savant publishes two tilt readings per pitch:
+///
+/// - **Hawk-Eye measured**: the directly observed spin axis from optical tracking.
+/// - **Movement-inferred**: the spin axis a pitch would need to produce its observed
+///   movement, given gravity and air resistance. This excludes gyro-spin (which does
+///   not contribute to movement).
+///
+/// The gap between the two measurements (`diffDegrees` / `diffClockLabel`) reveals
+/// how much of a pitch's spin is gyro (non-Magnus) — a large gap typically indicates
+/// a slider or other gyro-heavy offering. Active spin (`activeSpinFraction`,
+/// `activeSpinPercent`) is the share of total spin that produces movement.
+public struct PitchTiltEntry: Sendable, Equatable, Codable {
+    /// MLB player ID of the pitcher.
+    public let pitcherId: Int
+    /// Pitcher's full name as returned by the leaderboard (Last, First format).
+    public let pitcherName: String
+    /// Season year.
+    public let season: Int
+    /// Pitch hand (`"L"` or `"R"`).
+    public let pitchHand: String
+    /// Pitch type code (e.g. `"FF"`, `"SL"`, `"CU"`).
+    public let pitchType: String
+    /// Long-form pitch type name (e.g. `"4-Seam Fastball"`, `"Slider"`).
+    public let pitchTypeName: String
+    /// Number of pitches of this type thrown in the sample.
+    public let pitches: Int
+    /// Average release speed in mph.
+    public let releaseSpeed: Double
+    /// Average spin rate in rpm.
+    public let spinRate: Double
+    /// Total break in inches (movement magnitude).
+    public let movementInches: Double
+    /// Active spin as a 0–1 fraction (share of total spin that produces movement).
+    public let activeSpinFraction: Double
+    /// Active spin on the 0–100 scale (e.g. `96.3` means 96.3%).
+    public let activeSpinPercent: Double
+    /// Hawk-Eye measured spin axis in degrees (0° = 12:00, increasing clockwise).
+    public let hawkeyeMeasuredDegrees: Double
+    /// Movement-inferred spin axis in degrees (0° = 12:00, increasing clockwise).
+    public let movementInferredDegrees: Double
+    /// Difference between the two measurements in degrees (inferred minus measured).
+    public let diffDegrees: Double
+    /// Hawk-Eye measured tilt as a clock-face label (e.g. `"12:45"`).
+    public let hawkeyeMeasuredClockLabel: String
+    /// Movement-inferred tilt as a clock-face label (e.g. `"12:45"`).
+    public let movementInferredClockLabel: String
+    /// Difference between the two as a clock label (e.g. `"+0H 15M"`, `"-0H 15M"`, `" 0H 00M"`).
+    public let diffClockLabel: String
+}

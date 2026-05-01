@@ -502,3 +502,82 @@ struct SwingTakeTests {
         #expect(built.absoluteString.contains("year=2024"))
     }
 }
+
+// MARK: - Pitch Tilt (Spin Direction)
+
+@Suite("Pitch Tilt Tests")
+struct PitchTiltTests {
+    private func loadEntries() throws -> [PitchTiltEntry] {
+        let data = try Fixtures.load("pitch_tilt_2024.csv")
+        let csv = try #require(String(data: data, encoding: .utf8))
+        return PitchTiltParser.parse(csv, fallbackSeason: 2024)
+    }
+
+    @Test("Decodes all 15 fixture rows")
+    func decodesAllRows() throws {
+        let entries = try loadEntries()
+        #expect(entries.count == 15)
+        #expect(entries.allSatisfy { $0.season == 2024 })
+        #expect(entries.allSatisfy { $0.pitchType == "FF" })
+    }
+
+    @Test("Top entry (Verlander) parses tilt and active spin")
+    func topEntry() throws {
+        let entries = try loadEntries()
+        let top = try #require(entries.first)
+        #expect(top.pitcherId == 434_378)
+        #expect(top.pitcherName == "Verlander, Justin")
+        #expect(top.pitchHand == "R")
+        #expect(top.pitchType == "FF")
+        #expect(top.pitchTypeName == "4-Seam Fastball")
+        #expect(top.pitches == 766)
+        #expect(abs(top.releaseSpeed - 93.5) < 0.0001)
+        #expect(abs(top.spinRate - 2395) < 0.0001)
+        #expect(abs(top.movementInches - 20.8) < 0.0001)
+        #expect(abs(top.activeSpinFraction - 0.963303483313135) < 0.0001)
+        #expect(abs(top.activeSpinPercent - 96) < 0.0001)
+        #expect(top.hawkeyeMeasuredClockLabel == "12:45")
+        #expect(top.movementInferredClockLabel == "12:45")
+        #expect(top.diffClockLabel == " 0H 00M")
+    }
+
+    @Test("Active spin fraction × 100 ≈ active spin percent")
+    func activeSpinScalesMatch() throws {
+        let entries = try loadEntries()
+        for entry in entries {
+            let scaled = entry.activeSpinFraction * 100
+            #expect(abs(scaled - entry.activeSpinPercent) < 1.0)
+        }
+    }
+
+    @Test("Active spin fraction stays on 0-1 scale")
+    func activeSpinIsFraction() throws {
+        let entries = try loadEntries()
+        for entry in entries {
+            #expect(entry.activeSpinFraction >= 0 && entry.activeSpinFraction <= 1)
+        }
+    }
+
+    @Test("Diff clock label uses signed format with leading space for zero")
+    func diffClockLabels() throws {
+        let entries = try loadEntries()
+        for entry in entries {
+            let label = entry.diffClockLabel
+            #expect(label.hasPrefix("+") || label.hasPrefix("-") || label.hasPrefix(" "))
+            #expect(label.contains("H ") && label.hasSuffix("M"))
+        }
+    }
+
+    @Test("Endpoint URL targets /leaderboard/spin-direction-pitches with year")
+    func endpointURL() throws {
+        let endpoint = Endpoint(path: "leaderboard/spin-direction-pitches", queryItems: [
+            URLQueryItem(name: "year", value: "2024"),
+            URLQueryItem(name: "min", value: "q"),
+            URLQueryItem(name: "csv", value: "true")
+        ])
+        let baseURL = try #require(URL(string: "https://baseballsavant.mlb.com/"))
+        let built = try #require(endpoint.url(baseURL: baseURL))
+        #expect(built.absoluteString.contains("spin-direction-pitches"))
+        #expect(built.absoluteString.contains("year=2024"))
+    }
+}
