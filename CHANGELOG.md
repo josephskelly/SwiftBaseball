@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-05-01
+
 ### Added
 
 - **Raw Statcast pitch-level access**: four new endpoints expose un-aggregated pitch data from Baseball Savant. `SwiftBaseball.statcastRaw(start:end:)` returns `[StatcastPitch]` across an arbitrary date range, splitting the request into 7-day chunks internally (dispatched concurrently) so each response stays under Savant's 25 000-row CSV cap. `SwiftBaseball.statcastBatterRaw(playerId:)` and `SwiftBaseball.statcastPitcherRaw(playerId:)` filter to a single player with the same `.season(_:)` / `.dateRange(start:end:)` builders the aggregator queries already use. `SwiftBaseball.statcastGame(gamePk:)` returns every pitch from a single game by `game_pk`. `StatcastPitch` exposes typed fields for every documented Savant CSV column — pitch identification, release / movement / location, batted-ball outcome, expected stats, win-probability deltas, fielding alignment, scoring state, player ages and rest, plus the 2024+ bat-tracking surface (`batSpeed`, `swingLength`, `attackAngle`, `attackDirection`, `swingPathTilt`, `armAngle`, intercept-position offsets) — together with a `raw: [String: String]` escape hatch carrying every column verbatim, including any Savant adds in the future
