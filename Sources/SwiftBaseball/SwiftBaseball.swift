@@ -900,6 +900,31 @@ public enum SwiftBaseball {
         BatTrackingQuery(client: statcastClient)
     }
 
+    /// Build a query for the Baseball Savant `catch_probability` leaderboard.
+    ///
+    /// Returns one entry per outfielder with a per-star-bucket breakdown
+    /// (1-star = easiest, 5-star = hardest) of opportunities, outs, and catch
+    /// percentage. Catch percentages are reported on the **0–100 scale**;
+    /// a bucket's percentage is `nil` when the fielder had zero opportunities.
+    ///
+    ///     let catches = try await SwiftBaseball.outfieldCatchProbability().season(2024).fetch()
+    ///     print(catches.first?.fiveStarCatchPercent)
+    public static func outfieldCatchProbability() -> OutfieldCatchProbabilityQuery {
+        OutfieldCatchProbabilityQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `outfield_jump` leaderboard.
+    ///
+    /// Returns one entry per outfielder with reaction, burst, and routing distances
+    /// measured against league average (signed feet, positive = better than average),
+    /// plus absolute bootup distance covered in the first 3 seconds of pursuit.
+    ///
+    ///     let jumps = try await SwiftBaseball.outfielderJumps().season(2024).fetch()
+    ///     print(jumps.first?.relLeagueBurstDistance)
+    public static func outfielderJumps() -> OutfielderJumpsQuery {
+        OutfielderJumpsQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

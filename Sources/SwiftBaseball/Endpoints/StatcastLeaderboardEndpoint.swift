@@ -1513,6 +1513,199 @@ enum BatTrackingParser {
     }
 }
 
+// MARK: - Outfield Catch Probability
+
+/// Query builder for the Baseball Savant `catch_probability` leaderboard.
+///
+/// Returns one entry per outfielder with a per-star-bucket breakdown of how many
+/// fielding opportunities they saw and how many were converted to outs. Catch
+/// percentages are reported on the **0–100 scale**.
+///
+/// ```swift
+/// let entries = try await SwiftBaseball
+///     .outfieldCatchProbability()
+///     .season(2024)
+///     .fetch()
+/// print(entries.first?.fiveStarCatchPercent)
+/// ```
+public struct OutfieldCatchProbabilityQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> OutfieldCatchProbabilityQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per outfielder.
+    ///
+    /// - Returns: An array of ``OutfieldCatchProbabilityEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [OutfieldCatchProbabilityEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/catch_probability",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return OutfieldCatchProbabilityParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant catch-probability CSV into ``OutfieldCatchProbabilityEntry`` values.
+enum OutfieldCatchProbabilityParser {
+    static func parse(_ csv: String, season: Int) -> [OutfieldCatchProbabilityEntry] {
+        let rows = CSVParser.parse(csv, preserveEmpty: true)
+        return rows.compactMap { row -> OutfieldCatchProbabilityEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let oaaStr = row["oaa"], let oaa = Int(oaaStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? ""
+
+            func intField(_ key: String) -> Int? {
+                guard let raw = row[key], !raw.isEmpty else { return nil }
+                return Int(raw)
+            }
+            func optPercent(_ key: String) -> Double? {
+                guard let raw = row[key], !raw.isEmpty else { return nil }
+                return Double(raw)
+            }
+
+            guard
+                let fiveOuts = intField("n_fieldout_5stars"),
+                let fiveOpp = intField("n_opp_5stars"),
+                let fourOuts = intField("n_fieldout_4stars"),
+                let fourOpp = intField("n_opp_4stars"),
+                let threeOuts = intField("n_fieldout_3stars"),
+                let threeOpp = intField("n_opp_3stars"),
+                let twoOuts = intField("n_fieldout_2stars"),
+                let twoOpp = intField("n_opp_2stars"),
+                let oneOuts = intField("n_fieldout_1stars"),
+                let oneOpp = intField("n_opp_1stars")
+            else { return nil }
+
+            return OutfieldCatchProbabilityEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                outsAboveAverage: oaa,
+                fiveStarOuts: fiveOuts,
+                fiveStarOpportunities: fiveOpp,
+                fiveStarCatchPercent: optPercent("n_5star_percent"),
+                fourStarOuts: fourOuts,
+                fourStarOpportunities: fourOpp,
+                fourStarCatchPercent: optPercent("n_4star_percent"),
+                threeStarOuts: threeOuts,
+                threeStarOpportunities: threeOpp,
+                threeStarCatchPercent: optPercent("n_3star_percent"),
+                twoStarOuts: twoOuts,
+                twoStarOpportunities: twoOpp,
+                twoStarCatchPercent: optPercent("n_2star_percent"),
+                oneStarOuts: oneOuts,
+                oneStarOpportunities: oneOpp,
+                oneStarCatchPercent: optPercent("n_1star_percent")
+            )
+        }
+    }
+}
+
+// MARK: - Outfielder Jumps
+
+/// Query builder for the Baseball Savant `outfield_jump` leaderboard.
+///
+/// Returns one entry per outfielder with three additive distance components — reaction,
+/// burst, and routing — measured against league average (signed feet, positive = better).
+///
+/// ```swift
+/// let jumps = try await SwiftBaseball
+///     .outfielderJumps()
+///     .season(2024)
+///     .fetch()
+/// print(jumps.first?.relLeagueBurstDistance)
+/// ```
+public struct OutfielderJumpsQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> OutfielderJumpsQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per outfielder.
+    ///
+    /// - Returns: An array of ``OutfielderJumpEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [OutfielderJumpEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/outfield_jump",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return OutfielderJumpsParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant outfield-jump CSV into ``OutfielderJumpEntry`` values.
+enum OutfielderJumpsParser {
+    static func parse(_ csv: String, season: Int) -> [OutfielderJumpEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> OutfielderJumpEntry? in
+            guard
+                let idStr = row["resp_fielder_id"], let playerId = Int(idStr),
+                let oaaStr = row["outs_above_average"], let oaa = Int(oaaStr),
+                let oppStr = row["outs_per_play"], let oppPct = Double(oppStr),
+                let burstStr = row["rel_league_burst_distance"], let burst = Double(burstStr),
+                let reactStr = row["rel_league_reaction_distance"], let react = Double(reactStr),
+                let routeStr = row["rel_league_routing_distance"], let route = Double(routeStr),
+                let bootRelStr = row["rel_league_bootup_distance"], let bootRel = Double(bootRelStr),
+                let bootAbsStr = row["f_bootup_distance"], let bootAbs = Double(bootAbsStr),
+                let nStr = row["n"], let n = Int(nStr),
+                let outsStr = row["n_outs"], let outs = Int(outsStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? ""
+            let yr = row["year"].flatMap(Int.init) ?? season
+
+            return OutfielderJumpEntry(
+                playerId: playerId,
+                playerName: name,
+                season: yr,
+                outsAboveAverage: oaa,
+                outsPerPlay: oppPct,
+                relLeagueBurstDistance: burst,
+                relLeagueReactionDistance: react,
+                relLeagueRoutingDistance: route,
+                relLeagueBootupDistance: bootRel,
+                fBootupDistance: bootAbs,
+                opportunities: n,
+                outs: outs
+            )
+        }
+    }
+}
+
 /// Parses Baseball Savant pitch-movement CSV into ``PitchMovementEntry`` values.
 enum PitchMovementParser {
     static func parse(_ csv: String, season: Int) -> [PitchMovementEntry] {

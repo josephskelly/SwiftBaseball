@@ -129,6 +129,8 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``ActiveSpinEntry``
 - ``RunningSplitsEntry``
 - ``BatTrackingEntry``
+- ``OutfieldCatchProbabilityEntry``
+- ``OutfielderJumpEntry``
 
 ### Standings
 

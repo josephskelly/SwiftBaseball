@@ -212,3 +212,129 @@ struct BatTrackingTests {
         #expect(built.absoluteString.contains("attackZone=all"))
     }
 }
+
+// MARK: - Outfield Catch Probability
+
+@Suite("Outfield Catch Probability Tests")
+struct OutfieldCatchProbabilityTests {
+    private func loadEntries() throws -> [OutfieldCatchProbabilityEntry] {
+        let data = try Fixtures.load("outfield_catch_prob_2024.csv")
+        let csv = try #require(String(data: data, encoding: .utf8))
+        return OutfieldCatchProbabilityParser.parse(csv, season: 2024)
+    }
+
+    @Test("Decodes all 15 fixture rows")
+    func decodesAllRows() throws {
+        let entries = try loadEntries()
+        #expect(entries.count == 15)
+        #expect(entries.allSatisfy { $0.season == 2024 })
+    }
+
+    @Test("Top entry (Jacob Young) parses headline buckets")
+    func topEntry() throws {
+        let entries = try loadEntries()
+        let young = try #require(entries.first)
+        #expect(young.playerId == 696_285)
+        #expect(young.playerName == "Young, Jacob")
+        #expect(young.outsAboveAverage == 20)
+        #expect(young.fiveStarOpportunities == 26)
+        #expect(young.fiveStarOuts == 10)
+        #expect(abs((young.fiveStarCatchPercent ?? 0) - 38.5) < 0.0001)
+        #expect(abs((young.oneStarCatchPercent ?? 0) - 100.0) < 0.0001)
+    }
+
+    @Test("Empty bucket percent decodes to nil (Michael A. Taylor 4-star)")
+    func emptyBucketIsNil() throws {
+        let entries = try loadEntries()
+        let taylor = try #require(entries.first { $0.playerId == 572_191 })
+        #expect(taylor.fourStarOpportunities == 0)
+        #expect(taylor.fourStarOuts == 0)
+        #expect(taylor.fourStarCatchPercent == nil)
+    }
+
+    @Test("Catch percentages land on 0–100 scale (not normalized)")
+    func zeroToHundred() throws {
+        let entries = try loadEntries()
+        let allPercents = entries.flatMap {
+            [$0.fiveStarCatchPercent, $0.fourStarCatchPercent, $0.threeStarCatchPercent,
+             $0.twoStarCatchPercent, $0.oneStarCatchPercent].compactMap(\.self)
+        }
+        #expect(allPercents.contains { $0 > 1 })
+        #expect(allPercents.allSatisfy { $0 >= 0 && $0 <= 100 })
+    }
+
+    @Test("Endpoint URL targets /leaderboard/catch_probability with year")
+    func endpointURL() throws {
+        let endpoint = Endpoint(path: "leaderboard/catch_probability", queryItems: [
+            URLQueryItem(name: "year", value: "2024"),
+            URLQueryItem(name: "min", value: "q"),
+            URLQueryItem(name: "csv", value: "true")
+        ])
+        let baseURL = try #require(URL(string: "https://baseballsavant.mlb.com/"))
+        let built = try #require(endpoint.url(baseURL: baseURL))
+        #expect(built.absoluteString.contains("catch_probability"))
+        #expect(built.absoluteString.contains("year=2024"))
+    }
+}
+
+// MARK: - Outfielder Jumps
+
+@Suite("Outfielder Jumps Tests")
+struct OutfielderJumpsTests {
+    private func loadEntries() throws -> [OutfielderJumpEntry] {
+        let data = try Fixtures.load("outfielder_jumps_2024.csv")
+        let csv = try #require(String(data: data, encoding: .utf8))
+        return OutfielderJumpsParser.parse(csv, season: 2024)
+    }
+
+    @Test("Decodes all 15 fixture rows")
+    func decodesAllRows() throws {
+        let entries = try loadEntries()
+        #expect(entries.count == 15)
+        #expect(entries.allSatisfy { $0.season == 2024 })
+    }
+
+    @Test("Top entry (Wilyer Abreu) parses jump components")
+    func topEntry() throws {
+        let entries = try loadEntries()
+        let abreu = try #require(entries.first)
+        #expect(abreu.playerId == 677_800)
+        #expect(abreu.playerName == "Abreu, Wilyer")
+        #expect(abreu.outsAboveAverage == 6)
+        #expect(abs(abreu.outsPerPlay - 61.1) < 0.0001)
+        #expect(abreu.relLeagueBurstDistance == 0)
+        #expect(abs(abreu.relLeagueReactionDistance - 0.6) < 0.0001)
+        #expect(abs(abreu.fBootupDistance - 34.9) < 0.0001)
+        #expect(abreu.opportunities == 54)
+        #expect(abreu.outs == 33)
+    }
+
+    @Test("Negative rel-league distances preserved (Andujar reaction is positive but routing negative)")
+    func signedDistances() throws {
+        let entries = try loadEntries()
+        let andujar = try #require(entries.first { $0.playerId == 609_280 })
+        #expect(andujar.relLeagueBurstDistance < 0)
+        #expect(andujar.relLeagueReactionDistance > 0)
+        #expect(andujar.relLeagueRoutingDistance < 0)
+        #expect(andujar.outsAboveAverage == -6)
+    }
+
+    @Test("Bootup absolute distance is in realistic ft range (30–40)")
+    func bootupRange() throws {
+        let entries = try loadEntries()
+        #expect(entries.allSatisfy { $0.fBootupDistance >= 30 && $0.fBootupDistance <= 40 })
+    }
+
+    @Test("Endpoint URL targets /leaderboard/outfield_jump with year")
+    func endpointURL() throws {
+        let endpoint = Endpoint(path: "leaderboard/outfield_jump", queryItems: [
+            URLQueryItem(name: "year", value: "2024"),
+            URLQueryItem(name: "min", value: "q"),
+            URLQueryItem(name: "csv", value: "true")
+        ])
+        let baseURL = try #require(URL(string: "https://baseballsavant.mlb.com/"))
+        let built = try #require(endpoint.url(baseURL: baseURL))
+        #expect(built.absoluteString.contains("outfield_jump"))
+        #expect(built.absoluteString.contains("year=2024"))
+    }
+}

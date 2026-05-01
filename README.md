@@ -362,6 +362,14 @@ print(splits.first?.secondsTo90ft)
 let bat = try await SwiftBaseball.batTracking().season(2024).fetch()
 print(bat.first?.avgBatSpeed, bat.first?.hardSwingRate)
 
+// Outfield catch probability — opportunities and conversion rate by 1–5 star difficulty bucket
+let catches = try await SwiftBaseball.outfieldCatchProbability().season(2024).fetch()
+print(catches.first?.fiveStarOpportunities, catches.first?.fiveStarCatchPercent)
+
+// Outfielder jumps — reaction / burst / routing distance vs league average (signed feet)
+let jumps = try await SwiftBaseball.outfielderJumps().season(2024).fetch()
+print(jumps.first?.relLeagueReactionDistance, jumps.first?.fBootupDistance)
+
 // Raw pitch-level access — every documented Savant column, plus a `raw` escape hatch
 let game = try await SwiftBaseball.statcastGame(gamePk: 746309).fetch()
 print(game.first?.pitchType, game.first?.releaseSpeed, game.first?.launchSpeed)
@@ -381,7 +389,7 @@ print(aaron.first?.batSpeed, aaron.first?.swingLength)
 | Source | Status | Auth | Data Available |
 |---|---|---|---|
 | **MLB Stats API** | Supported | None (free) | Players, teams, schedules, standings, box scores, stats, sabermetrics (wOBA/wRC+/WAR), game logs, play-by-play, transactions, awards |
-| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing & pop time; expected-stats / percentile-rankings / exit-velo & barrels leaderboards (batter + pitcher); active-spin (per pitch type), running-splits (every 5 ft to 90 ft), bat-tracking (bat speed / swing length / squared-up rate, 2024+); raw pitch-level rows by date range, batter, pitcher, or `game_pk` (typed `StatcastPitch` + `raw: [String: String]` escape hatch) |
+| **Baseball Savant / Statcast** | Supported | None (free) | Batted ball profile (GB%/FB%/LD%), exit velocity, launch angle, barrel rate, xBA/xSLG/xwOBA; career splits vs LHP/RHP (xwOBA + PA); computed wOBA from counting stats; pitcher arsenal (velocity, spin, whiff%, CSW, pitch mix); sprint speed, outs above average, catcher framing & pop time; expected-stats / percentile-rankings / exit-velo & barrels leaderboards (batter + pitcher); active-spin (per pitch type), running-splits (every 5 ft to 90 ft), bat-tracking (bat speed / swing length / squared-up rate, 2024+); outfield catch probability (per 1–5 star bucket) and outfielder jumps (reaction / burst / routing vs league average); raw pitch-level rows by date range, batter, pitcher, or `game_pk` (typed `StatcastPitch` + `raw: [String: String]` escape hatch) |
 | Baseball Reference | Planned | None (scraped) | Historical season stats |
 | FanGraphs | Planned | None (scraped) | WAR, wRC+, FIP, advanced metrics |
 

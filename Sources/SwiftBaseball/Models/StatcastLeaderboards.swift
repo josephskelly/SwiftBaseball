@@ -735,3 +735,102 @@ public struct BatTrackingEntry: Sendable, Equatable, Codable {
     /// Batted-ball events per competitive swing (0–1 fraction).
     public let battedBallEventPerSwing: Double
 }
+
+// MARK: - Outfield Catch Probability
+
+/// A single outfielder's catch-probability breakdown from the Baseball Savant
+/// `catch_probability` leaderboard.
+///
+/// Catch probability bins each fielding opportunity into one of five star ratings
+/// based on the difficulty of the catch (1-star = easiest, 5-star = hardest, < 25%
+/// expected catch rate). The entry reports, per star bucket, how many opportunities
+/// the fielder saw, how many of them were converted to outs, and the conversion rate.
+///
+/// Catch percentages are reported on the **0–100 scale** (e.g. `38.5` means 38.5%).
+/// A bucket's percent field is `nil` when the fielder had zero opportunities at that
+/// difficulty (Savant emits an empty cell to avoid divide-by-zero).
+///
+/// - Note: Team is not included in the Savant catch-probability CSV. Use
+///   ``playerId`` to look up team via ``SwiftBaseball/players(ids:)``.
+public struct OutfieldCatchProbabilityEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Season year.
+    public let season: Int
+    /// Total Outs Above Average across all star buckets.
+    public let outsAboveAverage: Int
+    /// Number of 5-star catches (≥ 76% effort, < 25% expected).
+    public let fiveStarOuts: Int
+    /// Number of 5-star opportunities.
+    public let fiveStarOpportunities: Int
+    /// Catch percentage on 5-star opportunities (0–100). `nil` if no opportunities.
+    public let fiveStarCatchPercent: Double?
+    /// Number of 4-star catches (26–50% expected).
+    public let fourStarOuts: Int
+    /// Number of 4-star opportunities.
+    public let fourStarOpportunities: Int
+    /// Catch percentage on 4-star opportunities (0–100). `nil` if no opportunities.
+    public let fourStarCatchPercent: Double?
+    /// Number of 3-star catches (51–75% expected).
+    public let threeStarOuts: Int
+    /// Number of 3-star opportunities.
+    public let threeStarOpportunities: Int
+    /// Catch percentage on 3-star opportunities (0–100). `nil` if no opportunities.
+    public let threeStarCatchPercent: Double?
+    /// Number of 2-star catches (76–90% expected).
+    public let twoStarOuts: Int
+    /// Number of 2-star opportunities.
+    public let twoStarOpportunities: Int
+    /// Catch percentage on 2-star opportunities (0–100). `nil` if no opportunities.
+    public let twoStarCatchPercent: Double?
+    /// Number of 1-star catches (≥ 91% expected).
+    public let oneStarOuts: Int
+    /// Number of 1-star opportunities.
+    public let oneStarOpportunities: Int
+    /// Catch percentage on 1-star opportunities (0–100). `nil` if no opportunities.
+    public let oneStarCatchPercent: Double?
+}
+
+// MARK: - Outfielder Jumps
+
+/// A single outfielder's jump-tracking entry from the Baseball Savant `outfield_jump`
+/// leaderboard.
+///
+/// "Jump" measures the first 1.5 seconds of an outfielder's pursuit of a fly ball,
+/// decomposed into three additive distance components (relative to league average):
+/// reaction (first 0–1.5 s before any committed direction), burst (1.5–3.0 s of
+/// acceleration), and routing (efficiency of the path taken). Bootup distance is the
+/// sum of all three. All `relLeague*` fields are signed feet versus league average —
+/// positive = better than average. `fBootupDistance` is the absolute distance covered
+/// in feet (typical range 30–37 ft).
+///
+/// - Note: Team is not included in the Savant outfield-jump CSV. Use ``playerId``
+///   to look up team via ``SwiftBaseball/players(ids:)``.
+public struct OutfielderJumpEntry: Sendable, Equatable, Codable {
+    /// MLB player ID (Savant calls this `resp_fielder_id`).
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Season year.
+    public let season: Int
+    /// Outs Above Average attributable to first-step jump performance.
+    public let outsAboveAverage: Int
+    /// Outs per 100 plays — overall conversion percentage on tracked opportunities (0–100).
+    public let outsPerPlay: Double
+    /// Burst distance vs league average, in feet (1.5–3.0 s window).
+    public let relLeagueBurstDistance: Double
+    /// Reaction distance vs league average, in feet (0–1.5 s window).
+    public let relLeagueReactionDistance: Double
+    /// Routing efficiency vs league average, in feet (path quality).
+    public let relLeagueRoutingDistance: Double
+    /// Total bootup distance vs league average, in feet (sum of reaction + burst + routing).
+    public let relLeagueBootupDistance: Double
+    /// Absolute bootup distance in feet — total ground covered in the first 3 seconds.
+    public let fBootupDistance: Double
+    /// Number of two-star-or-harder opportunities in the sample.
+    public let opportunities: Int
+    /// Number of those opportunities converted to outs.
+    public let outs: Int
+}
