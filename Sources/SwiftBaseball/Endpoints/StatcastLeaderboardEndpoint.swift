@@ -1706,6 +1706,278 @@ enum OutfielderJumpsParser {
     }
 }
 
+// MARK: - Pitcher Fielding Run Value
+
+/// Query builder for the Baseball Savant `fielding-run-value` leaderboard.
+///
+/// Returns one entry per pitcher with the team-defense run value accumulated during
+/// that pitcher's innings — the leaderboard is **pitcher-centric** despite its name.
+///
+/// ```swift
+/// let frv = try await SwiftBaseball
+///     .pitcherFieldingRunValue()
+///     .season(2024)
+///     .fetch()
+/// print(frv.first?.totalRuns)
+/// ```
+public struct PitcherFieldingRunValueQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> PitcherFieldingRunValueQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per pitcher.
+    ///
+    /// - Returns: An array of ``PitcherFieldingRunValueEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [PitcherFieldingRunValueEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/fielding-run-value",
+            queryItems: [
+                URLQueryItem(name: "type", value: "Fielder"),
+                URLQueryItem(name: "seasonStart", value: String(year)),
+                URLQueryItem(name: "seasonEnd", value: String(year)),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return PitcherFieldingRunValueParser.parse(csv, season: year)
+    }
+}
+
+/// Parses Baseball Savant fielding-run-value CSV into ``PitcherFieldingRunValueEntry`` values.
+enum PitcherFieldingRunValueParser {
+    static func parse(_ csv: String, season: Int) -> [PitcherFieldingRunValueEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> PitcherFieldingRunValueEntry? in
+            guard
+                let idStr = row["id"], let playerId = Int(idStr),
+                let totalStr = row["total_runs"], let total = Double(totalStr),
+                let infOfStr = row["inf_of_runs"], let infOf = Double(infOfStr),
+                let rangeStr = row["range_runs"], let range = Double(rangeStr),
+                let armStr = row["arm_runs"], let arm = Double(armStr),
+                let dpStr = row["dp_runs"], let dp = Double(dpStr),
+                let catchStr = row["catching_runs"], let catching = Double(catchStr),
+                let framingStr = row["framing_runs"], let framing = Double(framingStr),
+                let throwingStr = row["throwing_runs"], let throwing = Double(throwingStr),
+                let blockingStr = row["blocking_runs"], let blocking = Double(blockingStr),
+                let playsStr = row["tot_plays"], let plays = Int(playsStr)
+            else { return nil }
+
+            let name = row["name"] ?? ""
+
+            return PitcherFieldingRunValueEntry(
+                playerId: playerId,
+                playerName: name,
+                season: season,
+                totalRuns: total,
+                infieldOutfieldRuns: infOf,
+                rangeRuns: range,
+                armRuns: arm,
+                doublePlayRuns: dp,
+                catchingRuns: catching,
+                framingRuns: framing,
+                throwingRuns: throwing,
+                blockingRuns: blocking,
+                totalPlays: plays
+            )
+        }
+    }
+}
+
+// MARK: - Baserunning Run Value
+
+/// Query builder for the Baseball Savant `baserunning-run-value` leaderboard.
+///
+/// Returns one entry per player with run value broken down across extra-base taking
+/// and stolen-base attempts, with sub-decompositions for each.
+///
+/// ```swift
+/// let brv = try await SwiftBaseball
+///     .baserunningRunValue()
+///     .season(2024)
+///     .fetch()
+/// print(brv.first?.runnerRunsTotal)
+/// ```
+///
+/// - Important: The CSV download from Savant always returns the current season's
+///   data regardless of `season(_:)`. The query still passes `season=` through, but
+///   results may not honor it depending on Savant's CSV export state.
+public struct BaserunningRunValueQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year. May be ignored by the Savant CSV export.
+    public func season(_ year: Int) -> BaserunningRunValueQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per player.
+    ///
+    /// - Returns: An array of ``BaserunningRunValueEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [BaserunningRunValueEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/baserunning-run-value",
+            queryItems: [
+                URLQueryItem(name: "season", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return BaserunningRunValueParser.parse(csv, fallbackSeason: year)
+    }
+}
+
+/// Parses Baseball Savant baserunning-run-value CSV into ``BaserunningRunValueEntry`` values.
+enum BaserunningRunValueParser {
+    static func parse(_ csv: String, fallbackSeason: Int) -> [BaserunningRunValueEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> BaserunningRunValueEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let team = row["team_name"],
+                let totStr = row["runner_runs_tot"], let tot = Double(totStr),
+                let xbStr = row["runner_runs_XB"], let xb = Double(xbStr),
+                let sbxStr = row["runner_runs_SBX"], let sbx = Double(sbxStr),
+                let nMovedStr = row["N_runner_moved"], let nMoved = Int(nMovedStr),
+                let swipeStr = row["runner_runs_XB_swipe"], let swipe = Double(swipeStr),
+                let snipeStr = row["runner_runs_XB_snipe"], let snipe = Double(snipeStr),
+                let freezeStr = row["runner_runs_XB_freeze"], let freeze = Double(freezeStr),
+                let nXBStr = row["N_runner_moved_XB"], let nXB = Int(nXBStr),
+                let sb2Str = row["runner_runs_SB2"], let sb2 = Double(sb2Str),
+                let sb3Str = row["runner_runs_SB3"], let sb3 = Double(sb3Str),
+                let simple2Str = row["simple_stolen_on_running_act_SB2"], let simple2 = Double(simple2Str),
+                let simple3Str = row["simple_stolen_on_running_act_SB3"], let simple3 = Double(simple3Str),
+                let nSBXStr = row["N_runner_moved_SBX"], let nSBX = Int(nSBXStr)
+            else { return nil }
+
+            let name = row["entity_name"] ?? ""
+            let yr = row["start_year"].flatMap(Int.init) ?? fallbackSeason
+
+            return BaserunningRunValueEntry(
+                playerId: playerId,
+                playerName: name,
+                team: team,
+                season: yr,
+                runnerRunsTotal: tot,
+                runnerRunsExtraBase: xb,
+                runnerRunsStolenBase: sbx,
+                runnersMoved: nMoved,
+                runnerRunsExtraBaseSwipe: swipe,
+                runnerRunsExtraBaseSnipe: snipe,
+                runnerRunsExtraBaseFreeze: freeze,
+                runnersMovedExtraBase: nXB,
+                runnerRunsSecond: sb2,
+                runnerRunsThird: sb3,
+                simpleStolenSecond: simple2,
+                simpleStolenThird: simple3,
+                runnersMovedStolenBase: nSBX
+            )
+        }
+    }
+}
+
+// MARK: - Swing / Take
+
+/// Query builder for the Baseball Savant `swing-take` leaderboard.
+///
+/// Returns one entry per batter with swing-decision run value broken down across
+/// four pitch-location zones (heart / shadow / chase / waste).
+///
+/// ```swift
+/// let swing = try await SwiftBaseball
+///     .swingTake()
+///     .season(2024)
+///     .fetch()
+/// print(swing.first?.runsHeart, swing.first?.runsChase)
+/// ```
+public struct SwingTakeQuery: Sendable {
+    let client: StatcastAPIClient
+    private var seasonYear: Int?
+
+    init(client: StatcastAPIClient) {
+        self.client = client
+    }
+
+    /// Filters to a specific season year.
+    public func season(_ year: Int) -> SwingTakeQuery {
+        var copy = self
+        copy.seasonYear = year
+        return copy
+    }
+
+    /// Executes the query and returns one entry per batter.
+    ///
+    /// - Returns: An array of ``SwingTakeEntry`` values.
+    /// - Throws: ``SwiftBaseballError`` if the request or parsing fails.
+    public func fetch() async throws -> [SwingTakeEntry] {
+        let year = seasonYear ?? Calendar.current.component(.year, from: Date())
+        let csv = try await client.fetchSavantCSV(
+            path: "leaderboard/swing-take",
+            queryItems: [
+                URLQueryItem(name: "year", value: String(year)),
+                URLQueryItem(name: "min", value: "q"),
+                URLQueryItem(name: "csv", value: "true")
+            ]
+        )
+        return SwingTakeParser.parse(csv, fallbackSeason: year)
+    }
+}
+
+/// Parses Baseball Savant swing-take CSV into ``SwingTakeEntry`` values.
+enum SwingTakeParser {
+    static func parse(_ csv: String, fallbackSeason: Int) -> [SwingTakeEntry] {
+        let rows = CSVParser.parse(csv)
+        return rows.compactMap { row -> SwingTakeEntry? in
+            guard
+                let idStr = row["player_id"], let playerId = Int(idStr),
+                let teamStr = row["team_id"], let teamId = Int(teamStr),
+                let paStr = row["pa"], let pa = Int(paStr),
+                let pitchesStr = row["pitches"], let pitches = Int(pitchesStr),
+                let allStr = row["runs_all"], let all = Double(allStr),
+                let heartStr = row["runs_heart"], let heart = Double(heartStr),
+                let shadowStr = row["runs_shadow"], let shadow = Double(shadowStr),
+                let chaseStr = row["runs_chase"], let chase = Double(chaseStr),
+                let wasteStr = row["runs_waste"], let waste = Double(wasteStr)
+            else { return nil }
+
+            let name = row["last_name, first_name"] ?? ""
+            let yr = row["year"].flatMap(Int.init) ?? fallbackSeason
+
+            return SwingTakeEntry(
+                playerId: playerId,
+                playerName: name,
+                teamId: teamId,
+                season: yr,
+                plateAppearances: pa,
+                pitches: pitches,
+                runsAll: all,
+                runsHeart: heart,
+                runsShadow: shadow,
+                runsChase: chase,
+                runsWaste: waste
+            )
+        }
+    }
+}
+
 /// Parses Baseball Savant pitch-movement CSV into ``PitchMovementEntry`` values.
 enum PitchMovementParser {
     static func parse(_ csv: String, season: Int) -> [PitchMovementEntry] {

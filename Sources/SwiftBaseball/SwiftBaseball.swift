@@ -925,6 +925,49 @@ public enum SwiftBaseball {
         OutfielderJumpsQuery(client: statcastClient)
     }
 
+    /// Build a query for the Baseball Savant `fielding-run-value` leaderboard
+    /// (pitcher-centric view).
+    ///
+    /// The Savant CSV export of this board is **pitcher-centric** — it credits each
+    /// pitcher with the cumulative team-defense run value accrued during their
+    /// innings (range, arm, double-play, framing, blocking, throwing) rather than
+    /// returning each individual fielder's defensive contribution. The method name
+    /// reflects this: results describe pitcher contexts, not fielder seasons.
+    ///
+    ///     let frv = try await SwiftBaseball.pitcherFieldingRunValue().season(2024).fetch()
+    ///     print(frv.first?.totalRuns)
+    public static func pitcherFieldingRunValue() -> PitcherFieldingRunValueQuery {
+        PitcherFieldingRunValueQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `baserunning-run-value` leaderboard.
+    ///
+    /// Returns one entry per player decomposing baserunning value into extra-base
+    /// taking and stolen-base components. Each component carries opportunity counts
+    /// and run-value totals. All values are in runs (positive = added value).
+    ///
+    ///     let brv = try await SwiftBaseball.baserunningRunValue().season(2024).fetch()
+    ///     print(brv.first?.runnerRunsTotal)
+    ///
+    /// - Important: The Savant CSV export defaults to the current season; results
+    ///   may not honor `season(_:)` until the upstream filter is fixed.
+    public static func baserunningRunValue() -> BaserunningRunValueQuery {
+        BaserunningRunValueQuery(client: statcastClient)
+    }
+
+    /// Build a query for the Baseball Savant `swing-take` leaderboard.
+    ///
+    /// Returns one entry per batter with swing-decision run value broken down
+    /// across four pitch-location zones — heart (middle), shadow (edges), chase
+    /// (just outside), and waste (far outside). Positive values indicate better
+    /// decisions than league average.
+    ///
+    ///     let swing = try await SwiftBaseball.swingTake().season(2024).fetch()
+    ///     print(swing.first?.runsHeart, swing.first?.runsChase)
+    public static func swingTake() -> SwingTakeQuery {
+        SwingTakeQuery(client: statcastClient)
+    }
+
     // MARK: - Venues
 
     /// Fetch all MLB venues with field dimensions and GPS coordinates.

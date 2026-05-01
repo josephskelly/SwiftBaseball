@@ -834,3 +834,144 @@ public struct OutfielderJumpEntry: Sendable, Equatable, Codable {
     /// Number of those opportunities converted to outs.
     public let outs: Int
 }
+
+// MARK: - Pitcher Fielding Run Value
+
+/// A single pitcher's accumulated fielding-run-value entry from the Baseball Savant
+/// `fielding-run-value` leaderboard.
+///
+/// This board credits each pitcher with the **team-defense run value** earned during
+/// their innings — i.e. the cumulative fielding runs from infielders, outfielders,
+/// and the catcher (framing, blocking, and throwing) on plays where this pitcher
+/// was on the mound. It is therefore a **pitcher-context** metric and not the
+/// fielder's own defensive value.
+///
+/// Pitchers with elite team defense behind them rank highly; pitchers backed by
+/// poor defenses rank low. All values are reported in runs (positive = added value).
+///
+/// - Note: Despite the column names, `framingRuns`, `catchingRuns`, `throwingRuns`,
+///   and `blockingRuns` reflect the team's catcher behind this pitcher — not the
+///   pitcher's own catching contribution.
+/// - Note: Team is not included in the Savant CSV. Use ``playerId`` to look up
+///   team via ``SwiftBaseball/players(ids:)``.
+public struct PitcherFieldingRunValueEntry: Sendable, Equatable, Codable {
+    /// MLB player ID of the pitcher.
+    public let playerId: Int
+    /// Pitcher's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Season year.
+    public let season: Int
+    /// Total fielding runs accumulated by the team's defense during this pitcher's innings.
+    public let totalRuns: Double
+    /// Combined infield + outfield runs (range + arm + double-play turn) on this pitcher's plays.
+    public let infieldOutfieldRuns: Double
+    /// Range runs — infielder/outfielder positioning and reaction.
+    public let rangeRuns: Double
+    /// Arm runs — outfielder throwing and infielder arm strength.
+    public let armRuns: Double
+    /// Double-play turn runs — turning twins on this pitcher's plays.
+    public let doublePlayRuns: Double
+    /// Combined catching runs (framing + throwing + blocking).
+    public let catchingRuns: Double
+    /// Catcher framing runs on this pitcher's pitches.
+    public let framingRuns: Double
+    /// Catcher throwing runs (caught stealing) on this pitcher's runners.
+    public let throwingRuns: Double
+    /// Catcher blocking runs (wild pitches / passed balls) on this pitcher's pitches.
+    public let blockingRuns: Double
+    /// Total plays / batters faced included in the sample.
+    public let totalPlays: Int
+}
+
+// MARK: - Baserunning Run Value
+
+/// A single player's baserunning-run-value entry from the Baseball Savant
+/// `baserunning-run-value` leaderboard.
+///
+/// Baserunning Run Value decomposes a runner's value into two main components:
+/// taking extra bases (hits, errors, wild pitches, advancing on outs) and stolen
+/// bases. Each component carries opportunity counts (`runnersMoved*` fields) and
+/// run-value totals (positive = value added, negative = value lost).
+///
+/// Stolen-base sub-decomposition: `runnerRunsSB2` covers steals of second,
+/// `runnerRunsSB3` covers steals of third, and the `simpleStolenSB*` fields carry
+/// Savant's simpler "stolen base credit" decomposition for each base.
+///
+/// - Note: The Savant CSV exposes `start_year` and `end_year` separately — for
+///   single-season queries they match. The entry's `season` is set from `start_year`.
+public struct BaserunningRunValueEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Team abbreviation (e.g. `"STL"`).
+    public let team: String
+    /// Season year (the CSV's `start_year`).
+    public let season: Int
+    /// Total baserunning run value across all components.
+    public let runnerRunsTotal: Double
+    /// Run value from extra-base taking (advancing on hits, errors, wild pitches, outs).
+    public let runnerRunsExtraBase: Double
+    /// Run value from stolen-base attempts.
+    public let runnerRunsStolenBase: Double
+    /// Total opportunities the runner moved or could have moved.
+    public let runnersMoved: Int
+    /// Extra-base credit attributable to swiping (aggressive base taking).
+    public let runnerRunsExtraBaseSwipe: Double
+    /// Extra-base credit attributable to sniping (avoiding tags / sliding).
+    public let runnerRunsExtraBaseSnipe: Double
+    /// Extra-base credit attributable to freezing (holding the bag — negative if too cautious).
+    public let runnerRunsExtraBaseFreeze: Double
+    /// Extra-base opportunity count.
+    public let runnersMovedExtraBase: Int
+    /// Stolen-base run value at second base.
+    public let runnerRunsSecond: Double
+    /// Stolen-base run value at third base.
+    public let runnerRunsThird: Double
+    /// Simple stolen-base credit at second base.
+    public let simpleStolenSecond: Double
+    /// Simple stolen-base credit at third base.
+    public let simpleStolenThird: Double
+    /// Stolen-base opportunity count.
+    public let runnersMovedStolenBase: Int
+}
+
+// MARK: - Swing / Take
+
+/// A single batter's swing/take entry from the Baseball Savant `swing-take` leaderboard.
+///
+/// Decomposes a batter's swing-decision run value across the four pitch-location
+/// zones Savant tracks:
+///
+/// - **Heart** — middle of the strike zone (best to swing at).
+/// - **Shadow** — edges of the strike zone (borderline pitches).
+/// - **Chase** — just outside the zone (the swing-decision battleground).
+/// - **Waste** — far outside the zone (clearly take pitches).
+///
+/// All values are reported in runs above/below average (positive = better decisions
+/// than league average, negative = worse). `runsAll` is the cumulative total across
+/// the four zones.
+public struct SwingTakeEntry: Sendable, Equatable, Codable {
+    /// MLB player ID.
+    public let playerId: Int
+    /// Player's full name as returned by the leaderboard (Last, First format).
+    public let playerName: String
+    /// Team ID (MLB Stats API team identifier, e.g. `109` for Arizona).
+    public let teamId: Int
+    /// Season year.
+    public let season: Int
+    /// Plate appearances in the sample.
+    public let plateAppearances: Int
+    /// Total pitches seen in the sample.
+    public let pitches: Int
+    /// Total swing/take run value across all four zones.
+    public let runsAll: Double
+    /// Run value on heart-of-zone pitches (middle).
+    public let runsHeart: Double
+    /// Run value on shadow-zone pitches (edges of strike zone).
+    public let runsShadow: Double
+    /// Run value on chase-zone pitches (just outside the strike zone).
+    public let runsChase: Double
+    /// Run value on waste-zone pitches (far outside the strike zone).
+    public let runsWaste: Double
+}

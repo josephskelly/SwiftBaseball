@@ -338,3 +338,167 @@ struct OutfielderJumpsTests {
         #expect(built.absoluteString.contains("year=2024"))
     }
 }
+
+// MARK: - Pitcher Fielding Run Value
+
+@Suite("Pitcher Fielding Run Value Tests")
+struct PitcherFieldingRunValueTests {
+    private func loadEntries() throws -> [PitcherFieldingRunValueEntry] {
+        let data = try Fixtures.load("fielding_run_value_2024.csv")
+        let csv = try #require(String(data: data, encoding: .utf8))
+        return PitcherFieldingRunValueParser.parse(csv, season: 2024)
+    }
+
+    @Test("Decodes all 15 fixture rows")
+    func decodesAllRows() throws {
+        let entries = try loadEntries()
+        #expect(entries.count == 15)
+        #expect(entries.allSatisfy { $0.season == 2024 })
+    }
+
+    @Test("Top entry (Berríos) parses headline run-value components")
+    func topEntry() throws {
+        let entries = try loadEntries()
+        let top = try #require(entries.first)
+        #expect(top.playerId == 621_244)
+        #expect(top.playerName == "Berríos, José")
+        #expect(abs(top.totalRuns - 11.7937153) < 0.0001)
+        #expect(abs(top.infieldOutfieldRuns - 7.7873831) < 0.0001)
+        #expect(abs(top.framingRuns - 3.3109431) < 0.0001)
+        #expect(top.totalPlays == 2965)
+    }
+
+    @Test("Negative components decode with correct sign")
+    func negativeComponents() throws {
+        let entries = try loadEntries()
+        let berrios = try #require(entries.first { $0.playerId == 621_244 })
+        // Berríos has negative arm_runs in the fixture.
+        #expect(berrios.armRuns < 0)
+    }
+
+    @Test("Endpoint URL targets /leaderboard/fielding-run-value with seasonStart/seasonEnd")
+    func endpointURL() throws {
+        let endpoint = Endpoint(path: "leaderboard/fielding-run-value", queryItems: [
+            URLQueryItem(name: "type", value: "Fielder"),
+            URLQueryItem(name: "seasonStart", value: "2024"),
+            URLQueryItem(name: "seasonEnd", value: "2024"),
+            URLQueryItem(name: "csv", value: "true")
+        ])
+        let baseURL = try #require(URL(string: "https://baseballsavant.mlb.com/"))
+        let built = try #require(endpoint.url(baseURL: baseURL))
+        #expect(built.absoluteString.contains("fielding-run-value"))
+        #expect(built.absoluteString.contains("seasonStart=2024"))
+        #expect(built.absoluteString.contains("seasonEnd=2024"))
+    }
+}
+
+// MARK: - Baserunning Run Value
+
+@Suite("Baserunning Run Value Tests")
+struct BaserunningRunValueTests {
+    private func loadEntries() throws -> [BaserunningRunValueEntry] {
+        let data = try Fixtures.load("baserunning_run_value_2026.csv")
+        let csv = try #require(String(data: data, encoding: .utf8))
+        return BaserunningRunValueParser.parse(csv, fallbackSeason: 2026)
+    }
+
+    @Test("Decodes all 15 fixture rows")
+    func decodesAllRows() throws {
+        let entries = try loadEntries()
+        #expect(entries.count == 15)
+        #expect(entries.allSatisfy { $0.season == 2026 })
+    }
+
+    @Test("Top entry (McGonigle) parses both XB and SB components")
+    func topEntry() throws {
+        let entries = try loadEntries()
+        let top = try #require(entries.first)
+        #expect(top.playerId == 805_808)
+        #expect(top.playerName == "McGonigle, Kevin")
+        #expect(top.team == "DET")
+        #expect(abs(top.runnerRunsTotal - 2.8167834) < 0.0001)
+        #expect(abs(top.runnerRunsExtraBase - 2.4334932) < 0.0001)
+        #expect(abs(top.runnerRunsStolenBase - 0.3832903) < 0.0001)
+        #expect(top.runnersMoved == 26)
+        #expect(top.runnersMovedExtraBase == 24)
+        #expect(top.runnersMovedStolenBase == 2)
+    }
+
+    @Test("Total runs ≈ sum of XB + SBX components within rounding")
+    func totalIsSumOfComponents() throws {
+        let entries = try loadEntries()
+        for entry in entries {
+            let recombined = entry.runnerRunsExtraBase + entry.runnerRunsStolenBase
+            #expect(abs(entry.runnerRunsTotal - recombined) < 0.0001)
+        }
+    }
+
+    @Test("Endpoint URL targets /leaderboard/baserunning-run-value with season")
+    func endpointURL() throws {
+        let endpoint = Endpoint(path: "leaderboard/baserunning-run-value", queryItems: [
+            URLQueryItem(name: "season", value: "2024"),
+            URLQueryItem(name: "min", value: "q"),
+            URLQueryItem(name: "csv", value: "true")
+        ])
+        let baseURL = try #require(URL(string: "https://baseballsavant.mlb.com/"))
+        let built = try #require(endpoint.url(baseURL: baseURL))
+        #expect(built.absoluteString.contains("baserunning-run-value"))
+        #expect(built.absoluteString.contains("season=2024"))
+    }
+}
+
+// MARK: - Swing / Take
+
+@Suite("Swing / Take Tests")
+struct SwingTakeTests {
+    private func loadEntries() throws -> [SwingTakeEntry] {
+        let data = try Fixtures.load("swing_take_2024.csv")
+        let csv = try #require(String(data: data, encoding: .utf8))
+        return SwingTakeParser.parse(csv, fallbackSeason: 2024)
+    }
+
+    @Test("Decodes all 15 fixture rows")
+    func decodesAllRows() throws {
+        let entries = try loadEntries()
+        #expect(entries.count == 15)
+        #expect(entries.allSatisfy { $0.season == 2024 })
+    }
+
+    @Test("Top entry (Carroll) parses zone-by-zone breakdown")
+    func topEntry() throws {
+        let entries = try loadEntries()
+        let top = try #require(entries.first)
+        #expect(top.playerId == 682_998)
+        #expect(top.playerName == "Carroll, Corbin")
+        #expect(top.teamId == 109)
+        #expect(top.plateAppearances == 684)
+        #expect(top.pitches == 2648)
+        #expect(abs(top.runsAll - 11.2324025) < 0.0001)
+        #expect(abs(top.runsHeart - -4.4468192) < 0.0001)
+        #expect(abs(top.runsShadow - -27.2081029) < 0.0001)
+        #expect(abs(top.runsChase - 26.6691131) < 0.0001)
+        #expect(abs(top.runsWaste - 16.2182115) < 0.0001)
+    }
+
+    @Test("runsAll equals sum of zone components within rounding")
+    func runsAllIsSum() throws {
+        let entries = try loadEntries()
+        for entry in entries {
+            let sum = entry.runsHeart + entry.runsShadow + entry.runsChase + entry.runsWaste
+            #expect(abs(entry.runsAll - sum) < 0.0001)
+        }
+    }
+
+    @Test("Endpoint URL targets /leaderboard/swing-take with year")
+    func endpointURL() throws {
+        let endpoint = Endpoint(path: "leaderboard/swing-take", queryItems: [
+            URLQueryItem(name: "year", value: "2024"),
+            URLQueryItem(name: "min", value: "q"),
+            URLQueryItem(name: "csv", value: "true")
+        ])
+        let baseURL = try #require(URL(string: "https://baseballsavant.mlb.com/"))
+        let built = try #require(endpoint.url(baseURL: baseURL))
+        #expect(built.absoluteString.contains("swing-take"))
+        #expect(built.absoluteString.contains("year=2024"))
+    }
+}
