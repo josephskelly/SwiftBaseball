@@ -93,6 +93,23 @@ public enum SwiftBaseball {
         .singlePlayer(id: id, client: client)
     }
 
+    /// Fetch every player active at a given level for a season.
+    ///
+    /// Returns the bulk player roster for an entire sport (e.g. all 1,400+ MLB
+    /// players who appeared in 2024). Useful for league-wide aggregation,
+    /// minor-league scouting, and bulk player-ID enumeration without paging
+    /// through individual team rosters.
+    ///
+    ///     let mlb2024  = try await SwiftBaseball.sportPlayers(season: 2024).fetch()
+    ///     let aaa2024  = try await SwiftBaseball.sportPlayers(sport: .tripleA, season: 2024).fetch()
+    ///
+    /// - Parameters:
+    ///   - sport: The sport / minor-league level. Defaults to ``Sport/mlb``.
+    ///   - season: The season to filter by. Required by the upstream API.
+    public static func sportPlayers(sport: Sport = .mlb, season: Int) -> QueryBuilder<[Player]> {
+        .sportPlayers(sport: sport, season: season, client: client)
+    }
+
     // MARK: - Teams
 
     /// Query MLB teams. Chain `.sport(_:)` to list minor league teams at a given level.

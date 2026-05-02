@@ -93,6 +93,10 @@ let k9Leaders  = try await SwiftBaseball.leaders(.strikeoutsPer9Inn).season(2024
 // Player detail
 let judge = try await SwiftBaseball.player(id: 592450).fetch()
 
+// Bulk player roster — every MLB (or AAA / AA / etc.) player active in a season
+let mlb2024 = try await SwiftBaseball.sportPlayers(season: 2024).fetch()
+let aaa2024 = try await SwiftBaseball.sportPlayers(sport: .tripleA, season: 2024).fetch()
+
 // Batch stats for multiple players
 let batch = try await SwiftBaseball
     .batchStats([660271, 592450], group: .batting)

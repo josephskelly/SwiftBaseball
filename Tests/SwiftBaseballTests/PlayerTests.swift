@@ -172,6 +172,50 @@ struct PlayerTests {
         #expect(hydrateItem?.value == "currentTeam")
     }
 
+    @Test("sportPlayers(season:) decodes bulk player roster")
+    func sportPlayersDecodesRoster() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("sport_players_mlb_2024.json")
+        mock.stub(path: "sports/1/players", data: data)
+
+        let builder = QueryBuilder<[Player]>.sportPlayers(sport: .mlb, season: 2024, client: mock)
+        let players = try await builder.fetch()
+
+        #expect(players.count == 5)
+        let abbott = try #require(players.first { $0.id == 671_096 })
+        #expect(abbott.fullName == "Andrew Abbott")
+        #expect(abbott.currentTeam?.id == 113)
+        #expect(abbott.primaryPosition == .pitcher)
+    }
+
+    @Test("sportPlayers builder hits sports/{sportId}/players with season query")
+    func sportPlayersQueryBuilder() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("sport_players_mlb_2024.json")
+        mock.stub(path: "sports/1/players", data: data)
+
+        _ = try await QueryBuilder<[Player]>
+            .sportPlayers(sport: .mlb, season: 2024, client: mock)
+            .fetch()
+
+        #expect(mock.lastEndpoint?.path == "sports/1/players")
+        let seasonItem = mock.lastEndpoint?.queryItems.first { $0.name == "season" }
+        #expect(seasonItem?.value == "2024")
+    }
+
+    @Test("sportPlayers respects minor-league sport id in path")
+    func sportPlayersMinorLeaguePath() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("sport_players_mlb_2024.json")
+        mock.stub(path: "sports/11/players", data: data)
+
+        _ = try await QueryBuilder<[Player]>
+            .sportPlayers(sport: .tripleA, season: 2024, client: mock)
+            .fetch()
+
+        #expect(mock.lastEndpoint?.path == "sports/11/players")
+    }
+
     @Test("playerNotFound error thrown when no people returned")
     func playerNotFoundError() async throws {
         let mock = MockAPIClient()

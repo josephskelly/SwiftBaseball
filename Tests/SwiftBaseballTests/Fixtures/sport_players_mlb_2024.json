@@ -1,0 +1,276 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "people": [
+    {
+      "id": 671096,
+      "fullName": "Andrew Abbott",
+      "link": "/api/v1/people/671096",
+      "firstName": "Andrew",
+      "lastName": "Abbott",
+      "primaryNumber": "41",
+      "birthDate": "1999-06-01",
+      "currentAge": 26,
+      "birthCity": "Lynchburg",
+      "birthStateProvince": "VA",
+      "birthCountry": "USA",
+      "height": "6' 0\"",
+      "weight": 192,
+      "active": true,
+      "currentTeam": {
+        "id": 113,
+        "name": "Cincinnati Reds",
+        "link": "/api/v1/teams/113"
+      },
+      "primaryPosition": {
+        "code": "1",
+        "name": "Pitcher",
+        "type": "Pitcher",
+        "abbreviation": "P"
+      },
+      "useName": "Andrew",
+      "useLastName": "Abbott",
+      "middleName": "Cole",
+      "boxscoreName": "Abbott, A",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": true,
+      "draftYear": 2021,
+      "mlbDebutDate": "2023-06-05",
+      "batSide": {
+        "code": "L",
+        "description": "Left"
+      },
+      "pitchHand": {
+        "code": "L",
+        "description": "Left"
+      },
+      "nameFirstLast": "Andrew Abbott",
+      "nameSlug": "andrew-abbott-671096",
+      "firstLastName": "Andrew Abbott",
+      "lastFirstName": "Abbott, Andrew",
+      "lastInitName": "Abbott, A",
+      "initLastName": "A Abbott",
+      "fullFMLName": "Andrew Cole Abbott",
+      "fullLFMName": "Abbott, Andrew Cole",
+      "strikeZoneTop": 3.37,
+      "strikeZoneBottom": 1.54
+    },
+    {
+      "id": 682928,
+      "fullName": "CJ Abrams",
+      "link": "/api/v1/people/682928",
+      "firstName": "Paul",
+      "lastName": "Abrams",
+      "primaryNumber": "5",
+      "birthDate": "2000-10-03",
+      "currentAge": 25,
+      "birthCity": "Alpharetta",
+      "birthStateProvince": "GA",
+      "birthCountry": "USA",
+      "height": "6' 0\"",
+      "weight": 191,
+      "active": true,
+      "currentTeam": {
+        "id": 120,
+        "name": "Washington Nationals",
+        "link": "/api/v1/teams/120"
+      },
+      "primaryPosition": {
+        "code": "6",
+        "name": "Shortstop",
+        "type": "Infielder",
+        "abbreviation": "SS"
+      },
+      "useName": "CJ",
+      "useLastName": "Abrams",
+      "middleName": "Christopher",
+      "boxscoreName": "Abrams",
+      "gender": "M",
+      "isPlayer": true,
+      "isVerified": true,
+      "draftYear": 2019,
+      "mlbDebutDate": "2022-04-08",
+      "batSide": {
+        "code": "L",
+        "description": "Left"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "CJ Abrams",
+      "nameSlug": "cj-abrams-682928",
+      "firstLastName": "CJ Abrams",
+      "lastFirstName": "Abrams, CJ",
+      "lastInitName": "Abrams, C",
+      "initLastName": "C Abrams",
+      "fullFMLName": "Paul Christopher Abrams",
+      "fullLFMName": "Abrams, Paul Christopher",
+      "strikeZoneTop": 3.223,
+      "strikeZoneBottom": 1.626
+    },
+    {
+      "id": 650556,
+      "fullName": "Bryan Abreu",
+      "link": "/api/v1/people/650556",
+      "firstName": "Bryan",
+      "lastName": "Abreu",
+      "primaryNumber": "52",
+      "birthDate": "1997-04-22",
+      "currentAge": 29,
+      "birthCity": "Santo Domingo Centro",
+      "birthCountry": "Dominican Republic",
+      "height": "6' 1\"",
+      "weight": 230,
+      "active": true,
+      "currentTeam": {
+        "id": 117,
+        "name": "Houston Astros",
+        "link": "/api/v1/teams/117"
+      },
+      "primaryPosition": {
+        "code": "1",
+        "name": "Pitcher",
+        "type": "Pitcher",
+        "abbreviation": "P"
+      },
+      "useName": "Bryan",
+      "useLastName": "Abreu",
+      "middleName": "Enrique",
+      "boxscoreName": "Abreu, B",
+      "gender": "M",
+      "nameMatrilineal": "Jimenez",
+      "isPlayer": true,
+      "isVerified": true,
+      "mlbDebutDate": "2019-07-31",
+      "batSide": {
+        "code": "R",
+        "description": "Right"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Bryan Abreu",
+      "nameSlug": "bryan-abreu-650556",
+      "firstLastName": "Bryan Abreu",
+      "lastFirstName": "Abreu, Bryan",
+      "lastInitName": "Abreu, B",
+      "initLastName": "B Abreu",
+      "fullFMLName": "Bryan Enrique Abreu",
+      "fullLFMName": "Abreu, Bryan Enrique",
+      "strikeZoneTop": 3.255,
+      "strikeZoneBottom": 1.643
+    },
+    {
+      "id": 547989,
+      "fullName": "Jos\u00e9 Abreu",
+      "link": "/api/v1/people/547989",
+      "firstName": "Jos\u00e9",
+      "lastName": "Abreu",
+      "primaryNumber": "79",
+      "birthDate": "1987-01-29",
+      "currentAge": 39,
+      "birthCity": "Cienfuegos",
+      "birthCountry": "Cuba",
+      "height": "6' 3\"",
+      "weight": 250,
+      "active": false,
+      "currentTeam": {
+        "id": 117,
+        "name": "Houston Astros",
+        "link": "/api/v1/teams/117"
+      },
+      "primaryPosition": {
+        "code": "3",
+        "name": "First Base",
+        "type": "Infielder",
+        "abbreviation": "1B"
+      },
+      "useName": "Jos\u00e9",
+      "useLastName": "Abreu",
+      "middleName": "Dariel",
+      "boxscoreName": "Abreu, J",
+      "nickName": "Mal Tiempo",
+      "gender": "M",
+      "nameMatrilineal": "Correa",
+      "isPlayer": true,
+      "isVerified": true,
+      "pronunciation": "uh-BRAY-you",
+      "lastPlayedDate": "2024-06-12",
+      "mlbDebutDate": "2014-03-31",
+      "batSide": {
+        "code": "R",
+        "description": "Right"
+      },
+      "pitchHand": {
+        "code": "R",
+        "description": "Right"
+      },
+      "nameFirstLast": "Jos\u00e9 Abreu",
+      "nameSlug": "jose-abreu-547989",
+      "firstLastName": "Jos\u00e9 Abreu",
+      "lastFirstName": "Abreu, Jos\u00e9",
+      "lastInitName": "Abreu, J",
+      "initLastName": "J Abreu",
+      "fullFMLName": "Jos\u00e9 Dariel Abreu",
+      "fullLFMName": "Abreu, Jos\u00e9 Dariel",
+      "strikeZoneTop": 3.42,
+      "strikeZoneBottom": 1.55
+    },
+    {
+      "id": 677800,
+      "fullName": "Wilyer Abreu",
+      "link": "/api/v1/people/677800",
+      "firstName": "Wilyer",
+      "lastName": "Abreu",
+      "primaryNumber": "52",
+      "birthDate": "1999-06-24",
+      "currentAge": 26,
+      "birthCity": "Maracaibo",
+      "birthCountry": "Venezuela",
+      "height": "5' 10\"",
+      "weight": 215,
+      "active": true,
+      "currentTeam": {
+        "id": 111,
+        "name": "Boston Red Sox",
+        "link": "/api/v1/teams/111"
+      },
+      "primaryPosition": {
+        "code": "9",
+        "name": "Outfielder",
+        "type": "Outfielder",
+        "abbreviation": "RF"
+      },
+      "useName": "Wilyer",
+      "useLastName": "Abreu",
+      "middleName": "David",
+      "boxscoreName": "Abreu, W",
+      "gender": "M",
+      "nameMatrilineal": "Villalobos",
+      "isPlayer": true,
+      "isVerified": true,
+      "pronunciation": "WHEEL-yurr",
+      "mlbDebutDate": "2023-08-22",
+      "batSide": {
+        "code": "L",
+        "description": "Left"
+      },
+      "pitchHand": {
+        "code": "L",
+        "description": "Left"
+      },
+      "nameFirstLast": "Wilyer Abreu",
+      "nameSlug": "wilyer-abreu-677800",
+      "firstLastName": "Wilyer Abreu",
+      "lastFirstName": "Abreu, Wilyer",
+      "lastInitName": "Abreu, W",
+      "initLastName": "W Abreu",
+      "fullFMLName": "Wilyer David Abreu",
+      "fullLFMName": "Abreu, Wilyer David",
+      "strikeZoneTop": 3.117,
+      "strikeZoneBottom": 1.573
+    }
+  ]
+}

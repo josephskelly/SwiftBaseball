@@ -30,6 +30,16 @@ extension QueryBuilder where T == [Player] {
             return response.people.map(MLBResponseConverters.player)
         }
     }
+
+    static func sportPlayers(sport: Sport, season: Int, client: any APIClient) -> QueryBuilder<[Player]> {
+        let endpoint = Endpoint(path: "sports/\(sport.rawValue)/players", queryItems: [
+            URLQueryItem(name: "season", value: String(season))
+        ])
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBPeopleResponse.self, from: data)
+            return response.people.map(MLBResponseConverters.player)
+        }
+    }
 }
 
 extension QueryBuilder where T == Player {
