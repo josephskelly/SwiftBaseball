@@ -107,3 +107,25 @@ extension QueryBuilder where T == [Team] {
         }
     }
 }
+
+// MARK: - Team venue history
+
+extension QueryBuilder where T == [Team] {
+    /// Fetches venue-change history for one or more franchises.
+    ///
+    /// Each returned ``Team`` is a snapshot of the franchise at a season when
+    /// its home venue (or location) changed. ``Team/season`` carries the year
+    /// of that snapshot and ``Team/venue`` the home park as of that season.
+    /// Results are ordered most-recent first within each team. Division and
+    /// other roster-context fields not included by the upstream history
+    /// endpoint default to sentinel values (id 0, empty name).
+    static func teamHistory(teamIds: [Int], client: any APIClient) -> QueryBuilder<[Team]> {
+        let endpoint = Endpoint(path: "teams/history", queryItems: [
+            URLQueryItem(name: "teamIds", value: teamIds.map(String.init).joined(separator: ","))
+        ])
+        return QueryBuilder(endpoint: endpoint, client: client) { data in
+            let response = try JSONDecoder.mlb.decode(MLBTeamsResponse.self, from: data)
+            return response.teams.map(MLBResponseConverters.team)
+        }
+    }
+}

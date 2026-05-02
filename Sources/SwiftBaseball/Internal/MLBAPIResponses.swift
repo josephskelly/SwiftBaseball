@@ -935,6 +935,22 @@ struct MLBEntityRef: Decodable {
     var displayName: String {
         name ?? fullName ?? ""
     }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        // Some upstream rows (e.g. franchises that didn't yet exist in a given
+        // teams/history snapshot season) carry only `link` and omit `id`/`name`;
+        // surface those as id 0 with empty display name rather than failing the
+        // entire response decode.
+        self.id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.fullName = try container.decodeIfPresent(String.self, forKey: .fullName)
+        self.link = try container.decodeIfPresent(String.self, forKey: .link)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, fullName, link
+    }
 }
 
 // MARK: - Live Game Feed

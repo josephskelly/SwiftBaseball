@@ -271,6 +271,53 @@ struct TeamTests {
         _ = SwiftBaseball.affiliates(teamId: 147, season: 2024)
     }
 
+    // MARK: - Team venue history
+
+    @Test("teamHistory decodes venue snapshots for one team")
+    func teamHistoryDecodesYankees() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("teams_history_yankees_dbacks.json")
+        mock.stub(path: "teams/history", data: data)
+
+        let history = try await QueryBuilder<[Team]>.teamHistory(teamIds: [147], client: mock).fetch()
+
+        let yankees = history.filter { $0.id == 147 }
+        #expect(yankees.count == 5)
+        let years = Set(yankees.compactMap(\.season))
+        #expect(years == [1903, 1913, 1923, 1974, 2009])
+        let venues = Set(yankees.map(\.venue.name))
+        #expect(venues.contains("Yankee Stadium"))
+        #expect(venues.contains("Yankee Stadium I"))
+        #expect(venues.contains("Hilltop Park"))
+        #expect(venues.contains("Polo Grounds IV"))
+        #expect(venues.contains("Shea Stadium"))
+    }
+
+    @Test("teamHistory query builder hits teams/history with comma-joined ids")
+    func teamHistoryQueryBuilder() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("teams_history_yankees_dbacks.json")
+        mock.stub(path: "teams/history", data: data)
+
+        _ = try await QueryBuilder<[Team]>.teamHistory(teamIds: [147, 109], client: mock).fetch()
+
+        #expect(mock.lastEndpoint?.path == "teams/history")
+        let teamIdsItem = mock.lastEndpoint?.queryItems.first { $0.name == "teamIds" }
+        #expect(teamIdsItem?.value == "147,109")
+    }
+
+    @Test("teamHistory groups multiple franchises in a single response")
+    func teamHistoryMultipleFranchises() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("teams_history_yankees_dbacks.json")
+        mock.stub(path: "teams/history", data: data)
+
+        let history = try await QueryBuilder<[Team]>.teamHistory(teamIds: [147, 109], client: mock).fetch()
+
+        let ids = Set(history.map(\.id))
+        #expect(ids == [147, 109])
+    }
+
     // MARK: - Minor league roster
 
     @Test("Decode minor league roster fixture")

@@ -97,6 +97,10 @@ let judge = try await SwiftBaseball.player(id: 592450).fetch()
 let mlb2024 = try await SwiftBaseball.sportPlayers(season: 2024).fetch()
 let aaa2024 = try await SwiftBaseball.sportPlayers(sport: .tripleA, season: 2024).fetch()
 
+// Team venue history — one snapshot per season the franchise changed home park
+let yankeesParks = try await SwiftBaseball.teamHistory(teamIds: [147]).fetch()
+for snapshot in yankeesParks { print(snapshot.season ?? 0, snapshot.venue.name) }
+
 // Batch stats for multiple players
 let batch = try await SwiftBaseball
     .batchStats([660271, 592450], group: .batting)

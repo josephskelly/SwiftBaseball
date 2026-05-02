@@ -129,6 +129,25 @@ public enum SwiftBaseball {
         .singleTeam(id: id, client: client)
     }
 
+    /// Fetch venue-change history for one or more franchises.
+    ///
+    /// Each returned ``Team`` is a snapshot of the franchise at a season when
+    /// its home venue or location changed — useful for reconstructing a club's
+    /// stadium timeline (e.g. the Yankees moved Hilltop → Polo Grounds → Yankee
+    /// Stadium I → Shea Stadium → Yankee Stadium). ``Team/season`` carries the
+    /// year of each snapshot. Pass multiple `teamIds` to fetch comparable
+    /// histories for several franchises in one call.
+    ///
+    ///     let yankeesHistory = try await SwiftBaseball.teamHistory(teamIds: [147]).fetch()
+    ///     for snapshot in yankeesHistory {
+    ///         print(snapshot.season ?? 0, snapshot.venue.name)
+    ///     }
+    ///
+    /// - Parameter teamIds: One or more MLB team identifiers.
+    public static func teamHistory(teamIds: [Int]) -> QueryBuilder<[Team]> {
+        .teamHistory(teamIds: teamIds, client: client)
+    }
+
     /// Fetch the coaching staff for a team.
     ///
     /// Returns the manager plus every listed field coach (bench, pitching,
