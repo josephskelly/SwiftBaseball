@@ -208,6 +208,57 @@ struct MLBLeagueRecord: Decodable {
     let pct: String
 }
 
+// MARK: - Draft Prospects
+
+struct MLBDraftProspectsResponse: Decodable {
+    let prospects: [MLBDraftProspectPayload]
+}
+
+struct MLBDraftLatestResponse: Decodable {
+    let pick: MLBDraftProspectPayload?
+    let number: Int?
+    let nextUp: [MLBDraftProspectPayload]?
+}
+
+struct MLBDraftProspectPayload: Decodable {
+    let bisPlayerId: Int?
+    let pickRound: String?
+    let pickNumber: Int?
+    let roundPickNumber: Int?
+    let person: MLBEntityRef?
+    let team: MLBEntityRef?
+    let school: MLBDraftSchool?
+    let home: MLBDraftLocation?
+    let draftType: MLBCodeDescription?
+    let isDrafted: Bool?
+    let isPass: Bool?
+    let year: String?
+}
+
+struct MLBDraftLocation: Decodable {
+    let city: String?
+    let state: String?
+    let country: String?
+}
+
+// MARK: - Postseason Series
+
+struct MLBPostseasonSeriesResponse: Decodable {
+    let series: [MLBPostseasonSeriesEntry]
+}
+
+struct MLBPostseasonSeriesEntry: Decodable {
+    let series: MLBPostseasonSeriesInfo
+    let totalGames: Int?
+    let games: [MLBGame]
+}
+
+struct MLBPostseasonSeriesInfo: Decodable {
+    let id: String
+    let sortNumber: Int?
+    let gameType: String?
+}
+
 // MARK: - Standings
 
 struct MLBStandingsResponse: Decodable {

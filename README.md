@@ -108,6 +108,20 @@ let bigHRGames = try await SwiftBaseball
     .fetch()
 print(bigHRGames.first?.team.name, bigHRGames.first?.statValue)
 
+// Postseason: flat schedule, or grouped by series for round-by-round walkthrough
+let psGames  = try await SwiftBaseball.postseasonSchedule(season: 2024).fetch()
+let psSeries = try await SwiftBaseball.postseasonSeries(season: 2024).fetch()
+let worldSeries = psSeries.first { $0.gameType == .worldSeries }
+print(worldSeries?.totalGames ?? 0, "WS games played")
+
+// Draft prospects (full pool) and live in-progress snapshot
+let pool     = try await SwiftBaseball.draftProspects(year: 2023).fetch()
+let snapshot = try await SwiftBaseball.draftLatest(year: 2024).fetch()
+print(snapshot.pick?.person?.fullName ?? "—", "(pick #\(snapshot.number))")
+
+// Official scorers active on a given date (mirrors the umpires roster shape)
+let scorers = try await SwiftBaseball.officialScorers(date: "2024-07-04").fetch()
+
 // Batch stats for multiple players
 let batch = try await SwiftBaseball
     .batchStats([660271, 592450], group: .batting)

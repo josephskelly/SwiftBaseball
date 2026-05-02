@@ -1,0 +1,2392 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "totalSize": 0,
+  "queriedSize": 2693,
+  "returnedSize": 20,
+  "offset": 0,
+  "prospects": [
+    {
+      "bisPlayerId": 5025837,
+      "pickRound": "14",
+      "pickNumber": 412,
+      "home": {
+        "city": "Sparta",
+        "state": "Tennessee",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Tennessee Tech",
+        "schoolClass": "4YR SR",
+        "city": "Cookeville",
+        "country": "USA",
+        "state": "TN"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/815065/headshot/draft/current",
+      "person": {
+        "id": 815065,
+        "fullName": "Hunter Mann",
+        "link": "/api/v1/people/815065",
+        "firstName": "Hunter",
+        "lastName": "Mann",
+        "birthDate": "2001-08-15",
+        "currentAge": 24,
+        "birthCity": "Gordonsville",
+        "birthStateProvince": "TN",
+        "birthCountry": "USA",
+        "height": "6' 7\"",
+        "weight": 225,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Hunter",
+        "useLastName": "Mann",
+        "boxscoreName": "Mann",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Hunter Mann",
+        "nameSlug": "hunter-mann-815065",
+        "firstLastName": "Hunter Mann",
+        "lastFirstName": "Mann, Hunter",
+        "lastInitName": "Mann, H",
+        "initLastName": "H Mann",
+        "fullFMLName": "Hunter Mann",
+        "fullLFMName": "Mann, Hunter ",
+        "strikeZoneTop": 3.522,
+        "strikeZoneBottom": 1.778
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 115,
+        "name": "Colorado Rockies",
+        "link": "/api/v1/teams/115",
+        "season": 2026,
+        "venue": {
+          "id": 19,
+          "name": "Coors Field",
+          "link": "/api/v1/venues/19"
+        },
+        "springVenue": {
+          "id": 4249,
+          "link": "/api/v1/venues/4249"
+        },
+        "teamCode": "col",
+        "fileCode": "col",
+        "abbreviation": "COL",
+        "teamName": "Rockies",
+        "locationName": "Denver",
+        "firstYearOfPlay": "1992",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Colorado",
+        "franchiseName": "Colorado",
+        "clubName": "Rockies",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5011079,
+      "pickRound": "15",
+      "pickNumber": 445,
+      "home": {
+        "city": "Ione",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "NC State",
+        "schoolClass": "4YR JR",
+        "city": "Raleigh",
+        "country": "USA",
+        "state": "NC"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/694833/headshot/draft/current",
+      "person": {
+        "id": 694833,
+        "fullName": "Rio Britton",
+        "link": "/api/v1/people/694833",
+        "firstName": "Rio",
+        "lastName": "Britton",
+        "birthDate": "2002-12-23",
+        "currentAge": 23,
+        "birthCity": "Sacramento",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 189,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Rio",
+        "useLastName": "Britton",
+        "middleName": "Jerron",
+        "boxscoreName": "Britton",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "S",
+          "description": "Switch"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Rio Britton",
+        "nameSlug": "rio-britton-694833",
+        "firstLastName": "Rio Britton",
+        "lastFirstName": "Britton, Rio",
+        "lastInitName": "Britton, R",
+        "initLastName": "R Britton",
+        "fullFMLName": "Rio Jerron Britton",
+        "fullLFMName": "Britton, Rio Jerron",
+        "strikeZoneTop": 3.299,
+        "strikeZoneBottom": 1.665
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 109,
+        "name": "Arizona Diamondbacks",
+        "link": "/api/v1/teams/109",
+        "season": 2026,
+        "venue": {
+          "id": 15,
+          "name": "Chase Field",
+          "link": "/api/v1/venues/15"
+        },
+        "springVenue": {
+          "id": 4249,
+          "link": "/api/v1/venues/4249"
+        },
+        "teamCode": "ari",
+        "fileCode": "ari",
+        "abbreviation": "AZ",
+        "teamName": "D-backs",
+        "locationName": "Phoenix",
+        "firstYearOfPlay": "1996",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Arizona",
+        "franchiseName": "Arizona",
+        "clubName": "Diamondbacks",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5011334,
+      "pickRound": "15",
+      "pickNumber": 460,
+      "home": {
+        "city": "Chula Vista",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "LSU",
+        "schoolClass": "4YR JR",
+        "city": "Baton Rouge",
+        "country": "USA",
+        "state": "LA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/691948/headshot/draft/current",
+      "person": {
+        "id": 691948,
+        "fullName": "Jordan Thompson",
+        "link": "/api/v1/people/691948",
+        "firstName": "Jordan",
+        "lastName": "Thompson",
+        "birthDate": "2002-01-09",
+        "currentAge": 24,
+        "birthCity": "San Diego",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 185,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "Jordan",
+        "useLastName": "Thompson",
+        "boxscoreName": "Thompson",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jordan Thompson",
+        "nameSlug": "jordan-thompson-691948",
+        "firstLastName": "Jordan Thompson",
+        "lastFirstName": "Thompson, Jordan",
+        "lastInitName": "Thompson, J",
+        "initLastName": "J Thompson",
+        "fullFMLName": "Jordan  Thompson",
+        "fullLFMName": "Thompson, Jordan",
+        "strikeZoneTop": 3.165,
+        "strikeZoneBottom": 1.598
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 119,
+        "name": "Los Angeles Dodgers",
+        "link": "/api/v1/teams/119",
+        "season": 2026,
+        "venue": {
+          "id": 22,
+          "name": "UNIQLO Field at Dodger Stadium",
+          "link": "/api/v1/venues/22"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "lan",
+        "fileCode": "la",
+        "abbreviation": "LAD",
+        "teamName": "Dodgers",
+        "locationName": "Los Angeles",
+        "firstYearOfPlay": "1884",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "LA Dodgers",
+        "franchiseName": "Los Angeles",
+        "clubName": "Dodgers",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "pickRound": "15",
+      "pickNumber": 460,
+      "home": {
+        "city": "Chula Vista",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "LSU",
+        "schoolClass": "4YR JR",
+        "city": "Baton Rouge",
+        "country": "USA",
+        "state": "LA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/691948/headshot/draft/current",
+      "person": {
+        "id": 691948,
+        "fullName": "Jordan Thompson",
+        "link": "/api/v1/people/691948",
+        "firstName": "Jordan",
+        "lastName": "Thompson",
+        "birthDate": "2002-01-09",
+        "currentAge": 24,
+        "birthCity": "San Diego",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 185,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "Jordan",
+        "useLastName": "Thompson",
+        "boxscoreName": "Thompson",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jordan Thompson",
+        "nameSlug": "jordan-thompson-691948",
+        "firstLastName": "Jordan Thompson",
+        "lastFirstName": "Thompson, Jordan",
+        "lastInitName": "Thompson, J",
+        "initLastName": "J Thompson",
+        "fullFMLName": "Jordan  Thompson",
+        "fullLFMName": "Thompson, Jordan",
+        "strikeZoneTop": 3.165,
+        "strikeZoneBottom": 1.598
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 119,
+        "name": "Los Angeles Dodgers",
+        "link": "/api/v1/teams/119",
+        "season": 2026,
+        "venue": {
+          "id": 22,
+          "name": "UNIQLO Field at Dodger Stadium",
+          "link": "/api/v1/venues/22"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "lan",
+        "fileCode": "la",
+        "abbreviation": "LAD",
+        "teamName": "Dodgers",
+        "locationName": "Los Angeles",
+        "firstYearOfPlay": "1884",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "LA Dodgers",
+        "franchiseName": "Los Angeles",
+        "clubName": "Dodgers",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "pickRound": "15",
+      "pickNumber": 460,
+      "home": {
+        "city": "Chula Vista",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "LSU",
+        "schoolClass": "4YR JR",
+        "city": "Baton Rouge",
+        "country": "USA",
+        "state": "LA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/691948/headshot/draft/current",
+      "person": {
+        "id": 691948,
+        "fullName": "Jordan Thompson",
+        "link": "/api/v1/people/691948",
+        "firstName": "Jordan",
+        "lastName": "Thompson",
+        "birthDate": "2002-01-09",
+        "currentAge": 24,
+        "birthCity": "San Diego",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 185,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "Jordan",
+        "useLastName": "Thompson",
+        "boxscoreName": "Thompson",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jordan Thompson",
+        "nameSlug": "jordan-thompson-691948",
+        "firstLastName": "Jordan Thompson",
+        "lastFirstName": "Thompson, Jordan",
+        "lastInitName": "Thompson, J",
+        "initLastName": "J Thompson",
+        "fullFMLName": "Jordan  Thompson",
+        "fullLFMName": "Thompson, Jordan",
+        "strikeZoneTop": 3.165,
+        "strikeZoneBottom": 1.598
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 119,
+        "name": "Los Angeles Dodgers",
+        "link": "/api/v1/teams/119",
+        "season": 2026,
+        "venue": {
+          "id": 22,
+          "name": "UNIQLO Field at Dodger Stadium",
+          "link": "/api/v1/venues/22"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "lan",
+        "fileCode": "la",
+        "abbreviation": "LAD",
+        "teamName": "Dodgers",
+        "locationName": "Los Angeles",
+        "firstYearOfPlay": "1884",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "LA Dodgers",
+        "franchiseName": "Los Angeles",
+        "clubName": "Dodgers",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "pickRound": "15",
+      "pickNumber": 460,
+      "home": {
+        "city": "Chula Vista",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "LSU",
+        "schoolClass": "4YR JR",
+        "city": "Baton Rouge",
+        "country": "USA",
+        "state": "LA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/691948/headshot/draft/current",
+      "person": {
+        "id": 691948,
+        "fullName": "Jordan Thompson",
+        "link": "/api/v1/people/691948",
+        "firstName": "Jordan",
+        "lastName": "Thompson",
+        "birthDate": "2002-01-09",
+        "currentAge": 24,
+        "birthCity": "San Diego",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 185,
+        "active": true,
+        "primaryPosition": {
+          "code": "6",
+          "name": "Shortstop",
+          "type": "Infielder",
+          "abbreviation": "SS"
+        },
+        "useName": "Jordan",
+        "useLastName": "Thompson",
+        "boxscoreName": "Thompson",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jordan Thompson",
+        "nameSlug": "jordan-thompson-691948",
+        "firstLastName": "Jordan Thompson",
+        "lastFirstName": "Thompson, Jordan",
+        "lastInitName": "Thompson, J",
+        "initLastName": "J Thompson",
+        "fullFMLName": "Jordan  Thompson",
+        "fullLFMName": "Thompson, Jordan",
+        "strikeZoneTop": 3.165,
+        "strikeZoneBottom": 1.598
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 119,
+        "name": "Los Angeles Dodgers",
+        "link": "/api/v1/teams/119",
+        "season": 2026,
+        "venue": {
+          "id": 22,
+          "name": "UNIQLO Field at Dodger Stadium",
+          "link": "/api/v1/venues/22"
+        },
+        "springVenue": {
+          "id": 3809,
+          "link": "/api/v1/venues/3809"
+        },
+        "teamCode": "lan",
+        "fileCode": "la",
+        "abbreviation": "LAD",
+        "teamName": "Dodgers",
+        "locationName": "Los Angeles",
+        "firstYearOfPlay": "1884",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "LA Dodgers",
+        "franchiseName": "Los Angeles",
+        "clubName": "Dodgers",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5011730,
+      "pickRound": "15",
+      "pickNumber": 462,
+      "home": {
+        "city": "Greenville",
+        "state": "South Carolina",
+        "country": "USA"
+      },
+      "school": {
+        "name": "North Carolina",
+        "schoolClass": "4YR JR",
+        "city": "Chapel Hill",
+        "country": "USA",
+        "state": "NC"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/694281/headshot/draft/current",
+      "person": {
+        "id": 694281,
+        "fullName": "Tomas Frick",
+        "link": "/api/v1/people/694281",
+        "firstName": "Tomas",
+        "lastName": "Frick",
+        "birthDate": "2000-10-11",
+        "currentAge": 25,
+        "birthCity": "Greenville",
+        "birthStateProvince": "SC",
+        "birthCountry": "USA",
+        "height": "5' 10\"",
+        "weight": 200,
+        "active": true,
+        "primaryPosition": {
+          "code": "2",
+          "name": "Catcher",
+          "type": "Catcher",
+          "abbreviation": "C"
+        },
+        "useName": "Tomas",
+        "useLastName": "Frick",
+        "middleName": "Wakefield",
+        "boxscoreName": "Frick",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Tomas Frick",
+        "nameSlug": "tomas-frick-694281",
+        "firstLastName": "Tomas Frick",
+        "lastFirstName": "Frick, Tomas",
+        "lastInitName": "Frick, T",
+        "initLastName": "T Frick",
+        "fullFMLName": "Tomas Wakefield Frick",
+        "fullLFMName": "Frick, Tomas Wakefield",
+        "strikeZoneTop": 3.12,
+        "strikeZoneBottom": 1.575
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 147,
+        "name": "New York Yankees",
+        "link": "/api/v1/teams/147",
+        "season": 2026,
+        "venue": {
+          "id": 3313,
+          "name": "Yankee Stadium",
+          "link": "/api/v1/venues/3313"
+        },
+        "springVenue": {
+          "id": 2523,
+          "link": "/api/v1/venues/2523"
+        },
+        "teamCode": "nya",
+        "fileCode": "nyy",
+        "abbreviation": "NYY",
+        "teamName": "Yankees",
+        "locationName": "Bronx",
+        "firstYearOfPlay": "1903",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 201,
+          "name": "American League East",
+          "link": "/api/v1/divisions/201"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "NY Yankees",
+        "franchiseName": "New York",
+        "clubName": "Yankees",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5027877,
+      "pickRound": "13",
+      "pickNumber": 396,
+      "home": {
+        "city": "Hightstown",
+        "state": "New Jersey",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Elon University",
+        "schoolClass": "4YR JR",
+        "city": "Elon",
+        "country": "USA",
+        "state": "NC"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/815084/headshot/draft/current",
+      "person": {
+        "id": 815084,
+        "fullName": "Ben Simon",
+        "link": "/api/v1/people/815084",
+        "firstName": "Benjamin",
+        "lastName": "Simon",
+        "birthDate": "2002-03-22",
+        "currentAge": 24,
+        "birthCity": "Princeton",
+        "birthStateProvince": "NJ",
+        "birthCountry": "USA",
+        "height": "5' 11\"",
+        "weight": 197,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Ben",
+        "useLastName": "Simon",
+        "middleName": "Ross",
+        "boxscoreName": "Simon",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Ben Simon",
+        "nameSlug": "ben-simon-815084",
+        "firstLastName": "Ben Simon",
+        "lastFirstName": "Simon, Ben",
+        "lastInitName": "Simon, B",
+        "initLastName": "B Simon",
+        "fullFMLName": "Benjamin Ross Simon",
+        "fullLFMName": "Simon, Benjamin Ross",
+        "strikeZoneTop": 3.165,
+        "strikeZoneBottom": 1.598
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 121,
+        "name": "New York Mets",
+        "link": "/api/v1/teams/121",
+        "season": 2026,
+        "venue": {
+          "id": 3289,
+          "name": "Citi Field",
+          "link": "/api/v1/venues/3289"
+        },
+        "springVenue": {
+          "id": 2856,
+          "link": "/api/v1/venues/2856"
+        },
+        "teamCode": "nyn",
+        "fileCode": "nym",
+        "abbreviation": "NYM",
+        "teamName": "Mets",
+        "locationName": "Flushing",
+        "firstYearOfPlay": "1962",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "NY Mets",
+        "franchiseName": "New York",
+        "clubName": "Mets",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 803515,
+      "pickRound": "10",
+      "pickNumber": 294,
+      "home": {
+        "city": "Tucson",
+        "state": "Arizona",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Arizona",
+        "schoolClass": "4YR 5S",
+        "city": "Tucson",
+        "country": "USA",
+        "state": "AZ"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/696511/headshot/draft/current",
+      "person": {
+        "id": 696511,
+        "fullName": "Chris Barraza",
+        "link": "/api/v1/people/696511",
+        "firstName": "Christopher",
+        "lastName": "Barraza",
+        "birthDate": "1999-12-03",
+        "currentAge": 26,
+        "birthCity": "Tucson",
+        "birthStateProvince": "AZ",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 196,
+        "active": false,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Chris",
+        "useLastName": "Barraza",
+        "middleName": "Oscar",
+        "boxscoreName": "Barraza",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Chris Barraza",
+        "nameTitle": "Jr.",
+        "nameSuffix": "Jr.",
+        "nameSlug": "chris-barraza-696511",
+        "firstLastName": "Chris Barraza",
+        "lastFirstName": "Barraza, Chris",
+        "lastInitName": "Barraza, C",
+        "initLastName": "C Barraza",
+        "fullFMLName": "Christopher Oscar Barraza",
+        "fullLFMName": "Barraza, Christopher Oscar",
+        "strikeZoneTop": 3.21,
+        "strikeZoneBottom": 1.62
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 108,
+        "name": "Los Angeles Angels",
+        "link": "/api/v1/teams/108",
+        "season": 2026,
+        "venue": {
+          "id": 1,
+          "name": "Angel Stadium",
+          "link": "/api/v1/venues/1"
+        },
+        "springVenue": {
+          "id": 2500,
+          "link": "/api/v1/venues/2500"
+        },
+        "teamCode": "ana",
+        "fileCode": "ana",
+        "abbreviation": "LAA",
+        "teamName": "Angels",
+        "locationName": "Anaheim",
+        "firstYearOfPlay": "1961",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "LA Angels",
+        "franchiseName": "Los Angeles",
+        "clubName": "Angels",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5014822,
+      "pickRound": "17",
+      "pickNumber": 521,
+      "home": {
+        "city": "Ossining",
+        "state": "New York",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Northeastern",
+        "schoolClass": "4YR JR",
+        "city": "Boston",
+        "country": "USA",
+        "state": "MA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/801293/headshot/draft/current",
+      "person": {
+        "id": 801293,
+        "fullName": "Eric Yost",
+        "link": "/api/v1/people/801293",
+        "firstName": "Eric",
+        "lastName": "Yost",
+        "birthDate": "2002-10-15",
+        "currentAge": 23,
+        "birthCity": "White Plains",
+        "birthStateProvince": "NY",
+        "birthCountry": "USA",
+        "height": "6' 1\"",
+        "weight": 190,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Eric",
+        "useLastName": "Yost",
+        "middleName": "Hilton",
+        "boxscoreName": "Yost",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Eric Yost",
+        "nameSlug": "eric-yost-801293",
+        "firstLastName": "Eric Yost",
+        "lastFirstName": "Yost, Eric",
+        "lastInitName": "Yost, E",
+        "initLastName": "E Yost",
+        "fullFMLName": "Eric Hilton Yost",
+        "fullLFMName": "Yost, Eric Hilton",
+        "strikeZoneTop": 3.255,
+        "strikeZoneBottom": 1.643
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 135,
+        "name": "San Diego Padres",
+        "link": "/api/v1/teams/135",
+        "season": 2026,
+        "venue": {
+          "id": 2680,
+          "name": "Petco Park",
+          "link": "/api/v1/venues/2680"
+        },
+        "springVenue": {
+          "id": 2530,
+          "link": "/api/v1/venues/2530"
+        },
+        "teamCode": "sdn",
+        "fileCode": "sd",
+        "abbreviation": "SD",
+        "teamName": "Padres",
+        "locationName": "San Diego",
+        "firstYearOfPlay": "1968",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "San Diego",
+        "franchiseName": "San Diego",
+        "clubName": "Padres",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5021247,
+      "pickRound": "16",
+      "pickNumber": 485,
+      "home": {
+        "city": "Bluffton",
+        "state": "South Carolina",
+        "country": "USA"
+      },
+      "school": {
+        "name": "East Carolina",
+        "schoolClass": "4YR SR",
+        "city": "Greenville",
+        "country": "USA",
+        "state": "NC"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/802680/headshot/draft/current",
+      "person": {
+        "id": 802680,
+        "fullName": "Tyler Bradt",
+        "link": "/api/v1/people/802680",
+        "firstName": "Tyler",
+        "lastName": "Bradt",
+        "birthDate": "2001-02-11",
+        "currentAge": 25,
+        "birthCity": "Stuart",
+        "birthStateProvince": "FL",
+        "birthCountry": "USA",
+        "height": "5' 9\"",
+        "weight": 196,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Tyler",
+        "useLastName": "Bradt",
+        "middleName": "Michael",
+        "boxscoreName": "Bradt",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Tyler Bradt",
+        "nameTitle": "Jr.",
+        "nameSuffix": "Jr.",
+        "nameSlug": "tyler-bradt-802680",
+        "firstLastName": "Tyler Bradt",
+        "lastFirstName": "Bradt, Tyler",
+        "lastInitName": "Bradt, T",
+        "initLastName": "T Bradt",
+        "fullFMLName": "Tyler Michael Bradt",
+        "fullLFMName": "Bradt, Tyler Michael",
+        "strikeZoneTop": 3.076,
+        "strikeZoneBottom": 1.553
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 138,
+        "name": "St. Louis Cardinals",
+        "link": "/api/v1/teams/138",
+        "season": 2026,
+        "venue": {
+          "id": 2889,
+          "name": "Busch Stadium",
+          "link": "/api/v1/venues/2889"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "sln",
+        "fileCode": "stl",
+        "abbreviation": "STL",
+        "teamName": "Cardinals",
+        "locationName": "St. Louis",
+        "firstYearOfPlay": "1892",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 205,
+          "name": "National League Central",
+          "link": "/api/v1/divisions/205"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "St. Louis",
+        "franchiseName": "St. Louis",
+        "clubName": "Cardinals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5027522,
+      "pickRound": "17",
+      "pickNumber": 495,
+      "home": {
+        "city": "Redondo Beach",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Loyola Marymount University",
+        "schoolClass": "4YR SR",
+        "city": "Los Angeles",
+        "country": "USA",
+        "state": "CA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/813707/headshot/draft/current",
+      "person": {
+        "id": 813707,
+        "fullName": "Merrick Baldo",
+        "link": "/api/v1/people/813707",
+        "firstName": "Merrick",
+        "lastName": "Baldo",
+        "birthDate": "2000-07-17",
+        "currentAge": 25,
+        "birthCity": "New York",
+        "birthStateProvince": "NY",
+        "birthCountry": "USA",
+        "height": "6' 1\"",
+        "weight": 200,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Merrick",
+        "useLastName": "Baldo",
+        "boxscoreName": "Baldo",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Merrick Baldo",
+        "nameSlug": "merrick-baldo-813707",
+        "firstLastName": "Merrick Baldo",
+        "lastFirstName": "Baldo, Merrick",
+        "lastInitName": "Baldo, M",
+        "initLastName": "M Baldo",
+        "fullFMLName": "Merrick Baldo",
+        "fullLFMName": "Baldo, Merrick ",
+        "strikeZoneTop": 3.255,
+        "strikeZoneBottom": 1.643
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 120,
+        "name": "Washington Nationals",
+        "link": "/api/v1/teams/120",
+        "season": 2026,
+        "venue": {
+          "id": 3309,
+          "name": "Nationals Park",
+          "link": "/api/v1/venues/3309"
+        },
+        "springVenue": {
+          "id": 5000,
+          "link": "/api/v1/venues/5000"
+        },
+        "teamCode": "was",
+        "fileCode": "was",
+        "abbreviation": "WSH",
+        "teamName": "Nationals",
+        "locationName": "Washington",
+        "firstYearOfPlay": "1968",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Washington",
+        "franchiseName": "Washington",
+        "clubName": "Nationals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5025601,
+      "pickRound": "17",
+      "pickNumber": 513,
+      "home": {
+        "city": "Berlin",
+        "state": "Maryland",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Randolph-Macon College",
+        "schoolClass": "4YR SR",
+        "city": "Ashland",
+        "country": "USA",
+        "state": "VA"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/814388/headshot/draft/current",
+      "person": {
+        "id": 814388,
+        "fullName": "Hayden Snelsire",
+        "link": "/api/v1/people/814388",
+        "firstName": "Hayden",
+        "lastName": "Snelsire",
+        "birthDate": "2001-01-16",
+        "currentAge": 25,
+        "birthCity": "Monroeville",
+        "birthStateProvince": "PA",
+        "birthCountry": "USA",
+        "height": "6' 3\"",
+        "weight": 205,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Hayden",
+        "useLastName": "Snelsire",
+        "middleName": "Matthew",
+        "boxscoreName": "Snelsire",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Hayden Snelsire",
+        "nameSlug": "hayden-snelsire-814388",
+        "firstLastName": "Hayden Snelsire",
+        "lastFirstName": "Snelsire, Hayden",
+        "lastInitName": "Snelsire, H",
+        "initLastName": "H Snelsire",
+        "fullFMLName": "Hayden Snelsire",
+        "fullLFMName": "Snelsire, Hayden ",
+        "strikeZoneTop": 3.344,
+        "strikeZoneBottom": 1.688
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 139,
+        "name": "Tampa Bay Rays",
+        "link": "/api/v1/teams/139",
+        "season": 2026,
+        "venue": {
+          "id": 12,
+          "name": "Tropicana Field",
+          "link": "/api/v1/venues/12"
+        },
+        "springVenue": {
+          "id": 2534,
+          "link": "/api/v1/venues/2534"
+        },
+        "teamCode": "tba",
+        "fileCode": "tb",
+        "abbreviation": "TB",
+        "teamName": "Rays",
+        "locationName": "St. Petersburg",
+        "firstYearOfPlay": "1996",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 201,
+          "name": "American League East",
+          "link": "/api/v1/divisions/201"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Tampa Bay",
+        "franchiseName": "Tampa Bay",
+        "clubName": "Rays",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5027087,
+      "pickRound": "17",
+      "pickNumber": 501,
+      "home": {
+        "city": "Las Vegas",
+        "state": "Nevada",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Bishop Gorman HS",
+        "schoolClass": "HS SR",
+        "city": "Las Vegas",
+        "country": "USA",
+        "state": "NV"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/815076/headshot/draft/current",
+      "person": {
+        "id": 815076,
+        "fullName": "Kamdyn Perry",
+        "link": "/api/v1/people/815076",
+        "firstName": "Kamdyn",
+        "lastName": "Perry",
+        "birthDate": "2005-08-09",
+        "currentAge": 20,
+        "birthCity": "Fremont",
+        "birthStateProvince": "NV",
+        "birthCountry": "USA",
+        "height": "6' 4\"",
+        "weight": 200,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Kamdyn",
+        "useLastName": "Perry",
+        "middleName": "Arnold",
+        "boxscoreName": "Perry",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Kamdyn Perry",
+        "nameSlug": "kamdyn-perry-815076",
+        "firstLastName": "Kamdyn Perry",
+        "lastFirstName": "Perry, Kamdyn",
+        "lastInitName": "Perry, K",
+        "initLastName": "K Perry",
+        "fullFMLName": "Kamdyn Arnold Perry",
+        "fullLFMName": "Perry, Kamdyn Arnold",
+        "strikeZoneTop": 3.388,
+        "strikeZoneBottom": 1.71
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 140,
+        "name": "Texas Rangers",
+        "link": "/api/v1/teams/140",
+        "season": 2026,
+        "venue": {
+          "id": 5325,
+          "name": "Globe Life Field",
+          "link": "/api/v1/venues/5325"
+        },
+        "springVenue": {
+          "id": 2603,
+          "link": "/api/v1/venues/2603"
+        },
+        "teamCode": "tex",
+        "fileCode": "tex",
+        "abbreviation": "TEX",
+        "teamName": "Rangers",
+        "locationName": "Arlington",
+        "firstYearOfPlay": "1961",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Texas",
+        "franchiseName": "Texas",
+        "clubName": "Rangers",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5021400,
+      "pickRound": "17",
+      "pickNumber": 517,
+      "home": {
+        "city": "Whittier",
+        "state": "California",
+        "country": "USA"
+      },
+      "school": {
+        "name": "UNLV",
+        "schoolClass": "4YR JR",
+        "city": "Las Vegas",
+        "country": "USA",
+        "state": "NV"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/814435/headshot/draft/current",
+      "person": {
+        "id": 814435,
+        "fullName": "Jacob Sharp",
+        "link": "/api/v1/people/814435",
+        "firstName": "Jacob",
+        "lastName": "Sharp",
+        "primaryNumber": "86",
+        "birthDate": "2001-09-15",
+        "currentAge": 24,
+        "birthCity": "Whittier",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "5' 7\"",
+        "weight": 180,
+        "active": true,
+        "primaryPosition": {
+          "code": "2",
+          "name": "Catcher",
+          "type": "Catcher",
+          "abbreviation": "C"
+        },
+        "useName": "Jacob",
+        "useLastName": "Sharp",
+        "middleName": "Duenez",
+        "boxscoreName": "Sharp",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Jacob Sharp",
+        "nameSlug": "jacob-sharp-814435",
+        "firstLastName": "Jacob Sharp",
+        "lastFirstName": "Sharp, Jacob",
+        "lastInitName": "Sharp, J",
+        "initLastName": "J Sharp",
+        "fullFMLName": "Jacob Sharp",
+        "fullLFMName": "Sharp, Jacob ",
+        "strikeZoneTop": 2.979,
+        "strikeZoneBottom": 1.503
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 136,
+        "name": "Seattle Mariners",
+        "link": "/api/v1/teams/136",
+        "season": 2026,
+        "venue": {
+          "id": 680,
+          "name": "T-Mobile Park",
+          "link": "/api/v1/venues/680"
+        },
+        "springVenue": {
+          "id": 2530,
+          "link": "/api/v1/venues/2530"
+        },
+        "teamCode": "sea",
+        "fileCode": "sea",
+        "abbreviation": "SEA",
+        "teamName": "Mariners",
+        "locationName": "Seattle",
+        "firstYearOfPlay": "1977",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 200,
+          "name": "American League West",
+          "link": "/api/v1/divisions/200"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Seattle",
+        "franchiseName": "Seattle",
+        "clubName": "Mariners",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5014256,
+      "pickRound": "17",
+      "pickNumber": 519,
+      "home": {
+        "city": "Archbold",
+        "state": "Ohio",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Ohio State",
+        "schoolClass": "4YR JR",
+        "city": "Columbus",
+        "country": "USA",
+        "state": "OH"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/807746/headshot/draft/current",
+      "person": {
+        "id": 807746,
+        "fullName": "Kade Kern",
+        "link": "/api/v1/people/807746",
+        "firstName": "Kade",
+        "lastName": "Kern",
+        "birthDate": "2001-09-18",
+        "currentAge": 24,
+        "birthCity": "Bryan",
+        "birthStateProvince": "OH",
+        "birthCountry": "USA",
+        "height": "6' 0\"",
+        "weight": 200,
+        "active": true,
+        "primaryPosition": {
+          "code": "O",
+          "name": "Outfield",
+          "type": "Outfielder",
+          "abbreviation": "OF"
+        },
+        "useName": "Kade",
+        "useLastName": "Kern",
+        "middleName": "Thomas",
+        "boxscoreName": "Kern",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Kade Kern",
+        "nameSlug": "kade-kern-807746",
+        "firstLastName": "Kade Kern",
+        "lastFirstName": "Kern, Kade",
+        "lastInitName": "Kern, K",
+        "initLastName": "K Kern",
+        "fullFMLName": "Kade Thomas Kern",
+        "fullLFMName": "Kern, Kade Thomas",
+        "strikeZoneTop": 3.21,
+        "strikeZoneBottom": 1.62
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 144,
+        "name": "Atlanta Braves",
+        "link": "/api/v1/teams/144",
+        "season": 2026,
+        "venue": {
+          "id": 4705,
+          "name": "Truist Park",
+          "link": "/api/v1/venues/4705"
+        },
+        "springVenue": {
+          "id": 5380,
+          "link": "/api/v1/venues/5380"
+        },
+        "teamCode": "atl",
+        "fileCode": "atl",
+        "abbreviation": "ATL",
+        "teamName": "Braves",
+        "locationName": "Atlanta",
+        "firstYearOfPlay": "1871",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Atlanta",
+        "franchiseName": "Atlanta",
+        "clubName": "Braves",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5017584,
+      "pickRound": "17",
+      "pickNumber": 499,
+      "home": {
+        "city": "Oak Forest",
+        "state": "Illinois",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Miami University",
+        "schoolClass": "4YR SR",
+        "city": "Oxford",
+        "country": "USA",
+        "state": "OH"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/700179/headshot/draft/current",
+      "person": {
+        "id": 700179,
+        "fullName": "Connor Oliver",
+        "link": "/api/v1/people/700179",
+        "firstName": "Connor",
+        "lastName": "Oliver",
+        "birthDate": "2001-05-26",
+        "currentAge": 24,
+        "birthCity": "Hazel Crest",
+        "birthStateProvince": "IL",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 170,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Connor",
+        "useLastName": "Oliver",
+        "middleName": "Thomas",
+        "boxscoreName": "Oliver",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Connor Oliver",
+        "nameSlug": "connor-oliver-700179",
+        "firstLastName": "Connor Oliver",
+        "lastFirstName": "Oliver, Connor",
+        "lastInitName": "Oliver, C",
+        "initLastName": "C Oliver",
+        "fullFMLName": "Connor Thomas Oliver",
+        "fullLFMName": "Oliver, Connor Thomas",
+        "strikeZoneTop": 3.299,
+        "strikeZoneBottom": 1.665
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 118,
+        "name": "Kansas City Royals",
+        "link": "/api/v1/teams/118",
+        "season": 2026,
+        "venue": {
+          "id": 7,
+          "name": "Kauffman Stadium",
+          "link": "/api/v1/venues/7"
+        },
+        "springVenue": {
+          "id": 2603,
+          "link": "/api/v1/venues/2603"
+        },
+        "teamCode": "kca",
+        "fileCode": "kc",
+        "abbreviation": "KC",
+        "teamName": "Royals",
+        "locationName": "Kansas City",
+        "firstYearOfPlay": "1968",
+        "league": {
+          "id": 103,
+          "name": "American League",
+          "link": "/api/v1/league/103"
+        },
+        "division": {
+          "id": 202,
+          "name": "American League Central",
+          "link": "/api/v1/divisions/202"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Kansas City",
+        "franchiseName": "Kansas City",
+        "clubName": "Royals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5019248,
+      "pickRound": "10",
+      "pickNumber": 295,
+      "home": {
+        "city": "Kingwood",
+        "state": "Texas",
+        "country": "USA"
+      },
+      "school": {
+        "name": "Dallas Baptist",
+        "schoolClass": "4YR SR",
+        "city": "Dallas",
+        "country": "USA",
+        "state": "TX"
+      },
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/801546/headshot/draft/current",
+      "person": {
+        "id": 801546,
+        "fullName": "Zane Russell",
+        "link": "/api/v1/people/801546",
+        "firstName": "Zane",
+        "lastName": "Russell",
+        "primaryNumber": "28",
+        "birthDate": "2000-06-12",
+        "currentAge": 25,
+        "birthCity": "Kingwood",
+        "birthStateProvince": "TX",
+        "birthCountry": "USA",
+        "height": "6' 2\"",
+        "weight": 196,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Zane",
+        "useLastName": "Russell",
+        "middleName": "Andrew",
+        "boxscoreName": "Russell",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Zane Russell",
+        "nameSlug": "zane-russell-801546",
+        "firstLastName": "Zane Russell",
+        "lastFirstName": "Russell, Zane",
+        "lastInitName": "Russell, Z",
+        "initLastName": "Z Russell",
+        "fullFMLName": "Zane Andrew Russell",
+        "fullLFMName": "Russell, Zane Andrew",
+        "strikeZoneTop": 3.299,
+        "strikeZoneBottom": 1.665
+      },
+      "team": {
+        "springLeague": {
+          "id": 114,
+          "name": "Cactus League",
+          "link": "/api/v1/league/114",
+          "abbreviation": "CL"
+        },
+        "allStarStatus": "N",
+        "id": 109,
+        "name": "Arizona Diamondbacks",
+        "link": "/api/v1/teams/109",
+        "season": 2026,
+        "venue": {
+          "id": 15,
+          "name": "Chase Field",
+          "link": "/api/v1/venues/15"
+        },
+        "springVenue": {
+          "id": 4249,
+          "link": "/api/v1/venues/4249"
+        },
+        "teamCode": "ari",
+        "fileCode": "ari",
+        "abbreviation": "AZ",
+        "teamName": "D-backs",
+        "locationName": "Phoenix",
+        "firstYearOfPlay": "1996",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 203,
+          "name": "National League West",
+          "link": "/api/v1/divisions/203"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Arizona",
+        "franchiseName": "Arizona",
+        "clubName": "Diamondbacks",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 807532,
+      "pickRound": "4",
+      "pickNumber": 122,
+      "rank": 86,
+      "home": {
+        "city": "Aliso Viejo",
+        "state": "California",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-quinn-mathews-lhp?t=mlb-draft",
+      "school": {
+        "name": "Stanford",
+        "schoolClass": "4YR SR",
+        "city": "Palo Alto",
+        "country": "USA",
+        "state": "CA"
+      },
+      "blurb": "After spending the shortened 2020 season and full 2021 campaign largely pitching out of Stanford's rotation, Mathews threw well in a four-start stint in the Cape Cod League in 2021. He followed that up by pitching well as a swingman/multi-inning reliever last year, landing on MLB Pipeline's Draft Top 250 list. The Rays took him close to the end of the Draft, and Matthews returned to campus for his senior year, where he's been effective as the Cardinals' Friday night starter. The 6-foot-5 left-hander brings four pitches and plenty of funk and deception to the mound. He can dial his fastball up to 94 mph, and it averages just over 91 mph, but his best pitch is his low 80s changeup, which features a ton of fade to both miss bats and get ground-ball outs. He throws his tight slider around the same velocity, and he also has a slower low-70s curve with three-quarter shape to it. The long and lanky southpaw has done a better job of finding the strike zone compared to last year while continuing to post high strikeout rates. His ceiling might be somewhat limited to a back-end starter, with teams considering him knowing that he knows how to get outs coming out of the bullpen.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/687273/headshot/draft/current",
+      "person": {
+        "id": 687273,
+        "fullName": "Quinn Mathews",
+        "link": "/api/v1/people/687273",
+        "firstName": "Quinn",
+        "lastName": "Mathews",
+        "birthDate": "2000-10-04",
+        "currentAge": 25,
+        "birthCity": "Mission Viejo",
+        "birthStateProvince": "CA",
+        "birthCountry": "USA",
+        "height": "6' 5\"",
+        "weight": 188,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Quinn",
+        "useLastName": "Mathews",
+        "middleName": "Jack",
+        "boxscoreName": "Mathews",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "L",
+          "description": "Left"
+        },
+        "pitchHand": {
+          "code": "L",
+          "description": "Left"
+        },
+        "nameFirstLast": "Quinn Mathews",
+        "nameSlug": "quinn-mathews-687273",
+        "firstLastName": "Quinn Mathews",
+        "lastFirstName": "Mathews, Quinn",
+        "lastInitName": "Mathews, Q",
+        "initLastName": "Q Mathews",
+        "fullFMLName": "Quinn Jack Mathews",
+        "fullLFMName": "Mathews, Quinn Jack",
+        "strikeZoneTop": 3.433,
+        "strikeZoneBottom": 1.733
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 138,
+        "name": "St. Louis Cardinals",
+        "link": "/api/v1/teams/138",
+        "season": 2026,
+        "venue": {
+          "id": 2889,
+          "name": "Busch Stadium",
+          "link": "/api/v1/venues/2889"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "sln",
+        "fileCode": "stl",
+        "abbreviation": "STL",
+        "teamName": "Cardinals",
+        "locationName": "St. Louis",
+        "firstYearOfPlay": "1892",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 205,
+          "name": "National League Central",
+          "link": "/api/v1/divisions/205"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "St. Louis",
+        "franchiseName": "St. Louis",
+        "clubName": "Cardinals",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    },
+    {
+      "bisPlayerId": 5012267,
+      "pickRound": "5",
+      "pickNumber": 146,
+      "rank": 172,
+      "home": {
+        "city": "New Johnsonville",
+        "state": "Tennessee",
+        "country": "USA"
+      },
+      "scoutingReport": "https://www.mlb.com/video/2023-draft-andrew-lindsey-rhp?t=mlb-draft",
+      "school": {
+        "name": "Tennessee",
+        "schoolClass": "4YR 5S",
+        "city": "Knoxville",
+        "country": "USA",
+        "state": "TN"
+      },
+      "blurb": "After two successful years at Walters State (Tenn.) CC and a decent one at Charlotte, Lindsey decided to give up baseball and took the 2022 season off. Coaching a youth team rekindled his desire to return to the game, and after pitching in the summer Appalachian League, he transferred to Tennessee. He worked his way into the weekend rotation by mid-April and was the Volunteers' most reliable starter down the stretch. Lindsey's velocity has increased 2-3 mph on all his pitches this season, and he now operates with a 93-95 mph fastball that tops out at 98 with a flat approach angle and some carry. His most effective pitch is a tight upper-80s slider that reaches 91 mph, and he can land it for strikes or use it to get chases outside the zone. He also dabbles with an upper-70s curveball but hasn't much used a mid-80s changeup with a bit of fade that was effective when he was at Charlotte. Lindsey maintained his improved stuff after moving from the bullpen to the rotation. He also has displayed better control and command than in the past. He's one of the more attractive fifth-year collegians in the 2023 Draft, with a chance to succeed as a starter, while having a nice floor as a fastball/slider reliever.",
+      "headshotLink": "https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:silo:current.png/w_120,q_auto:best/v1/people/701604/headshot/draft/current",
+      "person": {
+        "id": 701604,
+        "fullName": "Andrew Lindsey",
+        "link": "/api/v1/people/701604",
+        "firstName": "Andrew",
+        "lastName": "Lindsey",
+        "birthDate": "1999-11-15",
+        "currentAge": 26,
+        "birthCity": "New Johnsonville",
+        "birthStateProvince": "TN",
+        "birthCountry": "USA",
+        "height": "6' 3\"",
+        "weight": 216,
+        "active": true,
+        "primaryPosition": {
+          "code": "1",
+          "name": "Pitcher",
+          "type": "Pitcher",
+          "abbreviation": "P"
+        },
+        "useName": "Andrew",
+        "useLastName": "Lindsey",
+        "middleName": "Ryan",
+        "boxscoreName": "Lindsey",
+        "gender": "M",
+        "isPlayer": true,
+        "isVerified": true,
+        "draftYear": 2023,
+        "batSide": {
+          "code": "R",
+          "description": "Right"
+        },
+        "pitchHand": {
+          "code": "R",
+          "description": "Right"
+        },
+        "nameFirstLast": "Andrew Lindsey",
+        "nameSlug": "andrew-lindsey-701604",
+        "firstLastName": "Andrew Lindsey",
+        "lastFirstName": "Lindsey, Andrew",
+        "lastInitName": "Lindsey, A",
+        "initLastName": "A Lindsey",
+        "fullFMLName": "Andrew Ryan Lindsey",
+        "fullLFMName": "Lindsey, Andrew Ryan",
+        "strikeZoneTop": 3.344,
+        "strikeZoneBottom": 1.688
+      },
+      "team": {
+        "springLeague": {
+          "id": 115,
+          "name": "Grapefruit League",
+          "link": "/api/v1/league/115",
+          "abbreviation": "GL"
+        },
+        "allStarStatus": "N",
+        "id": 146,
+        "name": "Miami Marlins",
+        "link": "/api/v1/teams/146",
+        "season": 2026,
+        "venue": {
+          "id": 4169,
+          "name": "loanDepot park",
+          "link": "/api/v1/venues/4169"
+        },
+        "springVenue": {
+          "id": 2520,
+          "link": "/api/v1/venues/2520"
+        },
+        "teamCode": "mia",
+        "fileCode": "mia",
+        "abbreviation": "MIA",
+        "teamName": "Marlins",
+        "locationName": "Miami",
+        "firstYearOfPlay": "1991",
+        "league": {
+          "id": 104,
+          "name": "National League",
+          "link": "/api/v1/league/104"
+        },
+        "division": {
+          "id": 204,
+          "name": "National League East",
+          "link": "/api/v1/divisions/204"
+        },
+        "sport": {
+          "id": 1,
+          "link": "/api/v1/sports/1",
+          "name": "Major League Baseball"
+        },
+        "shortName": "Miami",
+        "franchiseName": "Miami",
+        "clubName": "Marlins",
+        "active": true
+      },
+      "draftType": {
+        "code": "JR",
+        "description": "Rule 4 / June Amateur Draft"
+      },
+      "isDrafted": true,
+      "isPass": false,
+      "year": "2023"
+    }
+  ]
+}

@@ -288,6 +288,28 @@ public enum SwiftBaseball {
         .schedule(query, hydrate: hydrate, client: client)
     }
 
+    /// Query the dedicated postseason schedule endpoint.
+    ///
+    ///     let games = try await SwiftBaseball.postseasonSchedule(season: 2024).fetch()
+    ///
+    /// Returns every postseason game (Wild Card, Division, League Championship, World Series)
+    /// for the requested season as a flat list. Use ``postseasonSeries(season:)`` to receive
+    /// the games grouped by series instead.
+    public static func postseasonSchedule(season: Int) -> QueryBuilder<[ScheduleEntry]> {
+        .postseasonSchedule(season: season, client: client)
+    }
+
+    /// Query the postseason series endpoint.
+    ///
+    ///     let series = try await SwiftBaseball.postseasonSeries(season: 2024).fetch()
+    ///     let worldSeries = series.first(where: { $0.gameType == .worldSeries })
+    ///
+    /// Each ``PostseasonSeries`` groups the games played in a single matchup, so consumers
+    /// can step round by round (Wild Card → Division → LCS → World Series).
+    public static func postseasonSeries(season: Int) -> QueryBuilder<[PostseasonSeries]> {
+        .postseasonSeries(season: season, client: client)
+    }
+
     // MARK: - Games
 
     /// Fetch a game's box score.
@@ -406,6 +428,20 @@ public enum SwiftBaseball {
     /// - Parameter date: Calendar date in `YYYY-MM-DD` format.
     public static func umpires(date: String) -> QueryBuilder<[Umpire]> {
         .umpires(date: date, client: client)
+    }
+
+    // MARK: - Official Scorers
+
+    /// Fetch the MLB official-scorer roster eligible to work on a given date.
+    ///
+    /// Returns the full pool of official scorers on duty for that day — not a per-game
+    /// assignment. Entries carry ``OfficialScorer/jobId`` of `"SCOR"`.
+    ///
+    ///     let scorers = try await SwiftBaseball.officialScorers(date: "2024-07-04").fetch()
+    ///
+    /// - Parameter date: Calendar date in `YYYY-MM-DD` format.
+    public static func officialScorers(date: String) -> QueryBuilder<[OfficialScorer]> {
+        .officialScorers(date: date, client: client)
     }
 
     // MARK: - Stats
@@ -1052,6 +1088,27 @@ public enum SwiftBaseball {
     ///     let firstRound = try await SwiftBaseball.draft(year: 2024).round(1).fetch()
     public static func draft(year: Int) -> QueryBuilder<[DraftPick]> {
         .draft(year: year, client: client)
+    }
+
+    /// Fetch the full pool of entered prospects for a draft year.
+    ///
+    ///     let pool = try await SwiftBaseball.draftProspects(year: 2023).fetch()
+    ///
+    /// Includes both selected and unselected prospects. Earlier drafts return several
+    /// thousand entries — iterate the result lazily where possible.
+    public static func draftProspects(year: Int) -> QueryBuilder<[DraftProspect]> {
+        .draftProspects(year: year, client: client)
+    }
+
+    /// Fetch the live in-progress snapshot of a draft.
+    ///
+    ///     let snapshot = try await SwiftBaseball.draftLatest(year: 2024).fetch()
+    ///     print(snapshot.pick?.person?.fullName)
+    ///
+    /// Useful only while a draft is actively running. Outside the window, `pick` reflects
+    /// the final selection of the most recent draft and ``DraftLatest/nextUp`` is empty.
+    public static func draftLatest(year: Int) -> QueryBuilder<DraftLatest> {
+        .draftLatest(year: year, client: client)
     }
 
     // MARK: - Awards

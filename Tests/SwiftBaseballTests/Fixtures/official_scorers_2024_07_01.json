@@ -1,0 +1,170 @@
+{
+  "copyright": "Copyright 2026 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
+  "roster": [
+    {
+      "person": {
+        "id": 582413,
+        "fullName": "Fernando Alcala",
+        "link": "/api/v1/people/582413"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 434138,
+        "fullName": "Billy Altman",
+        "link": "/api/v1/people/434138"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679924,
+        "fullName": "Kenny Ayres",
+        "link": "/api/v1/people/679924"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 427022,
+        "fullName": "Matt Bartlett",
+        "link": "/api/v1/people/427022"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 478601,
+        "fullName": "Tyler Barton",
+        "link": "/api/v1/people/478601"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 493719,
+        "fullName": "Bob Beghtol",
+        "link": "/api/v1/people/493719"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 679730,
+        "fullName": "Devin Benson",
+        "link": "/api/v1/people/679730"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 550488,
+        "fullName": "Court Berry-Tripp",
+        "link": "/api/v1/people/550488"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602880,
+        "fullName": "Matt Birch",
+        "link": "/api/v1/people/602880"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 650888,
+        "fullName": "Kara Blackstone",
+        "link": "/api/v1/people/650888"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 510188,
+        "fullName": "John Blake",
+        "link": "/api/v1/people/510188"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 431016,
+        "fullName": "Rick Blount",
+        "link": "/api/v1/people/431016"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 433218,
+        "fullName": "Chad Broski",
+        "link": "/api/v1/people/433218"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 602652,
+        "fullName": "Kyle Brostowitz",
+        "link": "/api/v1/people/602652"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    },
+    {
+      "person": {
+        "id": 650981,
+        "fullName": "Megan Brown",
+        "link": "/api/v1/people/650981"
+      },
+      "jerseyNumber": "",
+      "job": "Official Scorer",
+      "jobId": "SCOR",
+      "title": "Official Scorer"
+    }
+  ]
+}

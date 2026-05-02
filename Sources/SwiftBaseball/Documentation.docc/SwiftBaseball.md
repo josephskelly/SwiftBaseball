@@ -43,6 +43,7 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 ### Officials
 
 - ``Umpire``
+- ``OfficialScorer``
 
 ### Games & Schedule
 
@@ -50,6 +51,7 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``ScheduleTeams``
 - ``ScheduleTeamEntry``
 - ``LeagueRecord``
+- ``PostseasonSeries``
 - ``Boxscore``
 - ``BoxscoreTeams``
 - ``BoxscoreTeam``
@@ -89,6 +91,13 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 ### Transactions
 
 - ``Transaction``
+
+### Draft
+
+- ``DraftProspect``
+- ``DraftLatest``
+- ``DraftSchool``
+- ``DraftLocation``
 
 ### Statistics
 

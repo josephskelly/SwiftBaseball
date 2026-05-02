@@ -47,6 +47,16 @@ enum MLBResponseConverters {
         )
     }
 
+    static func officialScorer(from raw: MLBUmpire) -> OfficialScorer {
+        OfficialScorer(
+            person: PlayerReference(id: raw.person.id, fullName: raw.person.displayName),
+            jerseyNumber: raw.jerseyNumber.flatMap { $0.isEmpty ? nil : $0 },
+            job: raw.job ?? "Official Scorer",
+            jobId: raw.jobId ?? "SCOR",
+            title: raw.title
+        )
+    }
+
     static func umpire(from raw: MLBUmpire) -> Umpire {
         Umpire(
             person: playerReference(from: raw.person),
@@ -166,6 +176,75 @@ enum MLBResponseConverters {
             gamesInSeries: raw.gamesInSeries,
             seriesGameNumber: raw.seriesGameNumber
         )
+    }
+
+    // MARK: - Draft Prospects
+
+    static func draftProspects(from response: MLBDraftProspectsResponse) -> [DraftProspect] {
+        response.prospects.compactMap(draftProspect)
+    }
+
+    static func draftLatest(from response: MLBDraftLatestResponse) -> DraftLatest {
+        DraftLatest(
+            pick: response.pick.flatMap(draftProspect),
+            number: response.number ?? 0,
+            nextUp: (response.nextUp ?? []).compactMap(draftProspect)
+        )
+    }
+
+    static func draftProspect(from raw: MLBDraftProspectPayload) -> DraftProspect? {
+        guard let pickNumber = raw.pickNumber,
+              let year = raw.year.flatMap(Int.init)
+        else { return nil }
+
+        let person = raw.person.flatMap { p -> PlayerReference? in
+            let name = p.fullName ?? p.name
+            guard p.id != 0, let displayName = name else { return nil }
+            return PlayerReference(id: p.id, fullName: displayName)
+        }
+
+        // Prefer the dedicated draft-prospect identifier; fall back to the player's
+        // MLB person ID for rows where it's omitted (live picks, signed prospects).
+        guard let id = raw.bisPlayerId ?? person?.id else { return nil }
+
+        return DraftProspect(
+            id: id,
+            pickRound: raw.pickRound ?? "",
+            pickNumber: pickNumber,
+            roundPickNumber: raw.roundPickNumber,
+            person: person,
+            team: raw.team.map { TeamReference(id: $0.id, name: $0.displayName) },
+            school: raw.school.map { school in
+                DraftSchool(
+                    name: school.name,
+                    schoolClass: school.schoolClass,
+                    city: school.city,
+                    state: school.state,
+                    country: school.country
+                )
+            },
+            home: raw.home.map { loc in
+                DraftLocation(city: loc.city, state: loc.state, country: loc.country)
+            },
+            draftType: raw.draftType.map { CodeDescription(code: $0.code, description: $0.description) },
+            isDrafted: raw.isDrafted ?? false,
+            isPass: raw.isPass ?? false,
+            year: year
+        )
+    }
+
+    // MARK: - Postseason Series
+
+    static func postseasonSeries(from response: MLBPostseasonSeriesResponse) -> [PostseasonSeries] {
+        response.series.map { entry in
+            PostseasonSeries(
+                id: entry.series.id,
+                gameType: GameType(rawValue: entry.series.gameType ?? "") ?? .unknown,
+                sortNumber: entry.series.sortNumber ?? 0,
+                totalGames: entry.totalGames ?? entry.games.count,
+                games: entry.games.compactMap(scheduleEntry)
+            )
+        }
     }
 
     // MARK: - Standings

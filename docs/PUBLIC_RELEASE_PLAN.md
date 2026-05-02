@@ -193,11 +193,11 @@ point we will add on the `SwiftBaseball` namespace and the upstream source.
 11. **Team history / franchise** — `teams/history?teamIds=` → franchise-history rows.
 12. **Team stat-leaders history** — `teams/{id}/stats/leaders`.
 13. **High-low splits** — `highLow/player`, `highLow/team`.
-14. **Home Run Derby** — bracket + pool endpoints (seasonal but part of MLB's canonical API).
-15. **Postseason schedule** — dedicated `schedule.postseason(season:)` + series endpoints.
-16. **Draft prospects** — `draft/prospects/{year}` and `draft/{year}/latest`.
-17. **Official scorers** — `jobs/officialScorers?date=`.
-18. **Play-by-play color commentary** — `game/{pk}/color` (text events with timestamps).
+14. **Home Run Derby** — bracket + pool endpoints (seasonal but part of MLB's canonical API). **Deferred:** path is `homeRunDerby/{gamePk}` per toddrob99's spec, but the derby `gamePk` is not surfaced via `schedule?gameTypes=` (no gameType code returns derby games) and probing gamePks adjacent to the All-Star Game returns "Game data couldn't be found." Will revisit if MLB adds a gameType for it or if the gamePk becomes discoverable through another endpoint.
+15. **Postseason schedule** — ✅ `SwiftBaseball.postseasonSchedule(season:)` + `SwiftBaseball.postseasonSeries(season:)` shipped 2026-05-02.
+16. **Draft prospects** — ✅ `SwiftBaseball.draftProspects(year:)` + `SwiftBaseball.draftLatest(year:)` shipped 2026-05-02.
+17. **Official scorers** — ✅ `SwiftBaseball.officialScorers(date:)` shipped 2026-05-02.
+18. **Play-by-play color commentary** — `game/{pk}/color` (text events with timestamps). **Deferred:** the upstream endpoint is documented as `game/{pk}/feed/color` (per toddrob99) but every gamePk probed (regular season, ASG, postseason finals) returns HTTP 404. Endpoint appears to be deprecated. Will revisit if MLB restores it.
 
 ### 3.3 MLB Stats API — tranche C (metadata catalogs)
 
