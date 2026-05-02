@@ -1177,6 +1177,62 @@ public enum SwiftBaseball {
         .teamLeaders(teamId: teamId, category: category, client: client)
     }
 
+    /// Fetch single-game peaks (or troughs) for any player in a season.
+    ///
+    /// Each ``HighLowSplit`` represents a single game in which a player
+    /// posted the n-th highest (or lowest) value of `sortStat`. Use
+    /// `direction` to switch between top-of-leaderboard and
+    /// bottom-of-leaderboard views.
+    ///
+    ///     let peaks = try await SwiftBaseball
+    ///         .highLowPlayer(group: .batting, sortStat: .homeRuns, season: 2024)
+    ///         .limit(10)
+    ///         .fetch()
+    ///     // peaks.first?.player?.fullName  == "Yordan Alvarez"
+    ///     // peaks.first?.statValue         == 3
+    ///     // peaks.first?.opponent.name     == "Philadelphia Phillies"
+    ///
+    /// - Parameters:
+    ///   - group: The stat group (`.batting`, `.pitching`, or `.fielding`).
+    ///   - sortStat: The leaderboard stat to sort by.
+    ///   - season: The season year.
+    ///   - direction: `.high` for peaks (default), `.low` for troughs.
+    public static func highLowPlayer(
+        group: StatGroup,
+        sortStat: LeaderStatCategory,
+        season: Int,
+        direction: HighLowDirection = .high
+    ) -> QueryBuilder<[HighLowSplit]> {
+        .highLowPlayer(group: group, sortStat: sortStat, season: season, direction: direction, client: client)
+    }
+
+    /// Fetch single-game team peaks (or troughs) for a season.
+    ///
+    /// Each ``HighLowSplit`` represents a single game in which a team posted
+    /// the n-th highest (or lowest) value of `sortStat`. Player splits are
+    /// `nil` on team-level entries.
+    ///
+    ///     let teamHRs = try await SwiftBaseball
+    ///         .highLowTeam(group: .batting, sortStat: .homeRuns, season: 2024)
+    ///         .limit(5)
+    ///         .fetch()
+    ///     // teamHRs.first?.team.name  == "Oakland Athletics"
+    ///     // teamHRs.first?.statValue  == 8   // most HR in any single game in 2024
+    ///
+    /// - Parameters:
+    ///   - group: The stat group (`.batting`, `.pitching`, or `.fielding`).
+    ///   - sortStat: The leaderboard stat to sort by.
+    ///   - season: The season year.
+    ///   - direction: `.high` for peaks (default), `.low` for troughs.
+    public static func highLowTeam(
+        group: StatGroup,
+        sortStat: LeaderStatCategory,
+        season: Int,
+        direction: HighLowDirection = .high
+    ) -> QueryBuilder<[HighLowSplit]> {
+        .highLowTeam(group: group, sortStat: sortStat, season: season, direction: direction, client: client)
+    }
+
     // MARK: - Game Pace
 
     /// Fetch a team's pace-of-play metrics for a season.

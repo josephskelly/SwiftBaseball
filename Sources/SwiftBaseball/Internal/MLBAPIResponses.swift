@@ -1123,3 +1123,50 @@ struct MLBContextMetricsResponse: Decodable {
     let homeWinProbability: Double?
     let awayWinProbability: Double?
 }
+
+// MARK: - High / Low
+
+struct MLBHighLowResponse: Decodable {
+    let highLowResults: [MLBHighLowResult]
+}
+
+struct MLBHighLowResult: Decodable {
+    let splits: [MLBHighLowSplit]
+}
+
+struct MLBHighLowSplit: Decodable {
+    let season: String?
+    let stat: [String: MLBStatNumber]
+    let player: MLBEntityRef?
+    let team: MLBEntityRef?
+    let opponent: MLBEntityRef?
+    let date: String?
+    let isHome: Bool?
+    let rank: Int?
+    let gameInnings: Int?
+    let game: MLBGameReference?
+}
+
+/// Decodes a numeric value that may arrive as either an Int, Double, or
+/// quoted-string in the upstream JSON. The `highLow` endpoint's `stat`
+/// dictionary uses raw numbers for counting stats (`{"homeRuns": 3}`) but
+/// strings for rate stats (`{"battingAverage": "0.500"}`).
+struct MLBStatNumber: Decodable {
+    let value: Double
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let int = try? container.decode(Int.self) {
+            self.value = Double(int)
+        } else if let double = try? container.decode(Double.self) {
+            self.value = double
+        } else if let string = try? container.decode(String.self), let parsed = Double(string) {
+            self.value = parsed
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Expected numeric or numeric-string stat value"
+            )
+        }
+    }
+}

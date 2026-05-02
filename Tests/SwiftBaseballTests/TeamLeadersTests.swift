@@ -92,4 +92,22 @@ struct TeamLeadersTests {
         let built = try #require(endpoint.url(baseURL: baseURL))
         #expect(built.absoluteString == "https://statsapi.mlb.com/api/v1/teams/147/leaders?leaderCategories=homeRuns")
     }
+
+    @Test("teamLeaders.season(_:) chains historical season into the request")
+    func teamLeadersSeasonChain() async throws {
+        let mock = MockAPIClient()
+        let data = try Fixtures.load("team_leaders_147_homeRuns_2024.json")
+        mock.stub(path: "teams/147/leaders", data: data)
+
+        _ = try await QueryBuilder<[TeamLeaderCategory]>
+            .teamLeaders(teamId: 147, category: .homeRuns, client: mock)
+            .season(2010)
+            .fetch()
+
+        #expect(mock.lastEndpoint?.path == "teams/147/leaders")
+        let seasonItem = mock.lastEndpoint?.queryItems.first { $0.name == "season" }
+        #expect(seasonItem?.value == "2010")
+        let categoryItem = mock.lastEndpoint?.queryItems.first { $0.name == "leaderCategories" }
+        #expect(categoryItem?.value == "homeRuns")
+    }
 }

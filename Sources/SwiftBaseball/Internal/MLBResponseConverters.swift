@@ -1568,4 +1568,41 @@ extension MLBResponseConverters {
             awayWinProbability: response.awayWinProbability ?? 0
         )
     }
+
+    // MARK: - High / Low
+
+    static func highLowSplits(from response: MLBHighLowResponse) -> [HighLowSplit] {
+        response.highLowResults.flatMap(\.splits).compactMap(highLowSplit)
+    }
+
+    private static func highLowSplit(from raw: MLBHighLowSplit) -> HighLowSplit? {
+        guard
+            let teamRaw = raw.team,
+            let opponentRaw = raw.opponent,
+            let dateString = raw.date,
+            let date = parseDate(dateString),
+            let game = raw.game,
+            let isHome = raw.isHome,
+            let rank = raw.rank,
+            let seasonString = raw.season,
+            let season = Int(seasonString),
+            let (statName, statNumber) = raw.stat.first
+        else { return nil }
+
+        let player = raw.player.map { PlayerReference(id: $0.id, fullName: $0.displayName) }
+
+        return HighLowSplit(
+            season: season,
+            statValue: statNumber.value,
+            statName: statName,
+            player: player,
+            team: TeamReference(id: teamRaw.id, name: teamRaw.displayName),
+            opponent: TeamReference(id: opponentRaw.id, name: opponentRaw.displayName),
+            date: date,
+            isHome: isHome,
+            rank: rank,
+            gameInnings: raw.gameInnings,
+            gamePk: game.gamePk
+        )
+    }
 }

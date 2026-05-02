@@ -101,6 +101,13 @@ let aaa2024 = try await SwiftBaseball.sportPlayers(sport: .tripleA, season: 2024
 let yankeesParks = try await SwiftBaseball.teamHistory(teamIds: [147]).fetch()
 for snapshot in yankeesParks { print(snapshot.season ?? 0, snapshot.venue.name) }
 
+// Single-game peaks (or troughs) by stat — e.g. most HR in any one team game
+let bigHRGames = try await SwiftBaseball
+    .highLowTeam(group: .batting, sortStat: .homeRuns, season: 2024)
+    .limit(5)
+    .fetch()
+print(bigHRGames.first?.team.name, bigHRGames.first?.statValue)
+
 // Batch stats for multiple players
 let batch = try await SwiftBaseball
     .batchStats([660271, 592450], group: .batting)

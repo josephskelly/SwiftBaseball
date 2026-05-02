@@ -150,6 +150,8 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``LeaderStatCategory``
 - ``TeamLeaderCategory``
 - ``GamePace``
+- ``HighLowSplit``
+- ``HighLowDirection``
 
 ### Catalogs
 
