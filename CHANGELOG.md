@@ -6,6 +6,14 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **AsyncSequence streaming for raw Statcast**: `SwiftBaseball.statcastRaw(start:end:).stream()` returns an `AsyncThrowingStream<StatcastPitch, Error>` that yields one pitch at a time, fetching one chunk at a time. Use this for multi-month or multi-season pulls where holding every pitch in memory is wasteful — peak memory stays at roughly one chunk's worth of rows (~14k–17k pitches per default 7-day chunk) regardless of how long the requested range is. Cancelling the consuming task halts the stream cleanly: the in-flight chunk completes but no further chunks are requested. The existing `.fetch()` form is unchanged and remains the right choice when the caller wants the full array
+
+### Changed
+
+- **Memberwise initializers on Codable result types are now internal** (no public API surface): `DraftProspect`, `DraftLatest`, and `PostseasonSeries` no longer expose explicit memberwise `public init(...)` constructors. Consumers obtain these via the `Codable` decode path returned by `SwiftBaseball.*` query methods, which is the only documented construction path. Internal converters in `MLBResponseConverters.swift` continue to construct them via the synthesized internal init. Locking down to internal ahead of the v1.0 freeze prevents accidental dependence on a constructor that was never meant to be part of the public contract
+
 ## [0.5.0] — 2026-05-06
 
 ### Added

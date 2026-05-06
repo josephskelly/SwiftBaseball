@@ -428,6 +428,14 @@ let aaron = try await SwiftBaseball
     .fetch()
 print(aaron.first?.batSpeed, aaron.first?.swingLength)
 
+// Stream form — bounded memory across multi-month / multi-season pulls
+for try await pitch in SwiftBaseball
+    .statcastRaw(start: "2024-04-01", end: "2024-09-30")
+    .stream()
+{
+    // process one pitch at a time; only one chunk held in memory at a time
+}
+
 // Metadata catalogs — 18 typed lookup endpoints under SwiftBaseball.meta.*
 let groups = try await SwiftBaseball.meta.statGroups().fetch()
 print(groups.map(\.displayName))  // ["hitting", "pitching", "fielding", ...]

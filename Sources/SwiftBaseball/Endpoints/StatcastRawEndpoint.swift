@@ -115,6 +115,58 @@ public struct StatcastRawQuery: Sendable {
             return all
         }
     }
+
+    /// Streams pitches one at a time, fetching one chunk at a time to keep memory bounded.
+    ///
+    /// Use this for multi-month or multi-season pulls where holding every
+    /// ``StatcastPitch`` in memory at once would be wasteful. Peak memory stays at
+    /// roughly one chunk's worth of rows (~14k–17k pitches per default 7-day chunk)
+    /// regardless of how long the requested range is.
+    ///
+    /// Chunks are fetched sequentially in calendar order. Cancelling the consuming
+    /// task halts the stream — the in-flight chunk completes but no further chunks
+    /// are requested.
+    ///
+    /// ```swift
+    /// for try await pitch in SwiftBaseball
+    ///     .statcastRaw(start: "2024-04-01", end: "2024-09-30")
+    ///     .stream()
+    /// {
+    ///     // process one pitch at a time
+    /// }
+    /// ```
+    public func stream() -> AsyncThrowingStream<StatcastPitch, Error> {
+        let chunks = StatcastDateChunker.chunks(start: start, end: end, chunkDays: _chunkDays)
+        let gtFilter = gameTypeFilter
+        let streamClient = client
+
+        return AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    for chunk in chunks {
+                        try Task.checkCancellation()
+                        let csv = try await streamClient.fetchCSV(queryItems: [
+                            URLQueryItem(name: "all", value: "true"),
+                            URLQueryItem(name: "type", value: "details"),
+                            URLQueryItem(name: "game_date_gt", value: chunk.start),
+                            URLQueryItem(name: "game_date_lt", value: chunk.end)
+                        ])
+                        var rows = CSVParser.parse(csv, preserveEmpty: true)
+                        if let gt = gtFilter {
+                            rows = rows.filter { $0["game_type"] == gt }
+                        }
+                        for pitch in StatcastPitchParser.parse(rows: rows) {
+                            continuation.yield(pitch)
+                        }
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
 }
 
 // MARK: - Raw batter query
