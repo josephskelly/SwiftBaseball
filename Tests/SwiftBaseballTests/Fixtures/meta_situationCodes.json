@@ -1,0 +1,252 @@
+[
+  {
+    "code": "h",
+    "sortOrder": 1,
+    "navigationMenu": "Game",
+    "description": "Home Games",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "a",
+    "sortOrder": 2,
+    "navigationMenu": "Game",
+    "description": "Away Games",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "d",
+    "sortOrder": 3,
+    "navigationMenu": "Game",
+    "description": "Day Games",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "n",
+    "sortOrder": 4,
+    "navigationMenu": "Game",
+    "description": "Night Games",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "g",
+    "sortOrder": 5,
+    "navigationMenu": "Game",
+    "description": "On Grass",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "t",
+    "sortOrder": 6,
+    "navigationMenu": "Game",
+    "description": "On Turf",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "2",
+    "sortOrder": 20,
+    "navigationMenu": "Month",
+    "description": "February",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "3",
+    "sortOrder": 21,
+    "navigationMenu": "Month",
+    "description": "March",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "4",
+    "sortOrder": 22,
+    "navigationMenu": "Month",
+    "description": "April",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "5",
+    "sortOrder": 23,
+    "navigationMenu": "Month",
+    "description": "May",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "6",
+    "sortOrder": 24,
+    "navigationMenu": "Month",
+    "description": "June",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "7",
+    "sortOrder": 25,
+    "navigationMenu": "Month",
+    "description": "July",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "8",
+    "sortOrder": 26,
+    "navigationMenu": "Month",
+    "description": "August",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "9",
+    "sortOrder": 27,
+    "navigationMenu": "Month",
+    "description": "September",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "10",
+    "sortOrder": 28,
+    "navigationMenu": "Month",
+    "description": "October",
+    "team": true,
+    "batting": true,
+    "fielding": true,
+    "pitching": true
+  },
+  {
+    "code": "11",
+    "sortOrder": 29,
+    "navigationMenu": "Month",
+    "description": "November",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "12",
+    "sortOrder": 30,
+    "navigationMenu": "Month",
+    "description": "December",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "1",
+    "sortOrder": 31,
+    "navigationMenu": "Month",
+    "description": "January",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "h0",
+    "sortOrder": 41,
+    "navigationMenu": "Timeframe",
+    "description": "Season To Date",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "h1",
+    "sortOrder": 42,
+    "navigationMenu": "Timeframe",
+    "description": "First Half",
+    "team": true,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "h2",
+    "sortOrder": 43,
+    "navigationMenu": "Timeframe",
+    "description": "Second Half",
+    "team": true,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "preas",
+    "sortOrder": 44,
+    "navigationMenu": "Timeframe",
+    "description": "Pre All-Star",
+    "team": true,
+    "batting": true,
+    "fielding": false,
+    "pitching": true
+  },
+  {
+    "code": "posas",
+    "sortOrder": 45,
+    "navigationMenu": "Timeframe",
+    "description": "Post All-Star",
+    "team": true,
+    "batting": true,
+    "fielding": false,
+    "pitching": true
+  },
+  {
+    "code": "d1",
+    "sortOrder": 46,
+    "navigationMenu": "Timeframe",
+    "description": "Yesterday",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  },
+  {
+    "code": "d7",
+    "sortOrder": 47,
+    "navigationMenu": "Timeframe",
+    "description": "Last 7 Days",
+    "team": false,
+    "batting": false,
+    "fielding": false,
+    "pitching": false
+  }
+]

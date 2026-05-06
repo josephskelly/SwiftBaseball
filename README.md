@@ -427,6 +427,16 @@ let aaron = try await SwiftBaseball
     .season(2024)
     .fetch()
 print(aaron.first?.batSpeed, aaron.first?.swingLength)
+
+// Metadata catalogs — 18 typed lookup endpoints under SwiftBaseball.meta.*
+let groups = try await SwiftBaseball.meta.statGroups().fetch()
+print(groups.map(\.displayName))  // ["hitting", "pitching", "fielding", ...]
+
+let pitchCalls = try await SwiftBaseball.meta.pitchCodes().fetch()
+print(pitchCalls.first { $0.code == "C" }?.description)  // "Strike - Called"
+
+let positions = try await SwiftBaseball.meta.positions().fetch()
+print(positions.first { $0.code == "1" }?.formalName)    // "Pitcher"
 ```
 
 ## Data Sources

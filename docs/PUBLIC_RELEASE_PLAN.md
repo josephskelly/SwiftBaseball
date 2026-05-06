@@ -199,19 +199,18 @@ point we will add on the `SwiftBaseball` namespace and the upstream source.
 17. **Official scorers** — ✅ `SwiftBaseball.officialScorers(date:)` shipped 2026-05-02.
 18. **Play-by-play color commentary** — `game/{pk}/color` (text events with timestamps). **Deferred:** the upstream endpoint is documented as `game/{pk}/feed/color` (per toddrob99) but every gamePk probed (regular season, ASG, postseason finals) returns HTTP 404. Endpoint appears to be deprecated. Will revisit if MLB restores it.
 
-### 3.3 MLB Stats API — tranche C (metadata catalogs)
+### 3.3 MLB Stats API — tranche C (metadata catalogs) ✅ shipped 2026-05-05
 
 Single umbrella namespace: `SwiftBaseball.meta.*`. Ships small typed structs for every
 catalog endpoint. Not all consumers need these, but library completeness demands them:
 
-- `meta.statTypes()`, `meta.statGroups()`, `meta.statFields()`, `meta.rosterTypes()`,
-  `meta.gameTypes()`, `meta.standingsTypes()`, `meta.sitCodes()`, `meta.situationCodes()`,
+- ✅ `meta.statTypes()`, `meta.statGroups()`, `meta.statFields()`, `meta.rosterTypes()`,
+  `meta.gameTypes()`, `meta.standingsTypes()`, `meta.situationCodes()`,
   `meta.pitchTypes()`, `meta.pitchCodes()`, `meta.eventTypes()`, `meta.positions()`,
-  `meta.leagueLeaderTypes()`, `meta.reviewReasons()`, `meta.windDirections()`,
+  `meta.leagueLeaderTypes()`, `meta.reviewReasons()`,
   `meta.hitTrajectories()`, `meta.logicalEvents()`, `meta.jobTypes()`, `meta.languages()`,
-  `meta.baseballStats()`.
-
-These are cheap to implement (all are static-ish GET → `[T]`) and unblock power users.
+  `meta.baseballStats()` — 18 catalogs total
+- **Deferred:** `meta.sitCodes()` and `meta.windDirections()` — both endpoints return HTTP 404 (deprecated upstream; the corresponding situation codes are exposed via `situationCodes()` instead)
 
 ### 3.4 Baseball Savant — tranche A (high-value)
 

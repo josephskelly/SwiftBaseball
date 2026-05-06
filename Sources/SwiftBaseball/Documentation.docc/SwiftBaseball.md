@@ -169,6 +169,27 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 - ``LeagueSeasonDates``
 - ``DivisionCatalog``
 
+### Meta Catalogs
+
+- ``MetaStatType``
+- ``MetaStatGroup``
+- ``MetaStatField``
+- ``MetaLeagueLeaderType``
+- ``MetaBaseballStat``
+- ``MetaGameType``
+- ``MetaRosterType``
+- ``MetaStandingsType``
+- ``MetaPitchType``
+- ``MetaPitchCode``
+- ``MetaEventType``
+- ``MetaSituationCode``
+- ``MetaPosition``
+- ``MetaReviewReason``
+- ``MetaHitTrajectory``
+- ``MetaLogicalEvent``
+- ``MetaJobType``
+- ``MetaLanguage``
+
 ### Enumerations
 
 - ``Position``

@@ -1,0 +1,177 @@
+[
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pickoff_1b",
+    "baseRunningEvent": true,
+    "description": "Pickoff 1B"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pickoff_2b",
+    "baseRunningEvent": true,
+    "description": "Pickoff 2B"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pickoff_3b",
+    "baseRunningEvent": true,
+    "description": "Pickoff 3B"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pitcher_step_off",
+    "baseRunningEvent": false,
+    "description": "Pitcher Step Off"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pickoff_error_1b",
+    "baseRunningEvent": true,
+    "description": "Pickoff Error 1B"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pickoff_error_2b",
+    "baseRunningEvent": true,
+    "description": "Pickoff Error 2B"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "pickoff_error_3b",
+    "baseRunningEvent": true,
+    "description": "Pickoff Error 3B"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "batter_timeout",
+    "baseRunningEvent": false,
+    "description": "Batter Timeout"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "mound_visit",
+    "baseRunningEvent": false,
+    "description": "Mound Visit"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "no_pitch",
+    "baseRunningEvent": false,
+    "description": "No Pitch"
+  },
+  {
+    "plateAppearance": true,
+    "hit": true,
+    "code": "single",
+    "baseRunningEvent": false,
+    "description": "Single"
+  },
+  {
+    "plateAppearance": true,
+    "hit": true,
+    "code": "double",
+    "baseRunningEvent": false,
+    "description": "Double"
+  },
+  {
+    "plateAppearance": true,
+    "hit": true,
+    "code": "triple",
+    "baseRunningEvent": false,
+    "description": "Triple"
+  },
+  {
+    "plateAppearance": true,
+    "hit": true,
+    "code": "home_run",
+    "baseRunningEvent": false,
+    "description": "Home Run"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "double_play",
+    "baseRunningEvent": false,
+    "description": "Double Play"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "field_error",
+    "baseRunningEvent": false,
+    "description": "Field Error"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "error",
+    "baseRunningEvent": true,
+    "description": "Error"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "field_out",
+    "baseRunningEvent": false,
+    "description": "Field Out"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "fielders_choice",
+    "baseRunningEvent": false,
+    "description": "Fielders Choice"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "fielders_choice_out",
+    "baseRunningEvent": false,
+    "description": "Fielders Choice Out"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "force_out",
+    "baseRunningEvent": false,
+    "description": "Forceout"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "grounded_into_double_play",
+    "baseRunningEvent": false,
+    "description": "Grounded Into DP"
+  },
+  {
+    "plateAppearance": false,
+    "hit": false,
+    "code": "grounded_into_triple_play",
+    "baseRunningEvent": false,
+    "description": "Grounded Into TP"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "strikeout",
+    "baseRunningEvent": false,
+    "description": "Strikeout"
+  },
+  {
+    "plateAppearance": true,
+    "hit": false,
+    "code": "strike_out",
+    "baseRunningEvent": false,
+    "description": "Strike Out"
+  }
+]

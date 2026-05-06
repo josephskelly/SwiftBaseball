@@ -1,0 +1,127 @@
+[
+  {
+    "code": "UMPR",
+    "job": "Umpire",
+    "sortOrder": 1
+  },
+  {
+    "code": "UDIR",
+    "job": "Director of Instant Replay",
+    "sortOrder": 11
+  },
+  {
+    "code": "ROFF",
+    "job": "Replay Official",
+    "sortOrder": 21
+  },
+  {
+    "code": "MSTR",
+    "job": "Stringer",
+    "sortOrder": 101
+  },
+  {
+    "code": "BOSS",
+    "job": "BOSS Operator",
+    "sortOrder": 111
+  },
+  {
+    "code": "FTCO",
+    "job": "Field Timing Coordinator",
+    "sortOrder": 121
+  },
+  {
+    "code": "VRMO",
+    "job": "Video Room Monitor",
+    "sortOrder": 131
+  },
+  {
+    "code": "TRCK",
+    "job": "Tracking Operator",
+    "sortOrder": 151
+  },
+  {
+    "code": "SCRB",
+    "job": "Scrubber Operator",
+    "sortOrder": 161
+  },
+  {
+    "code": "PITO",
+    "job": "Pitchcast Operator",
+    "sortOrder": 171
+  },
+  {
+    "code": "SCOR",
+    "job": "Official Scorer",
+    "sortOrder": 201
+  },
+  {
+    "code": "SUPV",
+    "job": "Supervisor",
+    "sortOrder": 251
+  },
+  {
+    "code": "MNGR",
+    "job": "Manager",
+    "sortOrder": 301
+  },
+  {
+    "code": "COAB",
+    "job": "Bench Coach",
+    "sortOrder": 311
+  },
+  {
+    "code": "NTRM",
+    "job": "Interim Manager",
+    "sortOrder": 311
+  },
+  {
+    "code": "ASSM",
+    "job": "Associate Manager",
+    "sortOrder": 312
+  },
+  {
+    "code": "COAT",
+    "job": "Hitting Coach",
+    "sortOrder": 321
+  },
+  {
+    "code": "COAH",
+    "job": "Batting Coach",
+    "sortOrder": 331
+  },
+  {
+    "code": "COHB",
+    "job": "Hitting/Bench Coach",
+    "sortOrder": 341
+  },
+  {
+    "code": "COHF",
+    "job": "Hitting/First Base Coach",
+    "sortOrder": 351
+  },
+  {
+    "code": "INFC",
+    "job": "Infield Coach",
+    "sortOrder": 360
+  },
+  {
+    "code": "COHT",
+    "job": "Hitting/Third Base Coach",
+    "sortOrder": 361
+  },
+  {
+    "code": "COHU",
+    "job": "Hitting/Bullpen Coach",
+    "sortOrder": 371
+  },
+  {
+    "code": "COHI",
+    "job": "Interim Hitting Coach",
+    "sortOrder": 375
+  },
+  {
+    "code": "COPI",
+    "job": "Interim Pitching Coach",
+    "sortOrder": 376
+  }
+]

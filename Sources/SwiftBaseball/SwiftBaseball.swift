@@ -1327,4 +1327,98 @@ public enum SwiftBaseball {
     public static func leagueGamePace(season: Int) -> QueryBuilder<GamePace> {
         .leagueGamePace(season: season, client: client)
     }
+
+    // MARK: - Meta (catalog endpoints)
+
+    /// Catalog/metadata endpoints. Each method returns a top-level array of typed
+    /// entries served by `https://statsapi.mlb.com/api/v1/{path}`.
+    ///
+    ///     let groups = try await SwiftBaseball.meta.statGroups().fetch()
+    ///     // [hitting, pitching, fielding, catching, running, ...]
+    ///
+    ///     let pitches = try await SwiftBaseball.meta.pitchTypes().fetch()
+    ///     // [(FA, "Fastball"), (SL, "Slider"), ...]
+    ///
+    /// These endpoints are static-ish — content rarely changes — and are useful
+    /// for power users who need to enumerate everything the upstream API knows
+    /// about (situation codes, pitch codes, event types, etc.). Library consumers
+    /// targeting only the canonical surface can rely on the typed enums on
+    /// SwiftBaseball directly (``GameType``, ``Position``, ``StatGroup``, …).
+    public enum Meta {
+        public static func statTypes() -> QueryBuilder<[MetaStatType]> {
+            .metaCatalog(path: "statTypes", client: SwiftBaseball.client)
+        }
+
+        public static func statGroups() -> QueryBuilder<[MetaStatGroup]> {
+            .metaCatalog(path: "statGroups", client: SwiftBaseball.client)
+        }
+
+        public static func statFields() -> QueryBuilder<[MetaStatField]> {
+            .metaCatalog(path: "statFields", client: SwiftBaseball.client)
+        }
+
+        public static func leagueLeaderTypes() -> QueryBuilder<[MetaLeagueLeaderType]> {
+            .metaCatalog(path: "leagueLeaderTypes", client: SwiftBaseball.client)
+        }
+
+        public static func baseballStats() -> QueryBuilder<[MetaBaseballStat]> {
+            .metaCatalog(path: "baseballStats", client: SwiftBaseball.client)
+        }
+
+        public static func gameTypes() -> QueryBuilder<[MetaGameType]> {
+            .metaCatalog(path: "gameTypes", client: SwiftBaseball.client)
+        }
+
+        public static func rosterTypes() -> QueryBuilder<[MetaRosterType]> {
+            .metaCatalog(path: "rosterTypes", client: SwiftBaseball.client)
+        }
+
+        public static func standingsTypes() -> QueryBuilder<[MetaStandingsType]> {
+            .metaCatalog(path: "standingsTypes", client: SwiftBaseball.client)
+        }
+
+        public static func pitchTypes() -> QueryBuilder<[MetaPitchType]> {
+            .metaCatalog(path: "pitchTypes", client: SwiftBaseball.client)
+        }
+
+        public static func pitchCodes() -> QueryBuilder<[MetaPitchCode]> {
+            .metaCatalog(path: "pitchCodes", client: SwiftBaseball.client)
+        }
+
+        public static func eventTypes() -> QueryBuilder<[MetaEventType]> {
+            .metaCatalog(path: "eventTypes", client: SwiftBaseball.client)
+        }
+
+        public static func situationCodes() -> QueryBuilder<[MetaSituationCode]> {
+            .metaCatalog(path: "situationCodes", client: SwiftBaseball.client)
+        }
+
+        public static func positions() -> QueryBuilder<[MetaPosition]> {
+            .metaCatalog(path: "positions", client: SwiftBaseball.client)
+        }
+
+        public static func reviewReasons() -> QueryBuilder<[MetaReviewReason]> {
+            .metaCatalog(path: "reviewReasons", client: SwiftBaseball.client)
+        }
+
+        public static func hitTrajectories() -> QueryBuilder<[MetaHitTrajectory]> {
+            .metaCatalog(path: "hitTrajectories", client: SwiftBaseball.client)
+        }
+
+        public static func logicalEvents() -> QueryBuilder<[MetaLogicalEvent]> {
+            .metaCatalog(path: "logicalEvents", client: SwiftBaseball.client)
+        }
+
+        public static func jobTypes() -> QueryBuilder<[MetaJobType]> {
+            .metaCatalog(path: "jobTypes", client: SwiftBaseball.client)
+        }
+
+        public static func languages() -> QueryBuilder<[MetaLanguage]> {
+            .metaCatalog(path: "languages", client: SwiftBaseball.client)
+        }
+    }
+
+    /// Entry point for catalog/metadata endpoints. Returns the ``Meta`` namespace,
+    /// which exposes one method per upstream catalog (`statTypes`, `pitchCodes`, etc.).
+    public static var meta: Meta.Type { Meta.self }
 }
