@@ -18,8 +18,7 @@ public struct PostseasonSeries: Codable, Sendable, Equatable, Identifiable {
     /// All games in the series, in scheduled order.
     public let games: [ScheduleEntry]
 
-    /// Creates a postseason series.
-    public init(
+    init(
         id: String,
         gameType: GameType,
         sortNumber: Int,

@@ -34,8 +34,7 @@ public struct DraftProspect: Codable, Sendable, Equatable, Identifiable {
     /// Draft year.
     public let year: Int
 
-    /// Creates a draft prospect record.
-    public init(
+    init(
         id: Int,
         pickRound: String,
         pickNumber: Int,
@@ -101,8 +100,7 @@ public struct DraftLatest: Codable, Sendable, Equatable {
     /// Picks that are next on the clock, in order.
     public let nextUp: [DraftProspect]
 
-    /// Creates a draft snapshot.
-    public init(pick: DraftProspect?, number: Int, nextUp: [DraftProspect]) {
+    init(pick: DraftProspect?, number: Int, nextUp: [DraftProspect]) {
         self.pick = pick
         self.number = number
         self.nextUp = nextUp
