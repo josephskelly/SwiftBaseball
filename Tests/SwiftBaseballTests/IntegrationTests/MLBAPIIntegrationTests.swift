@@ -244,7 +244,9 @@ struct MLBAPIIntegrationTests {
 
         let category = try #require(categories.first)
         #expect(category.leaderCategory == "homeRuns")
-        #expect(category.leaders.count <= 5)
+        // The MLB API includes everyone tied at the cutoff rank, so the result
+        // can exceed `limit(5)` when multiple players share rank 5.
+        #expect(category.leaders.count >= 5)
         #expect(!category.leaders.isEmpty)
 
         let leader = try #require(category.leaders.first)

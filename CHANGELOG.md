@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0-rc.1] — 2026-05-06
+
 ### Added
 
 - **DocC articles**: eight long-form guides under the `Articles` topic in DocC. The first three (`GettingStarted`, `DataSources`, `Statcast`) cover install / configuration / first query, MLB Stats API vs Baseball Savant trade-offs, and aggregator vs leaderboard vs raw Statcast access. Five more added for the v1.0 polish round: `Caching` (opt-in TTL cache, MLB-Stats-only scope, manual invalidation, when not to cache), `RateLimiting` (concurrency caps per upstream, retry/back-off, 429 handling, cancellation semantics), `ErrorHandling` (every `SwiftBaseballError` case with recovery patterns), `MinorLeagues` (Sport enum, `.sport(_:)` modifier, what works and what's MLB-only at lower levels), and `MigratingFromPybaseball` (function-by-function map for users coming from the Python library). All wired into the catalog Topics so they appear at the top of the rendered docs site

@@ -1,7 +1,7 @@
 import Foundation
 
 /// The current version of the SwiftBaseball library.
-public let swiftBaseballVersion = "0.5.0"
+public let swiftBaseballVersion = "1.0.0-rc.1"
 
 /// Configuration for the SwiftBaseball API client.
 ///
