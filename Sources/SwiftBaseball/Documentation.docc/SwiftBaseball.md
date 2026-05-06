@@ -21,6 +21,12 @@ let leaders = try await SwiftBaseball.leaders(.homeRuns)
 
 ## Topics
 
+### Articles
+
+- <doc:GettingStarted>
+- <doc:DataSources>
+- <doc:Statcast>
+
 ### Essentials
 
 - ``SwiftBaseball``

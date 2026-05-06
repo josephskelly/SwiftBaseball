@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **DocC articles**: three long-form guides under the `Articles` topic in DocC — `GettingStarted` (install, configuration, first query, error handling), `DataSources` (when to reach for MLB Stats API vs Baseball Savant, schema quirks, caching), and `Statcast` (aggregator vs leaderboard vs raw, date chunking, `stream()` vs `fetch()`, barrel definition, bat-tracking 2024+ note, rate-scale conventions). Wired into the catalog Topics so they appear at the top of the rendered docs site
 - **AsyncSequence streaming for raw Statcast**: `SwiftBaseball.statcastRaw(start:end:).stream()` returns an `AsyncThrowingStream<StatcastPitch, Error>` that yields one pitch at a time, fetching one chunk at a time. Use this for multi-month or multi-season pulls where holding every pitch in memory is wasteful — peak memory stays at roughly one chunk's worth of rows (~14k–17k pitches per default 7-day chunk) regardless of how long the requested range is. Cancelling the consuming task halts the stream cleanly: the in-flight chunk completes but no further chunks are requested. The existing `.fetch()` form is unchanged and remains the right choice when the caller wants the full array
 
 ### Changed
