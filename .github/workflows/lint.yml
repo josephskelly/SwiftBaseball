@@ -30,3 +30,17 @@ jobs:
 
       - name: Run SwiftFormat (check only)
         run: swiftformat Sources Tests --lint
+
+  doc-coverage:
+    name: DocC Symbol Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Check doc coverage
+        run: python3 Scripts/check_doc_coverage.py

@@ -23,6 +23,9 @@ public enum SwiftBaseballError: Error, Sendable {
 }
 
 extension SwiftBaseballError: LocalizedError {
+    /// Human-readable description of the error, suitable for display in alerts
+    /// or log messages. Includes the upstream cause for `networkError`,
+    /// `decodingError`, `invalidDateRange`, and `rateLimited` cases.
     public var errorDescription: String? {
         switch self {
         case .networkError(let error):

@@ -520,6 +520,7 @@ public struct PlayerPlatoonStats: Sendable, Equatable {
     /// Stats vs right-handed pitchers.
     public let vsRight: BattingStats?
 
+    /// Creates a player platoon split with the supplied vs-left and vs-right batting lines.
     public init(vsLeft: BattingStats?, vsRight: BattingStats?) {
         self.vsLeft = vsLeft
         self.vsRight = vsRight
@@ -533,6 +534,7 @@ public struct PitcherPlatoonStats: Sendable, Equatable {
     /// Stats vs right-handed batters.
     public let vsRight: PitchingStats?
 
+    /// Creates a pitcher platoon split with the supplied vs-left and vs-right pitching lines.
     public init(vsLeft: PitchingStats?, vsRight: PitchingStats?) {
         self.vsLeft = vsLeft
         self.vsRight = vsRight
@@ -553,6 +555,7 @@ public struct PlayerCareerPlatoonStats: Sendable, Equatable {
     /// Career stats vs right-handed pitchers.
     public let vsRight: BattingStats?
 
+    /// Creates a player career platoon split with the supplied vs-left and vs-right batting lines.
     public init(vsLeft: BattingStats?, vsRight: BattingStats?) {
         self.vsLeft = vsLeft
         self.vsRight = vsRight
@@ -570,6 +573,7 @@ public struct PitcherCareerPlatoonStats: Sendable, Equatable {
     /// Career stats vs right-handed batters.
     public let vsRight: PitchingStats?
 
+    /// Creates a pitcher career platoon split with the supplied vs-left and vs-right pitching lines.
     public init(vsLeft: PitchingStats?, vsRight: PitchingStats?) {
         self.vsLeft = vsLeft
         self.vsRight = vsRight
@@ -585,6 +589,7 @@ public struct PlayerHomeAwaySplits: Sendable, Equatable {
     /// Stats in away games.
     public let away: BattingStats?
 
+    /// Creates a home/away batting split.
     public init(home: BattingStats?, away: BattingStats?) {
         self.home = home
         self.away = away
@@ -598,6 +603,7 @@ public struct PitcherHomeAwaySplits: Sendable, Equatable {
     /// Stats in away games.
     public let away: PitchingStats?
 
+    /// Creates a home/away pitching split.
     public init(home: PitchingStats?, away: PitchingStats?) {
         self.home = home
         self.away = away
@@ -613,6 +619,7 @@ public struct PlayerDayNightSplits: Sendable, Equatable {
     /// Stats in night games.
     public let night: BattingStats?
 
+    /// Creates a day/night batting split.
     public init(day: BattingStats?, night: BattingStats?) {
         self.day = day
         self.night = night
@@ -626,6 +633,7 @@ public struct PitcherDayNightSplits: Sendable, Equatable {
     /// Stats in night games.
     public let night: PitchingStats?
 
+    /// Creates a day/night pitching split.
     public init(day: PitchingStats?, night: PitchingStats?) {
         self.day = day
         self.night = night
@@ -653,6 +661,7 @@ public struct PlayerMonthlySplits: Sendable, Equatable {
     /// Stats in October (postseason / late-season games).
     public let october: BattingStats?
 
+    /// Creates a player monthly batting split with one batting line per calendar month.
     public init(
         march: BattingStats?,
         april: BattingStats?,
@@ -693,6 +702,7 @@ public struct PitcherMonthlySplits: Sendable, Equatable {
     /// Stats in October.
     public let october: PitchingStats?
 
+    /// Creates a pitcher monthly pitching split with one pitching line per calendar month.
     public init(
         march: PitchingStats?,
         april: PitchingStats?,
@@ -727,6 +737,7 @@ public struct PlayerRunnersOnSplits: Sendable, Equatable {
     /// Stats with runners in scoring position and two outs.
     public let rispTwoOut: BattingStats?
 
+    /// Creates a player runners-on batting split with one batting line per baserunner situation.
     public init(
         basesEmpty: BattingStats?,
         runnersOn: BattingStats?,
@@ -751,6 +762,7 @@ public struct PitcherRunnersOnSplits: Sendable, Equatable {
     /// Stats with runners in scoring position and two outs.
     public let rispTwoOut: PitchingStats?
 
+    /// Creates a pitcher runners-on pitching split with one pitching line per baserunner situation.
     public init(
         basesEmpty: PitchingStats?,
         runnersOn: PitchingStats?,
@@ -775,6 +787,7 @@ public struct PlayerLeverageSplits: Sendable, Equatable {
     /// Stats in high-leverage situations.
     public let high: BattingStats?
 
+    /// Creates a player leverage batting split with low, medium, and high leverage lines.
     public init(low: BattingStats?, medium: BattingStats?, high: BattingStats?) {
         self.low = low
         self.medium = medium
@@ -791,6 +804,7 @@ public struct PitcherLeverageSplits: Sendable, Equatable {
     /// Stats in high-leverage situations.
     public let high: PitchingStats?
 
+    /// Creates a pitcher leverage pitching split with low, medium, and high leverage lines.
     public init(low: PitchingStats?, medium: PitchingStats?, high: PitchingStats?) {
         self.low = low
         self.medium = medium
