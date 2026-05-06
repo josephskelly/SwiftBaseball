@@ -245,8 +245,8 @@ catalog endpoint. Not all consumers need these, but library completeness demands
 
 ### 3.6 Baseball Savant — tranche C (nice-to-have)
 
-17. **Umpire scorecards** — `/leaderboard/services`. Public but format drifts seasonally; keep behind an `ExperimentalAPI` availability marker.
-18. **Statcast illustrator / animations** — skip: requires browser rendering.
+17. **Umpire scorecards** — **deferred**: `/leaderboard/services`, `/leaderboard/umpire-scorecards`, `/umpire-scorecards`, and every adjacent URL form return HTTP 404 from Savant as of 2026-05-06. The popular umpire-scorecards data appears to be hosted on third-party sites (umpscorecards.com) rather than as a Savant CSV endpoint. Will revisit if/when Savant publishes a stable URL.
+18. **Statcast illustrator / animations** — skipped: requires browser rendering.
 
 ---
 

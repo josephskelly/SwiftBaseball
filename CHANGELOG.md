@@ -6,6 +6,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-05-06
+
 ### Added
 
 - **Postseason schedule + series**: `SwiftBaseball.postseasonSchedule(season:)` returns the full `[ScheduleEntry]` flat list from MLB's dedicated `schedule/postseason` endpoint (43 games for a normal 2024-style bracket). `SwiftBaseball.postseasonSeries(season:)` returns `[PostseasonSeries]` from `schedule/postseason/series` — eleven entries (4 Wild Card, 4 Division, 2 LCS, 1 World Series) each grouping the games that were actually played, so consumers can step the bracket round by round without filtering by `gameType` themselves
