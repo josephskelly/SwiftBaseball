@@ -59,12 +59,25 @@ public struct QueryBuilder<T: Sendable>: Sendable {
         modifying { $0.adding(name: "date", value: dateString) }
     }
 
+    /// Filters results to a specific date.
+    public func date(_ date: Date) -> QueryBuilder<T> {
+        self.date(MLBDateFormatter.string(from: date))
+    }
+
     /// Filters results to a date range. Both dates use `"YYYY-MM-DD"` format.
     public func dateRange(start: String, end: String) -> QueryBuilder<T> {
         modifying {
             $0.adding(name: "startDate", value: start)
                 .adding(name: "endDate", value: end)
         }
+    }
+
+    /// Filters results to a date range.
+    public func dateRange(start: Date, end: Date) -> QueryBuilder<T> {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
     }
 
     /// Filters stats by group (batting, pitching, or fielding).

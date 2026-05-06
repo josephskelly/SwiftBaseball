@@ -39,6 +39,14 @@ public struct StatcastQuery: Sendable {
         return copy
     }
 
+    /// Filters to a specific date range.
+    public func dateRange(start: Date, end: Date) -> StatcastQuery {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
+    }
+
     /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
     ///
     /// Savant's CSV endpoint does not filter server-side by game type — it always returns
@@ -123,6 +131,14 @@ public struct StatcastPitcherQuery: Sendable {
         copy.startDate = start
         copy.endDate = end
         return copy
+    }
+
+    /// Filters to a specific date range.
+    public func dateRange(start: Date, end: Date) -> StatcastPitcherQuery {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
     }
 
     /// Filters to a specific game type (e.g. `"R"` for regular season, `"S"` for spring training).
@@ -266,6 +282,14 @@ public struct StatcastBatchBattingQuery: Sendable {
         return copy
     }
 
+    /// Filters to a custom date range.
+    public func dateRange(start: Date, end: Date) -> StatcastBatchBattingQuery {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
+    }
+
     /// Overrides the number of player IDs sent per HTTP request (default: ``defaultBatchSize``).
     public func batchSize(_ size: Int) -> StatcastBatchBattingQuery {
         var copy = self
@@ -387,6 +411,14 @@ public struct StatcastBatchPitchingQuery: Sendable {
         copy.startDate = start
         copy.endDate = end
         return copy
+    }
+
+    /// Filters to a custom date range.
+    public func dateRange(start: Date, end: Date) -> StatcastBatchPitchingQuery {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
     }
 
     /// Overrides the number of player IDs sent per HTTP request (default: ``defaultBatchSize``).

@@ -202,6 +202,14 @@ public struct StatcastBatterRawQuery: Sendable {
         return copy
     }
 
+    /// Filters to a date range.
+    public func dateRange(start: Date, end: Date) -> StatcastBatterRawQuery {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
+    }
+
     /// Filters to a specific game type code (e.g. `"R"`).
     public func gameType(_ type: String) -> StatcastBatterRawQuery {
         var copy = self
@@ -262,6 +270,14 @@ public struct StatcastPitcherRawQuery: Sendable {
         copy.startDate = start
         copy.endDate = end
         return copy
+    }
+
+    /// Filters to a date range.
+    public func dateRange(start: Date, end: Date) -> StatcastPitcherRawQuery {
+        dateRange(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
     }
 
     /// Filters to a specific game type code (e.g. `"R"`).

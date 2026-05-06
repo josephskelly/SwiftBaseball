@@ -430,6 +430,16 @@ public enum SwiftBaseball {
         .umpires(date: date, client: client)
     }
 
+    /// Fetch the MLB umpire roster eligible to work on a given date.
+    ///
+    /// `Date`-accepting overload of ``umpires(date:)-(String)``. The date is
+    /// formatted as `"yyyy-MM-dd"` UTC, the canonical wire format.
+    ///
+    /// - Parameter date: Calendar date.
+    public static func umpires(date: Date) -> QueryBuilder<[Umpire]> {
+        umpires(date: MLBDateFormatter.string(from: date))
+    }
+
     // MARK: - Official Scorers
 
     /// Fetch the MLB official-scorer roster eligible to work on a given date.
@@ -442,6 +452,16 @@ public enum SwiftBaseball {
     /// - Parameter date: Calendar date in `YYYY-MM-DD` format.
     public static func officialScorers(date: String) -> QueryBuilder<[OfficialScorer]> {
         .officialScorers(date: date, client: client)
+    }
+
+    /// Fetch the MLB official-scorer roster eligible to work on a given date.
+    ///
+    /// `Date`-accepting overload of ``officialScorers(date:)-(String)``. The
+    /// date is formatted as `"yyyy-MM-dd"` UTC, the canonical wire format.
+    ///
+    /// - Parameter date: Calendar date.
+    public static func officialScorers(date: Date) -> QueryBuilder<[OfficialScorer]> {
+        officialScorers(date: MLBDateFormatter.string(from: date))
     }
 
     // MARK: - Stats
@@ -751,6 +771,20 @@ public enum SwiftBaseball {
     ///   - end: Inclusive end date in `"YYYY-MM-DD"` form.
     public static func statcastRaw(start: String, end: String) -> StatcastRawQuery {
         StatcastRawQuery(client: statcastClient, start: start, end: end)
+    }
+
+    /// Fetch raw Baseball Savant pitch-level data across a date range, with no aggregation.
+    ///
+    /// `Date`-accepting overload of ``statcastRaw(start:end:)-(String,_)``.
+    ///
+    /// - Parameters:
+    ///   - start: Inclusive start date.
+    ///   - end: Inclusive end date.
+    public static func statcastRaw(start: Date, end: Date) -> StatcastRawQuery {
+        statcastRaw(
+            start: MLBDateFormatter.string(from: start),
+            end: MLBDateFormatter.string(from: end)
+        )
     }
 
     /// Fetch raw Baseball Savant pitch-level data filtered to a single batter.
