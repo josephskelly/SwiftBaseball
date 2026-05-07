@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Tests
+
+- **Namespace-coverage tests**: a new `NamespaceCoverageTests` suite in `Tests/SwiftBaseballTests/NamespaceCoverageTests.swift` exercises every public static func on the `SwiftBaseball` enum (and `SwiftBaseball.Meta`) — ~120 trampolines that previous tests bypassed by constructing `QueryBuilder` directly with a mock client. Each `@Test` calls a batch of related namespace methods without `.fetch()`, which is enough to mark the trampoline lines covered without needing network IO or a custom mock-injection path. Lifts `Sources/SwiftBaseball/SwiftBaseball.swift` line coverage from 35% to 99%, addressing the namespace gap identified in the 1.0.0-rc.1 audit. No source changes
+
 ## [1.0.0-rc.1] — 2026-05-06
 
 ### Added
